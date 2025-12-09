@@ -134,6 +134,74 @@ flowchart LR
     end
 ```
 
+### CapabilityBase Requirement
+
+**Important**: When using the concrete API, you must implement the `CapabilityBase` method:
+
+```Go
+func (a myAPI) CapabilityBase(ctx context.Context) (r5.CapabilityStatement, error) {
+    return r5.CapabilityStatement{
+        Status:          r5.Code{Value: ptr.To("active")},
+        Kind:            r5.Code{Value: ptr.To("instance")},
+        Implementation:  &r5.CapabilityStatementImplementation{
+            Description: r5.String{Value: ptr.To("My FHIR Server")},
+            Url:         &r5.Url{Value: ptr.To("https://my-server.com")},
+        },
+        // ... other metadata
+    }, nil
+}
+```
+
+This base CapabilityStatement is enhanced with the capabilities detected from your concrete implementation.
+The `implementation.url` field is **required** as it's used to generate canonical URLs for SearchParameter references
+and other fully qualified ids, e.g. in bundles.
+
+### SearchParameter Aggregation
+
+The library automatically aggregates SearchParameter resources from your concrete implementations into the
+CapabilityStatement. By default, SearchParameter resources are gathered in the following way:
+
+```go
+// Your backend implements Patient search capabilities
+func (b MyBackend) SearchCapabilitiesPatient(ctx context.Context) (r4.SearchCapabilities, error) {
+    return r4.SearchCapabilities{
+        Parameters: map[string]r4.SearchParameter{
+            "_id":  {Type: r4.SearchParamTypeToken},
+            "name": {Type: r4.SearchParamTypeString},
+            "birthdate": {Type: r4.SearchParamTypeDate},
+        },
+    }, nil
+}
+
+// The system automatically creates SearchParameter resources for these parameters
+// Available at: GET /SearchParameter/Patient-name, /SearchParameter/Patient-birthdate, etc.
+```
+
+> **Note**: The values of the parameters map can be fully specified SearchParameter resources as defined in the standard. If you omit certain required fields like in the above example, these get augmented by the framework.
+
+> **Attention**: If you implement `SearchParameterSearch` (the `search` interaction for the `SearchParameter` resource), you will overwrite the automatic gathering and augmentation described above.
+
+
+### Interoperability
+
+Wrapper structs facilitate interoperability between the generic and the concrete API.
+
+```Go
+genericAPI := capabilitiesR4.Generic{Concrete: concreteAPI}
+```
+
+This adapts an implementation of the concrete interfaces so it can be served through the generic REST layer without additional glue code.
+To host a concrete implementation using the REST layer, you do **not** have to call this sexplicitly.
+The REST handler wraps concrete implementations for you!
+
+and vice versa:
+
+```Go
+concreteAPI := capabilitiesR4.Concrete{Generic: genericAPI}
+```
+
+This wraps a generic implementation and exposes the strongly typed concrete interfaces (e.g. `ReadPatient`) for consumers that prefer compile-time types.
+
 ### Operations
 
 FHIR operations are supported at system, type, and instance levels.
@@ -209,74 +277,6 @@ In addition to `InvokeSystem`, `InvokeType`, and `InvokeInstance`, the client ex
   ```
 
 These helpers are derived from the HL7 FHIR operations list for each release (R4, R4B, R5) during code generation and are available alongside other generated client methods.
-
-#### CapabilityBase Requirement
-
-**Important**: When using the concrete API, you must implement the `CapabilityBase` method:
-
-```Go
-func (a myAPI) CapabilityBase(ctx context.Context) (r5.CapabilityStatement, error) {
-    return r5.CapabilityStatement{
-        Status:          r5.Code{Value: ptr.To("active")},
-        Kind:            r5.Code{Value: ptr.To("instance")},
-        Implementation:  &r5.CapabilityStatementImplementation{
-            Description: r5.String{Value: ptr.To("My FHIR Server")},
-            Url:         &r5.Url{Value: ptr.To("https://my-server.com")},
-        },
-        // ... other metadata
-    }, nil
-}
-```
-
-This base CapabilityStatement is enhanced with the capabilities detected from your concrete implementation.
-The `implementation.url` field is **required** as it's used to generate canonical URLs for SearchParameter references
-and other fully qualified ids, e.g. in bundles.
-
-#### SearchParameter Aggregation
-
-The library automatically aggregates SearchParameter resources from your concrete implementations into the
-CapabilityStatement. By default, SearchParameter resources are gathered in the following way:
-
-```go
-// Your backend implements Patient search capabilities
-func (b MyBackend) SearchCapabilitiesPatient(ctx context.Context) (r4.SearchCapabilities, error) {
-    return r4.SearchCapabilities{
-        Parameters: map[string]r4.SearchParameter{
-            "_id":  {Type: r4.SearchParamTypeToken},
-            "name": {Type: r4.SearchParamTypeString},
-            "birthdate": {Type: r4.SearchParamTypeDate},
-        },
-    }, nil
-}
-
-// The system automatically creates SearchParameter resources for these parameters
-// Available at: GET /SearchParameter/Patient-name, /SearchParameter/Patient-birthdate, etc.
-```
-
-> **Note**: The values of the parameters map can be fully specified SearchParameter resources as defined in the standard. If you omit certain required fields like in the above example, these get augmented by the framework.
-
-> **Attention**: If you implement `SearchParameterSearch` (the `search` interaction for the `SearchParameter` resource), you will overwrite the automatic gathering and augmentation described above.
-
-
-#### Interoperability
-
-Wrapper structs facilitate interoperability between the generic and the concrete API.
-
-```Go
-genericAPI := capabilitiesR4.Generic{Concrete: concreteAPI}
-```
-
-This adapts an implementation of the concrete interfaces so it can be served through the generic REST layer without additional glue code.
-To host a concrete implementation using the REST layer, you do **not** have to call this sexplicitly.
-The REST handler wraps concrete implementations for you!
-
-and vice versa:
-
-```Go
-concreteAPI := capabilitiesR4.Concrete{Generic: genericAPI}
-```
-
-This wraps a generic implementation and exposes the strongly typed concrete interfaces (e.g. `ReadPatient`) for consumers that prefer compile-time types.
 
 ## FHIRPath
 
