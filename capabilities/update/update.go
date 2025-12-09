@@ -1,6 +1,6 @@
 package update
 
-import "github.com/DAMEDIC/fhir-toolbox-go/model"
+import "github.com/damedic/fhir-toolbox-go/model"
 
 // Capabilities describe what update interactions the backend supports.
 type Capabilities struct {

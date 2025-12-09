@@ -8,8 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/model"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/model"
 	. "github.com/dave/jennifer/jen"
 )
 

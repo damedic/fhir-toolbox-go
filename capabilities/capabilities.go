@@ -36,7 +36,7 @@ package capabilities
 
 import (
 	"context"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 // The ConcreteCapabilities interface allows concrete implementations to provide a base CapabilityStatement

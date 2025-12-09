@@ -1,7 +1,7 @@
 package generate
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
 	"slices"
 	"strings"
 
@@ -822,7 +822,7 @@ func generateOperationDefinitionsFn(f *File, release string) {
 			g.Return(Id("defs"))
 		})
 
-		// Index by ID (prefers explicit Id.value, falls back to code)
+	// Index by ID (prefers explicit Id.value, falls back to code)
 	f.Func().Id("operationDefinitionsByID").
 		Params(
 			Id("ctx").Qual("context", "Context"),

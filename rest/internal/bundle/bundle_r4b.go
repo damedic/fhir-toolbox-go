@@ -3,9 +3,9 @@
 package bundle
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	r4b "github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4b"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
+	"github.com/damedic/fhir-toolbox-go/model"
+	r4b "github.com/damedic/fhir-toolbox-go/model/gen/r4b"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 func init() {

@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath/internal/overflow"
-	parser "github.com/DAMEDIC/fhir-toolbox-go/fhirpath/internal/parser"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath/internal/overflow"
+	parser "github.com/damedic/fhir-toolbox-go/fhirpath/internal/parser"
 )
 
 type Element interface {

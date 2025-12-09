@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest"
 )
 
 func main() {

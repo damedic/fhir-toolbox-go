@@ -48,14 +48,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/update"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/bundle"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/encoding"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/outcome"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/wrap"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -63,6 +55,15 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities"
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/capabilities/update"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/bundle"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/encoding"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/outcome"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/wrap"
 )
 
 var (

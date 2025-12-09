@@ -2,7 +2,7 @@ package generate
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
 	"strings"
 
 	. "github.com/dave/jennifer/jen"
@@ -97,72 +97,72 @@ func (g BasicDocGenerator) GenerateAdditional(f func(fileName string, pkgName st
 	// Implement fhirpath.Element interface methods
 	file.Comment("Children returns child elements for FHIRPath evaluation")
 	file.Func().Params(Id("r").Id("RawResource")).Id("Children").Params(Id("name").Op("...").String()).
-		Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Collection").Block(
+		Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Collection").Block(
 		Return(Nil()), // Empty collection for raw resources
 	)
 
 	file.Comment("ToBoolean converts to Boolean for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToBoolean").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Boolean"), Bool(), Error()).Block(
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Boolean"), Bool(), Error()).Block(
 		Return(False(), False(), Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Boolean"))),
 	)
 
 	file.Comment("ToString converts to String for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToString").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "String"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "String").Call(Id("r.Content")), True(), Nil()),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "String"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "String").Call(Id("r.Content")), True(), Nil()),
 	)
 
 	file.Comment("ToInteger converts to Integer for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToInteger").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Integer"), Bool(), Error()).Block(
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Integer"), Bool(), Error()).Block(
 		Return(Lit(0), False(), Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Integer"))),
 	)
 
 	file.Comment("ToLong converts to Long for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToLong").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Long"), Bool(), Error()).Block(
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Long"), Bool(), Error()).Block(
 		Return(Lit(0), False(), Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Long"))),
 	)
 
 	file.Comment("ToDecimal converts to Decimal for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToDecimal").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Decimal"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Decimal").Values(), False(),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Decimal"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Decimal").Values(), False(),
 			Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Decimal"))),
 	)
 
 	file.Comment("ToDate converts to Date for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToDate").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Date"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Date").Values(), False(),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Date"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Date").Values(), False(),
 			Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Date"))),
 	)
 
 	file.Comment("ToTime converts to Time for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToTime").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Time"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Time").Values(), False(),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Time"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Time").Values(), False(),
 			Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Time"))),
 	)
 
 	file.Comment("ToDateTime converts to DateTime for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToDateTime").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "DateTime"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "DateTime").Values(), False(),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "DateTime"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "DateTime").Values(), False(),
 			Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to DateTime"))),
 	)
 
 	file.Comment("ToQuantity converts to Quantity for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("ToQuantity").Params(Id("explicit").Bool()).
-		Params(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Quantity"), Bool(), Error()).Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Quantity").Values(), False(),
+		Params(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Quantity"), Bool(), Error()).Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Quantity").Values(), False(),
 			Qual("fmt", "Errorf").Call(Lit("cannot convert RawResource to Quantity"))),
 	)
 
 	file.Comment("Equal compares with another Element for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("Equal").
-		Params(Id("other").Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Element")).
+		Params(Id("other").Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Element")).
 		Params(Bool(), Bool()).Block(
 		List(Id("s"), Id("ok"), Id("_")).Op(":=").Id("r").Dot("ToString").Call(False()),
 		If(Op("!").Id("ok")).Block(Return(False(), True())),
@@ -173,15 +173,15 @@ func (g BasicDocGenerator) GenerateAdditional(f func(fileName string, pkgName st
 
 	file.Comment("Equivalent checks equivalence with another Element for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("Equivalent").
-		Params(Id("other").Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "Element")).Bool().Block(
+		Params(Id("other").Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "Element")).Bool().Block(
 		List(Id("eq"), Id("ok")).Op(":=").Id("r").Dot("Equal").Call(Id("other")),
 		Return(Id("eq").Op("&&").Id("ok")),
 	)
 
 	file.Comment("TypeInfo returns type information for FHIRPath")
 	file.Func().Params(Id("r").Id("RawResource")).Id("TypeInfo").Params().
-		Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "TypeInfo").Block(
-		Return(Qual("github.com/DAMEDIC/fhir-toolbox-go/fhirpath", "ClassInfo").Values(Dict{
+		Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "TypeInfo").Block(
+		Return(Qual("github.com/damedic/fhir-toolbox-go/fhirpath", "ClassInfo").Values(Dict{
 			Id("Name"):      Lit("RawResource"),
 			Id("Namespace"): Lit("FHIR"),
 		})),

@@ -2,9 +2,10 @@ package wrap
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
 	"strings"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 var genericR4 = func(api any) (capabilities.GenericCapabilities, error) { return nil, disabledErr[model.R4]() }

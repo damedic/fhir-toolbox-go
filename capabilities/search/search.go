@@ -6,7 +6,7 @@
 //
 // # Example
 //
-//	import "github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
+//	import "github.com/damedic/fhir-toolbox-go/capabilities/search"
 //
 //	func (b *myAPI) SearchCapabilitiesObservation() r4.SearchCapabilities {
 //		// return supported search capabilities
@@ -27,9 +27,9 @@ package search
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
 	"net/url"
 	"slices"
 	"strconv"

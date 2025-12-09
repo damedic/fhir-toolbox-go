@@ -1,4 +1,4 @@
-module github.com/DAMEDIC/fhir-toolbox-go
+module github.com/damedic/fhir-toolbox-go
 
 go 1.23.0
 

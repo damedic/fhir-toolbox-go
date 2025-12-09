@@ -5,8 +5,8 @@ package encoding
 import (
 	"io"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
 )
 
 func init() {

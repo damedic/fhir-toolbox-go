@@ -2,11 +2,12 @@ package rest
 
 import (
 	"errors"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	restoutcome "github.com/DAMEDIC/fhir-toolbox-go/rest/internal/outcome"
 	"net/http"
 	"slices"
+
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
+	restoutcome "github.com/damedic/fhir-toolbox-go/rest/internal/outcome"
 )
 
 func errToOperationOutcome[R model.Release](err error) (int, model.Resource) {

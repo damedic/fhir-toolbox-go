@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4b"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4b"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r5"
+	"github.com/damedic/fhir-toolbox-go/testdata"
+	"github.com/damedic/fhir-toolbox-go/testdata/assert"
 )
 
 // runFHIRPathTest executes a single FHIRPath test and validates the result

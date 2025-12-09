@@ -3,18 +3,21 @@ package rest_test
 import (
 	"context"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/update"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/capabilities/update"
+	"github.com/damedic/fhir-toolbox-go/model"
+
 	// basic types have been removed; use r4 types directly
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/rest"
+	"github.com/damedic/fhir-toolbox-go/testdata/assert"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 // testCase represents a common structure for HTTP handler tests

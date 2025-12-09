@@ -3,9 +3,9 @@ package capabilities
 import (
 	"context"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/update"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/capabilities/update"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 // The GenericCapabilities interface provides a generic capabilities method that returns a CapabilityStatement of the underlying concrete implementation.

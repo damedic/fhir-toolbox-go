@@ -3,15 +3,15 @@ package main
 
 import (
 	"context"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r5"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest"
 )
 
 // 1. Define our backend

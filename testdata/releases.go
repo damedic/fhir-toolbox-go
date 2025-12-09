@@ -1,6 +1,6 @@
 package testdata
 
-import "github.com/DAMEDIC/fhir-toolbox-go/model"
+import "github.com/damedic/fhir-toolbox-go/model"
 
 var TestReleases = []model.Release{
 	model.R4{},

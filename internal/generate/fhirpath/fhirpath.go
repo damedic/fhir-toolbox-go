@@ -5,12 +5,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
 	. "github.com/dave/jennifer/jen"
 )
 
 const (
-	fhirpathModuleName = "github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
+	fhirpathModuleName = "github.com/damedic/fhir-toolbox-go/fhirpath"
 	ucumSystem         = "http://unitsofmeasure.org"
 )
 

@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	r4 "github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	r4 "github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 // evaluateAndPrint is a helper function that evaluates a FHIRPath expression and prints the result

@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest"
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/rest"
 	"io"
 	"log"
 	"net/url"

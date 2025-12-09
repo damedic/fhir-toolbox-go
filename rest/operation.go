@@ -5,15 +5,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities"
-	fhirpath "github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/encoding"
-	restoutcome "github.com/DAMEDIC/fhir-toolbox-go/rest/internal/outcome"
 	"log/slog"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities"
+	fhirpath "github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/encoding"
+	restoutcome "github.com/damedic/fhir-toolbox-go/rest/internal/outcome"
 )
 
 // level represents the invocation level of an operation.

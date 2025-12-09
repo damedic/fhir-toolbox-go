@@ -1,9 +1,10 @@
 package assert
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert/internal/diff"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/testdata/assert/internal/diff"
 )
 
 func FHIRPathEqual(t *testing.T, expected, actual fhirpath.Collection) {

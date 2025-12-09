@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	parser "github.com/DAMEDIC/fhir-toolbox-go/fhirpath/internal/parser"
 	"github.com/antlr4-go/antlr/v4"
+	parser "github.com/damedic/fhir-toolbox-go/fhirpath/internal/parser"
 )
 
 func evalInvocation(

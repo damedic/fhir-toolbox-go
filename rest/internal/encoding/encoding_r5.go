@@ -3,10 +3,11 @@
 package encoding
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
 	"io"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r5"
+
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 func init() {

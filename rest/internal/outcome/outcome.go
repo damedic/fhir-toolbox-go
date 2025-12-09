@@ -2,7 +2,8 @@ package outcome
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 // release-specific builders; replaced via Build-tagged files

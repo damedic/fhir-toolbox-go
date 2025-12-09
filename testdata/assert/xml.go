@@ -3,9 +3,10 @@ package assert
 import (
 	"bytes"
 	"encoding/xml"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert/internal/diff"
 	"strings"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/testdata/assert/internal/diff"
 )
 
 func XMLEqual(t *testing.T, expected, actual string) {

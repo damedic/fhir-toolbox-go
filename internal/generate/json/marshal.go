@@ -2,7 +2,7 @@
 package json
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
 	. "github.com/dave/jennifer/jen"
 	"strings"
 )

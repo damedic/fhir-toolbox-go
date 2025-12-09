@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	parser "github.com/DAMEDIC/fhir-toolbox-go/fhirpath/internal/parser"
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/cockroachdb/apd/v3"
+	parser "github.com/damedic/fhir-toolbox-go/fhirpath/internal/parser"
 )
 
 // Expression represents a parsed FHIRPath expression that can be evaluated against a FHIR resource.

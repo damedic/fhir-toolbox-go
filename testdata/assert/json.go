@@ -3,8 +3,9 @@ package assert
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert/internal/diff"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/testdata/assert/internal/diff"
 )
 
 func JSONEqual(t *testing.T, expected, actual string) {

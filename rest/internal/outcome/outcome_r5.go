@@ -3,9 +3,9 @@
 package outcome
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	r5 "github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
+	"github.com/damedic/fhir-toolbox-go/model"
+	r5 "github.com/damedic/fhir-toolbox-go/model/gen/r5"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 func init() {

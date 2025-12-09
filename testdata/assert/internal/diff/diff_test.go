@@ -6,9 +6,10 @@ package diff
 
 import (
 	"bytes"
-	"github.com/DAMEDIC/fhir-toolbox-go/testdata/assert/internal/txtar"
 	"path/filepath"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/testdata/assert/internal/txtar"
 )
 
 func clean(text []byte) []byte {

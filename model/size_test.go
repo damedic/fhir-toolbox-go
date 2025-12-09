@@ -1,11 +1,12 @@
 package model_test
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
 	"reflect"
 	"testing"
+
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 func TestMemSizeR4(t *testing.T) {

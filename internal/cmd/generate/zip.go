@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/json"
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/model"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/model"
 	"io"
 	"log"
 )

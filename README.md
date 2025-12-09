@@ -1,6 +1,6 @@
 # fhir-toolbox-go
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/DAMEDIC/fhir-toolbox-go.svg)](https://pkg.go.dev/github.com/DAMEDIC/fhir-toolbox-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/damedic/fhir-toolbox-go.svg)](https://pkg.go.dev/github.com/damedic/fhir-toolbox-go)
 
 > FHIR® is the registered trademark of HL7® and is used with the permission of HL7®.
 > Use of the FHIR trademark does not constitute endorsement of the contents of this repository by HL7®.
@@ -18,7 +18,7 @@ A REST server and client are provided.
 ## Installation
 
 ```sh
-go get github.com/DAMEDIC/fhir-toolbox-go
+go get github.com/damedic/fhir-toolbox-go
 ```
 
 ## Features

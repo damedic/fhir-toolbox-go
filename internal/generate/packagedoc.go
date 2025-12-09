@@ -2,7 +2,7 @@ package generate
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/internal/generate/ir"
+	"github.com/damedic/fhir-toolbox-go/internal/generate/ir"
 	"strings"
 
 	. "github.com/dave/jennifer/jen"

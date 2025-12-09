@@ -2,8 +2,8 @@ package fhirpath_test
 
 import (
 	"context"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
 	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
 	"testing"
 	"time"
 )

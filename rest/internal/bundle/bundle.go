@@ -2,11 +2,12 @@ package bundle
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/outcome"
 	"net/url"
 	"strings"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/outcome"
 )
 
 // Links captures top-level bundle links we populate.

@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 func GetExamples(release model.Release, format string) map[string][]byte {

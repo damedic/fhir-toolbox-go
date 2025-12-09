@@ -7,18 +7,19 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4b"
-	"github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
-	"github.com/cockroachdb/apd/v3"
 	"io"
 	"log"
 	"path"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4b"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r5"
 )
 
 type resourceDecoder func(io.Reader) (model.Resource, error)

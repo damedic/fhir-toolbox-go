@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
 )
 
 // Element is any element in the FHIR model.

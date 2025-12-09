@@ -6,14 +6,14 @@ package main
 
 import (
 	"context"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest"
 	"log"
 	"net/http"
 	"time"
 
-	r5 "github.com/DAMEDIC/fhir-toolbox-go/model/gen/r5"
-	"github.com/DAMEDIC/fhir-toolbox-go/utils/ptr"
+	r5 "github.com/damedic/fhir-toolbox-go/model/gen/r5"
+	"github.com/damedic/fhir-toolbox-go/utils/ptr"
 )
 
 // opBackend implements concrete operations and minimal reads needed by the server.

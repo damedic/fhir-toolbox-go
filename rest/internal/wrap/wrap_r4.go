@@ -4,9 +4,10 @@ package wrap
 
 import (
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities"
-	capabilitiesR4 "github.com/DAMEDIC/fhir-toolbox-go/capabilities/gen/r4"
-	r4 "github.com/DAMEDIC/fhir-toolbox-go/model/gen/r4"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities"
+	capabilitiesR4 "github.com/damedic/fhir-toolbox-go/capabilities/gen/r4"
+	r4 "github.com/damedic/fhir-toolbox-go/model/gen/r4"
 )
 
 func init() {

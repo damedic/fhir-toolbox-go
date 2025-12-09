@@ -5,15 +5,16 @@ import (
 	"cmp"
 	"context"
 	"fmt"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/search"
-	"github.com/DAMEDIC/fhir-toolbox-go/capabilities/update"
-	"github.com/DAMEDIC/fhir-toolbox-go/fhirpath"
-	"github.com/DAMEDIC/fhir-toolbox-go/model"
-	"github.com/DAMEDIC/fhir-toolbox-go/rest/internal/encoding"
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities"
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/capabilities/update"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
+	"github.com/damedic/fhir-toolbox-go/rest/internal/encoding"
 )
 
 const (
