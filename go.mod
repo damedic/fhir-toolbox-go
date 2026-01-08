@@ -14,4 +14,4 @@ require (
 	github.com/iimos/ucum/ucumapd v0.0.1
 )
 
-require golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39 // indirect
+require golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
