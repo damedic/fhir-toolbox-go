@@ -2405,7 +2405,7 @@ func (d Date) String() string {
 	default:
 		ds = d.Value.Format(DateFormatFull)
 	}
-	return fmt.Sprintf("%s", ds)
+	return ds
 }
 
 func (d Date) LowBoundary(precisionDigits *int) (Date, bool) {
@@ -2580,6 +2580,7 @@ func (t Time) PrecisionDigits() int {
 }
 
 func (t Time) ToString(explicit bool) (v String, ok bool, err error) {
+	// Time keeps @T prefix per FHIRPath spec (e.g., @T12:00:00)
 	return String(t.String()), true, nil
 }
 func (t Time) ToTime(explicit bool) (v Time, ok bool, err error) {
@@ -3254,21 +3255,45 @@ func (dt DateTime) String() string {
 		ds = dt.Value.Format(DateFormatFull)
 	case DateTimePrecisionHour:
 		ds = dt.Value.Format(DateFormatFull)
-		ts = dt.Value.Format(TimeFormatOnlyHourTZ)
+		if dt.HasTimeZone {
+			ts = dt.Value.Format(TimeFormatOnlyHourTZ)
+		} else {
+			ts = dt.Value.Format(TimeFormatOnlyHour)
+		}
 	case DateTimePrecisionMinute:
 		ds = dt.Value.Format(DateFormatFull)
-		ts = dt.Value.Format(TimeFormatUpToMinuteTZ)
+		if dt.HasTimeZone {
+			ts = dt.Value.Format(TimeFormatUpToMinuteTZ)
+		} else {
+			ts = dt.Value.Format(TimeFormatUpToMinute)
+		}
 	case DateTimePrecisionSecond:
 		ds = dt.Value.Format(DateFormatFull)
-		ts = dt.Value.Format(TimeFormatUpToSecondTZ)
+		if dt.HasTimeZone {
+			ts = dt.Value.Format(TimeFormatUpToSecondTZ)
+		} else {
+			ts = dt.Value.Format(TimeFormatUpToSecond)
+		}
 	case DateTimePrecisionMillisecond:
 		ds = dt.Value.Format(DateFormatFull)
-		ts = dt.Value.Format(TimeFormatFullTZ)
+		if dt.HasTimeZone {
+			ts = dt.Value.Format(TimeFormatFullTZ)
+		} else {
+			ts = dt.Value.Format(TimeFormatFull)
+		}
 	default:
 		ds = dt.Value.Format(DateFormatFull)
-		ts = dt.Value.Format(TimeFormatFullTZ)
+		if dt.HasTimeZone {
+			ts = dt.Value.Format(TimeFormatFullTZ)
+		} else {
+			ts = dt.Value.Format(TimeFormatFull)
+		}
 	}
 
+	// Only include T if there's a time component
+	if ts == "" {
+		return ds
+	}
 	return fmt.Sprintf("%sT%s", ds, ts)
 }
 
@@ -3416,12 +3441,21 @@ func buildDateTimeBoundary(value DateTime, digits int, useUpper bool) (DateTime,
 	// require floating datetimes to represent the range of possible timezone offsets,
 	// modeled as +/-14h (low) and +/-12h (high) adjustments at the requested precision.
 	if !value.HasTimeZone && includesTimeComponent(precision) {
-		offset := maxTimeZoneOffsetHours
+		// Create a FixedZone with the appropriate offset
+		// Low boundary uses +14:00 (earliest possible), high boundary uses -12:00 (latest possible)
+		var offsetHours int
+		var zoneName string
 		if useUpper {
-			offset = minTimeZoneOffsetHours
+			offsetHours = minTimeZoneOffsetHours // -12
+			zoneName = "-12:00"
+		} else {
+			offsetHours = maxTimeZoneOffsetHours // +14
+			zoneName = "+14:00"
 		}
-		adjHour := adjustHourForOffset(anchor.Hour(), offset)
-		anchor = time.Date(anchor.Year(), anchor.Month(), anchor.Day(), adjHour, anchor.Minute(), anchor.Second(), anchor.Nanosecond(), anchor.Location())
+		offsetSeconds := offsetHours * 3600
+		loc := time.FixedZone(zoneName, offsetSeconds)
+		// Reconstruct the time in the new timezone
+		anchor = time.Date(anchor.Year(), anchor.Month(), anchor.Day(), anchor.Hour(), anchor.Minute(), anchor.Second(), anchor.Nanosecond(), loc)
 	}
 
 	result := buildDateTimeFromTime(anchor, precision)
@@ -3442,15 +3476,6 @@ func includesTimeComponent(p DateTimePrecision) bool {
 	}
 }
 
-func adjustHourForOffset(hour, offset int) int {
-	adj := hour - offset
-	adj %= 24
-	if adj < 0 {
-		adj += 24
-	}
-	return adj
-}
-
 const (
 	DateFormatOnlyYear     = "2006"
 	DateFormatUpToMonth    = "2006-01"
@@ -3461,8 +3486,14 @@ const (
 	TimeFormatUpToMinuteTZ = "15:04Z07:00"
 	TimeFormatUpToSecond   = "15:04:05"
 	TimeFormatUpToSecondTZ = "15:04:05Z07:00"
-	TimeFormatFull         = "15:04:05.999999999"
-	TimeFormatFullTZ       = "15:04:05.999999999Z07:00"
+	TimeFormatFull         = "15:04:05.000"
+	TimeFormatFullTZ       = "15:04:05.000Z07:00"
+)
+
+// Private parsing formats that allow variable fractional seconds (1-3 digits)
+const (
+	parseTimeFormatFull   = "15:04:05.999999999"
+	parseTimeFormatFullTZ = "15:04:05.999999999Z07:00"
 )
 
 func ParseDate(s string) (Date, error) {
@@ -3528,12 +3559,12 @@ func parseTime(s string, withTZ bool) (Time, error) {
 			}
 		}
 	}
-	t, err = time.Parse(TimeFormatFull, ts)
+	t, err = time.Parse(parseTimeFormatFull, ts)
 	if err == nil {
 		return Time{Value: t, Precision: TimePrecisionMillisecond}, nil
 	}
 	if withTZ {
-		t, err = time.Parse(TimeFormatFullTZ, ts)
+		t, err = time.Parse(parseTimeFormatFullTZ, ts)
 		if err == nil {
 			return Time{Value: t, Precision: TimePrecisionMillisecond}, nil
 		}
@@ -3543,7 +3574,8 @@ func parseTime(s string, withTZ bool) (Time, error) {
 }
 
 func ParseDateTime(s string) (DateTime, error) {
-	splits := strings.Split(s, "T")
+	originalStr := strings.TrimLeft(s, "@")
+	splits := strings.Split(originalStr, "T")
 
 	ds := splits[0]
 	d, err := ParseDate(ds)
@@ -3551,15 +3583,7 @@ func ParseDateTime(s string) (DateTime, error) {
 		return DateTime{}, fmt.Errorf("invalid DateTime format (date part): %s", s)
 	}
 
-	hasTimeZone := false
-	if len(splits) > 1 && splits[1] != "" {
-		tsPart := splits[1]
-		if idx := strings.IndexAny(tsPart, "Zz"); idx != -1 {
-			hasTimeZone = true
-		} else if strings.Contains(tsPart, "+") || strings.Contains(tsPart, "-") {
-			hasTimeZone = true
-		}
-	}
+	// Date-only datetime
 	if len(splits) == 1 || splits[1] == "" {
 		if d.Precision == DatePrecisionFull {
 			return DateTime{Value: d.Value, Precision: DateTimePrecisionDay, HasTimeZone: false}, nil
@@ -3567,21 +3591,52 @@ func ParseDateTime(s string) (DateTime, error) {
 		return DateTime{Value: d.Value, Precision: DateTimePrecision(d.Precision), HasTimeZone: false}, nil
 	}
 
+	// DateTime with time component - detect timezone presence
 	ts := splits[1]
-	t, err := parseTime(ts, true)
-	if err != nil {
-		return DateTime{}, fmt.Errorf("invalid DateTime format (time part): %s", s)
+	hasTimeZone := strings.ContainsAny(ts, "Zz") ||
+		strings.Contains(ts, "+") ||
+		strings.Contains(ts, "-")
+
+	// Parse FULL datetime string in one pass to preserve FixedZone
+	var fullTime time.Time
+	var precision DateTimePrecision
+
+	fullStr := ds + "T" + ts
+	// Try parsing with different precision levels
+	formats := []struct {
+		format    string
+		precision DateTimePrecision
+	}{
+		{DateFormatFull + "T" + parseTimeFormatFullTZ, DateTimePrecisionMillisecond},
+		{DateFormatFull + "T" + parseTimeFormatFull, DateTimePrecisionMillisecond},
+		{DateFormatFull + "T" + TimeFormatUpToSecondTZ, DateTimePrecisionSecond},
+		{DateFormatFull + "T" + TimeFormatUpToSecond, DateTimePrecisionSecond},
+		{DateFormatFull + "T" + TimeFormatUpToMinuteTZ, DateTimePrecisionMinute},
+		{DateFormatFull + "T" + TimeFormatUpToMinute, DateTimePrecisionMinute},
+		{DateFormatFull + "T" + TimeFormatOnlyHourTZ, DateTimePrecisionHour},
+		{DateFormatFull + "T" + TimeFormatOnlyHour, DateTimePrecisionHour},
 	}
 
-	tv := t.Value.In(d.Value.Location())
+	parsed := false
+	for _, f := range formats {
+		t, err := time.Parse(f.format, fullStr)
+		if err == nil {
+			fullTime = t
+			precision = f.precision
+			parsed = true
+			break
+		}
+	}
 
-	dt := d.Value.Add(
-		time.Hour*time.Duration(tv.Hour()) +
-			time.Minute*time.Duration(tv.Minute()) +
-			time.Second*time.Duration(tv.Second()) +
-			time.Nanosecond*time.Duration(tv.Nanosecond()),
-	)
-	return DateTime{Value: dt, Precision: DateTimePrecision(t.Precision), HasTimeZone: hasTimeZone}, nil
+	if !parsed {
+		return DateTime{}, fmt.Errorf("invalid DateTime format: %s", s)
+	}
+
+	return DateTime{
+		Value:       fullTime,
+		Precision:   precision,
+		HasTimeZone: hasTimeZone,
+	}, nil
 }
 
 // Time units for date/time arithmetic

@@ -2,10 +2,11 @@ package fhirpath_test
 
 import (
 	"context"
-	"github.com/cockroachdb/apd/v3"
-	"github.com/damedic/fhir-toolbox-go/fhirpath"
 	"testing"
 	"time"
+
+	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
 )
 
 func TestDateArithmetic(t *testing.T) {
@@ -377,8 +378,13 @@ func TestDateTimeBoundariesPreserveTimeZone(t *testing.T) {
 	if !floatingLow.HasTimeZone {
 		t.Fatalf("floating datetime boundary should mark timezone")
 	}
-	if floatingLow.Value.Day() != 1 || floatingLow.Value.Hour() != 18 {
-		t.Fatalf("floating datetime low boundary should adjust hour: %v", floatingLow.Value)
+	// Low boundary should be in +14:00 timezone (earliest possible)
+	if floatingLow.Value.Day() != 1 || floatingLow.Value.Hour() != 8 {
+		t.Fatalf("floating datetime low boundary should preserve hour with +14:00 timezone: %v", floatingLow.Value)
+	}
+	_, offset := floatingLow.Value.Zone()
+	if offset != 14*3600 {
+		t.Fatalf("floating datetime low boundary should have +14:00 offset, got %d", offset)
 	}
 
 	floatingHigh, ok := floating.HighBoundary(&digits)
@@ -388,8 +394,13 @@ func TestDateTimeBoundariesPreserveTimeZone(t *testing.T) {
 	if !floatingHigh.HasTimeZone {
 		t.Fatalf("floating datetime boundary should mark timezone")
 	}
-	if floatingHigh.Value.Hour() != 20 {
-		t.Fatalf("floating datetime high boundary should adjust hour: %v", floatingHigh.Value)
+	// High boundary should be in -12:00 timezone (latest possible)
+	if floatingHigh.Value.Hour() != 8 {
+		t.Fatalf("floating datetime high boundary should preserve hour with -12:00 timezone: %v", floatingHigh.Value)
+	}
+	_, offset = floatingHigh.Value.Zone()
+	if offset != -12*3600 {
+		t.Fatalf("floating datetime high boundary should have -12:00 offset, got %d", offset)
 	}
 }
 
@@ -561,6 +572,71 @@ func TestDateTimeArithmetic(t *testing.T) {
 			}
 			if got != tt.wantSub {
 				t.Errorf("Subtract() = %v, want %v", got, tt.wantSub)
+			}
+		})
+	}
+}
+
+// TestDateTimeToStringPreservesTimezone tests that toString() preserves the original timezone
+// from the parsed datetime string. This is a regression test for GitHub issue #9.
+func TestDateTimeToStringPreservesTimezone(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "morning with +11:00",
+			input:    "@2024-01-15T06:30:00.000+11:00",
+			expected: "2024-01-15T06:30:00.000+11:00",
+		},
+		{
+			name:     "afternoon with +11:00",
+			input:    "@2024-01-15T16:30:00.000+11:00",
+			expected: "2024-01-15T16:30:00.000+11:00",
+		},
+		{
+			name:     "negative timezone",
+			input:    "@2024-01-15T06:30:00.000-05:00",
+			expected: "2024-01-15T06:30:00.000-05:00",
+		},
+		{
+			name:     "UTC with Z",
+			input:    "@2024-01-15T06:30:00.000Z",
+			expected: "2024-01-15T06:30:00.000Z",
+		},
+		{
+			name:     "floating datetime no TZ",
+			input:    "@2024-01-15T06:30:00.000",
+			expected: "2024-01-15T06:30:00.000",
+		},
+		{
+			name:     "UTC with explicit +00:00",
+			input:    "@2024-01-15T06:30:00.000+00:00",
+			expected: "2024-01-15T06:30:00.000Z", // Go normalizes +00:00 to Z
+		},
+		{
+			name:     "fractional timezone +05:30",
+			input:    "@2024-01-15T06:30:00.000+05:30",
+			expected: "2024-01-15T06:30:00.000+05:30",
+		},
+		{
+			name:     "date-only DateTime without T",
+			input:    "@2024-01-15",
+			expected: "2024-01-15",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dt, err := fhirpath.ParseDateTime(tt.input)
+			if err != nil {
+				t.Fatalf("ParseDateTime(%q) failed: %v", tt.input, err)
+			}
+
+			got := dt.String()
+			if got != tt.expected {
+				t.Errorf("String() = %q, want %q", got, tt.expected)
 			}
 		})
 	}
