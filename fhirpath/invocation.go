@@ -162,7 +162,7 @@ func callFunc(
 			ctx context.Context,
 			target Collection,
 			expr Expression,
-			fnScope ...FunctionScope,
+			scope *FunctionScope, // nil preserves parent scope
 		) (result Collection, resultOrdered bool, err error) {
 			// Create isolated environment scope for ALL parameter evaluations
 			// This prevents variables defined in parameter expressions from colliding
@@ -170,28 +170,28 @@ func callFunc(
 
 			parentScope, parentOk := getFunctionScope(ctx)
 
-			if len(fnScope) > 0 {
-				scope := functionScope{
-					index: fnScope[0].index,
+			if scope != nil {
+				fnScope := functionScope{
+					index: scope.index,
 				}
 
 				if len(target) == 1 && target[0] != nil {
-					scope.this = target[0]
+					fnScope.this = target[0]
 				}
 
 				// Preserve aggregate context from parent
 				if parentOk && parentScope.aggregate {
-					scope.aggregate = true
-					scope.total = parentScope.total
+					fnScope.aggregate = true
+					fnScope.total = parentScope.total
 				}
 
 				// Set aggregate context if this is the aggregate function
 				if ident == "aggregate" {
-					scope.aggregate = true
-					scope.total = fnScope[0].total
+					fnScope.aggregate = true
+					fnScope.total = scope.total
 				}
 
-				ctx = withFunctionScope(ctx, scope)
+				ctx = withFunctionScope(ctx, fnScope)
 			}
 			// Determine the evaluation target for the parameter expression:
 			//  1. Use the explicit target supplied by the caller (e.g., select/where).

@@ -68,7 +68,7 @@ type EvaluateFunc = func(
 	ctx context.Context,
 	target Collection,
 	expr Expression,
-	fnScope ...FunctionScope,
+	scope *FunctionScope, // nil preserves parent scope
 ) (result Collection, resultOrdered bool, err error)
 
 type functionCtxKey struct{}
@@ -285,7 +285,7 @@ var defaultFunctions = Functions{
 
 		// With criteria, equivalent to where(criteria).exists()
 		for i, elem := range target {
-			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 			if err != nil {
 				return nil, false, err
 			}
@@ -319,7 +319,7 @@ var defaultFunctions = Functions{
 		}
 
 		for i, elem := range target {
-			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 			if err != nil {
 				return nil, false, err
 			}
@@ -462,7 +462,7 @@ var defaultFunctions = Functions{
 			return Collection{Boolean(true)}, true, nil
 		}
 
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -498,7 +498,7 @@ var defaultFunctions = Functions{
 			return nil, false, fmt.Errorf("expected single collection parameter")
 		}
 
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -615,7 +615,7 @@ var defaultFunctions = Functions{
 		}
 
 		for i, elem := range target {
-			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+			criteria, _, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 			if err != nil {
 				return nil, false, err
 			}
@@ -650,7 +650,7 @@ var defaultFunctions = Functions{
 
 		resultOrdered = inputOrdered
 		for i, elem := range target {
-			projection, ordered, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+			projection, ordered, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 			if err != nil {
 				return nil, false, err
 			}
@@ -694,7 +694,7 @@ var defaultFunctions = Functions{
 			}
 			items[i].keys = make([]sortKeyValue, len(parameters))
 			for j, param := range parameters {
-				keyResult, _, err := evaluate(ctx, Collection{elem}, param, FunctionScope{index: i})
+				keyResult, _, err := evaluate(ctx, Collection{elem}, param, &FunctionScope{index: i})
 				if err != nil {
 					return nil, false, err
 				}
@@ -795,7 +795,7 @@ var defaultFunctions = Functions{
 		for {
 			newItems = nil
 			for i, elem := range current {
-				projection, _, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+				projection, _, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 				if err != nil {
 					return nil, false, err
 				}
@@ -858,7 +858,7 @@ var defaultFunctions = Functions{
 		for len(queue) > 0 {
 			var next Collection
 			for i, elem := range queue {
-				projection, _, err := evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i})
+				projection, _, err := evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i})
 				if err != nil {
 					return nil, false, err
 				}
@@ -987,7 +987,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the num parameter
-		numCollection, _, err := evaluate(ctx, nil, parameters[0])
+		numCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1035,7 +1035,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the num parameter
-		numCollection, _, err := evaluate(ctx, nil, parameters[0])
+		numCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1079,7 +1079,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the other collection parameter
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1131,7 +1131,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the other collection parameter
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1172,7 +1172,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the other collection parameter
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1192,7 +1192,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the other collection parameter
-		other, _, err := evaluate(ctx, nil, parameters[0])
+		other, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1213,7 +1213,7 @@ var defaultFunctions = Functions{
 		}
 
 		for _, param := range parameters {
-			value, ordered, err := evaluate(ctx, nil, param)
+			value, ordered, err := evaluate(ctx, nil, param, nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -1246,7 +1246,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the substring parameter
-		substringCollection, _, err := evaluate(ctx, nil, parameters[0])
+		substringCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1301,7 +1301,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the substring parameter
-		substringCollection, _, err := evaluate(ctx, nil, parameters[0])
+		substringCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1349,19 +1349,19 @@ var defaultFunctions = Functions{
 
 		// Determine parameter evaluation context
 		var paramTarget Collection
-		var paramScope []FunctionScope
+		var paramScope *FunctionScope
 		parentScope, ok := getFunctionScope(ctx)
 		if ok {
 			if len(target) > 0 && target[0] != nil {
 				paramTarget = Collection{target[0]}
-				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+				paramScope = &FunctionScope{index: parentScope.index, total: parentScope.total}
 			}
 		} else if root != nil {
 			paramTarget = Collection{root}
 		}
 
 		// Evaluate the start parameter (FHIRPath substring section states empty args propagate as empty results)
-		startCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
+		startCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1386,7 +1386,7 @@ var defaultFunctions = Functions{
 		// If length parameter is provided
 		if len(parameters) == 2 {
 			// Evaluate the length parameter (FHIRPath substring section: empty length behaves as if omitted)
-			lengthCollection, _, err := evaluate(ctx, paramTarget, parameters[1], paramScope...)
+			lengthCollection, _, err := evaluate(ctx, paramTarget, parameters[1], paramScope)
 			if err != nil {
 				return nil, false, err
 			}
@@ -1440,19 +1440,19 @@ var defaultFunctions = Functions{
 
 		// Determine parameter evaluation context
 		var paramTarget Collection
-		var paramScope []FunctionScope
+		var paramScope *FunctionScope
 		parentScope, ok := getFunctionScope(ctx)
 		if ok {
 			if len(target) > 0 && target[0] != nil {
 				paramTarget = Collection{target[0]}
-				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+				paramScope = &FunctionScope{index: parentScope.index, total: parentScope.total}
 			}
 		} else if root != nil {
 			paramTarget = Collection{root}
 		}
 
 		// Evaluate the prefix parameter
-		prefixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
+		prefixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1500,19 +1500,19 @@ var defaultFunctions = Functions{
 
 		// Determine parameter evaluation context
 		var paramTarget Collection
-		var paramScope []FunctionScope
+		var paramScope *FunctionScope
 		parentScope, ok := getFunctionScope(ctx)
 		if ok {
 			if len(target) > 0 && target[0] != nil {
 				paramTarget = Collection{target[0]}
-				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+				paramScope = &FunctionScope{index: parentScope.index, total: parentScope.total}
 			}
 		} else if root != nil {
 			paramTarget = Collection{root}
 		}
 
 		// Evaluate the suffix parameter
-		suffixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
+		suffixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1560,19 +1560,19 @@ var defaultFunctions = Functions{
 
 		// Determine parameter evaluation context
 		var paramTarget Collection
-		var paramScope []FunctionScope
+		var paramScope *FunctionScope
 		parentScope, ok := getFunctionScope(ctx)
 		if ok {
 			if len(target) > 0 && target[0] != nil {
 				paramTarget = Collection{target[0]}
-				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+				paramScope = &FunctionScope{index: parentScope.index, total: parentScope.total}
 			}
 		} else if root != nil {
 			paramTarget = Collection{root}
 		}
 
 		// Evaluate the substring parameter
-		substringCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
+		substringCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1671,7 +1671,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the pattern parameter
-		patternCollection, _, err := evaluate(ctx, evalTarget, parameters[0])
+		patternCollection, _, err := evaluate(ctx, evalTarget, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1686,7 +1686,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the substitution parameter
-		substitutionCollection, _, err := evaluate(ctx, evalTarget, parameters[1])
+		substitutionCollection, _, err := evaluate(ctx, evalTarget, parameters[1], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1735,7 +1735,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the regex parameter
-		regexCollection, _, err := evaluate(ctx, nil, parameters[0])
+		regexCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1757,7 +1757,7 @@ var defaultFunctions = Functions{
 		// Evaluate optional flags parameter
 		var flags string
 		if len(parameters) == 2 {
-			flagsCollection, _, err := evaluate(ctx, nil, parameters[1])
+			flagsCollection, _, err := evaluate(ctx, nil, parameters[1], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -1818,7 +1818,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the regex parameter
-		regexCollection, _, err := evaluate(ctx, nil, parameters[0])
+		regexCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1843,7 +1843,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the substitution parameter
-		substitutionCollection, _, err := evaluate(ctx, nil, parameters[1])
+		substitutionCollection, _, err := evaluate(ctx, nil, parameters[1], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -1865,7 +1865,7 @@ var defaultFunctions = Functions{
 		// Evaluate optional flags parameter
 		var flags string
 		if len(parameters) == 3 {
-			flagsCollection, _, err := evaluate(ctx, nil, parameters[2])
+			flagsCollection, _, err := evaluate(ctx, nil, parameters[2], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -1976,7 +1976,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the regex parameter
-		regexCollection, _, err := evaluate(ctx, nil, parameters[0])
+		regexCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2043,7 +2043,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the separator parameter
-		separatorCollection, _, err := evaluate(ctx, nil, parameters[0])
+		separatorCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2085,7 +2085,7 @@ var defaultFunctions = Functions{
 		separator := String("")
 		if len(parameters) == 1 {
 			// Evaluate the separator parameter
-			separatorCollection, _, err := evaluate(ctx, nil, parameters[0])
+			separatorCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -2146,7 +2146,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the format parameter
-		formatCollection, _, err := evaluate(ctx, nil, parameters[0])
+		formatCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2204,7 +2204,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the format parameter
-		formatCollection, _, err := evaluate(ctx, nil, parameters[0])
+		formatCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2271,7 +2271,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the target parameter
-		targetCollection, _, err := evaluate(ctx, nil, parameters[0])
+		targetCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2368,7 +2368,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the target parameter
-		targetCollection, _, err := evaluate(ctx, nil, parameters[0])
+		targetCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2475,7 +2475,7 @@ var defaultFunctions = Functions{
 			precisionProvided bool
 		)
 		if len(parameters) == 1 {
-			precisionCollection, _, err := evaluate(ctx, nil, parameters[0])
+			precisionCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -2587,7 +2587,7 @@ var defaultFunctions = Functions{
 			precisionProvided bool
 		)
 		if len(parameters) == 1 {
-			precisionCollection, _, err := evaluate(ctx, nil, parameters[0])
+			precisionCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -2745,7 +2745,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the value parameter
-		valueResult, _, err := evaluate(ctx, nil, parameters[0])
+		valueResult, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2757,7 +2757,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the precision parameter
-		precisionResult, _, err := evaluate(ctx, nil, parameters[1])
+		precisionResult, _, err := evaluate(ctx, nil, parameters[1], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2823,7 +2823,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the value parameter
-		valueResult, _, err := evaluate(ctx, nil, parameters[0])
+		valueResult, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2835,7 +2835,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the precision parameter
-		precisionResult, _, err := evaluate(ctx, nil, parameters[1])
+		precisionResult, _, err := evaluate(ctx, nil, parameters[1], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2890,7 +2890,7 @@ var defaultFunctions = Functions{
 			return nil, false, fmt.Errorf("expected one or two parameters (name [, value])")
 		}
 
-		nameCollection, _, err := evaluate(ctx, nil, parameters[0])
+		nameCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -2922,7 +2922,7 @@ var defaultFunctions = Functions{
 		if len(parameters) == 2 {
 			// FHIRPath STU defineVariable: the value expression is evaluated once using the
 			// current input collection as its starting point (Functions - Utility section).
-			value, _, err = evaluate(ctx, target, parameters[1])
+			value, _, err = evaluate(ctx, target, parameters[1], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -3138,7 +3138,7 @@ var defaultFunctions = Functions{
 
 		decimalPlaces := int64(0)
 		if len(parameters) == 1 {
-			c, _, err := evaluate(ctx, nil, parameters[0])
+			c, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -3262,7 +3262,7 @@ var defaultFunctions = Functions{
 			return nil, false, fmt.Errorf("log() expects a single input element")
 		}
 
-		baseCollection, _, err := evaluate(ctx, nil, parameters[0])
+		baseCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -3323,7 +3323,7 @@ var defaultFunctions = Functions{
 			return nil, false, fmt.Errorf("power() expects a single input element")
 		}
 
-		exponentCollection, _, err := evaluate(ctx, nil, parameters[0])
+		exponentCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -3798,7 +3798,7 @@ var defaultFunctions = Functions{
 		// If unit parameter is provided, check if the quantity can be converted to the given unit
 		if len(parameters) == 1 {
 			// Evaluate the unit parameter
-			unitCollection, _, err := evaluate(ctx, nil, parameters[0])
+			unitCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -3843,7 +3843,7 @@ var defaultFunctions = Functions{
 		// If unit parameter is provided, check if the quantity can be converted to the given unit
 		if len(parameters) == 1 {
 			// Evaluate the unit parameter
-			unitCollection, _, err := evaluate(ctx, nil, parameters[0])
+			unitCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -4018,7 +4018,7 @@ var defaultFunctions = Functions{
 			return nil, false, err
 		}
 
-		nameParam, _, err := evaluate(ctx, nil, parameters[0])
+		nameParam, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -4036,7 +4036,7 @@ var defaultFunctions = Functions{
 		var logCollection Collection
 		if len(parameters) == 2 {
 			for i, elem := range target {
-				projection, _, err := evaluate(ctx, Collection{elem}, parameters[1], FunctionScope{index: i})
+				projection, _, err := evaluate(ctx, Collection{elem}, parameters[1], &FunctionScope{index: i})
 				if err != nil {
 					return nil, false, err
 				}
@@ -4075,7 +4075,7 @@ var defaultFunctions = Functions{
 		if len(parameters) == 2 {
 			// If init value is provided, evaluate it
 			var err error
-			total, totalOrdered, err = evaluate(ctx, nil, parameters[1])
+			total, totalOrdered, err = evaluate(ctx, nil, parameters[1], nil)
 			if err != nil {
 				return nil, false, err
 			}
@@ -4084,7 +4084,7 @@ var defaultFunctions = Functions{
 		// Iterate over the target collection
 		for i, elem := range target {
 			var ordered bool
-			total, ordered, err = evaluate(ctx, Collection{elem}, parameters[0], FunctionScope{index: i, total: total})
+			total, ordered, err = evaluate(ctx, Collection{elem}, parameters[0], &FunctionScope{index: i, total: total})
 			if err != nil {
 				return nil, false, err
 			}
@@ -4164,20 +4164,20 @@ var defaultFunctions = Functions{
 		// Determine the evaluation target and scope for $this context
 		// Always set these, even for empty collections, to ensure proper scope resolution
 		evalTarget := target
-		var fnScope []FunctionScope
+		var fnScope *FunctionScope
 
 		// Preserve the parent function scope's index if it exists
 		parentScope, ok := getFunctionScope(ctx)
 		if ok {
 			// Use parent scope's index
-			fnScope = []FunctionScope{{index: parentScope.index, total: target}}
+			fnScope = &FunctionScope{index: parentScope.index, total: target}
 		} else {
 			// No parent scope, set index to 0
-			fnScope = []FunctionScope{{index: 0, total: target}}
+			fnScope = &FunctionScope{index: 0, total: target}
 		}
 
 		// Evaluate the criterion expression with $this context
-		criterion, _, err := evaluate(ctx, evalTarget, parameters[0], fnScope...)
+		criterion, _, err := evaluate(ctx, evalTarget, parameters[0], fnScope)
 		if err != nil {
 			return nil, false, err
 		}
@@ -4191,7 +4191,7 @@ var defaultFunctions = Functions{
 		// Short-circuit evaluation: only evaluate the taken branch
 		// If criterion is true, return the value of the true-result argument
 		if ok && bool(criterionBool) {
-			trueResult, ordered, err := evaluate(ctx, evalTarget, parameters[1], fnScope...)
+			trueResult, ordered, err := evaluate(ctx, evalTarget, parameters[1], fnScope)
 			if err != nil {
 				return nil, false, err
 			}
@@ -4201,7 +4201,7 @@ var defaultFunctions = Functions{
 		// If criterion is false or an empty collection, return otherwise-result
 		// If otherwise-result is not given, return an empty collection
 		if len(parameters) == 3 {
-			otherwiseResult, ordered, err := evaluate(ctx, evalTarget, parameters[2], fnScope...)
+			otherwiseResult, ordered, err := evaluate(ctx, evalTarget, parameters[2], fnScope)
 			if err != nil {
 				return nil, false, err
 			}
@@ -4581,7 +4581,7 @@ var defaultFunctions = Functions{
 		}
 
 		// Evaluate the parameter
-		paramCollection, _, err := evaluate(ctx, nil, parameters[0])
+		paramCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}
@@ -4633,7 +4633,7 @@ var FHIRFunctions = Functions{
 			return nil, false, fmt.Errorf("expected a single extension parameter")
 		}
 
-		extCollection, _, err := evaluate(ctx, nil, parameters[0])
+		extCollection, _, err := evaluate(ctx, nil, parameters[0], nil)
 		if err != nil {
 			return nil, false, err
 		}

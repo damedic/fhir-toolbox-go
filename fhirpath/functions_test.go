@@ -275,7 +275,7 @@ func testFunction(t *testing.T, fn Function, target Collection, params []Express
 	root := testElement{value: nil}
 
 	// Mock evaluate function that can handle simple expressions
-	mockEvaluate := func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+	mockEvaluate := func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 		if expr.tree == nil {
 			return Collection{}, false, fmt.Errorf("unexpected expression <nil>")
 		}
@@ -430,19 +430,19 @@ func runFunctionWithEval(t *testing.T, fn Function, target Collection, params []
 	ctx = withEvaluationInstant(ctx)
 	root := testElement{}
 
-	evaluate := func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+	evaluate := func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 		if expr.tree == nil {
 			return nil, false, fmt.Errorf("unexpected expression <nil>")
 		}
 
-		if len(fnScope) > 0 {
-			scope := functionScope{
-				index: fnScope[0].index,
+		if scope != nil {
+			fnScope := functionScope{
+				index: scope.index,
 			}
 			if len(target) == 1 {
-				scope.this = target[0]
+				fnScope.this = target[0]
 			}
-			ctx = withFunctionScope(ctx, scope)
+			ctx = withFunctionScope(ctx, fnScope)
 		}
 
 		return evalExpression(ctx, root, target, true, expr.tree, true)
@@ -1337,7 +1337,7 @@ func TestTemporalFunctionsDeterministic(t *testing.T) {
 	ctx = WithEvaluationTime(ctx, fixedEvaluationInstant)
 	ctx = withEvaluationInstant(ctx)
 	root := testElement{}
-	noEval := func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+	noEval := func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 		return nil, false, fmt.Errorf("unexpected evaluation")
 	}
 
@@ -1544,7 +1544,7 @@ func TestDefineVariable(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockEvaluate := func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+			mockEvaluate := func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 				if expr.tree == nil {
 					return Collection{}, false, fmt.Errorf("unexpected expression <nil>")
 				}
@@ -1761,16 +1761,16 @@ func TestIIFWithThisContext(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
 			ctx = withEvaluationInstant(ctx)
-			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 				// Set up function scope if provided
-				if len(fnScope) > 0 {
-					scope := functionScope{
-						index: fnScope[0].index,
+				if scope != nil {
+					fnScope := functionScope{
+						index: scope.index,
 					}
 					if len(target) == 1 {
-						scope.this = target[0]
+						fnScope.this = target[0]
 					}
-					ctx = withFunctionScope(ctx, scope)
+					ctx = withFunctionScope(ctx, fnScope)
 				}
 				// Determine evaluation target
 				evalTarget := target
@@ -1828,16 +1828,16 @@ func TestIIFWithNilElement(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
 			ctx = withEvaluationInstant(ctx)
-			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, scope *FunctionScope) (Collection, bool, error) {
 				// Set up function scope if provided
-				if len(fnScope) > 0 {
-					scope := functionScope{
-						index: fnScope[0].index,
+				if scope != nil {
+					fnScope := functionScope{
+						index: scope.index,
 					}
 					if len(target) == 1 {
-						scope.this = target[0]
+						fnScope.this = target[0]
 					}
-					ctx = withFunctionScope(ctx, scope)
+					ctx = withFunctionScope(ctx, fnScope)
 				}
 				// Determine evaluation target
 				evalTarget := target
