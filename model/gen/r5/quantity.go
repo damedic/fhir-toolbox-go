@@ -680,22 +680,7 @@ func (r Quantity) ToQuantity(explicit bool) (fhirpath.Quantity, bool, error) {
 	}
 	var unit string
 	if r.Code != nil && r.Code.Value != nil {
-		switch *r.Code.Value {
-		case "a":
-			unit = "year"
-		case "mo":
-			unit = "month"
-		case "d":
-			unit = "day"
-		case "h":
-			unit = "hour"
-		case "min":
-			unit = "minute"
-		case "s":
-			unit = "second"
-		default:
-			unit = *r.Code.Value
-		}
+		unit = *r.Code.Value
 	}
 	return fhirpath.Quantity{
 		Unit:  fhirpath.String(unit),

@@ -436,15 +436,7 @@ func generateToQuantityFunc(f *File, s ir.Struct) {
 			g.Var().Id("unit").String()
 			g.If(Id("r").Dot("Code").Op("!=").Nil().Op("&&").
 				Id("r").Dot("Code").Dot("Value").Op("!=").Nil()).Block(
-				Switch(Op("*").Id("r").Dot("Code").Dot("Value")).Block(
-					Case(Lit("a")).Id("unit").Op("=").Lit("year"),
-					Case(Lit("mo")).Id("unit").Op("=").Lit("month"),
-					Case(Lit("d")).Id("unit").Op("=").Lit("day"),
-					Case(Lit("h")).Id("unit").Op("=").Lit("hour"),
-					Case(Lit("min")).Id("unit").Op("=").Lit("minute"),
-					Case(Lit("s")).Id("unit").Op("=").Lit("second"),
-					Default().Id("unit").Op("=").Op("*").Id("r").Dot("Code").Dot("Value"),
-				),
+				Id("unit").Op("=").Op("*").Id("r").Dot("Code").Dot("Value"),
 			)
 
 			g.Return(
