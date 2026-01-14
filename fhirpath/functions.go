@@ -96,12 +96,9 @@ func withFunctionScope(
 	)
 }
 
-func getFunctionScope(ctx context.Context) (functionScope, error) {
+func getFunctionScope(ctx context.Context) (functionScope, bool) {
 	fnCtx, ok := ctx.Value(functionCtxKey{}).(functionScope)
-	if !ok {
-		return functionScope{}, fmt.Errorf("not in function context")
-	}
-	return fnCtx, nil
+	return fnCtx, ok
 }
 
 type functionsKey struct{}
@@ -1350,7 +1347,18 @@ var defaultFunctions = Functions{
 		runes := []rune(string(s))
 		runeCount := len(runes)
 
-		paramTarget, paramScope := singleInputParamContext(ctx, root, target)
+		// Determine parameter evaluation context
+		var paramTarget Collection
+		var paramScope []FunctionScope
+		parentScope, ok := getFunctionScope(ctx)
+		if ok {
+			if len(target) > 0 && target[0] != nil {
+				paramTarget = Collection{target[0]}
+				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+			}
+		} else if root != nil {
+			paramTarget = Collection{root}
+		}
 
 		// Evaluate the start parameter (FHIRPath substring section states empty args propagate as empty results)
 		startCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
@@ -1430,7 +1438,18 @@ var defaultFunctions = Functions{
 			return nil, true, nil
 		}
 
-		paramTarget, paramScope := singleInputParamContext(ctx, root, target)
+		// Determine parameter evaluation context
+		var paramTarget Collection
+		var paramScope []FunctionScope
+		parentScope, ok := getFunctionScope(ctx)
+		if ok {
+			if len(target) > 0 && target[0] != nil {
+				paramTarget = Collection{target[0]}
+				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+			}
+		} else if root != nil {
+			paramTarget = Collection{root}
+		}
 
 		// Evaluate the prefix parameter
 		prefixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
@@ -1479,7 +1498,18 @@ var defaultFunctions = Functions{
 			return nil, true, nil
 		}
 
-		paramTarget, paramScope := singleInputParamContext(ctx, root, target)
+		// Determine parameter evaluation context
+		var paramTarget Collection
+		var paramScope []FunctionScope
+		parentScope, ok := getFunctionScope(ctx)
+		if ok {
+			if len(target) > 0 && target[0] != nil {
+				paramTarget = Collection{target[0]}
+				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+			}
+		} else if root != nil {
+			paramTarget = Collection{root}
+		}
 
 		// Evaluate the suffix parameter
 		suffixCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
@@ -1528,7 +1558,18 @@ var defaultFunctions = Functions{
 			return nil, true, nil
 		}
 
-		paramTarget, paramScope := singleInputParamContext(ctx, root, target)
+		// Determine parameter evaluation context
+		var paramTarget Collection
+		var paramScope []FunctionScope
+		parentScope, ok := getFunctionScope(ctx)
+		if ok {
+			if len(target) > 0 && target[0] != nil {
+				paramTarget = Collection{target[0]}
+				paramScope = []FunctionScope{{index: parentScope.index, total: parentScope.total}}
+			}
+		} else if root != nil {
+			paramTarget = Collection{root}
+		}
 
 		// Evaluate the substring parameter
 		substringCollection, _, err := evaluate(ctx, paramTarget, parameters[0], paramScope...)
@@ -4126,8 +4167,8 @@ var defaultFunctions = Functions{
 		var fnScope []FunctionScope
 
 		// Preserve the parent function scope's index if it exists
-		parentScope, err := getFunctionScope(ctx)
-		if err == nil {
+		parentScope, ok := getFunctionScope(ctx)
+		if ok {
 			// Use parent scope's index
 			fnScope = []FunctionScope{{index: parentScope.index, total: target}}
 		} else {
@@ -5078,24 +5119,4 @@ func hasTimePrecision(t Time, precision string) bool {
 		return t.Precision == TimePrecisionMillisecond
 	}
 	return false
-}
-
-func singleInputParamContext(ctx context.Context, root Element, target Collection) (Collection, []FunctionScope) {
-	parentScope, err := getFunctionScope(ctx)
-	if err == nil {
-		if len(target) == 0 {
-			return nil, nil
-		}
-		scope := FunctionScope{
-			index: parentScope.index,
-			total: parentScope.total,
-		}
-		return Collection{target[0]}, []FunctionScope{scope}
-	}
-
-	if root != nil {
-		return Collection{root}, nil
-	}
-
-	return nil, nil
 }

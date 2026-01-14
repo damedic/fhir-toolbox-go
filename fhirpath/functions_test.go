@@ -1775,12 +1775,87 @@ func TestIIFWithThisContext(t *testing.T) {
 				// Determine evaluation target
 				evalTarget := target
 				if len(evalTarget) == 0 {
-					if scope, err := getFunctionScope(ctx); err == nil && scope.this != nil {
+					if scope, ok := getFunctionScope(ctx); ok && scope.this != nil {
 						evalTarget = Collection{scope.this}
 					}
 				}
 				return evalExpression(ctx, nil, evalTarget, true, expr.tree, false)
 			})
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if !reflect.DeepEqual(result, tc.expected) {
+				t.Errorf("expected %v, got %v", tc.expected, result)
+			}
+			if ordered != tc.expectedOrdered {
+				t.Errorf("expected ordered=%v, got %v", tc.expectedOrdered, ordered)
+			}
+		})
+	}
+}
+
+func TestIIFWithNilElement(t *testing.T) {
+	fn := defaultFunctions["iif"]
+
+	testCases := []struct {
+		name            string
+		target          Collection
+		params          []Expression
+		expected        Collection
+		expectedOrdered bool
+		expectError     bool
+	}{
+		{
+			name:            "iif with nil element in criterion should not panic",
+			target:          Collection{nil},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("'false'")},
+			expected:        Collection{String("false")},
+			expectedOrdered: true,
+			expectError:     false,
+		},
+		{
+			name:            "iif with empty collection in criterion",
+			target:          Collection{},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("'false'")},
+			expected:        Collection{String("false")},
+			expectedOrdered: true,
+			expectError:     false,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			ctx = withEvaluationInstant(ctx)
+			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+				// Set up function scope if provided
+				if len(fnScope) > 0 {
+					scope := functionScope{
+						index: fnScope[0].index,
+					}
+					if len(target) == 1 {
+						scope.this = target[0]
+					}
+					ctx = withFunctionScope(ctx, scope)
+				}
+				// Determine evaluation target
+				evalTarget := target
+				if len(evalTarget) == 0 {
+					if scope, ok := getFunctionScope(ctx); ok && scope.this != nil {
+						evalTarget = Collection{scope.this}
+					}
+				}
+				return evalExpression(ctx, nil, evalTarget, true, expr.tree, false)
+			})
+
+			if tc.expectError {
+				if err == nil {
+					t.Fatal("expected error but got none")
+				}
+				return
+			}
+
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}

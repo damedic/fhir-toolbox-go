@@ -53,23 +53,28 @@ func evalInvocation(
 	case *parser.FunctionInvocationContext:
 		return evalFunc(ctx, root, target, inputOrdered, t.Function())
 	case *parser.ThisInvocationContext:
-		scope, err := getFunctionScope(ctx)
-		if err == nil {
-			return Collection{scope.this}, true, nil
+		scope, ok := getFunctionScope(ctx)
+		if ok {
+			if scope.this != nil {
+				return Collection{scope.this}, true, nil
+			}
+			// If scope.this is nil, return empty collection
+			return nil, true, nil
 		}
-		return Collection{root}, true, nil
+		if root != nil {
+			return Collection{root}, true, nil
+		}
+		// If root is also nil, return empty collection
+		return nil, true, nil
 	case *parser.IndexInvocationContext:
-		scope, err := getFunctionScope(ctx)
-		if err != nil {
-			return nil, false, err
+		scope, ok := getFunctionScope(ctx)
+		if !ok {
+			return nil, false, fmt.Errorf("$index not defined (only in iteration context)")
 		}
 		return Collection{Integer(scope.index)}, true, nil
 	case *parser.TotalInvocationContext:
-		scope, err := getFunctionScope(ctx)
-		if err != nil {
-			return nil, false, err
-		}
-		if !scope.aggregate {
+		scope, ok := getFunctionScope(ctx)
+		if !ok || !scope.aggregate {
 			return nil, false, fmt.Errorf("$total not defined (only in aggregate)")
 		}
 		return scope.total, true, nil
@@ -163,19 +168,19 @@ func callFunc(
 			// This prevents variables defined in parameter expressions from colliding
 			ctx, _ = withNewEnvStackFrame(ctx)
 
-			parentScope, parentErr := getFunctionScope(ctx)
+			parentScope, parentOk := getFunctionScope(ctx)
 
 			if len(fnScope) > 0 {
 				scope := functionScope{
 					index: fnScope[0].index,
 				}
 
-				if len(target) == 1 {
+				if len(target) == 1 && target[0] != nil {
 					scope.this = target[0]
 				}
 
 				// Preserve aggregate context from parent
-				if parentErr == nil && parentScope.aggregate {
+				if parentOk && parentScope.aggregate {
 					scope.aggregate = true
 					scope.total = parentScope.total
 				}
@@ -194,7 +199,7 @@ func callFunc(
 			//  3. Finally, fall back to the root element of the overall evaluation.
 			evalTarget := target
 			if len(evalTarget) == 0 {
-				if scope, err := getFunctionScope(ctx); err == nil && scope.this != nil {
+				if scope, ok := getFunctionScope(ctx); ok && scope.this != nil {
 					evalTarget = Collection{scope.this}
 				} else if root != nil {
 					evalTarget = Collection{root}
