@@ -4141,13 +4141,6 @@ var defaultFunctions = Functions{
 			return nil, false, err
 		}
 
-		// Check if the criterion is actually a Boolean type
-		if len(criterion) > 0 {
-			if _, isBool := criterion[0].(Boolean); !isBool {
-				return nil, false, fmt.Errorf("iif() criterion must evaluate to a boolean value, got %T", criterion[0])
-			}
-		}
-
 		// Convert criterion to boolean
 		criterionBool, ok, err := Singleton[Boolean](criterion)
 		if err != nil {

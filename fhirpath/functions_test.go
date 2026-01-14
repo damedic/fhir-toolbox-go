@@ -1747,6 +1747,13 @@ func TestIIFWithThisContext(t *testing.T) {
 			expected:        Collection{Boolean(true)},
 			expectedOrdered: true,
 		},
+		{
+			name:            "iif with empty string as criterion via $this (singleton eval rule)",
+			target:          Collection{String("")},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("'false'")},
+			expected:        Collection{String("true")},
+			expectedOrdered: true,
+		},
 	}
 
 	for _, tc := range testCases {
