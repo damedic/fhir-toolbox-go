@@ -22,12 +22,6 @@ func disabledErr[R model.Release]() error {
 }
 
 func Generic[R model.Release](api any) (capabilities.GenericCapabilities, error) {
-	// we assume already generic, do not wrap it again
-	generic, ok := api.(capabilities.GenericCapabilities)
-	if ok {
-		return generic, nil
-	}
-
 	var r R
 	switch any(r).(type) {
 	case model.R4:

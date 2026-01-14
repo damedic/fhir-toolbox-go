@@ -935,8 +935,8 @@ func TestHandleDelete(t *testing.T) {
 				"resourceType": "OperationOutcome",
 				"issue": [
 					{
-						"severity": "error",
-						"code": "invalid",
+						"severity": "fatal",
+						"code": "processing",
 						"diagnostics": "invalid resource type: UnknownType"
 					}
 				]
@@ -1560,7 +1560,35 @@ func (m mockBackend) UpdateCapabilitiesPatient(ctx context.Context) (update.Capa
 }
 
 func (m mockBackend) DeletePatient(ctx context.Context, id string) error {
-	return nil
+	// Respect deleteErrorMode for testing error conditions
+	switch m.deleteErrorMode {
+	case "not-found":
+		return r4.OperationOutcome{Issue: []r4.OperationOutcomeIssue{
+			{
+				Severity:    r4.Code{Value: ptr.To("error")},
+				Code:        r4.Code{Value: ptr.To("not-found")},
+				Diagnostics: &r4.String{Value: ptr.To(fmt.Sprintf("Patient with ID %s not found", id))},
+			},
+		}}
+	case "invalid-type":
+		return r4.OperationOutcome{Issue: []r4.OperationOutcomeIssue{
+			{
+				Severity:    r4.Code{Value: ptr.To("error")},
+				Code:        r4.Code{Value: ptr.To("invalid")},
+				Diagnostics: &r4.String{Value: ptr.To("invalid resource type: Patient")},
+			},
+		}}
+	case "server-error":
+		return r4.OperationOutcome{Issue: []r4.OperationOutcomeIssue{
+			{
+				Severity:    r4.Code{Value: ptr.To("error")},
+				Code:        r4.Code{Value: ptr.To("exception")},
+				Diagnostics: &r4.String{Value: ptr.To("internal server error")},
+			},
+		}}
+	default:
+		return nil
+	}
 }
 
 func (m mockBackend) SearchCapabilitiesPatient(ctx context.Context) (r4.SearchCapabilities, error) {

@@ -12330,2647 +12330,3160 @@ func operationDefinitionsByID(ctx context.Context, api any, baseUrl string) (map
 	return defs, nil
 }
 func (w Generic) Create(ctx context.Context, resource model.Resource) (model.Resource, error) {
-	g, ok := w.Concrete.(capabilities.GenericCreate)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return g.Create(ctx, resource)
-	}
 	switch r := resource.(type) {
 	case r5.Account:
-		impl, ok := w.Concrete.(AccountCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Account")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AccountCreate); ok {
+			return impl.CreateAccount(ctx, r)
 		}
-		return impl.CreateAccount(ctx, r)
-	case r5.ActivityDefinition:
-		impl, ok := w.Concrete.(ActivityDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ActivityDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
 		}
-		return impl.CreateActivityDefinition(ctx, r)
-	case r5.ActorDefinition:
-		impl, ok := w.Concrete.(ActorDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ActorDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateActorDefinition(ctx, r)
-	case r5.AdministrableProductDefinition:
-		impl, ok := w.Concrete.(AdministrableProductDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for AdministrableProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAdministrableProductDefinition(ctx, r)
-	case r5.AdverseEvent:
-		impl, ok := w.Concrete.(AdverseEventCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for AdverseEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAdverseEvent(ctx, r)
-	case r5.AllergyIntolerance:
-		impl, ok := w.Concrete.(AllergyIntoleranceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for AllergyIntolerance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAllergyIntolerance(ctx, r)
-	case r5.Appointment:
-		impl, ok := w.Concrete.(AppointmentCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Appointment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAppointment(ctx, r)
-	case r5.AppointmentResponse:
-		impl, ok := w.Concrete.(AppointmentResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for AppointmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAppointmentResponse(ctx, r)
-	case r5.ArtifactAssessment:
-		impl, ok := w.Concrete.(ArtifactAssessmentCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ArtifactAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateArtifactAssessment(ctx, r)
-	case r5.AuditEvent:
-		impl, ok := w.Concrete.(AuditEventCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for AuditEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateAuditEvent(ctx, r)
-	case r5.Basic:
-		impl, ok := w.Concrete.(BasicCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Basic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBasic(ctx, r)
-	case r5.Binary:
-		impl, ok := w.Concrete.(BinaryCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Binary")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBinary(ctx, r)
-	case r5.BiologicallyDerivedProduct:
-		impl, ok := w.Concrete.(BiologicallyDerivedProductCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for BiologicallyDerivedProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBiologicallyDerivedProduct(ctx, r)
-	case r5.BiologicallyDerivedProductDispense:
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for BiologicallyDerivedProductDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBiologicallyDerivedProductDispense(ctx, r)
-	case r5.BodyStructure:
-		impl, ok := w.Concrete.(BodyStructureCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for BodyStructure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBodyStructure(ctx, r)
-	case r5.Bundle:
-		impl, ok := w.Concrete.(BundleCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Bundle")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateBundle(ctx, r)
-	case r5.CapabilityStatement:
-		impl, ok := w.Concrete.(CapabilityStatementCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CapabilityStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCapabilityStatement(ctx, r)
-	case r5.CarePlan:
-		impl, ok := w.Concrete.(CarePlanCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CarePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCarePlan(ctx, r)
-	case r5.CareTeam:
-		impl, ok := w.Concrete.(CareTeamCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CareTeam")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCareTeam(ctx, r)
-	case r5.ChargeItem:
-		impl, ok := w.Concrete.(ChargeItemCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ChargeItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateChargeItem(ctx, r)
-	case r5.ChargeItemDefinition:
-		impl, ok := w.Concrete.(ChargeItemDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ChargeItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateChargeItemDefinition(ctx, r)
-	case r5.Citation:
-		impl, ok := w.Concrete.(CitationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Citation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCitation(ctx, r)
-	case r5.Claim:
-		impl, ok := w.Concrete.(ClaimCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Claim")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateClaim(ctx, r)
-	case r5.ClaimResponse:
-		impl, ok := w.Concrete.(ClaimResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ClaimResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateClaimResponse(ctx, r)
-	case r5.ClinicalImpression:
-		impl, ok := w.Concrete.(ClinicalImpressionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ClinicalImpression")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateClinicalImpression(ctx, r)
-	case r5.ClinicalUseDefinition:
-		impl, ok := w.Concrete.(ClinicalUseDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ClinicalUseDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateClinicalUseDefinition(ctx, r)
-	case r5.CodeSystem:
-		impl, ok := w.Concrete.(CodeSystemCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CodeSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCodeSystem(ctx, r)
-	case r5.Communication:
-		impl, ok := w.Concrete.(CommunicationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Communication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCommunication(ctx, r)
-	case r5.CommunicationRequest:
-		impl, ok := w.Concrete.(CommunicationRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CommunicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCommunicationRequest(ctx, r)
-	case r5.CompartmentDefinition:
-		impl, ok := w.Concrete.(CompartmentDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CompartmentDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCompartmentDefinition(ctx, r)
-	case r5.Composition:
-		impl, ok := w.Concrete.(CompositionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Composition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateComposition(ctx, r)
-	case r5.ConceptMap:
-		impl, ok := w.Concrete.(ConceptMapCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ConceptMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateConceptMap(ctx, r)
-	case r5.Condition:
-		impl, ok := w.Concrete.(ConditionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Condition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCondition(ctx, r)
-	case r5.ConditionDefinition:
-		impl, ok := w.Concrete.(ConditionDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ConditionDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateConditionDefinition(ctx, r)
-	case r5.Consent:
-		impl, ok := w.Concrete.(ConsentCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Consent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateConsent(ctx, r)
-	case r5.Contract:
-		impl, ok := w.Concrete.(ContractCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Contract")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateContract(ctx, r)
-	case r5.Coverage:
-		impl, ok := w.Concrete.(CoverageCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Coverage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCoverage(ctx, r)
-	case r5.CoverageEligibilityRequest:
-		impl, ok := w.Concrete.(CoverageEligibilityRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CoverageEligibilityRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCoverageEligibilityRequest(ctx, r)
-	case r5.CoverageEligibilityResponse:
-		impl, ok := w.Concrete.(CoverageEligibilityResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for CoverageEligibilityResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateCoverageEligibilityResponse(ctx, r)
-	case r5.DetectedIssue:
-		impl, ok := w.Concrete.(DetectedIssueCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DetectedIssue")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDetectedIssue(ctx, r)
-	case r5.Device:
-		impl, ok := w.Concrete.(DeviceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Device")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDevice(ctx, r)
-	case r5.DeviceAssociation:
-		impl, ok := w.Concrete.(DeviceAssociationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceAssociation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceAssociation(ctx, r)
-	case r5.DeviceDefinition:
-		impl, ok := w.Concrete.(DeviceDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceDefinition(ctx, r)
-	case r5.DeviceDispense:
-		impl, ok := w.Concrete.(DeviceDispenseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceDispense(ctx, r)
-	case r5.DeviceMetric:
-		impl, ok := w.Concrete.(DeviceMetricCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceMetric")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceMetric(ctx, r)
-	case r5.DeviceRequest:
-		impl, ok := w.Concrete.(DeviceRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceRequest(ctx, r)
-	case r5.DeviceUsage:
-		impl, ok := w.Concrete.(DeviceUsageCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DeviceUsage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDeviceUsage(ctx, r)
-	case r5.DiagnosticReport:
-		impl, ok := w.Concrete.(DiagnosticReportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DiagnosticReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDiagnosticReport(ctx, r)
-	case r5.DocumentReference:
-		impl, ok := w.Concrete.(DocumentReferenceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for DocumentReference")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateDocumentReference(ctx, r)
-	case r5.Encounter:
-		impl, ok := w.Concrete.(EncounterCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Encounter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEncounter(ctx, r)
-	case r5.EncounterHistory:
-		impl, ok := w.Concrete.(EncounterHistoryCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EncounterHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEncounterHistory(ctx, r)
-	case r5.Endpoint:
-		impl, ok := w.Concrete.(EndpointCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Endpoint")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEndpoint(ctx, r)
-	case r5.EnrollmentRequest:
-		impl, ok := w.Concrete.(EnrollmentRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EnrollmentRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEnrollmentRequest(ctx, r)
-	case r5.EnrollmentResponse:
-		impl, ok := w.Concrete.(EnrollmentResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EnrollmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEnrollmentResponse(ctx, r)
-	case r5.EpisodeOfCare:
-		impl, ok := w.Concrete.(EpisodeOfCareCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EpisodeOfCare")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEpisodeOfCare(ctx, r)
-	case r5.EventDefinition:
-		impl, ok := w.Concrete.(EventDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EventDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEventDefinition(ctx, r)
-	case r5.Evidence:
-		impl, ok := w.Concrete.(EvidenceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Evidence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEvidence(ctx, r)
-	case r5.EvidenceReport:
-		impl, ok := w.Concrete.(EvidenceReportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EvidenceReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEvidenceReport(ctx, r)
-	case r5.EvidenceVariable:
-		impl, ok := w.Concrete.(EvidenceVariableCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for EvidenceVariable")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateEvidenceVariable(ctx, r)
-	case r5.ExampleScenario:
-		impl, ok := w.Concrete.(ExampleScenarioCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ExampleScenario")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateExampleScenario(ctx, r)
-	case r5.ExplanationOfBenefit:
-		impl, ok := w.Concrete.(ExplanationOfBenefitCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ExplanationOfBenefit")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateExplanationOfBenefit(ctx, r)
-	case r5.FamilyMemberHistory:
-		impl, ok := w.Concrete.(FamilyMemberHistoryCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for FamilyMemberHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateFamilyMemberHistory(ctx, r)
-	case r5.Flag:
-		impl, ok := w.Concrete.(FlagCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Flag")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateFlag(ctx, r)
-	case r5.FormularyItem:
-		impl, ok := w.Concrete.(FormularyItemCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for FormularyItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateFormularyItem(ctx, r)
-	case r5.GenomicStudy:
-		impl, ok := w.Concrete.(GenomicStudyCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for GenomicStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateGenomicStudy(ctx, r)
-	case r5.Goal:
-		impl, ok := w.Concrete.(GoalCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Goal")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateGoal(ctx, r)
-	case r5.GraphDefinition:
-		impl, ok := w.Concrete.(GraphDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for GraphDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateGraphDefinition(ctx, r)
-	case r5.Group:
-		impl, ok := w.Concrete.(GroupCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Group")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateGroup(ctx, r)
-	case r5.GuidanceResponse:
-		impl, ok := w.Concrete.(GuidanceResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for GuidanceResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateGuidanceResponse(ctx, r)
-	case r5.HealthcareService:
-		impl, ok := w.Concrete.(HealthcareServiceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for HealthcareService")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateHealthcareService(ctx, r)
-	case r5.ImagingSelection:
-		impl, ok := w.Concrete.(ImagingSelectionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ImagingSelection")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImagingSelection(ctx, r)
-	case r5.ImagingStudy:
-		impl, ok := w.Concrete.(ImagingStudyCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ImagingStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImagingStudy(ctx, r)
-	case r5.Immunization:
-		impl, ok := w.Concrete.(ImmunizationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Immunization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImmunization(ctx, r)
-	case r5.ImmunizationEvaluation:
-		impl, ok := w.Concrete.(ImmunizationEvaluationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ImmunizationEvaluation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImmunizationEvaluation(ctx, r)
-	case r5.ImmunizationRecommendation:
-		impl, ok := w.Concrete.(ImmunizationRecommendationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ImmunizationRecommendation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImmunizationRecommendation(ctx, r)
-	case r5.ImplementationGuide:
-		impl, ok := w.Concrete.(ImplementationGuideCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ImplementationGuide")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateImplementationGuide(ctx, r)
-	case r5.Ingredient:
-		impl, ok := w.Concrete.(IngredientCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Ingredient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateIngredient(ctx, r)
-	case r5.InsurancePlan:
-		impl, ok := w.Concrete.(InsurancePlanCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for InsurancePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateInsurancePlan(ctx, r)
-	case r5.InventoryItem:
-		impl, ok := w.Concrete.(InventoryItemCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for InventoryItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateInventoryItem(ctx, r)
-	case r5.InventoryReport:
-		impl, ok := w.Concrete.(InventoryReportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for InventoryReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateInventoryReport(ctx, r)
-	case r5.Invoice:
-		impl, ok := w.Concrete.(InvoiceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Invoice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateInvoice(ctx, r)
-	case r5.Library:
-		impl, ok := w.Concrete.(LibraryCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Library")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateLibrary(ctx, r)
-	case r5.Linkage:
-		impl, ok := w.Concrete.(LinkageCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Linkage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateLinkage(ctx, r)
-	case r5.List:
-		impl, ok := w.Concrete.(ListCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for List")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateList(ctx, r)
-	case r5.Location:
-		impl, ok := w.Concrete.(LocationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Location")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateLocation(ctx, r)
-	case r5.ManufacturedItemDefinition:
-		impl, ok := w.Concrete.(ManufacturedItemDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ManufacturedItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateManufacturedItemDefinition(ctx, r)
-	case r5.Measure:
-		impl, ok := w.Concrete.(MeasureCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Measure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMeasure(ctx, r)
-	case r5.MeasureReport:
-		impl, ok := w.Concrete.(MeasureReportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MeasureReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMeasureReport(ctx, r)
-	case r5.Medication:
-		impl, ok := w.Concrete.(MedicationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Medication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedication(ctx, r)
-	case r5.MedicationAdministration:
-		impl, ok := w.Concrete.(MedicationAdministrationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicationAdministration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicationAdministration(ctx, r)
-	case r5.MedicationDispense:
-		impl, ok := w.Concrete.(MedicationDispenseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicationDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicationDispense(ctx, r)
-	case r5.MedicationKnowledge:
-		impl, ok := w.Concrete.(MedicationKnowledgeCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicationKnowledge")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicationKnowledge(ctx, r)
-	case r5.MedicationRequest:
-		impl, ok := w.Concrete.(MedicationRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicationRequest(ctx, r)
-	case r5.MedicationStatement:
-		impl, ok := w.Concrete.(MedicationStatementCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicationStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicationStatement(ctx, r)
-	case r5.MedicinalProductDefinition:
-		impl, ok := w.Concrete.(MedicinalProductDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MedicinalProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMedicinalProductDefinition(ctx, r)
-	case r5.MessageDefinition:
-		impl, ok := w.Concrete.(MessageDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MessageDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMessageDefinition(ctx, r)
-	case r5.MessageHeader:
-		impl, ok := w.Concrete.(MessageHeaderCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MessageHeader")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMessageHeader(ctx, r)
-	case r5.MolecularSequence:
-		impl, ok := w.Concrete.(MolecularSequenceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for MolecularSequence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateMolecularSequence(ctx, r)
-	case r5.NamingSystem:
-		impl, ok := w.Concrete.(NamingSystemCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for NamingSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateNamingSystem(ctx, r)
-	case r5.NutritionIntake:
-		impl, ok := w.Concrete.(NutritionIntakeCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for NutritionIntake")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateNutritionIntake(ctx, r)
-	case r5.NutritionOrder:
-		impl, ok := w.Concrete.(NutritionOrderCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for NutritionOrder")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateNutritionOrder(ctx, r)
-	case r5.NutritionProduct:
-		impl, ok := w.Concrete.(NutritionProductCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for NutritionProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateNutritionProduct(ctx, r)
-	case r5.Observation:
-		impl, ok := w.Concrete.(ObservationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Observation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateObservation(ctx, r)
-	case r5.ObservationDefinition:
-		impl, ok := w.Concrete.(ObservationDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ObservationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateObservationDefinition(ctx, r)
-	case r5.OperationDefinition:
-		impl, ok := w.Concrete.(OperationDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for OperationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateOperationDefinition(ctx, r)
-	case r5.OperationOutcome:
-		impl, ok := w.Concrete.(OperationOutcomeCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for OperationOutcome")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateOperationOutcome(ctx, r)
-	case r5.Organization:
-		impl, ok := w.Concrete.(OrganizationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Organization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateOrganization(ctx, r)
-	case r5.OrganizationAffiliation:
-		impl, ok := w.Concrete.(OrganizationAffiliationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for OrganizationAffiliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateOrganizationAffiliation(ctx, r)
-	case r5.PackagedProductDefinition:
-		impl, ok := w.Concrete.(PackagedProductDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for PackagedProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePackagedProductDefinition(ctx, r)
-	case r5.Parameters:
-		impl, ok := w.Concrete.(ParametersCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Parameters")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateParameters(ctx, r)
-	case r5.Patient:
-		impl, ok := w.Concrete.(PatientCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Patient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePatient(ctx, r)
-	case r5.PaymentNotice:
-		impl, ok := w.Concrete.(PaymentNoticeCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for PaymentNotice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePaymentNotice(ctx, r)
-	case r5.PaymentReconciliation:
-		impl, ok := w.Concrete.(PaymentReconciliationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for PaymentReconciliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePaymentReconciliation(ctx, r)
-	case r5.Permission:
-		impl, ok := w.Concrete.(PermissionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Permission")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePermission(ctx, r)
-	case r5.Person:
-		impl, ok := w.Concrete.(PersonCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Person")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePerson(ctx, r)
-	case r5.PlanDefinition:
-		impl, ok := w.Concrete.(PlanDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for PlanDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePlanDefinition(ctx, r)
-	case r5.Practitioner:
-		impl, ok := w.Concrete.(PractitionerCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Practitioner")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePractitioner(ctx, r)
-	case r5.PractitionerRole:
-		impl, ok := w.Concrete.(PractitionerRoleCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for PractitionerRole")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreatePractitionerRole(ctx, r)
-	case r5.Procedure:
-		impl, ok := w.Concrete.(ProcedureCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Procedure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateProcedure(ctx, r)
-	case r5.Provenance:
-		impl, ok := w.Concrete.(ProvenanceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Provenance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateProvenance(ctx, r)
-	case r5.Questionnaire:
-		impl, ok := w.Concrete.(QuestionnaireCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Questionnaire")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateQuestionnaire(ctx, r)
-	case r5.QuestionnaireResponse:
-		impl, ok := w.Concrete.(QuestionnaireResponseCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for QuestionnaireResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateQuestionnaireResponse(ctx, r)
-	case r5.RegulatedAuthorization:
-		impl, ok := w.Concrete.(RegulatedAuthorizationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for RegulatedAuthorization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateRegulatedAuthorization(ctx, r)
-	case r5.RelatedPerson:
-		impl, ok := w.Concrete.(RelatedPersonCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for RelatedPerson")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateRelatedPerson(ctx, r)
-	case r5.RequestOrchestration:
-		impl, ok := w.Concrete.(RequestOrchestrationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for RequestOrchestration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateRequestOrchestration(ctx, r)
-	case r5.Requirements:
-		impl, ok := w.Concrete.(RequirementsCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Requirements")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateRequirements(ctx, r)
-	case r5.ResearchStudy:
-		impl, ok := w.Concrete.(ResearchStudyCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ResearchStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateResearchStudy(ctx, r)
-	case r5.ResearchSubject:
-		impl, ok := w.Concrete.(ResearchSubjectCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ResearchSubject")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateResearchSubject(ctx, r)
-	case r5.RiskAssessment:
-		impl, ok := w.Concrete.(RiskAssessmentCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for RiskAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateRiskAssessment(ctx, r)
-	case r5.Schedule:
-		impl, ok := w.Concrete.(ScheduleCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Schedule")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSchedule(ctx, r)
-	case r5.SearchParameter:
-		impl, ok := w.Concrete.(SearchParameterCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SearchParameter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSearchParameter(ctx, r)
-	case r5.ServiceRequest:
-		impl, ok := w.Concrete.(ServiceRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ServiceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateServiceRequest(ctx, r)
-	case r5.Slot:
-		impl, ok := w.Concrete.(SlotCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Slot")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSlot(ctx, r)
-	case r5.Specimen:
-		impl, ok := w.Concrete.(SpecimenCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Specimen")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSpecimen(ctx, r)
-	case r5.SpecimenDefinition:
-		impl, ok := w.Concrete.(SpecimenDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SpecimenDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSpecimenDefinition(ctx, r)
-	case r5.StructureDefinition:
-		impl, ok := w.Concrete.(StructureDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for StructureDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateStructureDefinition(ctx, r)
-	case r5.StructureMap:
-		impl, ok := w.Concrete.(StructureMapCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for StructureMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateStructureMap(ctx, r)
-	case r5.Subscription:
-		impl, ok := w.Concrete.(SubscriptionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Subscription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubscription(ctx, r)
-	case r5.SubscriptionStatus:
-		impl, ok := w.Concrete.(SubscriptionStatusCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubscriptionStatus")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubscriptionStatus(ctx, r)
-	case r5.SubscriptionTopic:
-		impl, ok := w.Concrete.(SubscriptionTopicCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubscriptionTopic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubscriptionTopic(ctx, r)
-	case r5.Substance:
-		impl, ok := w.Concrete.(SubstanceCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Substance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstance(ctx, r)
-	case r5.SubstanceDefinition:
-		impl, ok := w.Concrete.(SubstanceDefinitionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstanceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstanceDefinition(ctx, r)
-	case r5.SubstanceNucleicAcid:
-		impl, ok := w.Concrete.(SubstanceNucleicAcidCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstanceNucleicAcid")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstanceNucleicAcid(ctx, r)
-	case r5.SubstancePolymer:
-		impl, ok := w.Concrete.(SubstancePolymerCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstancePolymer")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstancePolymer(ctx, r)
-	case r5.SubstanceProtein:
-		impl, ok := w.Concrete.(SubstanceProteinCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstanceProtein")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstanceProtein(ctx, r)
-	case r5.SubstanceReferenceInformation:
-		impl, ok := w.Concrete.(SubstanceReferenceInformationCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstanceReferenceInformation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstanceReferenceInformation(ctx, r)
-	case r5.SubstanceSourceMaterial:
-		impl, ok := w.Concrete.(SubstanceSourceMaterialCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SubstanceSourceMaterial")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSubstanceSourceMaterial(ctx, r)
-	case r5.SupplyDelivery:
-		impl, ok := w.Concrete.(SupplyDeliveryCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SupplyDelivery")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSupplyDelivery(ctx, r)
-	case r5.SupplyRequest:
-		impl, ok := w.Concrete.(SupplyRequestCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for SupplyRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateSupplyRequest(ctx, r)
-	case r5.Task:
-		impl, ok := w.Concrete.(TaskCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Task")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTask(ctx, r)
-	case r5.TerminologyCapabilities:
-		impl, ok := w.Concrete.(TerminologyCapabilitiesCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for TerminologyCapabilities")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTerminologyCapabilities(ctx, r)
-	case r5.TestPlan:
-		impl, ok := w.Concrete.(TestPlanCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for TestPlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTestPlan(ctx, r)
-	case r5.TestReport:
-		impl, ok := w.Concrete.(TestReportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for TestReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTestReport(ctx, r)
-	case r5.TestScript:
-		impl, ok := w.Concrete.(TestScriptCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for TestScript")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTestScript(ctx, r)
-	case r5.Transport:
-		impl, ok := w.Concrete.(TransportCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for Transport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateTransport(ctx, r)
-	case r5.ValueSet:
-		impl, ok := w.Concrete.(ValueSetCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for ValueSet")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateValueSet(ctx, r)
-	case r5.VerificationResult:
-		impl, ok := w.Concrete.(VerificationResultCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for VerificationResult")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateVerificationResult(ctx, r)
-	case r5.VisionPrescription:
-		impl, ok := w.Concrete.(VisionPrescriptionCreate)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("create not implemented for VisionPrescription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.CreateVisionPrescription(ctx, r)
-	default:
 		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-			Code:        r5.Code{Value: ptr.To("processing")},
-			Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resource.ResourceType())},
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Account")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ActivityDefinition:
+		if impl, ok := w.Concrete.(ActivityDefinitionCreate); ok {
+			return impl.CreateActivityDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ActivityDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ActorDefinition:
+		if impl, ok := w.Concrete.(ActorDefinitionCreate); ok {
+			return impl.CreateActorDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ActorDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AdministrableProductDefinition:
+		if impl, ok := w.Concrete.(AdministrableProductDefinitionCreate); ok {
+			return impl.CreateAdministrableProductDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "AdministrableProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AdverseEvent:
+		if impl, ok := w.Concrete.(AdverseEventCreate); ok {
+			return impl.CreateAdverseEvent(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "AdverseEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AllergyIntolerance:
+		if impl, ok := w.Concrete.(AllergyIntoleranceCreate); ok {
+			return impl.CreateAllergyIntolerance(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "AllergyIntolerance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Appointment:
+		if impl, ok := w.Concrete.(AppointmentCreate); ok {
+			return impl.CreateAppointment(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Appointment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AppointmentResponse:
+		if impl, ok := w.Concrete.(AppointmentResponseCreate); ok {
+			return impl.CreateAppointmentResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "AppointmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ArtifactAssessment:
+		if impl, ok := w.Concrete.(ArtifactAssessmentCreate); ok {
+			return impl.CreateArtifactAssessment(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ArtifactAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AuditEvent:
+		if impl, ok := w.Concrete.(AuditEventCreate); ok {
+			return impl.CreateAuditEvent(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "AuditEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Basic:
+		if impl, ok := w.Concrete.(BasicCreate); ok {
+			return impl.CreateBasic(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Basic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Binary:
+		if impl, ok := w.Concrete.(BinaryCreate); ok {
+			return impl.CreateBinary(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Binary")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BiologicallyDerivedProduct:
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductCreate); ok {
+			return impl.CreateBiologicallyDerivedProduct(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "BiologicallyDerivedProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BiologicallyDerivedProductDispense:
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseCreate); ok {
+			return impl.CreateBiologicallyDerivedProductDispense(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "BiologicallyDerivedProductDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BodyStructure:
+		if impl, ok := w.Concrete.(BodyStructureCreate); ok {
+			return impl.CreateBodyStructure(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "BodyStructure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Bundle:
+		if impl, ok := w.Concrete.(BundleCreate); ok {
+			return impl.CreateBundle(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Bundle")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CapabilityStatement:
+		if impl, ok := w.Concrete.(CapabilityStatementCreate); ok {
+			return impl.CreateCapabilityStatement(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CapabilityStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CarePlan:
+		if impl, ok := w.Concrete.(CarePlanCreate); ok {
+			return impl.CreateCarePlan(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CarePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CareTeam:
+		if impl, ok := w.Concrete.(CareTeamCreate); ok {
+			return impl.CreateCareTeam(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CareTeam")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ChargeItem:
+		if impl, ok := w.Concrete.(ChargeItemCreate); ok {
+			return impl.CreateChargeItem(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ChargeItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ChargeItemDefinition:
+		if impl, ok := w.Concrete.(ChargeItemDefinitionCreate); ok {
+			return impl.CreateChargeItemDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ChargeItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Citation:
+		if impl, ok := w.Concrete.(CitationCreate); ok {
+			return impl.CreateCitation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Citation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Claim:
+		if impl, ok := w.Concrete.(ClaimCreate); ok {
+			return impl.CreateClaim(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Claim")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClaimResponse:
+		if impl, ok := w.Concrete.(ClaimResponseCreate); ok {
+			return impl.CreateClaimResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ClaimResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClinicalImpression:
+		if impl, ok := w.Concrete.(ClinicalImpressionCreate); ok {
+			return impl.CreateClinicalImpression(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ClinicalImpression")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClinicalUseDefinition:
+		if impl, ok := w.Concrete.(ClinicalUseDefinitionCreate); ok {
+			return impl.CreateClinicalUseDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ClinicalUseDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CodeSystem:
+		if impl, ok := w.Concrete.(CodeSystemCreate); ok {
+			return impl.CreateCodeSystem(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CodeSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Communication:
+		if impl, ok := w.Concrete.(CommunicationCreate); ok {
+			return impl.CreateCommunication(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Communication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CommunicationRequest:
+		if impl, ok := w.Concrete.(CommunicationRequestCreate); ok {
+			return impl.CreateCommunicationRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CommunicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CompartmentDefinition:
+		if impl, ok := w.Concrete.(CompartmentDefinitionCreate); ok {
+			return impl.CreateCompartmentDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CompartmentDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Composition:
+		if impl, ok := w.Concrete.(CompositionCreate); ok {
+			return impl.CreateComposition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Composition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ConceptMap:
+		if impl, ok := w.Concrete.(ConceptMapCreate); ok {
+			return impl.CreateConceptMap(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ConceptMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Condition:
+		if impl, ok := w.Concrete.(ConditionCreate); ok {
+			return impl.CreateCondition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Condition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ConditionDefinition:
+		if impl, ok := w.Concrete.(ConditionDefinitionCreate); ok {
+			return impl.CreateConditionDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ConditionDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Consent:
+		if impl, ok := w.Concrete.(ConsentCreate); ok {
+			return impl.CreateConsent(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Consent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Contract:
+		if impl, ok := w.Concrete.(ContractCreate); ok {
+			return impl.CreateContract(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Contract")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Coverage:
+		if impl, ok := w.Concrete.(CoverageCreate); ok {
+			return impl.CreateCoverage(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Coverage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CoverageEligibilityRequest:
+		if impl, ok := w.Concrete.(CoverageEligibilityRequestCreate); ok {
+			return impl.CreateCoverageEligibilityRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CoverageEligibilityRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CoverageEligibilityResponse:
+		if impl, ok := w.Concrete.(CoverageEligibilityResponseCreate); ok {
+			return impl.CreateCoverageEligibilityResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "CoverageEligibilityResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DetectedIssue:
+		if impl, ok := w.Concrete.(DetectedIssueCreate); ok {
+			return impl.CreateDetectedIssue(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DetectedIssue")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Device:
+		if impl, ok := w.Concrete.(DeviceCreate); ok {
+			return impl.CreateDevice(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Device")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceAssociation:
+		if impl, ok := w.Concrete.(DeviceAssociationCreate); ok {
+			return impl.CreateDeviceAssociation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceAssociation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceDefinition:
+		if impl, ok := w.Concrete.(DeviceDefinitionCreate); ok {
+			return impl.CreateDeviceDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceDispense:
+		if impl, ok := w.Concrete.(DeviceDispenseCreate); ok {
+			return impl.CreateDeviceDispense(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceMetric:
+		if impl, ok := w.Concrete.(DeviceMetricCreate); ok {
+			return impl.CreateDeviceMetric(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceMetric")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceRequest:
+		if impl, ok := w.Concrete.(DeviceRequestCreate); ok {
+			return impl.CreateDeviceRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceUsage:
+		if impl, ok := w.Concrete.(DeviceUsageCreate); ok {
+			return impl.CreateDeviceUsage(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DeviceUsage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DiagnosticReport:
+		if impl, ok := w.Concrete.(DiagnosticReportCreate); ok {
+			return impl.CreateDiagnosticReport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DiagnosticReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DocumentReference:
+		if impl, ok := w.Concrete.(DocumentReferenceCreate); ok {
+			return impl.CreateDocumentReference(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "DocumentReference")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Encounter:
+		if impl, ok := w.Concrete.(EncounterCreate); ok {
+			return impl.CreateEncounter(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Encounter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EncounterHistory:
+		if impl, ok := w.Concrete.(EncounterHistoryCreate); ok {
+			return impl.CreateEncounterHistory(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EncounterHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Endpoint:
+		if impl, ok := w.Concrete.(EndpointCreate); ok {
+			return impl.CreateEndpoint(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Endpoint")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EnrollmentRequest:
+		if impl, ok := w.Concrete.(EnrollmentRequestCreate); ok {
+			return impl.CreateEnrollmentRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EnrollmentRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EnrollmentResponse:
+		if impl, ok := w.Concrete.(EnrollmentResponseCreate); ok {
+			return impl.CreateEnrollmentResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EnrollmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EpisodeOfCare:
+		if impl, ok := w.Concrete.(EpisodeOfCareCreate); ok {
+			return impl.CreateEpisodeOfCare(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EpisodeOfCare")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EventDefinition:
+		if impl, ok := w.Concrete.(EventDefinitionCreate); ok {
+			return impl.CreateEventDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EventDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Evidence:
+		if impl, ok := w.Concrete.(EvidenceCreate); ok {
+			return impl.CreateEvidence(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Evidence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EvidenceReport:
+		if impl, ok := w.Concrete.(EvidenceReportCreate); ok {
+			return impl.CreateEvidenceReport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EvidenceReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EvidenceVariable:
+		if impl, ok := w.Concrete.(EvidenceVariableCreate); ok {
+			return impl.CreateEvidenceVariable(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "EvidenceVariable")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ExampleScenario:
+		if impl, ok := w.Concrete.(ExampleScenarioCreate); ok {
+			return impl.CreateExampleScenario(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ExampleScenario")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ExplanationOfBenefit:
+		if impl, ok := w.Concrete.(ExplanationOfBenefitCreate); ok {
+			return impl.CreateExplanationOfBenefit(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ExplanationOfBenefit")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.FamilyMemberHistory:
+		if impl, ok := w.Concrete.(FamilyMemberHistoryCreate); ok {
+			return impl.CreateFamilyMemberHistory(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "FamilyMemberHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Flag:
+		if impl, ok := w.Concrete.(FlagCreate); ok {
+			return impl.CreateFlag(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Flag")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.FormularyItem:
+		if impl, ok := w.Concrete.(FormularyItemCreate); ok {
+			return impl.CreateFormularyItem(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "FormularyItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GenomicStudy:
+		if impl, ok := w.Concrete.(GenomicStudyCreate); ok {
+			return impl.CreateGenomicStudy(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "GenomicStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Goal:
+		if impl, ok := w.Concrete.(GoalCreate); ok {
+			return impl.CreateGoal(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Goal")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GraphDefinition:
+		if impl, ok := w.Concrete.(GraphDefinitionCreate); ok {
+			return impl.CreateGraphDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "GraphDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Group:
+		if impl, ok := w.Concrete.(GroupCreate); ok {
+			return impl.CreateGroup(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Group")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GuidanceResponse:
+		if impl, ok := w.Concrete.(GuidanceResponseCreate); ok {
+			return impl.CreateGuidanceResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "GuidanceResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.HealthcareService:
+		if impl, ok := w.Concrete.(HealthcareServiceCreate); ok {
+			return impl.CreateHealthcareService(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "HealthcareService")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImagingSelection:
+		if impl, ok := w.Concrete.(ImagingSelectionCreate); ok {
+			return impl.CreateImagingSelection(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ImagingSelection")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImagingStudy:
+		if impl, ok := w.Concrete.(ImagingStudyCreate); ok {
+			return impl.CreateImagingStudy(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ImagingStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Immunization:
+		if impl, ok := w.Concrete.(ImmunizationCreate); ok {
+			return impl.CreateImmunization(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Immunization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImmunizationEvaluation:
+		if impl, ok := w.Concrete.(ImmunizationEvaluationCreate); ok {
+			return impl.CreateImmunizationEvaluation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ImmunizationEvaluation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImmunizationRecommendation:
+		if impl, ok := w.Concrete.(ImmunizationRecommendationCreate); ok {
+			return impl.CreateImmunizationRecommendation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ImmunizationRecommendation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImplementationGuide:
+		if impl, ok := w.Concrete.(ImplementationGuideCreate); ok {
+			return impl.CreateImplementationGuide(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ImplementationGuide")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Ingredient:
+		if impl, ok := w.Concrete.(IngredientCreate); ok {
+			return impl.CreateIngredient(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Ingredient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InsurancePlan:
+		if impl, ok := w.Concrete.(InsurancePlanCreate); ok {
+			return impl.CreateInsurancePlan(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "InsurancePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InventoryItem:
+		if impl, ok := w.Concrete.(InventoryItemCreate); ok {
+			return impl.CreateInventoryItem(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "InventoryItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InventoryReport:
+		if impl, ok := w.Concrete.(InventoryReportCreate); ok {
+			return impl.CreateInventoryReport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "InventoryReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Invoice:
+		if impl, ok := w.Concrete.(InvoiceCreate); ok {
+			return impl.CreateInvoice(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Invoice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Library:
+		if impl, ok := w.Concrete.(LibraryCreate); ok {
+			return impl.CreateLibrary(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Library")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Linkage:
+		if impl, ok := w.Concrete.(LinkageCreate); ok {
+			return impl.CreateLinkage(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Linkage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.List:
+		if impl, ok := w.Concrete.(ListCreate); ok {
+			return impl.CreateList(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "List")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Location:
+		if impl, ok := w.Concrete.(LocationCreate); ok {
+			return impl.CreateLocation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Location")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ManufacturedItemDefinition:
+		if impl, ok := w.Concrete.(ManufacturedItemDefinitionCreate); ok {
+			return impl.CreateManufacturedItemDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ManufacturedItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Measure:
+		if impl, ok := w.Concrete.(MeasureCreate); ok {
+			return impl.CreateMeasure(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Measure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MeasureReport:
+		if impl, ok := w.Concrete.(MeasureReportCreate); ok {
+			return impl.CreateMeasureReport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MeasureReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Medication:
+		if impl, ok := w.Concrete.(MedicationCreate); ok {
+			return impl.CreateMedication(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Medication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationAdministration:
+		if impl, ok := w.Concrete.(MedicationAdministrationCreate); ok {
+			return impl.CreateMedicationAdministration(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicationAdministration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationDispense:
+		if impl, ok := w.Concrete.(MedicationDispenseCreate); ok {
+			return impl.CreateMedicationDispense(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicationDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationKnowledge:
+		if impl, ok := w.Concrete.(MedicationKnowledgeCreate); ok {
+			return impl.CreateMedicationKnowledge(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicationKnowledge")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationRequest:
+		if impl, ok := w.Concrete.(MedicationRequestCreate); ok {
+			return impl.CreateMedicationRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationStatement:
+		if impl, ok := w.Concrete.(MedicationStatementCreate); ok {
+			return impl.CreateMedicationStatement(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicationStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicinalProductDefinition:
+		if impl, ok := w.Concrete.(MedicinalProductDefinitionCreate); ok {
+			return impl.CreateMedicinalProductDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MedicinalProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MessageDefinition:
+		if impl, ok := w.Concrete.(MessageDefinitionCreate); ok {
+			return impl.CreateMessageDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MessageDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MessageHeader:
+		if impl, ok := w.Concrete.(MessageHeaderCreate); ok {
+			return impl.CreateMessageHeader(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MessageHeader")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MolecularSequence:
+		if impl, ok := w.Concrete.(MolecularSequenceCreate); ok {
+			return impl.CreateMolecularSequence(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "MolecularSequence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NamingSystem:
+		if impl, ok := w.Concrete.(NamingSystemCreate); ok {
+			return impl.CreateNamingSystem(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "NamingSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionIntake:
+		if impl, ok := w.Concrete.(NutritionIntakeCreate); ok {
+			return impl.CreateNutritionIntake(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "NutritionIntake")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionOrder:
+		if impl, ok := w.Concrete.(NutritionOrderCreate); ok {
+			return impl.CreateNutritionOrder(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "NutritionOrder")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionProduct:
+		if impl, ok := w.Concrete.(NutritionProductCreate); ok {
+			return impl.CreateNutritionProduct(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "NutritionProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Observation:
+		if impl, ok := w.Concrete.(ObservationCreate); ok {
+			return impl.CreateObservation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Observation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ObservationDefinition:
+		if impl, ok := w.Concrete.(ObservationDefinitionCreate); ok {
+			return impl.CreateObservationDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ObservationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OperationDefinition:
+		if impl, ok := w.Concrete.(OperationDefinitionCreate); ok {
+			return impl.CreateOperationDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "OperationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OperationOutcome:
+		if impl, ok := w.Concrete.(OperationOutcomeCreate); ok {
+			return impl.CreateOperationOutcome(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "OperationOutcome")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Organization:
+		if impl, ok := w.Concrete.(OrganizationCreate); ok {
+			return impl.CreateOrganization(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Organization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OrganizationAffiliation:
+		if impl, ok := w.Concrete.(OrganizationAffiliationCreate); ok {
+			return impl.CreateOrganizationAffiliation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "OrganizationAffiliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PackagedProductDefinition:
+		if impl, ok := w.Concrete.(PackagedProductDefinitionCreate); ok {
+			return impl.CreatePackagedProductDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "PackagedProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Parameters:
+		if impl, ok := w.Concrete.(ParametersCreate); ok {
+			return impl.CreateParameters(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Parameters")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Patient:
+		if impl, ok := w.Concrete.(PatientCreate); ok {
+			return impl.CreatePatient(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Patient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PaymentNotice:
+		if impl, ok := w.Concrete.(PaymentNoticeCreate); ok {
+			return impl.CreatePaymentNotice(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "PaymentNotice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PaymentReconciliation:
+		if impl, ok := w.Concrete.(PaymentReconciliationCreate); ok {
+			return impl.CreatePaymentReconciliation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "PaymentReconciliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Permission:
+		if impl, ok := w.Concrete.(PermissionCreate); ok {
+			return impl.CreatePermission(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Permission")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Person:
+		if impl, ok := w.Concrete.(PersonCreate); ok {
+			return impl.CreatePerson(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Person")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PlanDefinition:
+		if impl, ok := w.Concrete.(PlanDefinitionCreate); ok {
+			return impl.CreatePlanDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "PlanDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Practitioner:
+		if impl, ok := w.Concrete.(PractitionerCreate); ok {
+			return impl.CreatePractitioner(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Practitioner")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PractitionerRole:
+		if impl, ok := w.Concrete.(PractitionerRoleCreate); ok {
+			return impl.CreatePractitionerRole(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "PractitionerRole")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Procedure:
+		if impl, ok := w.Concrete.(ProcedureCreate); ok {
+			return impl.CreateProcedure(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Procedure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Provenance:
+		if impl, ok := w.Concrete.(ProvenanceCreate); ok {
+			return impl.CreateProvenance(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Provenance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Questionnaire:
+		if impl, ok := w.Concrete.(QuestionnaireCreate); ok {
+			return impl.CreateQuestionnaire(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Questionnaire")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.QuestionnaireResponse:
+		if impl, ok := w.Concrete.(QuestionnaireResponseCreate); ok {
+			return impl.CreateQuestionnaireResponse(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "QuestionnaireResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RegulatedAuthorization:
+		if impl, ok := w.Concrete.(RegulatedAuthorizationCreate); ok {
+			return impl.CreateRegulatedAuthorization(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "RegulatedAuthorization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RelatedPerson:
+		if impl, ok := w.Concrete.(RelatedPersonCreate); ok {
+			return impl.CreateRelatedPerson(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "RelatedPerson")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RequestOrchestration:
+		if impl, ok := w.Concrete.(RequestOrchestrationCreate); ok {
+			return impl.CreateRequestOrchestration(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "RequestOrchestration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Requirements:
+		if impl, ok := w.Concrete.(RequirementsCreate); ok {
+			return impl.CreateRequirements(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Requirements")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ResearchStudy:
+		if impl, ok := w.Concrete.(ResearchStudyCreate); ok {
+			return impl.CreateResearchStudy(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ResearchStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ResearchSubject:
+		if impl, ok := w.Concrete.(ResearchSubjectCreate); ok {
+			return impl.CreateResearchSubject(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ResearchSubject")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RiskAssessment:
+		if impl, ok := w.Concrete.(RiskAssessmentCreate); ok {
+			return impl.CreateRiskAssessment(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "RiskAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Schedule:
+		if impl, ok := w.Concrete.(ScheduleCreate); ok {
+			return impl.CreateSchedule(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Schedule")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SearchParameter:
+		if impl, ok := w.Concrete.(SearchParameterCreate); ok {
+			return impl.CreateSearchParameter(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SearchParameter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ServiceRequest:
+		if impl, ok := w.Concrete.(ServiceRequestCreate); ok {
+			return impl.CreateServiceRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ServiceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Slot:
+		if impl, ok := w.Concrete.(SlotCreate); ok {
+			return impl.CreateSlot(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Slot")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Specimen:
+		if impl, ok := w.Concrete.(SpecimenCreate); ok {
+			return impl.CreateSpecimen(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Specimen")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SpecimenDefinition:
+		if impl, ok := w.Concrete.(SpecimenDefinitionCreate); ok {
+			return impl.CreateSpecimenDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SpecimenDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.StructureDefinition:
+		if impl, ok := w.Concrete.(StructureDefinitionCreate); ok {
+			return impl.CreateStructureDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "StructureDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.StructureMap:
+		if impl, ok := w.Concrete.(StructureMapCreate); ok {
+			return impl.CreateStructureMap(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "StructureMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Subscription:
+		if impl, ok := w.Concrete.(SubscriptionCreate); ok {
+			return impl.CreateSubscription(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Subscription")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubscriptionStatus:
+		if impl, ok := w.Concrete.(SubscriptionStatusCreate); ok {
+			return impl.CreateSubscriptionStatus(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubscriptionStatus")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubscriptionTopic:
+		if impl, ok := w.Concrete.(SubscriptionTopicCreate); ok {
+			return impl.CreateSubscriptionTopic(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubscriptionTopic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Substance:
+		if impl, ok := w.Concrete.(SubstanceCreate); ok {
+			return impl.CreateSubstance(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Substance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceDefinition:
+		if impl, ok := w.Concrete.(SubstanceDefinitionCreate); ok {
+			return impl.CreateSubstanceDefinition(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstanceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceNucleicAcid:
+		if impl, ok := w.Concrete.(SubstanceNucleicAcidCreate); ok {
+			return impl.CreateSubstanceNucleicAcid(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstanceNucleicAcid")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstancePolymer:
+		if impl, ok := w.Concrete.(SubstancePolymerCreate); ok {
+			return impl.CreateSubstancePolymer(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstancePolymer")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceProtein:
+		if impl, ok := w.Concrete.(SubstanceProteinCreate); ok {
+			return impl.CreateSubstanceProtein(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstanceProtein")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceReferenceInformation:
+		if impl, ok := w.Concrete.(SubstanceReferenceInformationCreate); ok {
+			return impl.CreateSubstanceReferenceInformation(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstanceReferenceInformation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceSourceMaterial:
+		if impl, ok := w.Concrete.(SubstanceSourceMaterialCreate); ok {
+			return impl.CreateSubstanceSourceMaterial(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SubstanceSourceMaterial")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SupplyDelivery:
+		if impl, ok := w.Concrete.(SupplyDeliveryCreate); ok {
+			return impl.CreateSupplyDelivery(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SupplyDelivery")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SupplyRequest:
+		if impl, ok := w.Concrete.(SupplyRequestCreate); ok {
+			return impl.CreateSupplyRequest(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "SupplyRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Task:
+		if impl, ok := w.Concrete.(TaskCreate); ok {
+			return impl.CreateTask(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Task")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TerminologyCapabilities:
+		if impl, ok := w.Concrete.(TerminologyCapabilitiesCreate); ok {
+			return impl.CreateTerminologyCapabilities(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "TerminologyCapabilities")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestPlan:
+		if impl, ok := w.Concrete.(TestPlanCreate); ok {
+			return impl.CreateTestPlan(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "TestPlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestReport:
+		if impl, ok := w.Concrete.(TestReportCreate); ok {
+			return impl.CreateTestReport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "TestReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestScript:
+		if impl, ok := w.Concrete.(TestScriptCreate); ok {
+			return impl.CreateTestScript(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "TestScript")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Transport:
+		if impl, ok := w.Concrete.(TransportCreate); ok {
+			return impl.CreateTransport(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "Transport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ValueSet:
+		if impl, ok := w.Concrete.(ValueSetCreate); ok {
+			return impl.CreateValueSet(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "ValueSet")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.VerificationResult:
+		if impl, ok := w.Concrete.(VerificationResultCreate); ok {
+			return impl.CreateVerificationResult(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "VerificationResult")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.VisionPrescription:
+		if impl, ok := w.Concrete.(VisionPrescriptionCreate); ok {
+			return impl.CreateVisionPrescription(ctx, r)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericCreate); ok {
+			return gen.Create(ctx, resource)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("create not implemented for " + "VisionPrescription")},
 			Severity:    r5.Code{Value: ptr.To("fatal")},
 		}}}
 	}
+	return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+		Code:        r5.Code{Value: ptr.To("processing")},
+		Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resource.ResourceType())},
+		Severity:    r5.Code{Value: ptr.To("fatal")},
+	}}}
 }
 func (w Generic) Read(ctx context.Context, resourceType string, id string) (model.Resource, error) {
-	g, ok := w.Concrete.(capabilities.GenericRead)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return g.Read(ctx, resourceType, id)
-	}
 	switch resourceType {
 	case "Account":
-		impl, ok := w.Concrete.(AccountRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Account")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AccountRead); ok {
+			return impl.ReadAccount(ctx, id)
 		}
-		return impl.ReadAccount(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Account")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ActivityDefinition":
-		impl, ok := w.Concrete.(ActivityDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ActivityDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ActivityDefinitionRead); ok {
+			return impl.ReadActivityDefinition(ctx, id)
 		}
-		return impl.ReadActivityDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ActivityDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ActorDefinition":
-		impl, ok := w.Concrete.(ActorDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ActorDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ActorDefinitionRead); ok {
+			return impl.ReadActorDefinition(ctx, id)
 		}
-		return impl.ReadActorDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ActorDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AdministrableProductDefinition":
-		impl, ok := w.Concrete.(AdministrableProductDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for AdministrableProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AdministrableProductDefinitionRead); ok {
+			return impl.ReadAdministrableProductDefinition(ctx, id)
 		}
-		return impl.ReadAdministrableProductDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "AdministrableProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AdverseEvent":
-		impl, ok := w.Concrete.(AdverseEventRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for AdverseEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AdverseEventRead); ok {
+			return impl.ReadAdverseEvent(ctx, id)
 		}
-		return impl.ReadAdverseEvent(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "AdverseEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AllergyIntolerance":
-		impl, ok := w.Concrete.(AllergyIntoleranceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for AllergyIntolerance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AllergyIntoleranceRead); ok {
+			return impl.ReadAllergyIntolerance(ctx, id)
 		}
-		return impl.ReadAllergyIntolerance(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "AllergyIntolerance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Appointment":
-		impl, ok := w.Concrete.(AppointmentRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Appointment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AppointmentRead); ok {
+			return impl.ReadAppointment(ctx, id)
 		}
-		return impl.ReadAppointment(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Appointment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AppointmentResponse":
-		impl, ok := w.Concrete.(AppointmentResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for AppointmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AppointmentResponseRead); ok {
+			return impl.ReadAppointmentResponse(ctx, id)
 		}
-		return impl.ReadAppointmentResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "AppointmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ArtifactAssessment":
-		impl, ok := w.Concrete.(ArtifactAssessmentRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ArtifactAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ArtifactAssessmentRead); ok {
+			return impl.ReadArtifactAssessment(ctx, id)
 		}
-		return impl.ReadArtifactAssessment(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ArtifactAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AuditEvent":
-		impl, ok := w.Concrete.(AuditEventRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for AuditEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AuditEventRead); ok {
+			return impl.ReadAuditEvent(ctx, id)
 		}
-		return impl.ReadAuditEvent(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "AuditEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Basic":
-		impl, ok := w.Concrete.(BasicRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Basic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BasicRead); ok {
+			return impl.ReadBasic(ctx, id)
 		}
-		return impl.ReadBasic(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Basic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Binary":
-		impl, ok := w.Concrete.(BinaryRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Binary")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BinaryRead); ok {
+			return impl.ReadBinary(ctx, id)
 		}
-		return impl.ReadBinary(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Binary")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BiologicallyDerivedProduct":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for BiologicallyDerivedProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductRead); ok {
+			return impl.ReadBiologicallyDerivedProduct(ctx, id)
 		}
-		return impl.ReadBiologicallyDerivedProduct(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "BiologicallyDerivedProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BiologicallyDerivedProductDispense":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for BiologicallyDerivedProductDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseRead); ok {
+			return impl.ReadBiologicallyDerivedProductDispense(ctx, id)
 		}
-		return impl.ReadBiologicallyDerivedProductDispense(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "BiologicallyDerivedProductDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BodyStructure":
-		impl, ok := w.Concrete.(BodyStructureRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for BodyStructure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BodyStructureRead); ok {
+			return impl.ReadBodyStructure(ctx, id)
 		}
-		return impl.ReadBodyStructure(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "BodyStructure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Bundle":
-		impl, ok := w.Concrete.(BundleRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Bundle")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(BundleRead); ok {
+			return impl.ReadBundle(ctx, id)
 		}
-		return impl.ReadBundle(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Bundle")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CapabilityStatement":
-		impl, ok := w.Concrete.(CapabilityStatementRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CapabilityStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CapabilityStatementRead); ok {
+			return impl.ReadCapabilityStatement(ctx, id)
 		}
-		return impl.ReadCapabilityStatement(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CapabilityStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CarePlan":
-		impl, ok := w.Concrete.(CarePlanRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CarePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CarePlanRead); ok {
+			return impl.ReadCarePlan(ctx, id)
 		}
-		return impl.ReadCarePlan(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CarePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CareTeam":
-		impl, ok := w.Concrete.(CareTeamRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CareTeam")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CareTeamRead); ok {
+			return impl.ReadCareTeam(ctx, id)
 		}
-		return impl.ReadCareTeam(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CareTeam")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ChargeItem":
-		impl, ok := w.Concrete.(ChargeItemRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ChargeItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ChargeItemRead); ok {
+			return impl.ReadChargeItem(ctx, id)
 		}
-		return impl.ReadChargeItem(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ChargeItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ChargeItemDefinition":
-		impl, ok := w.Concrete.(ChargeItemDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ChargeItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ChargeItemDefinitionRead); ok {
+			return impl.ReadChargeItemDefinition(ctx, id)
 		}
-		return impl.ReadChargeItemDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ChargeItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Citation":
-		impl, ok := w.Concrete.(CitationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Citation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CitationRead); ok {
+			return impl.ReadCitation(ctx, id)
 		}
-		return impl.ReadCitation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Citation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Claim":
-		impl, ok := w.Concrete.(ClaimRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Claim")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ClaimRead); ok {
+			return impl.ReadClaim(ctx, id)
 		}
-		return impl.ReadClaim(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Claim")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClaimResponse":
-		impl, ok := w.Concrete.(ClaimResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ClaimResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ClaimResponseRead); ok {
+			return impl.ReadClaimResponse(ctx, id)
 		}
-		return impl.ReadClaimResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ClaimResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClinicalImpression":
-		impl, ok := w.Concrete.(ClinicalImpressionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ClinicalImpression")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ClinicalImpressionRead); ok {
+			return impl.ReadClinicalImpression(ctx, id)
 		}
-		return impl.ReadClinicalImpression(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ClinicalImpression")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClinicalUseDefinition":
-		impl, ok := w.Concrete.(ClinicalUseDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ClinicalUseDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ClinicalUseDefinitionRead); ok {
+			return impl.ReadClinicalUseDefinition(ctx, id)
 		}
-		return impl.ReadClinicalUseDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ClinicalUseDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CodeSystem":
-		impl, ok := w.Concrete.(CodeSystemRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CodeSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CodeSystemRead); ok {
+			return impl.ReadCodeSystem(ctx, id)
 		}
-		return impl.ReadCodeSystem(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CodeSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Communication":
-		impl, ok := w.Concrete.(CommunicationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Communication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CommunicationRead); ok {
+			return impl.ReadCommunication(ctx, id)
 		}
-		return impl.ReadCommunication(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Communication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CommunicationRequest":
-		impl, ok := w.Concrete.(CommunicationRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CommunicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CommunicationRequestRead); ok {
+			return impl.ReadCommunicationRequest(ctx, id)
 		}
-		return impl.ReadCommunicationRequest(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CommunicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CompartmentDefinition":
-		impl, ok := w.Concrete.(CompartmentDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CompartmentDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CompartmentDefinitionRead); ok {
+			return impl.ReadCompartmentDefinition(ctx, id)
 		}
-		return impl.ReadCompartmentDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CompartmentDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Composition":
-		impl, ok := w.Concrete.(CompositionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Composition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CompositionRead); ok {
+			return impl.ReadComposition(ctx, id)
 		}
-		return impl.ReadComposition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Composition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ConceptMap":
-		impl, ok := w.Concrete.(ConceptMapRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ConceptMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ConceptMapRead); ok {
+			return impl.ReadConceptMap(ctx, id)
 		}
-		return impl.ReadConceptMap(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ConceptMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Condition":
-		impl, ok := w.Concrete.(ConditionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Condition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ConditionRead); ok {
+			return impl.ReadCondition(ctx, id)
 		}
-		return impl.ReadCondition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Condition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ConditionDefinition":
-		impl, ok := w.Concrete.(ConditionDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ConditionDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ConditionDefinitionRead); ok {
+			return impl.ReadConditionDefinition(ctx, id)
 		}
-		return impl.ReadConditionDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ConditionDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Consent":
-		impl, ok := w.Concrete.(ConsentRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Consent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ConsentRead); ok {
+			return impl.ReadConsent(ctx, id)
 		}
-		return impl.ReadConsent(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Consent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Contract":
-		impl, ok := w.Concrete.(ContractRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Contract")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ContractRead); ok {
+			return impl.ReadContract(ctx, id)
 		}
-		return impl.ReadContract(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Contract")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Coverage":
-		impl, ok := w.Concrete.(CoverageRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Coverage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CoverageRead); ok {
+			return impl.ReadCoverage(ctx, id)
 		}
-		return impl.ReadCoverage(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Coverage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CoverageEligibilityRequest":
-		impl, ok := w.Concrete.(CoverageEligibilityRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CoverageEligibilityRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CoverageEligibilityRequestRead); ok {
+			return impl.ReadCoverageEligibilityRequest(ctx, id)
 		}
-		return impl.ReadCoverageEligibilityRequest(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CoverageEligibilityRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CoverageEligibilityResponse":
-		impl, ok := w.Concrete.(CoverageEligibilityResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for CoverageEligibilityResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(CoverageEligibilityResponseRead); ok {
+			return impl.ReadCoverageEligibilityResponse(ctx, id)
 		}
-		return impl.ReadCoverageEligibilityResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "CoverageEligibilityResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DetectedIssue":
-		impl, ok := w.Concrete.(DetectedIssueRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DetectedIssue")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DetectedIssueRead); ok {
+			return impl.ReadDetectedIssue(ctx, id)
 		}
-		return impl.ReadDetectedIssue(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DetectedIssue")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Device":
-		impl, ok := w.Concrete.(DeviceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Device")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceRead); ok {
+			return impl.ReadDevice(ctx, id)
 		}
-		return impl.ReadDevice(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Device")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceAssociation":
-		impl, ok := w.Concrete.(DeviceAssociationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceAssociation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceAssociationRead); ok {
+			return impl.ReadDeviceAssociation(ctx, id)
 		}
-		return impl.ReadDeviceAssociation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceAssociation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceDefinition":
-		impl, ok := w.Concrete.(DeviceDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceDefinitionRead); ok {
+			return impl.ReadDeviceDefinition(ctx, id)
 		}
-		return impl.ReadDeviceDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceDispense":
-		impl, ok := w.Concrete.(DeviceDispenseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceDispenseRead); ok {
+			return impl.ReadDeviceDispense(ctx, id)
 		}
-		return impl.ReadDeviceDispense(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceMetric":
-		impl, ok := w.Concrete.(DeviceMetricRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceMetric")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceMetricRead); ok {
+			return impl.ReadDeviceMetric(ctx, id)
 		}
-		return impl.ReadDeviceMetric(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceMetric")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceRequest":
-		impl, ok := w.Concrete.(DeviceRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceRequestRead); ok {
+			return impl.ReadDeviceRequest(ctx, id)
 		}
-		return impl.ReadDeviceRequest(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceUsage":
-		impl, ok := w.Concrete.(DeviceUsageRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DeviceUsage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DeviceUsageRead); ok {
+			return impl.ReadDeviceUsage(ctx, id)
 		}
-		return impl.ReadDeviceUsage(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DeviceUsage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DiagnosticReport":
-		impl, ok := w.Concrete.(DiagnosticReportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DiagnosticReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DiagnosticReportRead); ok {
+			return impl.ReadDiagnosticReport(ctx, id)
 		}
-		return impl.ReadDiagnosticReport(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DiagnosticReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DocumentReference":
-		impl, ok := w.Concrete.(DocumentReferenceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for DocumentReference")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(DocumentReferenceRead); ok {
+			return impl.ReadDocumentReference(ctx, id)
 		}
-		return impl.ReadDocumentReference(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "DocumentReference")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Encounter":
-		impl, ok := w.Concrete.(EncounterRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Encounter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EncounterRead); ok {
+			return impl.ReadEncounter(ctx, id)
 		}
-		return impl.ReadEncounter(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Encounter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EncounterHistory":
-		impl, ok := w.Concrete.(EncounterHistoryRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EncounterHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EncounterHistoryRead); ok {
+			return impl.ReadEncounterHistory(ctx, id)
 		}
-		return impl.ReadEncounterHistory(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EncounterHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Endpoint":
-		impl, ok := w.Concrete.(EndpointRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Endpoint")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EndpointRead); ok {
+			return impl.ReadEndpoint(ctx, id)
 		}
-		return impl.ReadEndpoint(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Endpoint")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EnrollmentRequest":
-		impl, ok := w.Concrete.(EnrollmentRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EnrollmentRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EnrollmentRequestRead); ok {
+			return impl.ReadEnrollmentRequest(ctx, id)
 		}
-		return impl.ReadEnrollmentRequest(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EnrollmentRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EnrollmentResponse":
-		impl, ok := w.Concrete.(EnrollmentResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EnrollmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EnrollmentResponseRead); ok {
+			return impl.ReadEnrollmentResponse(ctx, id)
 		}
-		return impl.ReadEnrollmentResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EnrollmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EpisodeOfCare":
-		impl, ok := w.Concrete.(EpisodeOfCareRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EpisodeOfCare")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EpisodeOfCareRead); ok {
+			return impl.ReadEpisodeOfCare(ctx, id)
 		}
-		return impl.ReadEpisodeOfCare(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EpisodeOfCare")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EventDefinition":
-		impl, ok := w.Concrete.(EventDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EventDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EventDefinitionRead); ok {
+			return impl.ReadEventDefinition(ctx, id)
 		}
-		return impl.ReadEventDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EventDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Evidence":
-		impl, ok := w.Concrete.(EvidenceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Evidence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EvidenceRead); ok {
+			return impl.ReadEvidence(ctx, id)
 		}
-		return impl.ReadEvidence(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Evidence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EvidenceReport":
-		impl, ok := w.Concrete.(EvidenceReportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EvidenceReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EvidenceReportRead); ok {
+			return impl.ReadEvidenceReport(ctx, id)
 		}
-		return impl.ReadEvidenceReport(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EvidenceReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EvidenceVariable":
-		impl, ok := w.Concrete.(EvidenceVariableRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for EvidenceVariable")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(EvidenceVariableRead); ok {
+			return impl.ReadEvidenceVariable(ctx, id)
 		}
-		return impl.ReadEvidenceVariable(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "EvidenceVariable")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ExampleScenario":
-		impl, ok := w.Concrete.(ExampleScenarioRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ExampleScenario")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ExampleScenarioRead); ok {
+			return impl.ReadExampleScenario(ctx, id)
 		}
-		return impl.ReadExampleScenario(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ExampleScenario")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ExplanationOfBenefit":
-		impl, ok := w.Concrete.(ExplanationOfBenefitRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ExplanationOfBenefit")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ExplanationOfBenefitRead); ok {
+			return impl.ReadExplanationOfBenefit(ctx, id)
 		}
-		return impl.ReadExplanationOfBenefit(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ExplanationOfBenefit")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "FamilyMemberHistory":
-		impl, ok := w.Concrete.(FamilyMemberHistoryRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for FamilyMemberHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(FamilyMemberHistoryRead); ok {
+			return impl.ReadFamilyMemberHistory(ctx, id)
 		}
-		return impl.ReadFamilyMemberHistory(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "FamilyMemberHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Flag":
-		impl, ok := w.Concrete.(FlagRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Flag")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(FlagRead); ok {
+			return impl.ReadFlag(ctx, id)
 		}
-		return impl.ReadFlag(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Flag")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "FormularyItem":
-		impl, ok := w.Concrete.(FormularyItemRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for FormularyItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(FormularyItemRead); ok {
+			return impl.ReadFormularyItem(ctx, id)
 		}
-		return impl.ReadFormularyItem(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "FormularyItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GenomicStudy":
-		impl, ok := w.Concrete.(GenomicStudyRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for GenomicStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(GenomicStudyRead); ok {
+			return impl.ReadGenomicStudy(ctx, id)
 		}
-		return impl.ReadGenomicStudy(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "GenomicStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Goal":
-		impl, ok := w.Concrete.(GoalRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Goal")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(GoalRead); ok {
+			return impl.ReadGoal(ctx, id)
 		}
-		return impl.ReadGoal(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Goal")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GraphDefinition":
-		impl, ok := w.Concrete.(GraphDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for GraphDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(GraphDefinitionRead); ok {
+			return impl.ReadGraphDefinition(ctx, id)
 		}
-		return impl.ReadGraphDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "GraphDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Group":
-		impl, ok := w.Concrete.(GroupRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Group")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(GroupRead); ok {
+			return impl.ReadGroup(ctx, id)
 		}
-		return impl.ReadGroup(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Group")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GuidanceResponse":
-		impl, ok := w.Concrete.(GuidanceResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for GuidanceResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(GuidanceResponseRead); ok {
+			return impl.ReadGuidanceResponse(ctx, id)
 		}
-		return impl.ReadGuidanceResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "GuidanceResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "HealthcareService":
-		impl, ok := w.Concrete.(HealthcareServiceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for HealthcareService")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(HealthcareServiceRead); ok {
+			return impl.ReadHealthcareService(ctx, id)
 		}
-		return impl.ReadHealthcareService(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "HealthcareService")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImagingSelection":
-		impl, ok := w.Concrete.(ImagingSelectionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ImagingSelection")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImagingSelectionRead); ok {
+			return impl.ReadImagingSelection(ctx, id)
 		}
-		return impl.ReadImagingSelection(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ImagingSelection")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImagingStudy":
-		impl, ok := w.Concrete.(ImagingStudyRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ImagingStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImagingStudyRead); ok {
+			return impl.ReadImagingStudy(ctx, id)
 		}
-		return impl.ReadImagingStudy(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ImagingStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Immunization":
-		impl, ok := w.Concrete.(ImmunizationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Immunization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImmunizationRead); ok {
+			return impl.ReadImmunization(ctx, id)
 		}
-		return impl.ReadImmunization(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Immunization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImmunizationEvaluation":
-		impl, ok := w.Concrete.(ImmunizationEvaluationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ImmunizationEvaluation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImmunizationEvaluationRead); ok {
+			return impl.ReadImmunizationEvaluation(ctx, id)
 		}
-		return impl.ReadImmunizationEvaluation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ImmunizationEvaluation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImmunizationRecommendation":
-		impl, ok := w.Concrete.(ImmunizationRecommendationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ImmunizationRecommendation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImmunizationRecommendationRead); ok {
+			return impl.ReadImmunizationRecommendation(ctx, id)
 		}
-		return impl.ReadImmunizationRecommendation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ImmunizationRecommendation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImplementationGuide":
-		impl, ok := w.Concrete.(ImplementationGuideRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ImplementationGuide")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ImplementationGuideRead); ok {
+			return impl.ReadImplementationGuide(ctx, id)
 		}
-		return impl.ReadImplementationGuide(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ImplementationGuide")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Ingredient":
-		impl, ok := w.Concrete.(IngredientRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Ingredient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(IngredientRead); ok {
+			return impl.ReadIngredient(ctx, id)
 		}
-		return impl.ReadIngredient(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Ingredient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InsurancePlan":
-		impl, ok := w.Concrete.(InsurancePlanRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for InsurancePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(InsurancePlanRead); ok {
+			return impl.ReadInsurancePlan(ctx, id)
 		}
-		return impl.ReadInsurancePlan(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "InsurancePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InventoryItem":
-		impl, ok := w.Concrete.(InventoryItemRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for InventoryItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(InventoryItemRead); ok {
+			return impl.ReadInventoryItem(ctx, id)
 		}
-		return impl.ReadInventoryItem(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "InventoryItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InventoryReport":
-		impl, ok := w.Concrete.(InventoryReportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for InventoryReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(InventoryReportRead); ok {
+			return impl.ReadInventoryReport(ctx, id)
 		}
-		return impl.ReadInventoryReport(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "InventoryReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Invoice":
-		impl, ok := w.Concrete.(InvoiceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Invoice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(InvoiceRead); ok {
+			return impl.ReadInvoice(ctx, id)
 		}
-		return impl.ReadInvoice(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Invoice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Library":
-		impl, ok := w.Concrete.(LibraryRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Library")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(LibraryRead); ok {
+			return impl.ReadLibrary(ctx, id)
 		}
-		return impl.ReadLibrary(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Library")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Linkage":
-		impl, ok := w.Concrete.(LinkageRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Linkage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(LinkageRead); ok {
+			return impl.ReadLinkage(ctx, id)
 		}
-		return impl.ReadLinkage(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Linkage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "List":
-		impl, ok := w.Concrete.(ListRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for List")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ListRead); ok {
+			return impl.ReadList(ctx, id)
 		}
-		return impl.ReadList(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "List")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Location":
-		impl, ok := w.Concrete.(LocationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Location")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(LocationRead); ok {
+			return impl.ReadLocation(ctx, id)
 		}
-		return impl.ReadLocation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Location")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ManufacturedItemDefinition":
-		impl, ok := w.Concrete.(ManufacturedItemDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ManufacturedItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ManufacturedItemDefinitionRead); ok {
+			return impl.ReadManufacturedItemDefinition(ctx, id)
 		}
-		return impl.ReadManufacturedItemDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ManufacturedItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Measure":
-		impl, ok := w.Concrete.(MeasureRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Measure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MeasureRead); ok {
+			return impl.ReadMeasure(ctx, id)
 		}
-		return impl.ReadMeasure(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Measure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MeasureReport":
-		impl, ok := w.Concrete.(MeasureReportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MeasureReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MeasureReportRead); ok {
+			return impl.ReadMeasureReport(ctx, id)
 		}
-		return impl.ReadMeasureReport(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MeasureReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Medication":
-		impl, ok := w.Concrete.(MedicationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Medication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationRead); ok {
+			return impl.ReadMedication(ctx, id)
 		}
-		return impl.ReadMedication(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Medication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationAdministration":
-		impl, ok := w.Concrete.(MedicationAdministrationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicationAdministration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationAdministrationRead); ok {
+			return impl.ReadMedicationAdministration(ctx, id)
 		}
-		return impl.ReadMedicationAdministration(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicationAdministration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationDispense":
-		impl, ok := w.Concrete.(MedicationDispenseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicationDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationDispenseRead); ok {
+			return impl.ReadMedicationDispense(ctx, id)
 		}
-		return impl.ReadMedicationDispense(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicationDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationKnowledge":
-		impl, ok := w.Concrete.(MedicationKnowledgeRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicationKnowledge")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationKnowledgeRead); ok {
+			return impl.ReadMedicationKnowledge(ctx, id)
 		}
-		return impl.ReadMedicationKnowledge(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicationKnowledge")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationRequest":
-		impl, ok := w.Concrete.(MedicationRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationRequestRead); ok {
+			return impl.ReadMedicationRequest(ctx, id)
 		}
-		return impl.ReadMedicationRequest(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationStatement":
-		impl, ok := w.Concrete.(MedicationStatementRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicationStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicationStatementRead); ok {
+			return impl.ReadMedicationStatement(ctx, id)
 		}
-		return impl.ReadMedicationStatement(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicationStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicinalProductDefinition":
-		impl, ok := w.Concrete.(MedicinalProductDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MedicinalProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MedicinalProductDefinitionRead); ok {
+			return impl.ReadMedicinalProductDefinition(ctx, id)
 		}
-		return impl.ReadMedicinalProductDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MedicinalProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MessageDefinition":
-		impl, ok := w.Concrete.(MessageDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MessageDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MessageDefinitionRead); ok {
+			return impl.ReadMessageDefinition(ctx, id)
 		}
-		return impl.ReadMessageDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MessageDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MessageHeader":
-		impl, ok := w.Concrete.(MessageHeaderRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MessageHeader")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MessageHeaderRead); ok {
+			return impl.ReadMessageHeader(ctx, id)
 		}
-		return impl.ReadMessageHeader(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MessageHeader")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MolecularSequence":
-		impl, ok := w.Concrete.(MolecularSequenceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for MolecularSequence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(MolecularSequenceRead); ok {
+			return impl.ReadMolecularSequence(ctx, id)
 		}
-		return impl.ReadMolecularSequence(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "MolecularSequence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NamingSystem":
-		impl, ok := w.Concrete.(NamingSystemRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for NamingSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(NamingSystemRead); ok {
+			return impl.ReadNamingSystem(ctx, id)
 		}
-		return impl.ReadNamingSystem(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "NamingSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionIntake":
-		impl, ok := w.Concrete.(NutritionIntakeRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for NutritionIntake")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(NutritionIntakeRead); ok {
+			return impl.ReadNutritionIntake(ctx, id)
 		}
-		return impl.ReadNutritionIntake(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "NutritionIntake")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionOrder":
-		impl, ok := w.Concrete.(NutritionOrderRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for NutritionOrder")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(NutritionOrderRead); ok {
+			return impl.ReadNutritionOrder(ctx, id)
 		}
-		return impl.ReadNutritionOrder(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "NutritionOrder")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionProduct":
-		impl, ok := w.Concrete.(NutritionProductRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for NutritionProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(NutritionProductRead); ok {
+			return impl.ReadNutritionProduct(ctx, id)
 		}
-		return impl.ReadNutritionProduct(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "NutritionProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Observation":
-		impl, ok := w.Concrete.(ObservationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Observation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ObservationRead); ok {
+			return impl.ReadObservation(ctx, id)
 		}
-		return impl.ReadObservation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Observation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ObservationDefinition":
-		impl, ok := w.Concrete.(ObservationDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ObservationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ObservationDefinitionRead); ok {
+			return impl.ReadObservationDefinition(ctx, id)
 		}
-		return impl.ReadObservationDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ObservationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "OperationDefinition":
 		impl, ok := w.Concrete.(OperationDefinitionRead)
 		if ok {
@@ -14997,255 +15510,305 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 			Severity:    r5.Code{Value: ptr.To("error")},
 		}}}
 	case "OperationOutcome":
-		impl, ok := w.Concrete.(OperationOutcomeRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for OperationOutcome")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(OperationOutcomeRead); ok {
+			return impl.ReadOperationOutcome(ctx, id)
 		}
-		return impl.ReadOperationOutcome(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "OperationOutcome")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Organization":
-		impl, ok := w.Concrete.(OrganizationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Organization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(OrganizationRead); ok {
+			return impl.ReadOrganization(ctx, id)
 		}
-		return impl.ReadOrganization(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Organization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "OrganizationAffiliation":
-		impl, ok := w.Concrete.(OrganizationAffiliationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for OrganizationAffiliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(OrganizationAffiliationRead); ok {
+			return impl.ReadOrganizationAffiliation(ctx, id)
 		}
-		return impl.ReadOrganizationAffiliation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "OrganizationAffiliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PackagedProductDefinition":
-		impl, ok := w.Concrete.(PackagedProductDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for PackagedProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PackagedProductDefinitionRead); ok {
+			return impl.ReadPackagedProductDefinition(ctx, id)
 		}
-		return impl.ReadPackagedProductDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "PackagedProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Parameters":
-		impl, ok := w.Concrete.(ParametersRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Parameters")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ParametersRead); ok {
+			return impl.ReadParameters(ctx, id)
 		}
-		return impl.ReadParameters(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Parameters")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Patient":
-		impl, ok := w.Concrete.(PatientRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Patient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PatientRead); ok {
+			return impl.ReadPatient(ctx, id)
 		}
-		return impl.ReadPatient(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Patient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PaymentNotice":
-		impl, ok := w.Concrete.(PaymentNoticeRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for PaymentNotice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PaymentNoticeRead); ok {
+			return impl.ReadPaymentNotice(ctx, id)
 		}
-		return impl.ReadPaymentNotice(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "PaymentNotice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PaymentReconciliation":
-		impl, ok := w.Concrete.(PaymentReconciliationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for PaymentReconciliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PaymentReconciliationRead); ok {
+			return impl.ReadPaymentReconciliation(ctx, id)
 		}
-		return impl.ReadPaymentReconciliation(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "PaymentReconciliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Permission":
-		impl, ok := w.Concrete.(PermissionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Permission")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PermissionRead); ok {
+			return impl.ReadPermission(ctx, id)
 		}
-		return impl.ReadPermission(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Permission")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Person":
-		impl, ok := w.Concrete.(PersonRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Person")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PersonRead); ok {
+			return impl.ReadPerson(ctx, id)
 		}
-		return impl.ReadPerson(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Person")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PlanDefinition":
-		impl, ok := w.Concrete.(PlanDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for PlanDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PlanDefinitionRead); ok {
+			return impl.ReadPlanDefinition(ctx, id)
 		}
-		return impl.ReadPlanDefinition(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "PlanDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Practitioner":
-		impl, ok := w.Concrete.(PractitionerRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Practitioner")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PractitionerRead); ok {
+			return impl.ReadPractitioner(ctx, id)
 		}
-		return impl.ReadPractitioner(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Practitioner")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PractitionerRole":
-		impl, ok := w.Concrete.(PractitionerRoleRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for PractitionerRole")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(PractitionerRoleRead); ok {
+			return impl.ReadPractitionerRole(ctx, id)
 		}
-		return impl.ReadPractitionerRole(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "PractitionerRole")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Procedure":
-		impl, ok := w.Concrete.(ProcedureRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Procedure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ProcedureRead); ok {
+			return impl.ReadProcedure(ctx, id)
 		}
-		return impl.ReadProcedure(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Procedure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Provenance":
-		impl, ok := w.Concrete.(ProvenanceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Provenance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ProvenanceRead); ok {
+			return impl.ReadProvenance(ctx, id)
 		}
-		return impl.ReadProvenance(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Provenance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Questionnaire":
-		impl, ok := w.Concrete.(QuestionnaireRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Questionnaire")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(QuestionnaireRead); ok {
+			return impl.ReadQuestionnaire(ctx, id)
 		}
-		return impl.ReadQuestionnaire(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Questionnaire")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "QuestionnaireResponse":
-		impl, ok := w.Concrete.(QuestionnaireResponseRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for QuestionnaireResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(QuestionnaireResponseRead); ok {
+			return impl.ReadQuestionnaireResponse(ctx, id)
 		}
-		return impl.ReadQuestionnaireResponse(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "QuestionnaireResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RegulatedAuthorization":
-		impl, ok := w.Concrete.(RegulatedAuthorizationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for RegulatedAuthorization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(RegulatedAuthorizationRead); ok {
+			return impl.ReadRegulatedAuthorization(ctx, id)
 		}
-		return impl.ReadRegulatedAuthorization(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "RegulatedAuthorization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RelatedPerson":
-		impl, ok := w.Concrete.(RelatedPersonRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for RelatedPerson")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(RelatedPersonRead); ok {
+			return impl.ReadRelatedPerson(ctx, id)
 		}
-		return impl.ReadRelatedPerson(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "RelatedPerson")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RequestOrchestration":
-		impl, ok := w.Concrete.(RequestOrchestrationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for RequestOrchestration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(RequestOrchestrationRead); ok {
+			return impl.ReadRequestOrchestration(ctx, id)
 		}
-		return impl.ReadRequestOrchestration(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "RequestOrchestration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Requirements":
-		impl, ok := w.Concrete.(RequirementsRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Requirements")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(RequirementsRead); ok {
+			return impl.ReadRequirements(ctx, id)
 		}
-		return impl.ReadRequirements(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Requirements")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ResearchStudy":
-		impl, ok := w.Concrete.(ResearchStudyRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ResearchStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ResearchStudyRead); ok {
+			return impl.ReadResearchStudy(ctx, id)
 		}
-		return impl.ReadResearchStudy(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ResearchStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ResearchSubject":
-		impl, ok := w.Concrete.(ResearchSubjectRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ResearchSubject")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ResearchSubjectRead); ok {
+			return impl.ReadResearchSubject(ctx, id)
 		}
-		return impl.ReadResearchSubject(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ResearchSubject")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RiskAssessment":
-		impl, ok := w.Concrete.(RiskAssessmentRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for RiskAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(RiskAssessmentRead); ok {
+			return impl.ReadRiskAssessment(ctx, id)
 		}
-		return impl.ReadRiskAssessment(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "RiskAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Schedule":
-		impl, ok := w.Concrete.(ScheduleRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Schedule")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ScheduleRead); ok {
+			return impl.ReadSchedule(ctx, id)
 		}
-		return impl.ReadSchedule(ctx, id)
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Schedule")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "SearchParameter":
 		impl, ok := w.Concrete.(SearchParameterRead)
 		if ok {
@@ -15275,7136 +15838,8012 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 			Severity:    r5.Code{Value: ptr.To("error")},
 		}}}
 	case "ServiceRequest":
-		impl, ok := w.Concrete.(ServiceRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ServiceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(ServiceRequestRead); ok {
+			return impl.ReadServiceRequest(ctx, id)
 		}
-		return impl.ReadServiceRequest(ctx, id)
-	case "Slot":
-		impl, ok := w.Concrete.(SlotRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Slot")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
 		}
-		return impl.ReadSlot(ctx, id)
-	case "Specimen":
-		impl, ok := w.Concrete.(SpecimenRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Specimen")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSpecimen(ctx, id)
-	case "SpecimenDefinition":
-		impl, ok := w.Concrete.(SpecimenDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SpecimenDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSpecimenDefinition(ctx, id)
-	case "StructureDefinition":
-		impl, ok := w.Concrete.(StructureDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for StructureDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadStructureDefinition(ctx, id)
-	case "StructureMap":
-		impl, ok := w.Concrete.(StructureMapRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for StructureMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadStructureMap(ctx, id)
-	case "Subscription":
-		impl, ok := w.Concrete.(SubscriptionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Subscription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubscription(ctx, id)
-	case "SubscriptionStatus":
-		impl, ok := w.Concrete.(SubscriptionStatusRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubscriptionStatus")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubscriptionStatus(ctx, id)
-	case "SubscriptionTopic":
-		impl, ok := w.Concrete.(SubscriptionTopicRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubscriptionTopic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubscriptionTopic(ctx, id)
-	case "Substance":
-		impl, ok := w.Concrete.(SubstanceRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Substance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstance(ctx, id)
-	case "SubstanceDefinition":
-		impl, ok := w.Concrete.(SubstanceDefinitionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstanceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstanceDefinition(ctx, id)
-	case "SubstanceNucleicAcid":
-		impl, ok := w.Concrete.(SubstanceNucleicAcidRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstanceNucleicAcid")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstanceNucleicAcid(ctx, id)
-	case "SubstancePolymer":
-		impl, ok := w.Concrete.(SubstancePolymerRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstancePolymer")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstancePolymer(ctx, id)
-	case "SubstanceProtein":
-		impl, ok := w.Concrete.(SubstanceProteinRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstanceProtein")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstanceProtein(ctx, id)
-	case "SubstanceReferenceInformation":
-		impl, ok := w.Concrete.(SubstanceReferenceInformationRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstanceReferenceInformation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstanceReferenceInformation(ctx, id)
-	case "SubstanceSourceMaterial":
-		impl, ok := w.Concrete.(SubstanceSourceMaterialRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SubstanceSourceMaterial")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSubstanceSourceMaterial(ctx, id)
-	case "SupplyDelivery":
-		impl, ok := w.Concrete.(SupplyDeliveryRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SupplyDelivery")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSupplyDelivery(ctx, id)
-	case "SupplyRequest":
-		impl, ok := w.Concrete.(SupplyRequestRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for SupplyRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadSupplyRequest(ctx, id)
-	case "Task":
-		impl, ok := w.Concrete.(TaskRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Task")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTask(ctx, id)
-	case "TerminologyCapabilities":
-		impl, ok := w.Concrete.(TerminologyCapabilitiesRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for TerminologyCapabilities")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTerminologyCapabilities(ctx, id)
-	case "TestPlan":
-		impl, ok := w.Concrete.(TestPlanRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for TestPlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTestPlan(ctx, id)
-	case "TestReport":
-		impl, ok := w.Concrete.(TestReportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for TestReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTestReport(ctx, id)
-	case "TestScript":
-		impl, ok := w.Concrete.(TestScriptRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for TestScript")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTestScript(ctx, id)
-	case "Transport":
-		impl, ok := w.Concrete.(TransportRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for Transport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadTransport(ctx, id)
-	case "ValueSet":
-		impl, ok := w.Concrete.(ValueSetRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for ValueSet")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadValueSet(ctx, id)
-	case "VerificationResult":
-		impl, ok := w.Concrete.(VerificationResultRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for VerificationResult")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadVerificationResult(ctx, id)
-	case "VisionPrescription":
-		impl, ok := w.Concrete.(VisionPrescriptionRead)
-		if !ok {
-			return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("read not implemented for VisionPrescription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.ReadVisionPrescription(ctx, id)
-	default:
 		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-			Code:        r5.Code{Value: ptr.To("processing")},
-			Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ServiceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Slot":
+		if impl, ok := w.Concrete.(SlotRead); ok {
+			return impl.ReadSlot(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Slot")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Specimen":
+		if impl, ok := w.Concrete.(SpecimenRead); ok {
+			return impl.ReadSpecimen(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Specimen")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SpecimenDefinition":
+		if impl, ok := w.Concrete.(SpecimenDefinitionRead); ok {
+			return impl.ReadSpecimenDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SpecimenDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureDefinition":
+		if impl, ok := w.Concrete.(StructureDefinitionRead); ok {
+			return impl.ReadStructureDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "StructureDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureMap":
+		if impl, ok := w.Concrete.(StructureMapRead); ok {
+			return impl.ReadStructureMap(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "StructureMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Subscription":
+		if impl, ok := w.Concrete.(SubscriptionRead); ok {
+			return impl.ReadSubscription(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Subscription")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionStatus":
+		if impl, ok := w.Concrete.(SubscriptionStatusRead); ok {
+			return impl.ReadSubscriptionStatus(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubscriptionStatus")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionTopic":
+		if impl, ok := w.Concrete.(SubscriptionTopicRead); ok {
+			return impl.ReadSubscriptionTopic(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubscriptionTopic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Substance":
+		if impl, ok := w.Concrete.(SubstanceRead); ok {
+			return impl.ReadSubstance(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Substance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceDefinition":
+		if impl, ok := w.Concrete.(SubstanceDefinitionRead); ok {
+			return impl.ReadSubstanceDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstanceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceNucleicAcid":
+		if impl, ok := w.Concrete.(SubstanceNucleicAcidRead); ok {
+			return impl.ReadSubstanceNucleicAcid(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstanceNucleicAcid")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstancePolymer":
+		if impl, ok := w.Concrete.(SubstancePolymerRead); ok {
+			return impl.ReadSubstancePolymer(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstancePolymer")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceProtein":
+		if impl, ok := w.Concrete.(SubstanceProteinRead); ok {
+			return impl.ReadSubstanceProtein(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstanceProtein")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceReferenceInformation":
+		if impl, ok := w.Concrete.(SubstanceReferenceInformationRead); ok {
+			return impl.ReadSubstanceReferenceInformation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstanceReferenceInformation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceSourceMaterial":
+		if impl, ok := w.Concrete.(SubstanceSourceMaterialRead); ok {
+			return impl.ReadSubstanceSourceMaterial(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SubstanceSourceMaterial")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyDelivery":
+		if impl, ok := w.Concrete.(SupplyDeliveryRead); ok {
+			return impl.ReadSupplyDelivery(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SupplyDelivery")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyRequest":
+		if impl, ok := w.Concrete.(SupplyRequestRead); ok {
+			return impl.ReadSupplyRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "SupplyRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Task":
+		if impl, ok := w.Concrete.(TaskRead); ok {
+			return impl.ReadTask(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Task")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TerminologyCapabilities":
+		if impl, ok := w.Concrete.(TerminologyCapabilitiesRead); ok {
+			return impl.ReadTerminologyCapabilities(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "TerminologyCapabilities")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestPlan":
+		if impl, ok := w.Concrete.(TestPlanRead); ok {
+			return impl.ReadTestPlan(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "TestPlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestReport":
+		if impl, ok := w.Concrete.(TestReportRead); ok {
+			return impl.ReadTestReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "TestReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestScript":
+		if impl, ok := w.Concrete.(TestScriptRead); ok {
+			return impl.ReadTestScript(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "TestScript")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Transport":
+		if impl, ok := w.Concrete.(TransportRead); ok {
+			return impl.ReadTransport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "Transport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ValueSet":
+		if impl, ok := w.Concrete.(ValueSetRead); ok {
+			return impl.ReadValueSet(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "ValueSet")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VerificationResult":
+		if impl, ok := w.Concrete.(VerificationResultRead); ok {
+			return impl.ReadVerificationResult(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "VerificationResult")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VisionPrescription":
+		if impl, ok := w.Concrete.(VisionPrescriptionRead); ok {
+			return impl.ReadVisionPrescription(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, resourceType, id)
+		}
+		return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("read not implemented for " + "VisionPrescription")},
 			Severity:    r5.Code{Value: ptr.To("fatal")},
 		}}}
 	}
+	return nil, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+		Code:        r5.Code{Value: ptr.To("processing")},
+		Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+		Severity:    r5.Code{Value: ptr.To("fatal")},
+	}}}
 }
 func (w Generic) Update(ctx context.Context, resource model.Resource) (update.Result[model.Resource], error) {
-	g, ok := w.Concrete.(capabilities.GenericUpdate)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return g.Update(ctx, resource)
-	}
 	switch r := resource.(type) {
 	case r5.Account:
-		impl, ok := w.Concrete.(AccountUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Account")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AccountUpdate); ok {
+			result, err := impl.UpdateAccount(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
 		}
-		result, err := impl.UpdateAccount(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ActivityDefinition:
-		impl, ok := w.Concrete.(ActivityDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ActivityDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateActivityDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ActorDefinition:
-		impl, ok := w.Concrete.(ActorDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ActorDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateActorDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.AdministrableProductDefinition:
-		impl, ok := w.Concrete.(AdministrableProductDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for AdministrableProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAdministrableProductDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.AdverseEvent:
-		impl, ok := w.Concrete.(AdverseEventUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for AdverseEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAdverseEvent(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.AllergyIntolerance:
-		impl, ok := w.Concrete.(AllergyIntoleranceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for AllergyIntolerance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAllergyIntolerance(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Appointment:
-		impl, ok := w.Concrete.(AppointmentUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Appointment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAppointment(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.AppointmentResponse:
-		impl, ok := w.Concrete.(AppointmentResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for AppointmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAppointmentResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ArtifactAssessment:
-		impl, ok := w.Concrete.(ArtifactAssessmentUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ArtifactAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateArtifactAssessment(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.AuditEvent:
-		impl, ok := w.Concrete.(AuditEventUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for AuditEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateAuditEvent(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Basic:
-		impl, ok := w.Concrete.(BasicUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Basic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBasic(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Binary:
-		impl, ok := w.Concrete.(BinaryUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Binary")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBinary(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.BiologicallyDerivedProduct:
-		impl, ok := w.Concrete.(BiologicallyDerivedProductUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for BiologicallyDerivedProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBiologicallyDerivedProduct(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.BiologicallyDerivedProductDispense:
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for BiologicallyDerivedProductDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBiologicallyDerivedProductDispense(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.BodyStructure:
-		impl, ok := w.Concrete.(BodyStructureUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for BodyStructure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBodyStructure(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Bundle:
-		impl, ok := w.Concrete.(BundleUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Bundle")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateBundle(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CapabilityStatement:
-		impl, ok := w.Concrete.(CapabilityStatementUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CapabilityStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCapabilityStatement(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CarePlan:
-		impl, ok := w.Concrete.(CarePlanUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CarePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCarePlan(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CareTeam:
-		impl, ok := w.Concrete.(CareTeamUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CareTeam")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCareTeam(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ChargeItem:
-		impl, ok := w.Concrete.(ChargeItemUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ChargeItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateChargeItem(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ChargeItemDefinition:
-		impl, ok := w.Concrete.(ChargeItemDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ChargeItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateChargeItemDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Citation:
-		impl, ok := w.Concrete.(CitationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Citation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCitation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Claim:
-		impl, ok := w.Concrete.(ClaimUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Claim")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateClaim(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ClaimResponse:
-		impl, ok := w.Concrete.(ClaimResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ClaimResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateClaimResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ClinicalImpression:
-		impl, ok := w.Concrete.(ClinicalImpressionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ClinicalImpression")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateClinicalImpression(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ClinicalUseDefinition:
-		impl, ok := w.Concrete.(ClinicalUseDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ClinicalUseDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateClinicalUseDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CodeSystem:
-		impl, ok := w.Concrete.(CodeSystemUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CodeSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCodeSystem(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Communication:
-		impl, ok := w.Concrete.(CommunicationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Communication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCommunication(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CommunicationRequest:
-		impl, ok := w.Concrete.(CommunicationRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CommunicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCommunicationRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CompartmentDefinition:
-		impl, ok := w.Concrete.(CompartmentDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CompartmentDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCompartmentDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Composition:
-		impl, ok := w.Concrete.(CompositionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Composition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateComposition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ConceptMap:
-		impl, ok := w.Concrete.(ConceptMapUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ConceptMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateConceptMap(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Condition:
-		impl, ok := w.Concrete.(ConditionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Condition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCondition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ConditionDefinition:
-		impl, ok := w.Concrete.(ConditionDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ConditionDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateConditionDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Consent:
-		impl, ok := w.Concrete.(ConsentUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Consent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateConsent(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Contract:
-		impl, ok := w.Concrete.(ContractUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Contract")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateContract(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Coverage:
-		impl, ok := w.Concrete.(CoverageUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Coverage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCoverage(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CoverageEligibilityRequest:
-		impl, ok := w.Concrete.(CoverageEligibilityRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CoverageEligibilityRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCoverageEligibilityRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.CoverageEligibilityResponse:
-		impl, ok := w.Concrete.(CoverageEligibilityResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for CoverageEligibilityResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateCoverageEligibilityResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DetectedIssue:
-		impl, ok := w.Concrete.(DetectedIssueUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DetectedIssue")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDetectedIssue(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Device:
-		impl, ok := w.Concrete.(DeviceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Device")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDevice(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceAssociation:
-		impl, ok := w.Concrete.(DeviceAssociationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceAssociation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceAssociation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceDefinition:
-		impl, ok := w.Concrete.(DeviceDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceDispense:
-		impl, ok := w.Concrete.(DeviceDispenseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceDispense(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceMetric:
-		impl, ok := w.Concrete.(DeviceMetricUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceMetric")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceMetric(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceRequest:
-		impl, ok := w.Concrete.(DeviceRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DeviceUsage:
-		impl, ok := w.Concrete.(DeviceUsageUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DeviceUsage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDeviceUsage(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DiagnosticReport:
-		impl, ok := w.Concrete.(DiagnosticReportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DiagnosticReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDiagnosticReport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.DocumentReference:
-		impl, ok := w.Concrete.(DocumentReferenceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for DocumentReference")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateDocumentReference(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Encounter:
-		impl, ok := w.Concrete.(EncounterUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Encounter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEncounter(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EncounterHistory:
-		impl, ok := w.Concrete.(EncounterHistoryUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EncounterHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEncounterHistory(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Endpoint:
-		impl, ok := w.Concrete.(EndpointUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Endpoint")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEndpoint(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EnrollmentRequest:
-		impl, ok := w.Concrete.(EnrollmentRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EnrollmentRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEnrollmentRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EnrollmentResponse:
-		impl, ok := w.Concrete.(EnrollmentResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EnrollmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEnrollmentResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EpisodeOfCare:
-		impl, ok := w.Concrete.(EpisodeOfCareUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EpisodeOfCare")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEpisodeOfCare(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EventDefinition:
-		impl, ok := w.Concrete.(EventDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EventDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEventDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Evidence:
-		impl, ok := w.Concrete.(EvidenceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Evidence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEvidence(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EvidenceReport:
-		impl, ok := w.Concrete.(EvidenceReportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EvidenceReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEvidenceReport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.EvidenceVariable:
-		impl, ok := w.Concrete.(EvidenceVariableUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for EvidenceVariable")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateEvidenceVariable(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ExampleScenario:
-		impl, ok := w.Concrete.(ExampleScenarioUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ExampleScenario")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateExampleScenario(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ExplanationOfBenefit:
-		impl, ok := w.Concrete.(ExplanationOfBenefitUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ExplanationOfBenefit")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateExplanationOfBenefit(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.FamilyMemberHistory:
-		impl, ok := w.Concrete.(FamilyMemberHistoryUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for FamilyMemberHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateFamilyMemberHistory(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Flag:
-		impl, ok := w.Concrete.(FlagUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Flag")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateFlag(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.FormularyItem:
-		impl, ok := w.Concrete.(FormularyItemUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for FormularyItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateFormularyItem(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.GenomicStudy:
-		impl, ok := w.Concrete.(GenomicStudyUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for GenomicStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateGenomicStudy(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Goal:
-		impl, ok := w.Concrete.(GoalUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Goal")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateGoal(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.GraphDefinition:
-		impl, ok := w.Concrete.(GraphDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for GraphDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateGraphDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Group:
-		impl, ok := w.Concrete.(GroupUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Group")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateGroup(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.GuidanceResponse:
-		impl, ok := w.Concrete.(GuidanceResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for GuidanceResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateGuidanceResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.HealthcareService:
-		impl, ok := w.Concrete.(HealthcareServiceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for HealthcareService")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateHealthcareService(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ImagingSelection:
-		impl, ok := w.Concrete.(ImagingSelectionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ImagingSelection")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImagingSelection(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ImagingStudy:
-		impl, ok := w.Concrete.(ImagingStudyUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ImagingStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImagingStudy(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Immunization:
-		impl, ok := w.Concrete.(ImmunizationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Immunization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImmunization(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ImmunizationEvaluation:
-		impl, ok := w.Concrete.(ImmunizationEvaluationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ImmunizationEvaluation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImmunizationEvaluation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ImmunizationRecommendation:
-		impl, ok := w.Concrete.(ImmunizationRecommendationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ImmunizationRecommendation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImmunizationRecommendation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ImplementationGuide:
-		impl, ok := w.Concrete.(ImplementationGuideUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ImplementationGuide")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateImplementationGuide(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Ingredient:
-		impl, ok := w.Concrete.(IngredientUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Ingredient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateIngredient(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.InsurancePlan:
-		impl, ok := w.Concrete.(InsurancePlanUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for InsurancePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateInsurancePlan(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.InventoryItem:
-		impl, ok := w.Concrete.(InventoryItemUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for InventoryItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateInventoryItem(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.InventoryReport:
-		impl, ok := w.Concrete.(InventoryReportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for InventoryReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateInventoryReport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Invoice:
-		impl, ok := w.Concrete.(InvoiceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Invoice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateInvoice(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Library:
-		impl, ok := w.Concrete.(LibraryUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Library")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateLibrary(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Linkage:
-		impl, ok := w.Concrete.(LinkageUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Linkage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateLinkage(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.List:
-		impl, ok := w.Concrete.(ListUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for List")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateList(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Location:
-		impl, ok := w.Concrete.(LocationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Location")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateLocation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ManufacturedItemDefinition:
-		impl, ok := w.Concrete.(ManufacturedItemDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ManufacturedItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateManufacturedItemDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Measure:
-		impl, ok := w.Concrete.(MeasureUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Measure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMeasure(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MeasureReport:
-		impl, ok := w.Concrete.(MeasureReportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MeasureReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMeasureReport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Medication:
-		impl, ok := w.Concrete.(MedicationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Medication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedication(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicationAdministration:
-		impl, ok := w.Concrete.(MedicationAdministrationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicationAdministration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicationAdministration(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicationDispense:
-		impl, ok := w.Concrete.(MedicationDispenseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicationDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicationDispense(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicationKnowledge:
-		impl, ok := w.Concrete.(MedicationKnowledgeUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicationKnowledge")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicationKnowledge(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicationRequest:
-		impl, ok := w.Concrete.(MedicationRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicationRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicationStatement:
-		impl, ok := w.Concrete.(MedicationStatementUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicationStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicationStatement(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MedicinalProductDefinition:
-		impl, ok := w.Concrete.(MedicinalProductDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MedicinalProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMedicinalProductDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MessageDefinition:
-		impl, ok := w.Concrete.(MessageDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MessageDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMessageDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MessageHeader:
-		impl, ok := w.Concrete.(MessageHeaderUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MessageHeader")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMessageHeader(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.MolecularSequence:
-		impl, ok := w.Concrete.(MolecularSequenceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for MolecularSequence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateMolecularSequence(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.NamingSystem:
-		impl, ok := w.Concrete.(NamingSystemUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for NamingSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateNamingSystem(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.NutritionIntake:
-		impl, ok := w.Concrete.(NutritionIntakeUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for NutritionIntake")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateNutritionIntake(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.NutritionOrder:
-		impl, ok := w.Concrete.(NutritionOrderUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for NutritionOrder")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateNutritionOrder(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.NutritionProduct:
-		impl, ok := w.Concrete.(NutritionProductUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for NutritionProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateNutritionProduct(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Observation:
-		impl, ok := w.Concrete.(ObservationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Observation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateObservation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ObservationDefinition:
-		impl, ok := w.Concrete.(ObservationDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ObservationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateObservationDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.OperationDefinition:
-		impl, ok := w.Concrete.(OperationDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for OperationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateOperationDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.OperationOutcome:
-		impl, ok := w.Concrete.(OperationOutcomeUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for OperationOutcome")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateOperationOutcome(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Organization:
-		impl, ok := w.Concrete.(OrganizationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Organization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateOrganization(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.OrganizationAffiliation:
-		impl, ok := w.Concrete.(OrganizationAffiliationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for OrganizationAffiliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateOrganizationAffiliation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.PackagedProductDefinition:
-		impl, ok := w.Concrete.(PackagedProductDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for PackagedProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePackagedProductDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Parameters:
-		impl, ok := w.Concrete.(ParametersUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Parameters")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateParameters(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Patient:
-		impl, ok := w.Concrete.(PatientUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Patient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePatient(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.PaymentNotice:
-		impl, ok := w.Concrete.(PaymentNoticeUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for PaymentNotice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePaymentNotice(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.PaymentReconciliation:
-		impl, ok := w.Concrete.(PaymentReconciliationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for PaymentReconciliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePaymentReconciliation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Permission:
-		impl, ok := w.Concrete.(PermissionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Permission")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePermission(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Person:
-		impl, ok := w.Concrete.(PersonUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Person")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePerson(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.PlanDefinition:
-		impl, ok := w.Concrete.(PlanDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for PlanDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePlanDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Practitioner:
-		impl, ok := w.Concrete.(PractitionerUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Practitioner")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePractitioner(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.PractitionerRole:
-		impl, ok := w.Concrete.(PractitionerRoleUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for PractitionerRole")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdatePractitionerRole(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Procedure:
-		impl, ok := w.Concrete.(ProcedureUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Procedure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateProcedure(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Provenance:
-		impl, ok := w.Concrete.(ProvenanceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Provenance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateProvenance(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Questionnaire:
-		impl, ok := w.Concrete.(QuestionnaireUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Questionnaire")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateQuestionnaire(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.QuestionnaireResponse:
-		impl, ok := w.Concrete.(QuestionnaireResponseUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for QuestionnaireResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateQuestionnaireResponse(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.RegulatedAuthorization:
-		impl, ok := w.Concrete.(RegulatedAuthorizationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for RegulatedAuthorization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateRegulatedAuthorization(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.RelatedPerson:
-		impl, ok := w.Concrete.(RelatedPersonUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for RelatedPerson")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateRelatedPerson(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.RequestOrchestration:
-		impl, ok := w.Concrete.(RequestOrchestrationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for RequestOrchestration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateRequestOrchestration(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Requirements:
-		impl, ok := w.Concrete.(RequirementsUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Requirements")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateRequirements(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ResearchStudy:
-		impl, ok := w.Concrete.(ResearchStudyUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ResearchStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateResearchStudy(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ResearchSubject:
-		impl, ok := w.Concrete.(ResearchSubjectUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ResearchSubject")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateResearchSubject(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.RiskAssessment:
-		impl, ok := w.Concrete.(RiskAssessmentUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for RiskAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateRiskAssessment(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Schedule:
-		impl, ok := w.Concrete.(ScheduleUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Schedule")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSchedule(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SearchParameter:
-		impl, ok := w.Concrete.(SearchParameterUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SearchParameter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSearchParameter(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ServiceRequest:
-		impl, ok := w.Concrete.(ServiceRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ServiceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateServiceRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Slot:
-		impl, ok := w.Concrete.(SlotUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Slot")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSlot(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Specimen:
-		impl, ok := w.Concrete.(SpecimenUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Specimen")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSpecimen(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SpecimenDefinition:
-		impl, ok := w.Concrete.(SpecimenDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SpecimenDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSpecimenDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.StructureDefinition:
-		impl, ok := w.Concrete.(StructureDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for StructureDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateStructureDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.StructureMap:
-		impl, ok := w.Concrete.(StructureMapUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for StructureMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateStructureMap(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Subscription:
-		impl, ok := w.Concrete.(SubscriptionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Subscription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubscription(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubscriptionStatus:
-		impl, ok := w.Concrete.(SubscriptionStatusUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubscriptionStatus")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubscriptionStatus(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubscriptionTopic:
-		impl, ok := w.Concrete.(SubscriptionTopicUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubscriptionTopic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubscriptionTopic(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Substance:
-		impl, ok := w.Concrete.(SubstanceUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Substance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstance(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstanceDefinition:
-		impl, ok := w.Concrete.(SubstanceDefinitionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstanceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstanceDefinition(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstanceNucleicAcid:
-		impl, ok := w.Concrete.(SubstanceNucleicAcidUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstanceNucleicAcid")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstanceNucleicAcid(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstancePolymer:
-		impl, ok := w.Concrete.(SubstancePolymerUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstancePolymer")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstancePolymer(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstanceProtein:
-		impl, ok := w.Concrete.(SubstanceProteinUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstanceProtein")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstanceProtein(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstanceReferenceInformation:
-		impl, ok := w.Concrete.(SubstanceReferenceInformationUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstanceReferenceInformation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstanceReferenceInformation(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SubstanceSourceMaterial:
-		impl, ok := w.Concrete.(SubstanceSourceMaterialUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SubstanceSourceMaterial")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSubstanceSourceMaterial(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SupplyDelivery:
-		impl, ok := w.Concrete.(SupplyDeliveryUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SupplyDelivery")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSupplyDelivery(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.SupplyRequest:
-		impl, ok := w.Concrete.(SupplyRequestUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for SupplyRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateSupplyRequest(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Task:
-		impl, ok := w.Concrete.(TaskUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Task")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTask(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.TerminologyCapabilities:
-		impl, ok := w.Concrete.(TerminologyCapabilitiesUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for TerminologyCapabilities")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTerminologyCapabilities(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.TestPlan:
-		impl, ok := w.Concrete.(TestPlanUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for TestPlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTestPlan(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.TestReport:
-		impl, ok := w.Concrete.(TestReportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for TestReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTestReport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.TestScript:
-		impl, ok := w.Concrete.(TestScriptUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for TestScript")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTestScript(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.Transport:
-		impl, ok := w.Concrete.(TransportUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for Transport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateTransport(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.ValueSet:
-		impl, ok := w.Concrete.(ValueSetUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for ValueSet")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateValueSet(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.VerificationResult:
-		impl, ok := w.Concrete.(VerificationResultUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for VerificationResult")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateVerificationResult(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	case r5.VisionPrescription:
-		impl, ok := w.Concrete.(VisionPrescriptionUpdate)
-		if !ok {
-			return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("update not implemented for VisionPrescription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.UpdateVisionPrescription(ctx, r)
-		if err != nil {
-			return update.Result[model.Resource]{}, err
-		}
-		return update.Result[model.Resource]{
-
-			Created:  result.Created,
-			Resource: result.Resource,
-		}, nil
-	default:
 		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-			Code:        r5.Code{Value: ptr.To("processing")},
-			Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resource.ResourceType())},
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Account")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ActivityDefinition:
+		if impl, ok := w.Concrete.(ActivityDefinitionUpdate); ok {
+			result, err := impl.UpdateActivityDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ActivityDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ActorDefinition:
+		if impl, ok := w.Concrete.(ActorDefinitionUpdate); ok {
+			result, err := impl.UpdateActorDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ActorDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AdministrableProductDefinition:
+		if impl, ok := w.Concrete.(AdministrableProductDefinitionUpdate); ok {
+			result, err := impl.UpdateAdministrableProductDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "AdministrableProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AdverseEvent:
+		if impl, ok := w.Concrete.(AdverseEventUpdate); ok {
+			result, err := impl.UpdateAdverseEvent(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "AdverseEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AllergyIntolerance:
+		if impl, ok := w.Concrete.(AllergyIntoleranceUpdate); ok {
+			result, err := impl.UpdateAllergyIntolerance(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "AllergyIntolerance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Appointment:
+		if impl, ok := w.Concrete.(AppointmentUpdate); ok {
+			result, err := impl.UpdateAppointment(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Appointment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AppointmentResponse:
+		if impl, ok := w.Concrete.(AppointmentResponseUpdate); ok {
+			result, err := impl.UpdateAppointmentResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "AppointmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ArtifactAssessment:
+		if impl, ok := w.Concrete.(ArtifactAssessmentUpdate); ok {
+			result, err := impl.UpdateArtifactAssessment(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ArtifactAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.AuditEvent:
+		if impl, ok := w.Concrete.(AuditEventUpdate); ok {
+			result, err := impl.UpdateAuditEvent(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "AuditEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Basic:
+		if impl, ok := w.Concrete.(BasicUpdate); ok {
+			result, err := impl.UpdateBasic(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Basic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Binary:
+		if impl, ok := w.Concrete.(BinaryUpdate); ok {
+			result, err := impl.UpdateBinary(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Binary")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BiologicallyDerivedProduct:
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductUpdate); ok {
+			result, err := impl.UpdateBiologicallyDerivedProduct(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "BiologicallyDerivedProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BiologicallyDerivedProductDispense:
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseUpdate); ok {
+			result, err := impl.UpdateBiologicallyDerivedProductDispense(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "BiologicallyDerivedProductDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.BodyStructure:
+		if impl, ok := w.Concrete.(BodyStructureUpdate); ok {
+			result, err := impl.UpdateBodyStructure(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "BodyStructure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Bundle:
+		if impl, ok := w.Concrete.(BundleUpdate); ok {
+			result, err := impl.UpdateBundle(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Bundle")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CapabilityStatement:
+		if impl, ok := w.Concrete.(CapabilityStatementUpdate); ok {
+			result, err := impl.UpdateCapabilityStatement(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CapabilityStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CarePlan:
+		if impl, ok := w.Concrete.(CarePlanUpdate); ok {
+			result, err := impl.UpdateCarePlan(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CarePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CareTeam:
+		if impl, ok := w.Concrete.(CareTeamUpdate); ok {
+			result, err := impl.UpdateCareTeam(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CareTeam")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ChargeItem:
+		if impl, ok := w.Concrete.(ChargeItemUpdate); ok {
+			result, err := impl.UpdateChargeItem(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ChargeItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ChargeItemDefinition:
+		if impl, ok := w.Concrete.(ChargeItemDefinitionUpdate); ok {
+			result, err := impl.UpdateChargeItemDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ChargeItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Citation:
+		if impl, ok := w.Concrete.(CitationUpdate); ok {
+			result, err := impl.UpdateCitation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Citation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Claim:
+		if impl, ok := w.Concrete.(ClaimUpdate); ok {
+			result, err := impl.UpdateClaim(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Claim")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClaimResponse:
+		if impl, ok := w.Concrete.(ClaimResponseUpdate); ok {
+			result, err := impl.UpdateClaimResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ClaimResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClinicalImpression:
+		if impl, ok := w.Concrete.(ClinicalImpressionUpdate); ok {
+			result, err := impl.UpdateClinicalImpression(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ClinicalImpression")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ClinicalUseDefinition:
+		if impl, ok := w.Concrete.(ClinicalUseDefinitionUpdate); ok {
+			result, err := impl.UpdateClinicalUseDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ClinicalUseDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CodeSystem:
+		if impl, ok := w.Concrete.(CodeSystemUpdate); ok {
+			result, err := impl.UpdateCodeSystem(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CodeSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Communication:
+		if impl, ok := w.Concrete.(CommunicationUpdate); ok {
+			result, err := impl.UpdateCommunication(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Communication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CommunicationRequest:
+		if impl, ok := w.Concrete.(CommunicationRequestUpdate); ok {
+			result, err := impl.UpdateCommunicationRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CommunicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CompartmentDefinition:
+		if impl, ok := w.Concrete.(CompartmentDefinitionUpdate); ok {
+			result, err := impl.UpdateCompartmentDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CompartmentDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Composition:
+		if impl, ok := w.Concrete.(CompositionUpdate); ok {
+			result, err := impl.UpdateComposition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Composition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ConceptMap:
+		if impl, ok := w.Concrete.(ConceptMapUpdate); ok {
+			result, err := impl.UpdateConceptMap(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ConceptMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Condition:
+		if impl, ok := w.Concrete.(ConditionUpdate); ok {
+			result, err := impl.UpdateCondition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Condition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ConditionDefinition:
+		if impl, ok := w.Concrete.(ConditionDefinitionUpdate); ok {
+			result, err := impl.UpdateConditionDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ConditionDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Consent:
+		if impl, ok := w.Concrete.(ConsentUpdate); ok {
+			result, err := impl.UpdateConsent(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Consent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Contract:
+		if impl, ok := w.Concrete.(ContractUpdate); ok {
+			result, err := impl.UpdateContract(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Contract")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Coverage:
+		if impl, ok := w.Concrete.(CoverageUpdate); ok {
+			result, err := impl.UpdateCoverage(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Coverage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CoverageEligibilityRequest:
+		if impl, ok := w.Concrete.(CoverageEligibilityRequestUpdate); ok {
+			result, err := impl.UpdateCoverageEligibilityRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CoverageEligibilityRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.CoverageEligibilityResponse:
+		if impl, ok := w.Concrete.(CoverageEligibilityResponseUpdate); ok {
+			result, err := impl.UpdateCoverageEligibilityResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "CoverageEligibilityResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DetectedIssue:
+		if impl, ok := w.Concrete.(DetectedIssueUpdate); ok {
+			result, err := impl.UpdateDetectedIssue(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DetectedIssue")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Device:
+		if impl, ok := w.Concrete.(DeviceUpdate); ok {
+			result, err := impl.UpdateDevice(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Device")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceAssociation:
+		if impl, ok := w.Concrete.(DeviceAssociationUpdate); ok {
+			result, err := impl.UpdateDeviceAssociation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceAssociation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceDefinition:
+		if impl, ok := w.Concrete.(DeviceDefinitionUpdate); ok {
+			result, err := impl.UpdateDeviceDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceDispense:
+		if impl, ok := w.Concrete.(DeviceDispenseUpdate); ok {
+			result, err := impl.UpdateDeviceDispense(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceMetric:
+		if impl, ok := w.Concrete.(DeviceMetricUpdate); ok {
+			result, err := impl.UpdateDeviceMetric(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceMetric")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceRequest:
+		if impl, ok := w.Concrete.(DeviceRequestUpdate); ok {
+			result, err := impl.UpdateDeviceRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DeviceUsage:
+		if impl, ok := w.Concrete.(DeviceUsageUpdate); ok {
+			result, err := impl.UpdateDeviceUsage(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DeviceUsage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DiagnosticReport:
+		if impl, ok := w.Concrete.(DiagnosticReportUpdate); ok {
+			result, err := impl.UpdateDiagnosticReport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DiagnosticReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.DocumentReference:
+		if impl, ok := w.Concrete.(DocumentReferenceUpdate); ok {
+			result, err := impl.UpdateDocumentReference(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "DocumentReference")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Encounter:
+		if impl, ok := w.Concrete.(EncounterUpdate); ok {
+			result, err := impl.UpdateEncounter(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Encounter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EncounterHistory:
+		if impl, ok := w.Concrete.(EncounterHistoryUpdate); ok {
+			result, err := impl.UpdateEncounterHistory(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EncounterHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Endpoint:
+		if impl, ok := w.Concrete.(EndpointUpdate); ok {
+			result, err := impl.UpdateEndpoint(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Endpoint")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EnrollmentRequest:
+		if impl, ok := w.Concrete.(EnrollmentRequestUpdate); ok {
+			result, err := impl.UpdateEnrollmentRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EnrollmentRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EnrollmentResponse:
+		if impl, ok := w.Concrete.(EnrollmentResponseUpdate); ok {
+			result, err := impl.UpdateEnrollmentResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EnrollmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EpisodeOfCare:
+		if impl, ok := w.Concrete.(EpisodeOfCareUpdate); ok {
+			result, err := impl.UpdateEpisodeOfCare(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EpisodeOfCare")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EventDefinition:
+		if impl, ok := w.Concrete.(EventDefinitionUpdate); ok {
+			result, err := impl.UpdateEventDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EventDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Evidence:
+		if impl, ok := w.Concrete.(EvidenceUpdate); ok {
+			result, err := impl.UpdateEvidence(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Evidence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EvidenceReport:
+		if impl, ok := w.Concrete.(EvidenceReportUpdate); ok {
+			result, err := impl.UpdateEvidenceReport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EvidenceReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.EvidenceVariable:
+		if impl, ok := w.Concrete.(EvidenceVariableUpdate); ok {
+			result, err := impl.UpdateEvidenceVariable(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "EvidenceVariable")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ExampleScenario:
+		if impl, ok := w.Concrete.(ExampleScenarioUpdate); ok {
+			result, err := impl.UpdateExampleScenario(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ExampleScenario")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ExplanationOfBenefit:
+		if impl, ok := w.Concrete.(ExplanationOfBenefitUpdate); ok {
+			result, err := impl.UpdateExplanationOfBenefit(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ExplanationOfBenefit")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.FamilyMemberHistory:
+		if impl, ok := w.Concrete.(FamilyMemberHistoryUpdate); ok {
+			result, err := impl.UpdateFamilyMemberHistory(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "FamilyMemberHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Flag:
+		if impl, ok := w.Concrete.(FlagUpdate); ok {
+			result, err := impl.UpdateFlag(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Flag")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.FormularyItem:
+		if impl, ok := w.Concrete.(FormularyItemUpdate); ok {
+			result, err := impl.UpdateFormularyItem(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "FormularyItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GenomicStudy:
+		if impl, ok := w.Concrete.(GenomicStudyUpdate); ok {
+			result, err := impl.UpdateGenomicStudy(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "GenomicStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Goal:
+		if impl, ok := w.Concrete.(GoalUpdate); ok {
+			result, err := impl.UpdateGoal(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Goal")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GraphDefinition:
+		if impl, ok := w.Concrete.(GraphDefinitionUpdate); ok {
+			result, err := impl.UpdateGraphDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "GraphDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Group:
+		if impl, ok := w.Concrete.(GroupUpdate); ok {
+			result, err := impl.UpdateGroup(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Group")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.GuidanceResponse:
+		if impl, ok := w.Concrete.(GuidanceResponseUpdate); ok {
+			result, err := impl.UpdateGuidanceResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "GuidanceResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.HealthcareService:
+		if impl, ok := w.Concrete.(HealthcareServiceUpdate); ok {
+			result, err := impl.UpdateHealthcareService(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "HealthcareService")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImagingSelection:
+		if impl, ok := w.Concrete.(ImagingSelectionUpdate); ok {
+			result, err := impl.UpdateImagingSelection(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ImagingSelection")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImagingStudy:
+		if impl, ok := w.Concrete.(ImagingStudyUpdate); ok {
+			result, err := impl.UpdateImagingStudy(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ImagingStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Immunization:
+		if impl, ok := w.Concrete.(ImmunizationUpdate); ok {
+			result, err := impl.UpdateImmunization(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Immunization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImmunizationEvaluation:
+		if impl, ok := w.Concrete.(ImmunizationEvaluationUpdate); ok {
+			result, err := impl.UpdateImmunizationEvaluation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ImmunizationEvaluation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImmunizationRecommendation:
+		if impl, ok := w.Concrete.(ImmunizationRecommendationUpdate); ok {
+			result, err := impl.UpdateImmunizationRecommendation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ImmunizationRecommendation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ImplementationGuide:
+		if impl, ok := w.Concrete.(ImplementationGuideUpdate); ok {
+			result, err := impl.UpdateImplementationGuide(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ImplementationGuide")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Ingredient:
+		if impl, ok := w.Concrete.(IngredientUpdate); ok {
+			result, err := impl.UpdateIngredient(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Ingredient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InsurancePlan:
+		if impl, ok := w.Concrete.(InsurancePlanUpdate); ok {
+			result, err := impl.UpdateInsurancePlan(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "InsurancePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InventoryItem:
+		if impl, ok := w.Concrete.(InventoryItemUpdate); ok {
+			result, err := impl.UpdateInventoryItem(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "InventoryItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.InventoryReport:
+		if impl, ok := w.Concrete.(InventoryReportUpdate); ok {
+			result, err := impl.UpdateInventoryReport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "InventoryReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Invoice:
+		if impl, ok := w.Concrete.(InvoiceUpdate); ok {
+			result, err := impl.UpdateInvoice(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Invoice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Library:
+		if impl, ok := w.Concrete.(LibraryUpdate); ok {
+			result, err := impl.UpdateLibrary(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Library")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Linkage:
+		if impl, ok := w.Concrete.(LinkageUpdate); ok {
+			result, err := impl.UpdateLinkage(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Linkage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.List:
+		if impl, ok := w.Concrete.(ListUpdate); ok {
+			result, err := impl.UpdateList(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "List")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Location:
+		if impl, ok := w.Concrete.(LocationUpdate); ok {
+			result, err := impl.UpdateLocation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Location")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ManufacturedItemDefinition:
+		if impl, ok := w.Concrete.(ManufacturedItemDefinitionUpdate); ok {
+			result, err := impl.UpdateManufacturedItemDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ManufacturedItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Measure:
+		if impl, ok := w.Concrete.(MeasureUpdate); ok {
+			result, err := impl.UpdateMeasure(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Measure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MeasureReport:
+		if impl, ok := w.Concrete.(MeasureReportUpdate); ok {
+			result, err := impl.UpdateMeasureReport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MeasureReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Medication:
+		if impl, ok := w.Concrete.(MedicationUpdate); ok {
+			result, err := impl.UpdateMedication(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Medication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationAdministration:
+		if impl, ok := w.Concrete.(MedicationAdministrationUpdate); ok {
+			result, err := impl.UpdateMedicationAdministration(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicationAdministration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationDispense:
+		if impl, ok := w.Concrete.(MedicationDispenseUpdate); ok {
+			result, err := impl.UpdateMedicationDispense(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicationDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationKnowledge:
+		if impl, ok := w.Concrete.(MedicationKnowledgeUpdate); ok {
+			result, err := impl.UpdateMedicationKnowledge(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicationKnowledge")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationRequest:
+		if impl, ok := w.Concrete.(MedicationRequestUpdate); ok {
+			result, err := impl.UpdateMedicationRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicationStatement:
+		if impl, ok := w.Concrete.(MedicationStatementUpdate); ok {
+			result, err := impl.UpdateMedicationStatement(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicationStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MedicinalProductDefinition:
+		if impl, ok := w.Concrete.(MedicinalProductDefinitionUpdate); ok {
+			result, err := impl.UpdateMedicinalProductDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MedicinalProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MessageDefinition:
+		if impl, ok := w.Concrete.(MessageDefinitionUpdate); ok {
+			result, err := impl.UpdateMessageDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MessageDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MessageHeader:
+		if impl, ok := w.Concrete.(MessageHeaderUpdate); ok {
+			result, err := impl.UpdateMessageHeader(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MessageHeader")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.MolecularSequence:
+		if impl, ok := w.Concrete.(MolecularSequenceUpdate); ok {
+			result, err := impl.UpdateMolecularSequence(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "MolecularSequence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NamingSystem:
+		if impl, ok := w.Concrete.(NamingSystemUpdate); ok {
+			result, err := impl.UpdateNamingSystem(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "NamingSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionIntake:
+		if impl, ok := w.Concrete.(NutritionIntakeUpdate); ok {
+			result, err := impl.UpdateNutritionIntake(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "NutritionIntake")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionOrder:
+		if impl, ok := w.Concrete.(NutritionOrderUpdate); ok {
+			result, err := impl.UpdateNutritionOrder(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "NutritionOrder")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.NutritionProduct:
+		if impl, ok := w.Concrete.(NutritionProductUpdate); ok {
+			result, err := impl.UpdateNutritionProduct(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "NutritionProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Observation:
+		if impl, ok := w.Concrete.(ObservationUpdate); ok {
+			result, err := impl.UpdateObservation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Observation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ObservationDefinition:
+		if impl, ok := w.Concrete.(ObservationDefinitionUpdate); ok {
+			result, err := impl.UpdateObservationDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ObservationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OperationDefinition:
+		if impl, ok := w.Concrete.(OperationDefinitionUpdate); ok {
+			result, err := impl.UpdateOperationDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "OperationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OperationOutcome:
+		if impl, ok := w.Concrete.(OperationOutcomeUpdate); ok {
+			result, err := impl.UpdateOperationOutcome(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "OperationOutcome")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Organization:
+		if impl, ok := w.Concrete.(OrganizationUpdate); ok {
+			result, err := impl.UpdateOrganization(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Organization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.OrganizationAffiliation:
+		if impl, ok := w.Concrete.(OrganizationAffiliationUpdate); ok {
+			result, err := impl.UpdateOrganizationAffiliation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "OrganizationAffiliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PackagedProductDefinition:
+		if impl, ok := w.Concrete.(PackagedProductDefinitionUpdate); ok {
+			result, err := impl.UpdatePackagedProductDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "PackagedProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Parameters:
+		if impl, ok := w.Concrete.(ParametersUpdate); ok {
+			result, err := impl.UpdateParameters(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Parameters")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Patient:
+		if impl, ok := w.Concrete.(PatientUpdate); ok {
+			result, err := impl.UpdatePatient(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Patient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PaymentNotice:
+		if impl, ok := w.Concrete.(PaymentNoticeUpdate); ok {
+			result, err := impl.UpdatePaymentNotice(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "PaymentNotice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PaymentReconciliation:
+		if impl, ok := w.Concrete.(PaymentReconciliationUpdate); ok {
+			result, err := impl.UpdatePaymentReconciliation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "PaymentReconciliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Permission:
+		if impl, ok := w.Concrete.(PermissionUpdate); ok {
+			result, err := impl.UpdatePermission(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Permission")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Person:
+		if impl, ok := w.Concrete.(PersonUpdate); ok {
+			result, err := impl.UpdatePerson(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Person")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PlanDefinition:
+		if impl, ok := w.Concrete.(PlanDefinitionUpdate); ok {
+			result, err := impl.UpdatePlanDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "PlanDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Practitioner:
+		if impl, ok := w.Concrete.(PractitionerUpdate); ok {
+			result, err := impl.UpdatePractitioner(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Practitioner")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.PractitionerRole:
+		if impl, ok := w.Concrete.(PractitionerRoleUpdate); ok {
+			result, err := impl.UpdatePractitionerRole(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "PractitionerRole")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Procedure:
+		if impl, ok := w.Concrete.(ProcedureUpdate); ok {
+			result, err := impl.UpdateProcedure(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Procedure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Provenance:
+		if impl, ok := w.Concrete.(ProvenanceUpdate); ok {
+			result, err := impl.UpdateProvenance(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Provenance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Questionnaire:
+		if impl, ok := w.Concrete.(QuestionnaireUpdate); ok {
+			result, err := impl.UpdateQuestionnaire(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Questionnaire")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.QuestionnaireResponse:
+		if impl, ok := w.Concrete.(QuestionnaireResponseUpdate); ok {
+			result, err := impl.UpdateQuestionnaireResponse(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "QuestionnaireResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RegulatedAuthorization:
+		if impl, ok := w.Concrete.(RegulatedAuthorizationUpdate); ok {
+			result, err := impl.UpdateRegulatedAuthorization(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "RegulatedAuthorization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RelatedPerson:
+		if impl, ok := w.Concrete.(RelatedPersonUpdate); ok {
+			result, err := impl.UpdateRelatedPerson(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "RelatedPerson")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RequestOrchestration:
+		if impl, ok := w.Concrete.(RequestOrchestrationUpdate); ok {
+			result, err := impl.UpdateRequestOrchestration(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "RequestOrchestration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Requirements:
+		if impl, ok := w.Concrete.(RequirementsUpdate); ok {
+			result, err := impl.UpdateRequirements(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Requirements")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ResearchStudy:
+		if impl, ok := w.Concrete.(ResearchStudyUpdate); ok {
+			result, err := impl.UpdateResearchStudy(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ResearchStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ResearchSubject:
+		if impl, ok := w.Concrete.(ResearchSubjectUpdate); ok {
+			result, err := impl.UpdateResearchSubject(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ResearchSubject")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.RiskAssessment:
+		if impl, ok := w.Concrete.(RiskAssessmentUpdate); ok {
+			result, err := impl.UpdateRiskAssessment(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "RiskAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Schedule:
+		if impl, ok := w.Concrete.(ScheduleUpdate); ok {
+			result, err := impl.UpdateSchedule(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Schedule")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SearchParameter:
+		if impl, ok := w.Concrete.(SearchParameterUpdate); ok {
+			result, err := impl.UpdateSearchParameter(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SearchParameter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ServiceRequest:
+		if impl, ok := w.Concrete.(ServiceRequestUpdate); ok {
+			result, err := impl.UpdateServiceRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ServiceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Slot:
+		if impl, ok := w.Concrete.(SlotUpdate); ok {
+			result, err := impl.UpdateSlot(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Slot")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Specimen:
+		if impl, ok := w.Concrete.(SpecimenUpdate); ok {
+			result, err := impl.UpdateSpecimen(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Specimen")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SpecimenDefinition:
+		if impl, ok := w.Concrete.(SpecimenDefinitionUpdate); ok {
+			result, err := impl.UpdateSpecimenDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SpecimenDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.StructureDefinition:
+		if impl, ok := w.Concrete.(StructureDefinitionUpdate); ok {
+			result, err := impl.UpdateStructureDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "StructureDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.StructureMap:
+		if impl, ok := w.Concrete.(StructureMapUpdate); ok {
+			result, err := impl.UpdateStructureMap(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "StructureMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Subscription:
+		if impl, ok := w.Concrete.(SubscriptionUpdate); ok {
+			result, err := impl.UpdateSubscription(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Subscription")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubscriptionStatus:
+		if impl, ok := w.Concrete.(SubscriptionStatusUpdate); ok {
+			result, err := impl.UpdateSubscriptionStatus(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubscriptionStatus")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubscriptionTopic:
+		if impl, ok := w.Concrete.(SubscriptionTopicUpdate); ok {
+			result, err := impl.UpdateSubscriptionTopic(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubscriptionTopic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Substance:
+		if impl, ok := w.Concrete.(SubstanceUpdate); ok {
+			result, err := impl.UpdateSubstance(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Substance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceDefinition:
+		if impl, ok := w.Concrete.(SubstanceDefinitionUpdate); ok {
+			result, err := impl.UpdateSubstanceDefinition(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstanceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceNucleicAcid:
+		if impl, ok := w.Concrete.(SubstanceNucleicAcidUpdate); ok {
+			result, err := impl.UpdateSubstanceNucleicAcid(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstanceNucleicAcid")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstancePolymer:
+		if impl, ok := w.Concrete.(SubstancePolymerUpdate); ok {
+			result, err := impl.UpdateSubstancePolymer(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstancePolymer")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceProtein:
+		if impl, ok := w.Concrete.(SubstanceProteinUpdate); ok {
+			result, err := impl.UpdateSubstanceProtein(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstanceProtein")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceReferenceInformation:
+		if impl, ok := w.Concrete.(SubstanceReferenceInformationUpdate); ok {
+			result, err := impl.UpdateSubstanceReferenceInformation(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstanceReferenceInformation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SubstanceSourceMaterial:
+		if impl, ok := w.Concrete.(SubstanceSourceMaterialUpdate); ok {
+			result, err := impl.UpdateSubstanceSourceMaterial(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SubstanceSourceMaterial")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SupplyDelivery:
+		if impl, ok := w.Concrete.(SupplyDeliveryUpdate); ok {
+			result, err := impl.UpdateSupplyDelivery(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SupplyDelivery")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.SupplyRequest:
+		if impl, ok := w.Concrete.(SupplyRequestUpdate); ok {
+			result, err := impl.UpdateSupplyRequest(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "SupplyRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Task:
+		if impl, ok := w.Concrete.(TaskUpdate); ok {
+			result, err := impl.UpdateTask(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Task")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TerminologyCapabilities:
+		if impl, ok := w.Concrete.(TerminologyCapabilitiesUpdate); ok {
+			result, err := impl.UpdateTerminologyCapabilities(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "TerminologyCapabilities")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestPlan:
+		if impl, ok := w.Concrete.(TestPlanUpdate); ok {
+			result, err := impl.UpdateTestPlan(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "TestPlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestReport:
+		if impl, ok := w.Concrete.(TestReportUpdate); ok {
+			result, err := impl.UpdateTestReport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "TestReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.TestScript:
+		if impl, ok := w.Concrete.(TestScriptUpdate); ok {
+			result, err := impl.UpdateTestScript(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "TestScript")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.Transport:
+		if impl, ok := w.Concrete.(TransportUpdate); ok {
+			result, err := impl.UpdateTransport(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "Transport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.ValueSet:
+		if impl, ok := w.Concrete.(ValueSetUpdate); ok {
+			result, err := impl.UpdateValueSet(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "ValueSet")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.VerificationResult:
+		if impl, ok := w.Concrete.(VerificationResultUpdate); ok {
+			result, err := impl.UpdateVerificationResult(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "VerificationResult")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case r5.VisionPrescription:
+		if impl, ok := w.Concrete.(VisionPrescriptionUpdate); ok {
+			result, err := impl.UpdateVisionPrescription(ctx, r)
+			if err != nil {
+				return update.Result[model.Resource]{}, err
+			}
+			return update.Result[model.Resource]{
+
+				Created:  result.Created,
+				Resource: result.Resource,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericUpdate); ok {
+			return gen.Update(ctx, resource)
+		}
+		return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("update not implemented for " + "VisionPrescription")},
 			Severity:    r5.Code{Value: ptr.To("fatal")},
 		}}}
 	}
+	return update.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+		Code:        r5.Code{Value: ptr.To("processing")},
+		Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resource.ResourceType())},
+		Severity:    r5.Code{Value: ptr.To("fatal")},
+	}}}
 }
 func (w Generic) Delete(ctx context.Context, resourceType string, id string) error {
-	g, ok := w.Concrete.(capabilities.GenericDelete)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return g.Delete(ctx, resourceType, id)
-	}
 	switch resourceType {
 	case "Account":
-		impl, ok := w.Concrete.(AccountDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Account")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if impl, ok := w.Concrete.(AccountDelete); ok {
+			return impl.DeleteAccount(ctx, id)
 		}
-		return impl.DeleteAccount(ctx, id)
-	case "ActivityDefinition":
-		impl, ok := w.Concrete.(ActivityDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ActivityDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
 		}
-		return impl.DeleteActivityDefinition(ctx, id)
-	case "ActorDefinition":
-		impl, ok := w.Concrete.(ActorDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ActorDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteActorDefinition(ctx, id)
-	case "AdministrableProductDefinition":
-		impl, ok := w.Concrete.(AdministrableProductDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for AdministrableProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAdministrableProductDefinition(ctx, id)
-	case "AdverseEvent":
-		impl, ok := w.Concrete.(AdverseEventDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for AdverseEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAdverseEvent(ctx, id)
-	case "AllergyIntolerance":
-		impl, ok := w.Concrete.(AllergyIntoleranceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for AllergyIntolerance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAllergyIntolerance(ctx, id)
-	case "Appointment":
-		impl, ok := w.Concrete.(AppointmentDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Appointment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAppointment(ctx, id)
-	case "AppointmentResponse":
-		impl, ok := w.Concrete.(AppointmentResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for AppointmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAppointmentResponse(ctx, id)
-	case "ArtifactAssessment":
-		impl, ok := w.Concrete.(ArtifactAssessmentDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ArtifactAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteArtifactAssessment(ctx, id)
-	case "AuditEvent":
-		impl, ok := w.Concrete.(AuditEventDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for AuditEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteAuditEvent(ctx, id)
-	case "Basic":
-		impl, ok := w.Concrete.(BasicDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Basic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBasic(ctx, id)
-	case "Binary":
-		impl, ok := w.Concrete.(BinaryDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Binary")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBinary(ctx, id)
-	case "BiologicallyDerivedProduct":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for BiologicallyDerivedProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBiologicallyDerivedProduct(ctx, id)
-	case "BiologicallyDerivedProductDispense":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for BiologicallyDerivedProductDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBiologicallyDerivedProductDispense(ctx, id)
-	case "BodyStructure":
-		impl, ok := w.Concrete.(BodyStructureDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for BodyStructure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBodyStructure(ctx, id)
-	case "Bundle":
-		impl, ok := w.Concrete.(BundleDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Bundle")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteBundle(ctx, id)
-	case "CapabilityStatement":
-		impl, ok := w.Concrete.(CapabilityStatementDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CapabilityStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCapabilityStatement(ctx, id)
-	case "CarePlan":
-		impl, ok := w.Concrete.(CarePlanDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CarePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCarePlan(ctx, id)
-	case "CareTeam":
-		impl, ok := w.Concrete.(CareTeamDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CareTeam")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCareTeam(ctx, id)
-	case "ChargeItem":
-		impl, ok := w.Concrete.(ChargeItemDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ChargeItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteChargeItem(ctx, id)
-	case "ChargeItemDefinition":
-		impl, ok := w.Concrete.(ChargeItemDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ChargeItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteChargeItemDefinition(ctx, id)
-	case "Citation":
-		impl, ok := w.Concrete.(CitationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Citation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCitation(ctx, id)
-	case "Claim":
-		impl, ok := w.Concrete.(ClaimDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Claim")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteClaim(ctx, id)
-	case "ClaimResponse":
-		impl, ok := w.Concrete.(ClaimResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ClaimResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteClaimResponse(ctx, id)
-	case "ClinicalImpression":
-		impl, ok := w.Concrete.(ClinicalImpressionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ClinicalImpression")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteClinicalImpression(ctx, id)
-	case "ClinicalUseDefinition":
-		impl, ok := w.Concrete.(ClinicalUseDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ClinicalUseDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteClinicalUseDefinition(ctx, id)
-	case "CodeSystem":
-		impl, ok := w.Concrete.(CodeSystemDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CodeSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCodeSystem(ctx, id)
-	case "Communication":
-		impl, ok := w.Concrete.(CommunicationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Communication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCommunication(ctx, id)
-	case "CommunicationRequest":
-		impl, ok := w.Concrete.(CommunicationRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CommunicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCommunicationRequest(ctx, id)
-	case "CompartmentDefinition":
-		impl, ok := w.Concrete.(CompartmentDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CompartmentDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCompartmentDefinition(ctx, id)
-	case "Composition":
-		impl, ok := w.Concrete.(CompositionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Composition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteComposition(ctx, id)
-	case "ConceptMap":
-		impl, ok := w.Concrete.(ConceptMapDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ConceptMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteConceptMap(ctx, id)
-	case "Condition":
-		impl, ok := w.Concrete.(ConditionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Condition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCondition(ctx, id)
-	case "ConditionDefinition":
-		impl, ok := w.Concrete.(ConditionDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ConditionDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteConditionDefinition(ctx, id)
-	case "Consent":
-		impl, ok := w.Concrete.(ConsentDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Consent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteConsent(ctx, id)
-	case "Contract":
-		impl, ok := w.Concrete.(ContractDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Contract")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteContract(ctx, id)
-	case "Coverage":
-		impl, ok := w.Concrete.(CoverageDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Coverage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCoverage(ctx, id)
-	case "CoverageEligibilityRequest":
-		impl, ok := w.Concrete.(CoverageEligibilityRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CoverageEligibilityRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCoverageEligibilityRequest(ctx, id)
-	case "CoverageEligibilityResponse":
-		impl, ok := w.Concrete.(CoverageEligibilityResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for CoverageEligibilityResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteCoverageEligibilityResponse(ctx, id)
-	case "DetectedIssue":
-		impl, ok := w.Concrete.(DetectedIssueDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DetectedIssue")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDetectedIssue(ctx, id)
-	case "Device":
-		impl, ok := w.Concrete.(DeviceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Device")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDevice(ctx, id)
-	case "DeviceAssociation":
-		impl, ok := w.Concrete.(DeviceAssociationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceAssociation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceAssociation(ctx, id)
-	case "DeviceDefinition":
-		impl, ok := w.Concrete.(DeviceDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceDefinition(ctx, id)
-	case "DeviceDispense":
-		impl, ok := w.Concrete.(DeviceDispenseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceDispense(ctx, id)
-	case "DeviceMetric":
-		impl, ok := w.Concrete.(DeviceMetricDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceMetric")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceMetric(ctx, id)
-	case "DeviceRequest":
-		impl, ok := w.Concrete.(DeviceRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceRequest(ctx, id)
-	case "DeviceUsage":
-		impl, ok := w.Concrete.(DeviceUsageDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DeviceUsage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDeviceUsage(ctx, id)
-	case "DiagnosticReport":
-		impl, ok := w.Concrete.(DiagnosticReportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DiagnosticReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDiagnosticReport(ctx, id)
-	case "DocumentReference":
-		impl, ok := w.Concrete.(DocumentReferenceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for DocumentReference")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteDocumentReference(ctx, id)
-	case "Encounter":
-		impl, ok := w.Concrete.(EncounterDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Encounter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEncounter(ctx, id)
-	case "EncounterHistory":
-		impl, ok := w.Concrete.(EncounterHistoryDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EncounterHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEncounterHistory(ctx, id)
-	case "Endpoint":
-		impl, ok := w.Concrete.(EndpointDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Endpoint")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEndpoint(ctx, id)
-	case "EnrollmentRequest":
-		impl, ok := w.Concrete.(EnrollmentRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EnrollmentRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEnrollmentRequest(ctx, id)
-	case "EnrollmentResponse":
-		impl, ok := w.Concrete.(EnrollmentResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EnrollmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEnrollmentResponse(ctx, id)
-	case "EpisodeOfCare":
-		impl, ok := w.Concrete.(EpisodeOfCareDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EpisodeOfCare")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEpisodeOfCare(ctx, id)
-	case "EventDefinition":
-		impl, ok := w.Concrete.(EventDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EventDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEventDefinition(ctx, id)
-	case "Evidence":
-		impl, ok := w.Concrete.(EvidenceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Evidence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEvidence(ctx, id)
-	case "EvidenceReport":
-		impl, ok := w.Concrete.(EvidenceReportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EvidenceReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEvidenceReport(ctx, id)
-	case "EvidenceVariable":
-		impl, ok := w.Concrete.(EvidenceVariableDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for EvidenceVariable")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteEvidenceVariable(ctx, id)
-	case "ExampleScenario":
-		impl, ok := w.Concrete.(ExampleScenarioDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ExampleScenario")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteExampleScenario(ctx, id)
-	case "ExplanationOfBenefit":
-		impl, ok := w.Concrete.(ExplanationOfBenefitDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ExplanationOfBenefit")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteExplanationOfBenefit(ctx, id)
-	case "FamilyMemberHistory":
-		impl, ok := w.Concrete.(FamilyMemberHistoryDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for FamilyMemberHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteFamilyMemberHistory(ctx, id)
-	case "Flag":
-		impl, ok := w.Concrete.(FlagDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Flag")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteFlag(ctx, id)
-	case "FormularyItem":
-		impl, ok := w.Concrete.(FormularyItemDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for FormularyItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteFormularyItem(ctx, id)
-	case "GenomicStudy":
-		impl, ok := w.Concrete.(GenomicStudyDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for GenomicStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteGenomicStudy(ctx, id)
-	case "Goal":
-		impl, ok := w.Concrete.(GoalDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Goal")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteGoal(ctx, id)
-	case "GraphDefinition":
-		impl, ok := w.Concrete.(GraphDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for GraphDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteGraphDefinition(ctx, id)
-	case "Group":
-		impl, ok := w.Concrete.(GroupDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Group")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteGroup(ctx, id)
-	case "GuidanceResponse":
-		impl, ok := w.Concrete.(GuidanceResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for GuidanceResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteGuidanceResponse(ctx, id)
-	case "HealthcareService":
-		impl, ok := w.Concrete.(HealthcareServiceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for HealthcareService")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteHealthcareService(ctx, id)
-	case "ImagingSelection":
-		impl, ok := w.Concrete.(ImagingSelectionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ImagingSelection")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImagingSelection(ctx, id)
-	case "ImagingStudy":
-		impl, ok := w.Concrete.(ImagingStudyDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ImagingStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImagingStudy(ctx, id)
-	case "Immunization":
-		impl, ok := w.Concrete.(ImmunizationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Immunization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImmunization(ctx, id)
-	case "ImmunizationEvaluation":
-		impl, ok := w.Concrete.(ImmunizationEvaluationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ImmunizationEvaluation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImmunizationEvaluation(ctx, id)
-	case "ImmunizationRecommendation":
-		impl, ok := w.Concrete.(ImmunizationRecommendationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ImmunizationRecommendation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImmunizationRecommendation(ctx, id)
-	case "ImplementationGuide":
-		impl, ok := w.Concrete.(ImplementationGuideDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ImplementationGuide")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteImplementationGuide(ctx, id)
-	case "Ingredient":
-		impl, ok := w.Concrete.(IngredientDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Ingredient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteIngredient(ctx, id)
-	case "InsurancePlan":
-		impl, ok := w.Concrete.(InsurancePlanDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for InsurancePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteInsurancePlan(ctx, id)
-	case "InventoryItem":
-		impl, ok := w.Concrete.(InventoryItemDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for InventoryItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteInventoryItem(ctx, id)
-	case "InventoryReport":
-		impl, ok := w.Concrete.(InventoryReportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for InventoryReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteInventoryReport(ctx, id)
-	case "Invoice":
-		impl, ok := w.Concrete.(InvoiceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Invoice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteInvoice(ctx, id)
-	case "Library":
-		impl, ok := w.Concrete.(LibraryDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Library")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteLibrary(ctx, id)
-	case "Linkage":
-		impl, ok := w.Concrete.(LinkageDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Linkage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteLinkage(ctx, id)
-	case "List":
-		impl, ok := w.Concrete.(ListDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for List")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteList(ctx, id)
-	case "Location":
-		impl, ok := w.Concrete.(LocationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Location")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteLocation(ctx, id)
-	case "ManufacturedItemDefinition":
-		impl, ok := w.Concrete.(ManufacturedItemDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ManufacturedItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteManufacturedItemDefinition(ctx, id)
-	case "Measure":
-		impl, ok := w.Concrete.(MeasureDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Measure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMeasure(ctx, id)
-	case "MeasureReport":
-		impl, ok := w.Concrete.(MeasureReportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MeasureReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMeasureReport(ctx, id)
-	case "Medication":
-		impl, ok := w.Concrete.(MedicationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Medication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedication(ctx, id)
-	case "MedicationAdministration":
-		impl, ok := w.Concrete.(MedicationAdministrationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicationAdministration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicationAdministration(ctx, id)
-	case "MedicationDispense":
-		impl, ok := w.Concrete.(MedicationDispenseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicationDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicationDispense(ctx, id)
-	case "MedicationKnowledge":
-		impl, ok := w.Concrete.(MedicationKnowledgeDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicationKnowledge")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicationKnowledge(ctx, id)
-	case "MedicationRequest":
-		impl, ok := w.Concrete.(MedicationRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicationRequest(ctx, id)
-	case "MedicationStatement":
-		impl, ok := w.Concrete.(MedicationStatementDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicationStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicationStatement(ctx, id)
-	case "MedicinalProductDefinition":
-		impl, ok := w.Concrete.(MedicinalProductDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MedicinalProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMedicinalProductDefinition(ctx, id)
-	case "MessageDefinition":
-		impl, ok := w.Concrete.(MessageDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MessageDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMessageDefinition(ctx, id)
-	case "MessageHeader":
-		impl, ok := w.Concrete.(MessageHeaderDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MessageHeader")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMessageHeader(ctx, id)
-	case "MolecularSequence":
-		impl, ok := w.Concrete.(MolecularSequenceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for MolecularSequence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteMolecularSequence(ctx, id)
-	case "NamingSystem":
-		impl, ok := w.Concrete.(NamingSystemDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for NamingSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteNamingSystem(ctx, id)
-	case "NutritionIntake":
-		impl, ok := w.Concrete.(NutritionIntakeDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for NutritionIntake")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteNutritionIntake(ctx, id)
-	case "NutritionOrder":
-		impl, ok := w.Concrete.(NutritionOrderDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for NutritionOrder")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteNutritionOrder(ctx, id)
-	case "NutritionProduct":
-		impl, ok := w.Concrete.(NutritionProductDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for NutritionProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteNutritionProduct(ctx, id)
-	case "Observation":
-		impl, ok := w.Concrete.(ObservationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Observation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteObservation(ctx, id)
-	case "ObservationDefinition":
-		impl, ok := w.Concrete.(ObservationDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ObservationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteObservationDefinition(ctx, id)
-	case "OperationDefinition":
-		impl, ok := w.Concrete.(OperationDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for OperationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteOperationDefinition(ctx, id)
-	case "OperationOutcome":
-		impl, ok := w.Concrete.(OperationOutcomeDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for OperationOutcome")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteOperationOutcome(ctx, id)
-	case "Organization":
-		impl, ok := w.Concrete.(OrganizationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Organization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteOrganization(ctx, id)
-	case "OrganizationAffiliation":
-		impl, ok := w.Concrete.(OrganizationAffiliationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for OrganizationAffiliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteOrganizationAffiliation(ctx, id)
-	case "PackagedProductDefinition":
-		impl, ok := w.Concrete.(PackagedProductDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for PackagedProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePackagedProductDefinition(ctx, id)
-	case "Parameters":
-		impl, ok := w.Concrete.(ParametersDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Parameters")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteParameters(ctx, id)
-	case "Patient":
-		impl, ok := w.Concrete.(PatientDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Patient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePatient(ctx, id)
-	case "PaymentNotice":
-		impl, ok := w.Concrete.(PaymentNoticeDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for PaymentNotice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePaymentNotice(ctx, id)
-	case "PaymentReconciliation":
-		impl, ok := w.Concrete.(PaymentReconciliationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for PaymentReconciliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePaymentReconciliation(ctx, id)
-	case "Permission":
-		impl, ok := w.Concrete.(PermissionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Permission")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePermission(ctx, id)
-	case "Person":
-		impl, ok := w.Concrete.(PersonDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Person")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePerson(ctx, id)
-	case "PlanDefinition":
-		impl, ok := w.Concrete.(PlanDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for PlanDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePlanDefinition(ctx, id)
-	case "Practitioner":
-		impl, ok := w.Concrete.(PractitionerDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Practitioner")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePractitioner(ctx, id)
-	case "PractitionerRole":
-		impl, ok := w.Concrete.(PractitionerRoleDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for PractitionerRole")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeletePractitionerRole(ctx, id)
-	case "Procedure":
-		impl, ok := w.Concrete.(ProcedureDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Procedure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteProcedure(ctx, id)
-	case "Provenance":
-		impl, ok := w.Concrete.(ProvenanceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Provenance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteProvenance(ctx, id)
-	case "Questionnaire":
-		impl, ok := w.Concrete.(QuestionnaireDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Questionnaire")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteQuestionnaire(ctx, id)
-	case "QuestionnaireResponse":
-		impl, ok := w.Concrete.(QuestionnaireResponseDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for QuestionnaireResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteQuestionnaireResponse(ctx, id)
-	case "RegulatedAuthorization":
-		impl, ok := w.Concrete.(RegulatedAuthorizationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for RegulatedAuthorization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteRegulatedAuthorization(ctx, id)
-	case "RelatedPerson":
-		impl, ok := w.Concrete.(RelatedPersonDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for RelatedPerson")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteRelatedPerson(ctx, id)
-	case "RequestOrchestration":
-		impl, ok := w.Concrete.(RequestOrchestrationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for RequestOrchestration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteRequestOrchestration(ctx, id)
-	case "Requirements":
-		impl, ok := w.Concrete.(RequirementsDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Requirements")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteRequirements(ctx, id)
-	case "ResearchStudy":
-		impl, ok := w.Concrete.(ResearchStudyDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ResearchStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteResearchStudy(ctx, id)
-	case "ResearchSubject":
-		impl, ok := w.Concrete.(ResearchSubjectDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ResearchSubject")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteResearchSubject(ctx, id)
-	case "RiskAssessment":
-		impl, ok := w.Concrete.(RiskAssessmentDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for RiskAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteRiskAssessment(ctx, id)
-	case "Schedule":
-		impl, ok := w.Concrete.(ScheduleDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Schedule")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSchedule(ctx, id)
-	case "SearchParameter":
-		impl, ok := w.Concrete.(SearchParameterDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SearchParameter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSearchParameter(ctx, id)
-	case "ServiceRequest":
-		impl, ok := w.Concrete.(ServiceRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ServiceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteServiceRequest(ctx, id)
-	case "Slot":
-		impl, ok := w.Concrete.(SlotDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Slot")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSlot(ctx, id)
-	case "Specimen":
-		impl, ok := w.Concrete.(SpecimenDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Specimen")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSpecimen(ctx, id)
-	case "SpecimenDefinition":
-		impl, ok := w.Concrete.(SpecimenDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SpecimenDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSpecimenDefinition(ctx, id)
-	case "StructureDefinition":
-		impl, ok := w.Concrete.(StructureDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for StructureDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteStructureDefinition(ctx, id)
-	case "StructureMap":
-		impl, ok := w.Concrete.(StructureMapDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for StructureMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteStructureMap(ctx, id)
-	case "Subscription":
-		impl, ok := w.Concrete.(SubscriptionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Subscription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubscription(ctx, id)
-	case "SubscriptionStatus":
-		impl, ok := w.Concrete.(SubscriptionStatusDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubscriptionStatus")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubscriptionStatus(ctx, id)
-	case "SubscriptionTopic":
-		impl, ok := w.Concrete.(SubscriptionTopicDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubscriptionTopic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubscriptionTopic(ctx, id)
-	case "Substance":
-		impl, ok := w.Concrete.(SubstanceDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Substance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstance(ctx, id)
-	case "SubstanceDefinition":
-		impl, ok := w.Concrete.(SubstanceDefinitionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstanceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstanceDefinition(ctx, id)
-	case "SubstanceNucleicAcid":
-		impl, ok := w.Concrete.(SubstanceNucleicAcidDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstanceNucleicAcid")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstanceNucleicAcid(ctx, id)
-	case "SubstancePolymer":
-		impl, ok := w.Concrete.(SubstancePolymerDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstancePolymer")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstancePolymer(ctx, id)
-	case "SubstanceProtein":
-		impl, ok := w.Concrete.(SubstanceProteinDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstanceProtein")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstanceProtein(ctx, id)
-	case "SubstanceReferenceInformation":
-		impl, ok := w.Concrete.(SubstanceReferenceInformationDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstanceReferenceInformation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstanceReferenceInformation(ctx, id)
-	case "SubstanceSourceMaterial":
-		impl, ok := w.Concrete.(SubstanceSourceMaterialDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SubstanceSourceMaterial")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSubstanceSourceMaterial(ctx, id)
-	case "SupplyDelivery":
-		impl, ok := w.Concrete.(SupplyDeliveryDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SupplyDelivery")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSupplyDelivery(ctx, id)
-	case "SupplyRequest":
-		impl, ok := w.Concrete.(SupplyRequestDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for SupplyRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteSupplyRequest(ctx, id)
-	case "Task":
-		impl, ok := w.Concrete.(TaskDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Task")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTask(ctx, id)
-	case "TerminologyCapabilities":
-		impl, ok := w.Concrete.(TerminologyCapabilitiesDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for TerminologyCapabilities")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTerminologyCapabilities(ctx, id)
-	case "TestPlan":
-		impl, ok := w.Concrete.(TestPlanDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for TestPlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTestPlan(ctx, id)
-	case "TestReport":
-		impl, ok := w.Concrete.(TestReportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for TestReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTestReport(ctx, id)
-	case "TestScript":
-		impl, ok := w.Concrete.(TestScriptDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for TestScript")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTestScript(ctx, id)
-	case "Transport":
-		impl, ok := w.Concrete.(TransportDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for Transport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteTransport(ctx, id)
-	case "ValueSet":
-		impl, ok := w.Concrete.(ValueSetDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for ValueSet")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteValueSet(ctx, id)
-	case "VerificationResult":
-		impl, ok := w.Concrete.(VerificationResultDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for VerificationResult")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteVerificationResult(ctx, id)
-	case "VisionPrescription":
-		impl, ok := w.Concrete.(VisionPrescriptionDelete)
-		if !ok {
-			return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("delete not implemented for VisionPrescription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		return impl.DeleteVisionPrescription(ctx, id)
-	default:
 		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-			Code:        r5.Code{Value: ptr.To("processing")},
-			Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Account")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ActivityDefinition":
+		if impl, ok := w.Concrete.(ActivityDefinitionDelete); ok {
+			return impl.DeleteActivityDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ActivityDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ActorDefinition":
+		if impl, ok := w.Concrete.(ActorDefinitionDelete); ok {
+			return impl.DeleteActorDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ActorDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "AdministrableProductDefinition":
+		if impl, ok := w.Concrete.(AdministrableProductDefinitionDelete); ok {
+			return impl.DeleteAdministrableProductDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "AdministrableProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "AdverseEvent":
+		if impl, ok := w.Concrete.(AdverseEventDelete); ok {
+			return impl.DeleteAdverseEvent(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "AdverseEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "AllergyIntolerance":
+		if impl, ok := w.Concrete.(AllergyIntoleranceDelete); ok {
+			return impl.DeleteAllergyIntolerance(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "AllergyIntolerance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Appointment":
+		if impl, ok := w.Concrete.(AppointmentDelete); ok {
+			return impl.DeleteAppointment(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Appointment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "AppointmentResponse":
+		if impl, ok := w.Concrete.(AppointmentResponseDelete); ok {
+			return impl.DeleteAppointmentResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "AppointmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ArtifactAssessment":
+		if impl, ok := w.Concrete.(ArtifactAssessmentDelete); ok {
+			return impl.DeleteArtifactAssessment(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ArtifactAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "AuditEvent":
+		if impl, ok := w.Concrete.(AuditEventDelete); ok {
+			return impl.DeleteAuditEvent(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "AuditEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Basic":
+		if impl, ok := w.Concrete.(BasicDelete); ok {
+			return impl.DeleteBasic(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Basic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Binary":
+		if impl, ok := w.Concrete.(BinaryDelete); ok {
+			return impl.DeleteBinary(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Binary")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "BiologicallyDerivedProduct":
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDelete); ok {
+			return impl.DeleteBiologicallyDerivedProduct(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "BiologicallyDerivedProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "BiologicallyDerivedProductDispense":
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseDelete); ok {
+			return impl.DeleteBiologicallyDerivedProductDispense(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "BiologicallyDerivedProductDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "BodyStructure":
+		if impl, ok := w.Concrete.(BodyStructureDelete); ok {
+			return impl.DeleteBodyStructure(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "BodyStructure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Bundle":
+		if impl, ok := w.Concrete.(BundleDelete); ok {
+			return impl.DeleteBundle(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Bundle")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CapabilityStatement":
+		if impl, ok := w.Concrete.(CapabilityStatementDelete); ok {
+			return impl.DeleteCapabilityStatement(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CapabilityStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CarePlan":
+		if impl, ok := w.Concrete.(CarePlanDelete); ok {
+			return impl.DeleteCarePlan(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CarePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CareTeam":
+		if impl, ok := w.Concrete.(CareTeamDelete); ok {
+			return impl.DeleteCareTeam(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CareTeam")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ChargeItem":
+		if impl, ok := w.Concrete.(ChargeItemDelete); ok {
+			return impl.DeleteChargeItem(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ChargeItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ChargeItemDefinition":
+		if impl, ok := w.Concrete.(ChargeItemDefinitionDelete); ok {
+			return impl.DeleteChargeItemDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ChargeItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Citation":
+		if impl, ok := w.Concrete.(CitationDelete); ok {
+			return impl.DeleteCitation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Citation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Claim":
+		if impl, ok := w.Concrete.(ClaimDelete); ok {
+			return impl.DeleteClaim(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Claim")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ClaimResponse":
+		if impl, ok := w.Concrete.(ClaimResponseDelete); ok {
+			return impl.DeleteClaimResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ClaimResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ClinicalImpression":
+		if impl, ok := w.Concrete.(ClinicalImpressionDelete); ok {
+			return impl.DeleteClinicalImpression(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ClinicalImpression")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ClinicalUseDefinition":
+		if impl, ok := w.Concrete.(ClinicalUseDefinitionDelete); ok {
+			return impl.DeleteClinicalUseDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ClinicalUseDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CodeSystem":
+		if impl, ok := w.Concrete.(CodeSystemDelete); ok {
+			return impl.DeleteCodeSystem(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CodeSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Communication":
+		if impl, ok := w.Concrete.(CommunicationDelete); ok {
+			return impl.DeleteCommunication(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Communication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CommunicationRequest":
+		if impl, ok := w.Concrete.(CommunicationRequestDelete); ok {
+			return impl.DeleteCommunicationRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CommunicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CompartmentDefinition":
+		if impl, ok := w.Concrete.(CompartmentDefinitionDelete); ok {
+			return impl.DeleteCompartmentDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CompartmentDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Composition":
+		if impl, ok := w.Concrete.(CompositionDelete); ok {
+			return impl.DeleteComposition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Composition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ConceptMap":
+		if impl, ok := w.Concrete.(ConceptMapDelete); ok {
+			return impl.DeleteConceptMap(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ConceptMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Condition":
+		if impl, ok := w.Concrete.(ConditionDelete); ok {
+			return impl.DeleteCondition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Condition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ConditionDefinition":
+		if impl, ok := w.Concrete.(ConditionDefinitionDelete); ok {
+			return impl.DeleteConditionDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ConditionDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Consent":
+		if impl, ok := w.Concrete.(ConsentDelete); ok {
+			return impl.DeleteConsent(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Consent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Contract":
+		if impl, ok := w.Concrete.(ContractDelete); ok {
+			return impl.DeleteContract(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Contract")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Coverage":
+		if impl, ok := w.Concrete.(CoverageDelete); ok {
+			return impl.DeleteCoverage(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Coverage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CoverageEligibilityRequest":
+		if impl, ok := w.Concrete.(CoverageEligibilityRequestDelete); ok {
+			return impl.DeleteCoverageEligibilityRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CoverageEligibilityRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "CoverageEligibilityResponse":
+		if impl, ok := w.Concrete.(CoverageEligibilityResponseDelete); ok {
+			return impl.DeleteCoverageEligibilityResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "CoverageEligibilityResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DetectedIssue":
+		if impl, ok := w.Concrete.(DetectedIssueDelete); ok {
+			return impl.DeleteDetectedIssue(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DetectedIssue")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Device":
+		if impl, ok := w.Concrete.(DeviceDelete); ok {
+			return impl.DeleteDevice(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Device")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceAssociation":
+		if impl, ok := w.Concrete.(DeviceAssociationDelete); ok {
+			return impl.DeleteDeviceAssociation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceAssociation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceDefinition":
+		if impl, ok := w.Concrete.(DeviceDefinitionDelete); ok {
+			return impl.DeleteDeviceDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceDispense":
+		if impl, ok := w.Concrete.(DeviceDispenseDelete); ok {
+			return impl.DeleteDeviceDispense(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceMetric":
+		if impl, ok := w.Concrete.(DeviceMetricDelete); ok {
+			return impl.DeleteDeviceMetric(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceMetric")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceRequest":
+		if impl, ok := w.Concrete.(DeviceRequestDelete); ok {
+			return impl.DeleteDeviceRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DeviceUsage":
+		if impl, ok := w.Concrete.(DeviceUsageDelete); ok {
+			return impl.DeleteDeviceUsage(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DeviceUsage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DiagnosticReport":
+		if impl, ok := w.Concrete.(DiagnosticReportDelete); ok {
+			return impl.DeleteDiagnosticReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DiagnosticReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "DocumentReference":
+		if impl, ok := w.Concrete.(DocumentReferenceDelete); ok {
+			return impl.DeleteDocumentReference(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "DocumentReference")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Encounter":
+		if impl, ok := w.Concrete.(EncounterDelete); ok {
+			return impl.DeleteEncounter(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Encounter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EncounterHistory":
+		if impl, ok := w.Concrete.(EncounterHistoryDelete); ok {
+			return impl.DeleteEncounterHistory(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EncounterHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Endpoint":
+		if impl, ok := w.Concrete.(EndpointDelete); ok {
+			return impl.DeleteEndpoint(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Endpoint")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EnrollmentRequest":
+		if impl, ok := w.Concrete.(EnrollmentRequestDelete); ok {
+			return impl.DeleteEnrollmentRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EnrollmentRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EnrollmentResponse":
+		if impl, ok := w.Concrete.(EnrollmentResponseDelete); ok {
+			return impl.DeleteEnrollmentResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EnrollmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EpisodeOfCare":
+		if impl, ok := w.Concrete.(EpisodeOfCareDelete); ok {
+			return impl.DeleteEpisodeOfCare(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EpisodeOfCare")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EventDefinition":
+		if impl, ok := w.Concrete.(EventDefinitionDelete); ok {
+			return impl.DeleteEventDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EventDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Evidence":
+		if impl, ok := w.Concrete.(EvidenceDelete); ok {
+			return impl.DeleteEvidence(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Evidence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EvidenceReport":
+		if impl, ok := w.Concrete.(EvidenceReportDelete); ok {
+			return impl.DeleteEvidenceReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EvidenceReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "EvidenceVariable":
+		if impl, ok := w.Concrete.(EvidenceVariableDelete); ok {
+			return impl.DeleteEvidenceVariable(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "EvidenceVariable")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ExampleScenario":
+		if impl, ok := w.Concrete.(ExampleScenarioDelete); ok {
+			return impl.DeleteExampleScenario(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ExampleScenario")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ExplanationOfBenefit":
+		if impl, ok := w.Concrete.(ExplanationOfBenefitDelete); ok {
+			return impl.DeleteExplanationOfBenefit(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ExplanationOfBenefit")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "FamilyMemberHistory":
+		if impl, ok := w.Concrete.(FamilyMemberHistoryDelete); ok {
+			return impl.DeleteFamilyMemberHistory(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "FamilyMemberHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Flag":
+		if impl, ok := w.Concrete.(FlagDelete); ok {
+			return impl.DeleteFlag(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Flag")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "FormularyItem":
+		if impl, ok := w.Concrete.(FormularyItemDelete); ok {
+			return impl.DeleteFormularyItem(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "FormularyItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "GenomicStudy":
+		if impl, ok := w.Concrete.(GenomicStudyDelete); ok {
+			return impl.DeleteGenomicStudy(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "GenomicStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Goal":
+		if impl, ok := w.Concrete.(GoalDelete); ok {
+			return impl.DeleteGoal(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Goal")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "GraphDefinition":
+		if impl, ok := w.Concrete.(GraphDefinitionDelete); ok {
+			return impl.DeleteGraphDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "GraphDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Group":
+		if impl, ok := w.Concrete.(GroupDelete); ok {
+			return impl.DeleteGroup(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Group")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "GuidanceResponse":
+		if impl, ok := w.Concrete.(GuidanceResponseDelete); ok {
+			return impl.DeleteGuidanceResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "GuidanceResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "HealthcareService":
+		if impl, ok := w.Concrete.(HealthcareServiceDelete); ok {
+			return impl.DeleteHealthcareService(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "HealthcareService")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ImagingSelection":
+		if impl, ok := w.Concrete.(ImagingSelectionDelete); ok {
+			return impl.DeleteImagingSelection(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ImagingSelection")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ImagingStudy":
+		if impl, ok := w.Concrete.(ImagingStudyDelete); ok {
+			return impl.DeleteImagingStudy(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ImagingStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Immunization":
+		if impl, ok := w.Concrete.(ImmunizationDelete); ok {
+			return impl.DeleteImmunization(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Immunization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ImmunizationEvaluation":
+		if impl, ok := w.Concrete.(ImmunizationEvaluationDelete); ok {
+			return impl.DeleteImmunizationEvaluation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ImmunizationEvaluation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ImmunizationRecommendation":
+		if impl, ok := w.Concrete.(ImmunizationRecommendationDelete); ok {
+			return impl.DeleteImmunizationRecommendation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ImmunizationRecommendation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ImplementationGuide":
+		if impl, ok := w.Concrete.(ImplementationGuideDelete); ok {
+			return impl.DeleteImplementationGuide(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ImplementationGuide")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Ingredient":
+		if impl, ok := w.Concrete.(IngredientDelete); ok {
+			return impl.DeleteIngredient(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Ingredient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "InsurancePlan":
+		if impl, ok := w.Concrete.(InsurancePlanDelete); ok {
+			return impl.DeleteInsurancePlan(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "InsurancePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "InventoryItem":
+		if impl, ok := w.Concrete.(InventoryItemDelete); ok {
+			return impl.DeleteInventoryItem(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "InventoryItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "InventoryReport":
+		if impl, ok := w.Concrete.(InventoryReportDelete); ok {
+			return impl.DeleteInventoryReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "InventoryReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Invoice":
+		if impl, ok := w.Concrete.(InvoiceDelete); ok {
+			return impl.DeleteInvoice(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Invoice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Library":
+		if impl, ok := w.Concrete.(LibraryDelete); ok {
+			return impl.DeleteLibrary(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Library")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Linkage":
+		if impl, ok := w.Concrete.(LinkageDelete); ok {
+			return impl.DeleteLinkage(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Linkage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "List":
+		if impl, ok := w.Concrete.(ListDelete); ok {
+			return impl.DeleteList(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "List")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Location":
+		if impl, ok := w.Concrete.(LocationDelete); ok {
+			return impl.DeleteLocation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Location")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ManufacturedItemDefinition":
+		if impl, ok := w.Concrete.(ManufacturedItemDefinitionDelete); ok {
+			return impl.DeleteManufacturedItemDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ManufacturedItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Measure":
+		if impl, ok := w.Concrete.(MeasureDelete); ok {
+			return impl.DeleteMeasure(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Measure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MeasureReport":
+		if impl, ok := w.Concrete.(MeasureReportDelete); ok {
+			return impl.DeleteMeasureReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MeasureReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Medication":
+		if impl, ok := w.Concrete.(MedicationDelete); ok {
+			return impl.DeleteMedication(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Medication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicationAdministration":
+		if impl, ok := w.Concrete.(MedicationAdministrationDelete); ok {
+			return impl.DeleteMedicationAdministration(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicationAdministration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicationDispense":
+		if impl, ok := w.Concrete.(MedicationDispenseDelete); ok {
+			return impl.DeleteMedicationDispense(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicationDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicationKnowledge":
+		if impl, ok := w.Concrete.(MedicationKnowledgeDelete); ok {
+			return impl.DeleteMedicationKnowledge(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicationKnowledge")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicationRequest":
+		if impl, ok := w.Concrete.(MedicationRequestDelete); ok {
+			return impl.DeleteMedicationRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicationStatement":
+		if impl, ok := w.Concrete.(MedicationStatementDelete); ok {
+			return impl.DeleteMedicationStatement(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicationStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MedicinalProductDefinition":
+		if impl, ok := w.Concrete.(MedicinalProductDefinitionDelete); ok {
+			return impl.DeleteMedicinalProductDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MedicinalProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MessageDefinition":
+		if impl, ok := w.Concrete.(MessageDefinitionDelete); ok {
+			return impl.DeleteMessageDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MessageDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MessageHeader":
+		if impl, ok := w.Concrete.(MessageHeaderDelete); ok {
+			return impl.DeleteMessageHeader(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MessageHeader")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "MolecularSequence":
+		if impl, ok := w.Concrete.(MolecularSequenceDelete); ok {
+			return impl.DeleteMolecularSequence(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "MolecularSequence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "NamingSystem":
+		if impl, ok := w.Concrete.(NamingSystemDelete); ok {
+			return impl.DeleteNamingSystem(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "NamingSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "NutritionIntake":
+		if impl, ok := w.Concrete.(NutritionIntakeDelete); ok {
+			return impl.DeleteNutritionIntake(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "NutritionIntake")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "NutritionOrder":
+		if impl, ok := w.Concrete.(NutritionOrderDelete); ok {
+			return impl.DeleteNutritionOrder(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "NutritionOrder")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "NutritionProduct":
+		if impl, ok := w.Concrete.(NutritionProductDelete); ok {
+			return impl.DeleteNutritionProduct(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "NutritionProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Observation":
+		if impl, ok := w.Concrete.(ObservationDelete); ok {
+			return impl.DeleteObservation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Observation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ObservationDefinition":
+		if impl, ok := w.Concrete.(ObservationDefinitionDelete); ok {
+			return impl.DeleteObservationDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ObservationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "OperationDefinition":
+		if impl, ok := w.Concrete.(OperationDefinitionDelete); ok {
+			return impl.DeleteOperationDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "OperationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "OperationOutcome":
+		if impl, ok := w.Concrete.(OperationOutcomeDelete); ok {
+			return impl.DeleteOperationOutcome(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "OperationOutcome")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Organization":
+		if impl, ok := w.Concrete.(OrganizationDelete); ok {
+			return impl.DeleteOrganization(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Organization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "OrganizationAffiliation":
+		if impl, ok := w.Concrete.(OrganizationAffiliationDelete); ok {
+			return impl.DeleteOrganizationAffiliation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "OrganizationAffiliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "PackagedProductDefinition":
+		if impl, ok := w.Concrete.(PackagedProductDefinitionDelete); ok {
+			return impl.DeletePackagedProductDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "PackagedProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Parameters":
+		if impl, ok := w.Concrete.(ParametersDelete); ok {
+			return impl.DeleteParameters(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Parameters")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Patient":
+		if impl, ok := w.Concrete.(PatientDelete); ok {
+			return impl.DeletePatient(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Patient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "PaymentNotice":
+		if impl, ok := w.Concrete.(PaymentNoticeDelete); ok {
+			return impl.DeletePaymentNotice(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "PaymentNotice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "PaymentReconciliation":
+		if impl, ok := w.Concrete.(PaymentReconciliationDelete); ok {
+			return impl.DeletePaymentReconciliation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "PaymentReconciliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Permission":
+		if impl, ok := w.Concrete.(PermissionDelete); ok {
+			return impl.DeletePermission(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Permission")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Person":
+		if impl, ok := w.Concrete.(PersonDelete); ok {
+			return impl.DeletePerson(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Person")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "PlanDefinition":
+		if impl, ok := w.Concrete.(PlanDefinitionDelete); ok {
+			return impl.DeletePlanDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "PlanDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Practitioner":
+		if impl, ok := w.Concrete.(PractitionerDelete); ok {
+			return impl.DeletePractitioner(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Practitioner")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "PractitionerRole":
+		if impl, ok := w.Concrete.(PractitionerRoleDelete); ok {
+			return impl.DeletePractitionerRole(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "PractitionerRole")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Procedure":
+		if impl, ok := w.Concrete.(ProcedureDelete); ok {
+			return impl.DeleteProcedure(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Procedure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Provenance":
+		if impl, ok := w.Concrete.(ProvenanceDelete); ok {
+			return impl.DeleteProvenance(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Provenance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Questionnaire":
+		if impl, ok := w.Concrete.(QuestionnaireDelete); ok {
+			return impl.DeleteQuestionnaire(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Questionnaire")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "QuestionnaireResponse":
+		if impl, ok := w.Concrete.(QuestionnaireResponseDelete); ok {
+			return impl.DeleteQuestionnaireResponse(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "QuestionnaireResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "RegulatedAuthorization":
+		if impl, ok := w.Concrete.(RegulatedAuthorizationDelete); ok {
+			return impl.DeleteRegulatedAuthorization(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "RegulatedAuthorization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "RelatedPerson":
+		if impl, ok := w.Concrete.(RelatedPersonDelete); ok {
+			return impl.DeleteRelatedPerson(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "RelatedPerson")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "RequestOrchestration":
+		if impl, ok := w.Concrete.(RequestOrchestrationDelete); ok {
+			return impl.DeleteRequestOrchestration(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "RequestOrchestration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Requirements":
+		if impl, ok := w.Concrete.(RequirementsDelete); ok {
+			return impl.DeleteRequirements(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Requirements")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ResearchStudy":
+		if impl, ok := w.Concrete.(ResearchStudyDelete); ok {
+			return impl.DeleteResearchStudy(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ResearchStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ResearchSubject":
+		if impl, ok := w.Concrete.(ResearchSubjectDelete); ok {
+			return impl.DeleteResearchSubject(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ResearchSubject")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "RiskAssessment":
+		if impl, ok := w.Concrete.(RiskAssessmentDelete); ok {
+			return impl.DeleteRiskAssessment(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "RiskAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Schedule":
+		if impl, ok := w.Concrete.(ScheduleDelete); ok {
+			return impl.DeleteSchedule(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Schedule")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SearchParameter":
+		if impl, ok := w.Concrete.(SearchParameterDelete); ok {
+			return impl.DeleteSearchParameter(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SearchParameter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ServiceRequest":
+		if impl, ok := w.Concrete.(ServiceRequestDelete); ok {
+			return impl.DeleteServiceRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ServiceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Slot":
+		if impl, ok := w.Concrete.(SlotDelete); ok {
+			return impl.DeleteSlot(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Slot")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Specimen":
+		if impl, ok := w.Concrete.(SpecimenDelete); ok {
+			return impl.DeleteSpecimen(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Specimen")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SpecimenDefinition":
+		if impl, ok := w.Concrete.(SpecimenDefinitionDelete); ok {
+			return impl.DeleteSpecimenDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SpecimenDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureDefinition":
+		if impl, ok := w.Concrete.(StructureDefinitionDelete); ok {
+			return impl.DeleteStructureDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "StructureDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureMap":
+		if impl, ok := w.Concrete.(StructureMapDelete); ok {
+			return impl.DeleteStructureMap(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "StructureMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Subscription":
+		if impl, ok := w.Concrete.(SubscriptionDelete); ok {
+			return impl.DeleteSubscription(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Subscription")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionStatus":
+		if impl, ok := w.Concrete.(SubscriptionStatusDelete); ok {
+			return impl.DeleteSubscriptionStatus(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubscriptionStatus")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionTopic":
+		if impl, ok := w.Concrete.(SubscriptionTopicDelete); ok {
+			return impl.DeleteSubscriptionTopic(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubscriptionTopic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Substance":
+		if impl, ok := w.Concrete.(SubstanceDelete); ok {
+			return impl.DeleteSubstance(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Substance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceDefinition":
+		if impl, ok := w.Concrete.(SubstanceDefinitionDelete); ok {
+			return impl.DeleteSubstanceDefinition(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstanceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceNucleicAcid":
+		if impl, ok := w.Concrete.(SubstanceNucleicAcidDelete); ok {
+			return impl.DeleteSubstanceNucleicAcid(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstanceNucleicAcid")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstancePolymer":
+		if impl, ok := w.Concrete.(SubstancePolymerDelete); ok {
+			return impl.DeleteSubstancePolymer(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstancePolymer")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceProtein":
+		if impl, ok := w.Concrete.(SubstanceProteinDelete); ok {
+			return impl.DeleteSubstanceProtein(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstanceProtein")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceReferenceInformation":
+		if impl, ok := w.Concrete.(SubstanceReferenceInformationDelete); ok {
+			return impl.DeleteSubstanceReferenceInformation(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstanceReferenceInformation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceSourceMaterial":
+		if impl, ok := w.Concrete.(SubstanceSourceMaterialDelete); ok {
+			return impl.DeleteSubstanceSourceMaterial(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SubstanceSourceMaterial")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyDelivery":
+		if impl, ok := w.Concrete.(SupplyDeliveryDelete); ok {
+			return impl.DeleteSupplyDelivery(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SupplyDelivery")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyRequest":
+		if impl, ok := w.Concrete.(SupplyRequestDelete); ok {
+			return impl.DeleteSupplyRequest(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "SupplyRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Task":
+		if impl, ok := w.Concrete.(TaskDelete); ok {
+			return impl.DeleteTask(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Task")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TerminologyCapabilities":
+		if impl, ok := w.Concrete.(TerminologyCapabilitiesDelete); ok {
+			return impl.DeleteTerminologyCapabilities(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "TerminologyCapabilities")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestPlan":
+		if impl, ok := w.Concrete.(TestPlanDelete); ok {
+			return impl.DeleteTestPlan(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "TestPlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestReport":
+		if impl, ok := w.Concrete.(TestReportDelete); ok {
+			return impl.DeleteTestReport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "TestReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestScript":
+		if impl, ok := w.Concrete.(TestScriptDelete); ok {
+			return impl.DeleteTestScript(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "TestScript")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Transport":
+		if impl, ok := w.Concrete.(TransportDelete); ok {
+			return impl.DeleteTransport(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "Transport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ValueSet":
+		if impl, ok := w.Concrete.(ValueSetDelete); ok {
+			return impl.DeleteValueSet(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "ValueSet")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VerificationResult":
+		if impl, ok := w.Concrete.(VerificationResultDelete); ok {
+			return impl.DeleteVerificationResult(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "VerificationResult")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VisionPrescription":
+		if impl, ok := w.Concrete.(VisionPrescriptionDelete); ok {
+			return impl.DeleteVisionPrescription(ctx, id)
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericDelete); ok {
+			return gen.Delete(ctx, resourceType, id)
+		}
+		return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("delete not implemented for " + "VisionPrescription")},
 			Severity:    r5.Code{Value: ptr.To("fatal")},
 		}}}
 	}
+	return r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+		Code:        r5.Code{Value: ptr.To("processing")},
+		Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+		Severity:    r5.Code{Value: ptr.To("fatal")},
+	}}}
 }
 func (w Generic) Search(ctx context.Context, resourceType string, parameters search.Parameters, options search.Options) (search.Result[model.Resource], error) {
-	g, ok := w.Concrete.(capabilities.GenericSearch)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return g.Search(ctx, resourceType, parameters, options)
-	}
 	switch resourceType {
 	case "Account":
-		impl, ok := w.Concrete.(AccountSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Account")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAccount(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AccountSearch); ok {
+			result, err := impl.SearchAccount(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Account")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ActivityDefinition":
-		impl, ok := w.Concrete.(ActivityDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ActivityDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchActivityDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ActivityDefinitionSearch); ok {
+			result, err := impl.SearchActivityDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ActivityDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ActorDefinition":
-		impl, ok := w.Concrete.(ActorDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ActorDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchActorDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ActorDefinitionSearch); ok {
+			result, err := impl.SearchActorDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ActorDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AdministrableProductDefinition":
-		impl, ok := w.Concrete.(AdministrableProductDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for AdministrableProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAdministrableProductDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AdministrableProductDefinitionSearch); ok {
+			result, err := impl.SearchAdministrableProductDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "AdministrableProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AdverseEvent":
-		impl, ok := w.Concrete.(AdverseEventSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for AdverseEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAdverseEvent(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AdverseEventSearch); ok {
+			result, err := impl.SearchAdverseEvent(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "AdverseEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AllergyIntolerance":
-		impl, ok := w.Concrete.(AllergyIntoleranceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for AllergyIntolerance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAllergyIntolerance(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AllergyIntoleranceSearch); ok {
+			result, err := impl.SearchAllergyIntolerance(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "AllergyIntolerance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Appointment":
-		impl, ok := w.Concrete.(AppointmentSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Appointment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAppointment(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AppointmentSearch); ok {
+			result, err := impl.SearchAppointment(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Appointment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AppointmentResponse":
-		impl, ok := w.Concrete.(AppointmentResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for AppointmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAppointmentResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AppointmentResponseSearch); ok {
+			result, err := impl.SearchAppointmentResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "AppointmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ArtifactAssessment":
-		impl, ok := w.Concrete.(ArtifactAssessmentSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ArtifactAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchArtifactAssessment(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ArtifactAssessmentSearch); ok {
+			result, err := impl.SearchArtifactAssessment(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ArtifactAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "AuditEvent":
-		impl, ok := w.Concrete.(AuditEventSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for AuditEvent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchAuditEvent(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(AuditEventSearch); ok {
+			result, err := impl.SearchAuditEvent(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "AuditEvent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Basic":
-		impl, ok := w.Concrete.(BasicSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Basic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBasic(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BasicSearch); ok {
+			result, err := impl.SearchBasic(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Basic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Binary":
-		impl, ok := w.Concrete.(BinarySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Binary")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBinary(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BinarySearch); ok {
+			result, err := impl.SearchBinary(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Binary")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BiologicallyDerivedProduct":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for BiologicallyDerivedProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBiologicallyDerivedProduct(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductSearch); ok {
+			result, err := impl.SearchBiologicallyDerivedProduct(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "BiologicallyDerivedProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BiologicallyDerivedProductDispense":
-		impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for BiologicallyDerivedProductDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBiologicallyDerivedProductDispense(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BiologicallyDerivedProductDispenseSearch); ok {
+			result, err := impl.SearchBiologicallyDerivedProductDispense(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "BiologicallyDerivedProductDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "BodyStructure":
-		impl, ok := w.Concrete.(BodyStructureSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for BodyStructure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBodyStructure(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BodyStructureSearch); ok {
+			result, err := impl.SearchBodyStructure(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "BodyStructure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Bundle":
-		impl, ok := w.Concrete.(BundleSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Bundle")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchBundle(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(BundleSearch); ok {
+			result, err := impl.SearchBundle(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Bundle")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CapabilityStatement":
-		impl, ok := w.Concrete.(CapabilityStatementSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CapabilityStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCapabilityStatement(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CapabilityStatementSearch); ok {
+			result, err := impl.SearchCapabilityStatement(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CapabilityStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CarePlan":
-		impl, ok := w.Concrete.(CarePlanSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CarePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCarePlan(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CarePlanSearch); ok {
+			result, err := impl.SearchCarePlan(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CarePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CareTeam":
-		impl, ok := w.Concrete.(CareTeamSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CareTeam")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCareTeam(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CareTeamSearch); ok {
+			result, err := impl.SearchCareTeam(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CareTeam")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ChargeItem":
-		impl, ok := w.Concrete.(ChargeItemSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ChargeItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchChargeItem(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ChargeItemSearch); ok {
+			result, err := impl.SearchChargeItem(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ChargeItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ChargeItemDefinition":
-		impl, ok := w.Concrete.(ChargeItemDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ChargeItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchChargeItemDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ChargeItemDefinitionSearch); ok {
+			result, err := impl.SearchChargeItemDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ChargeItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Citation":
-		impl, ok := w.Concrete.(CitationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Citation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCitation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CitationSearch); ok {
+			result, err := impl.SearchCitation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Citation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Claim":
-		impl, ok := w.Concrete.(ClaimSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Claim")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchClaim(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ClaimSearch); ok {
+			result, err := impl.SearchClaim(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Claim")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClaimResponse":
-		impl, ok := w.Concrete.(ClaimResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ClaimResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchClaimResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ClaimResponseSearch); ok {
+			result, err := impl.SearchClaimResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ClaimResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClinicalImpression":
-		impl, ok := w.Concrete.(ClinicalImpressionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ClinicalImpression")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchClinicalImpression(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ClinicalImpressionSearch); ok {
+			result, err := impl.SearchClinicalImpression(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ClinicalImpression")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ClinicalUseDefinition":
-		impl, ok := w.Concrete.(ClinicalUseDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ClinicalUseDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchClinicalUseDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ClinicalUseDefinitionSearch); ok {
+			result, err := impl.SearchClinicalUseDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ClinicalUseDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CodeSystem":
-		impl, ok := w.Concrete.(CodeSystemSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CodeSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCodeSystem(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CodeSystemSearch); ok {
+			result, err := impl.SearchCodeSystem(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CodeSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Communication":
-		impl, ok := w.Concrete.(CommunicationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Communication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCommunication(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CommunicationSearch); ok {
+			result, err := impl.SearchCommunication(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Communication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CommunicationRequest":
-		impl, ok := w.Concrete.(CommunicationRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CommunicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCommunicationRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CommunicationRequestSearch); ok {
+			result, err := impl.SearchCommunicationRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CommunicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CompartmentDefinition":
-		impl, ok := w.Concrete.(CompartmentDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CompartmentDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCompartmentDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CompartmentDefinitionSearch); ok {
+			result, err := impl.SearchCompartmentDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CompartmentDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Composition":
-		impl, ok := w.Concrete.(CompositionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Composition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchComposition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CompositionSearch); ok {
+			result, err := impl.SearchComposition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Composition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ConceptMap":
-		impl, ok := w.Concrete.(ConceptMapSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ConceptMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchConceptMap(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ConceptMapSearch); ok {
+			result, err := impl.SearchConceptMap(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ConceptMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Condition":
-		impl, ok := w.Concrete.(ConditionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Condition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCondition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ConditionSearch); ok {
+			result, err := impl.SearchCondition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Condition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ConditionDefinition":
-		impl, ok := w.Concrete.(ConditionDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ConditionDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchConditionDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ConditionDefinitionSearch); ok {
+			result, err := impl.SearchConditionDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ConditionDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Consent":
-		impl, ok := w.Concrete.(ConsentSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Consent")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchConsent(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ConsentSearch); ok {
+			result, err := impl.SearchConsent(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Consent")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Contract":
-		impl, ok := w.Concrete.(ContractSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Contract")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchContract(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ContractSearch); ok {
+			result, err := impl.SearchContract(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Contract")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Coverage":
-		impl, ok := w.Concrete.(CoverageSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Coverage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCoverage(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CoverageSearch); ok {
+			result, err := impl.SearchCoverage(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Coverage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CoverageEligibilityRequest":
-		impl, ok := w.Concrete.(CoverageEligibilityRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CoverageEligibilityRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCoverageEligibilityRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CoverageEligibilityRequestSearch); ok {
+			result, err := impl.SearchCoverageEligibilityRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CoverageEligibilityRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "CoverageEligibilityResponse":
-		impl, ok := w.Concrete.(CoverageEligibilityResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for CoverageEligibilityResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchCoverageEligibilityResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(CoverageEligibilityResponseSearch); ok {
+			result, err := impl.SearchCoverageEligibilityResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "CoverageEligibilityResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DetectedIssue":
-		impl, ok := w.Concrete.(DetectedIssueSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DetectedIssue")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDetectedIssue(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DetectedIssueSearch); ok {
+			result, err := impl.SearchDetectedIssue(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DetectedIssue")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Device":
-		impl, ok := w.Concrete.(DeviceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Device")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDevice(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceSearch); ok {
+			result, err := impl.SearchDevice(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Device")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceAssociation":
-		impl, ok := w.Concrete.(DeviceAssociationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceAssociation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceAssociation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceAssociationSearch); ok {
+			result, err := impl.SearchDeviceAssociation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceAssociation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceDefinition":
-		impl, ok := w.Concrete.(DeviceDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceDefinitionSearch); ok {
+			result, err := impl.SearchDeviceDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceDispense":
-		impl, ok := w.Concrete.(DeviceDispenseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceDispense(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceDispenseSearch); ok {
+			result, err := impl.SearchDeviceDispense(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceMetric":
-		impl, ok := w.Concrete.(DeviceMetricSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceMetric")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceMetric(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceMetricSearch); ok {
+			result, err := impl.SearchDeviceMetric(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceMetric")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceRequest":
-		impl, ok := w.Concrete.(DeviceRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceRequestSearch); ok {
+			result, err := impl.SearchDeviceRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DeviceUsage":
-		impl, ok := w.Concrete.(DeviceUsageSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DeviceUsage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDeviceUsage(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DeviceUsageSearch); ok {
+			result, err := impl.SearchDeviceUsage(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DeviceUsage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DiagnosticReport":
-		impl, ok := w.Concrete.(DiagnosticReportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DiagnosticReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDiagnosticReport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DiagnosticReportSearch); ok {
+			result, err := impl.SearchDiagnosticReport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DiagnosticReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "DocumentReference":
-		impl, ok := w.Concrete.(DocumentReferenceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for DocumentReference")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchDocumentReference(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(DocumentReferenceSearch); ok {
+			result, err := impl.SearchDocumentReference(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "DocumentReference")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Encounter":
-		impl, ok := w.Concrete.(EncounterSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Encounter")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEncounter(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EncounterSearch); ok {
+			result, err := impl.SearchEncounter(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Encounter")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EncounterHistory":
-		impl, ok := w.Concrete.(EncounterHistorySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EncounterHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEncounterHistory(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EncounterHistorySearch); ok {
+			result, err := impl.SearchEncounterHistory(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EncounterHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Endpoint":
-		impl, ok := w.Concrete.(EndpointSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Endpoint")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEndpoint(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EndpointSearch); ok {
+			result, err := impl.SearchEndpoint(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Endpoint")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EnrollmentRequest":
-		impl, ok := w.Concrete.(EnrollmentRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EnrollmentRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEnrollmentRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EnrollmentRequestSearch); ok {
+			result, err := impl.SearchEnrollmentRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EnrollmentRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EnrollmentResponse":
-		impl, ok := w.Concrete.(EnrollmentResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EnrollmentResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEnrollmentResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EnrollmentResponseSearch); ok {
+			result, err := impl.SearchEnrollmentResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EnrollmentResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EpisodeOfCare":
-		impl, ok := w.Concrete.(EpisodeOfCareSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EpisodeOfCare")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEpisodeOfCare(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EpisodeOfCareSearch); ok {
+			result, err := impl.SearchEpisodeOfCare(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EpisodeOfCare")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EventDefinition":
-		impl, ok := w.Concrete.(EventDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EventDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEventDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EventDefinitionSearch); ok {
+			result, err := impl.SearchEventDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EventDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Evidence":
-		impl, ok := w.Concrete.(EvidenceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Evidence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEvidence(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EvidenceSearch); ok {
+			result, err := impl.SearchEvidence(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Evidence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EvidenceReport":
-		impl, ok := w.Concrete.(EvidenceReportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EvidenceReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEvidenceReport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EvidenceReportSearch); ok {
+			result, err := impl.SearchEvidenceReport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EvidenceReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "EvidenceVariable":
-		impl, ok := w.Concrete.(EvidenceVariableSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for EvidenceVariable")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchEvidenceVariable(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(EvidenceVariableSearch); ok {
+			result, err := impl.SearchEvidenceVariable(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "EvidenceVariable")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ExampleScenario":
-		impl, ok := w.Concrete.(ExampleScenarioSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ExampleScenario")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchExampleScenario(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ExampleScenarioSearch); ok {
+			result, err := impl.SearchExampleScenario(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ExampleScenario")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ExplanationOfBenefit":
-		impl, ok := w.Concrete.(ExplanationOfBenefitSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ExplanationOfBenefit")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchExplanationOfBenefit(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ExplanationOfBenefitSearch); ok {
+			result, err := impl.SearchExplanationOfBenefit(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ExplanationOfBenefit")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "FamilyMemberHistory":
-		impl, ok := w.Concrete.(FamilyMemberHistorySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for FamilyMemberHistory")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchFamilyMemberHistory(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(FamilyMemberHistorySearch); ok {
+			result, err := impl.SearchFamilyMemberHistory(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "FamilyMemberHistory")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Flag":
-		impl, ok := w.Concrete.(FlagSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Flag")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchFlag(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(FlagSearch); ok {
+			result, err := impl.SearchFlag(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Flag")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "FormularyItem":
-		impl, ok := w.Concrete.(FormularyItemSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for FormularyItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchFormularyItem(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(FormularyItemSearch); ok {
+			result, err := impl.SearchFormularyItem(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "FormularyItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GenomicStudy":
-		impl, ok := w.Concrete.(GenomicStudySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for GenomicStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchGenomicStudy(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(GenomicStudySearch); ok {
+			result, err := impl.SearchGenomicStudy(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "GenomicStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Goal":
-		impl, ok := w.Concrete.(GoalSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Goal")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchGoal(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(GoalSearch); ok {
+			result, err := impl.SearchGoal(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Goal")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GraphDefinition":
-		impl, ok := w.Concrete.(GraphDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for GraphDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchGraphDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(GraphDefinitionSearch); ok {
+			result, err := impl.SearchGraphDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "GraphDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Group":
-		impl, ok := w.Concrete.(GroupSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Group")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchGroup(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(GroupSearch); ok {
+			result, err := impl.SearchGroup(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Group")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "GuidanceResponse":
-		impl, ok := w.Concrete.(GuidanceResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for GuidanceResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchGuidanceResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(GuidanceResponseSearch); ok {
+			result, err := impl.SearchGuidanceResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "GuidanceResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "HealthcareService":
-		impl, ok := w.Concrete.(HealthcareServiceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for HealthcareService")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchHealthcareService(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(HealthcareServiceSearch); ok {
+			result, err := impl.SearchHealthcareService(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "HealthcareService")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImagingSelection":
-		impl, ok := w.Concrete.(ImagingSelectionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ImagingSelection")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImagingSelection(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImagingSelectionSearch); ok {
+			result, err := impl.SearchImagingSelection(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ImagingSelection")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImagingStudy":
-		impl, ok := w.Concrete.(ImagingStudySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ImagingStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImagingStudy(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImagingStudySearch); ok {
+			result, err := impl.SearchImagingStudy(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ImagingStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Immunization":
-		impl, ok := w.Concrete.(ImmunizationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Immunization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImmunization(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImmunizationSearch); ok {
+			result, err := impl.SearchImmunization(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Immunization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImmunizationEvaluation":
-		impl, ok := w.Concrete.(ImmunizationEvaluationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ImmunizationEvaluation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImmunizationEvaluation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImmunizationEvaluationSearch); ok {
+			result, err := impl.SearchImmunizationEvaluation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ImmunizationEvaluation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImmunizationRecommendation":
-		impl, ok := w.Concrete.(ImmunizationRecommendationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ImmunizationRecommendation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImmunizationRecommendation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImmunizationRecommendationSearch); ok {
+			result, err := impl.SearchImmunizationRecommendation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ImmunizationRecommendation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ImplementationGuide":
-		impl, ok := w.Concrete.(ImplementationGuideSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ImplementationGuide")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchImplementationGuide(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ImplementationGuideSearch); ok {
+			result, err := impl.SearchImplementationGuide(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ImplementationGuide")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Ingredient":
-		impl, ok := w.Concrete.(IngredientSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Ingredient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchIngredient(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(IngredientSearch); ok {
+			result, err := impl.SearchIngredient(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Ingredient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InsurancePlan":
-		impl, ok := w.Concrete.(InsurancePlanSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for InsurancePlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchInsurancePlan(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(InsurancePlanSearch); ok {
+			result, err := impl.SearchInsurancePlan(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "InsurancePlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InventoryItem":
-		impl, ok := w.Concrete.(InventoryItemSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for InventoryItem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchInventoryItem(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(InventoryItemSearch); ok {
+			result, err := impl.SearchInventoryItem(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "InventoryItem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "InventoryReport":
-		impl, ok := w.Concrete.(InventoryReportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for InventoryReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchInventoryReport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(InventoryReportSearch); ok {
+			result, err := impl.SearchInventoryReport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "InventoryReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Invoice":
-		impl, ok := w.Concrete.(InvoiceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Invoice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchInvoice(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(InvoiceSearch); ok {
+			result, err := impl.SearchInvoice(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Invoice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Library":
-		impl, ok := w.Concrete.(LibrarySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Library")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchLibrary(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(LibrarySearch); ok {
+			result, err := impl.SearchLibrary(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Library")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Linkage":
-		impl, ok := w.Concrete.(LinkageSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Linkage")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchLinkage(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(LinkageSearch); ok {
+			result, err := impl.SearchLinkage(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Linkage")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "List":
-		impl, ok := w.Concrete.(ListSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for List")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchList(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ListSearch); ok {
+			result, err := impl.SearchList(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "List")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Location":
-		impl, ok := w.Concrete.(LocationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Location")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchLocation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(LocationSearch); ok {
+			result, err := impl.SearchLocation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Location")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ManufacturedItemDefinition":
-		impl, ok := w.Concrete.(ManufacturedItemDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ManufacturedItemDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchManufacturedItemDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ManufacturedItemDefinitionSearch); ok {
+			result, err := impl.SearchManufacturedItemDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ManufacturedItemDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Measure":
-		impl, ok := w.Concrete.(MeasureSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Measure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMeasure(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MeasureSearch); ok {
+			result, err := impl.SearchMeasure(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Measure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MeasureReport":
-		impl, ok := w.Concrete.(MeasureReportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MeasureReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMeasureReport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MeasureReportSearch); ok {
+			result, err := impl.SearchMeasureReport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MeasureReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Medication":
-		impl, ok := w.Concrete.(MedicationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Medication")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedication(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationSearch); ok {
+			result, err := impl.SearchMedication(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Medication")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationAdministration":
-		impl, ok := w.Concrete.(MedicationAdministrationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicationAdministration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicationAdministration(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationAdministrationSearch); ok {
+			result, err := impl.SearchMedicationAdministration(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicationAdministration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationDispense":
-		impl, ok := w.Concrete.(MedicationDispenseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicationDispense")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicationDispense(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationDispenseSearch); ok {
+			result, err := impl.SearchMedicationDispense(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicationDispense")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationKnowledge":
-		impl, ok := w.Concrete.(MedicationKnowledgeSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicationKnowledge")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicationKnowledge(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationKnowledgeSearch); ok {
+			result, err := impl.SearchMedicationKnowledge(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicationKnowledge")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationRequest":
-		impl, ok := w.Concrete.(MedicationRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicationRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicationRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationRequestSearch); ok {
+			result, err := impl.SearchMedicationRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicationRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicationStatement":
-		impl, ok := w.Concrete.(MedicationStatementSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicationStatement")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicationStatement(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicationStatementSearch); ok {
+			result, err := impl.SearchMedicationStatement(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicationStatement")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MedicinalProductDefinition":
-		impl, ok := w.Concrete.(MedicinalProductDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MedicinalProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMedicinalProductDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MedicinalProductDefinitionSearch); ok {
+			result, err := impl.SearchMedicinalProductDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MedicinalProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MessageDefinition":
-		impl, ok := w.Concrete.(MessageDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MessageDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMessageDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MessageDefinitionSearch); ok {
+			result, err := impl.SearchMessageDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MessageDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MessageHeader":
-		impl, ok := w.Concrete.(MessageHeaderSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MessageHeader")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMessageHeader(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MessageHeaderSearch); ok {
+			result, err := impl.SearchMessageHeader(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MessageHeader")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "MolecularSequence":
-		impl, ok := w.Concrete.(MolecularSequenceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for MolecularSequence")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchMolecularSequence(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(MolecularSequenceSearch); ok {
+			result, err := impl.SearchMolecularSequence(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "MolecularSequence")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NamingSystem":
-		impl, ok := w.Concrete.(NamingSystemSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for NamingSystem")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchNamingSystem(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(NamingSystemSearch); ok {
+			result, err := impl.SearchNamingSystem(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "NamingSystem")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionIntake":
-		impl, ok := w.Concrete.(NutritionIntakeSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for NutritionIntake")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchNutritionIntake(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(NutritionIntakeSearch); ok {
+			result, err := impl.SearchNutritionIntake(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "NutritionIntake")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionOrder":
-		impl, ok := w.Concrete.(NutritionOrderSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for NutritionOrder")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchNutritionOrder(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(NutritionOrderSearch); ok {
+			result, err := impl.SearchNutritionOrder(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "NutritionOrder")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "NutritionProduct":
-		impl, ok := w.Concrete.(NutritionProductSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for NutritionProduct")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchNutritionProduct(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(NutritionProductSearch); ok {
+			result, err := impl.SearchNutritionProduct(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "NutritionProduct")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Observation":
-		impl, ok := w.Concrete.(ObservationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Observation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchObservation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ObservationSearch); ok {
+			result, err := impl.SearchObservation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Observation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ObservationDefinition":
-		impl, ok := w.Concrete.(ObservationDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ObservationDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchObservationDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ObservationDefinitionSearch); ok {
+			result, err := impl.SearchObservationDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ObservationDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "OperationDefinition":
 		impl, ok := w.Concrete.(OperationDefinitionSearch)
 		if ok {
@@ -22490,580 +23929,630 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 			Resources: resources,
 		}, nil
 	case "OperationOutcome":
-		impl, ok := w.Concrete.(OperationOutcomeSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for OperationOutcome")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchOperationOutcome(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(OperationOutcomeSearch); ok {
+			result, err := impl.SearchOperationOutcome(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "OperationOutcome")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Organization":
-		impl, ok := w.Concrete.(OrganizationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Organization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchOrganization(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(OrganizationSearch); ok {
+			result, err := impl.SearchOrganization(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Organization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "OrganizationAffiliation":
-		impl, ok := w.Concrete.(OrganizationAffiliationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for OrganizationAffiliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchOrganizationAffiliation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(OrganizationAffiliationSearch); ok {
+			result, err := impl.SearchOrganizationAffiliation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "OrganizationAffiliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PackagedProductDefinition":
-		impl, ok := w.Concrete.(PackagedProductDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for PackagedProductDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPackagedProductDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PackagedProductDefinitionSearch); ok {
+			result, err := impl.SearchPackagedProductDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "PackagedProductDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Parameters":
-		impl, ok := w.Concrete.(ParametersSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Parameters")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchParameters(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ParametersSearch); ok {
+			result, err := impl.SearchParameters(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Parameters")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Patient":
-		impl, ok := w.Concrete.(PatientSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Patient")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPatient(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PatientSearch); ok {
+			result, err := impl.SearchPatient(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Patient")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PaymentNotice":
-		impl, ok := w.Concrete.(PaymentNoticeSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for PaymentNotice")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPaymentNotice(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PaymentNoticeSearch); ok {
+			result, err := impl.SearchPaymentNotice(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "PaymentNotice")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PaymentReconciliation":
-		impl, ok := w.Concrete.(PaymentReconciliationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for PaymentReconciliation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPaymentReconciliation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PaymentReconciliationSearch); ok {
+			result, err := impl.SearchPaymentReconciliation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "PaymentReconciliation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Permission":
-		impl, ok := w.Concrete.(PermissionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Permission")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPermission(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PermissionSearch); ok {
+			result, err := impl.SearchPermission(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Permission")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Person":
-		impl, ok := w.Concrete.(PersonSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Person")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPerson(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PersonSearch); ok {
+			result, err := impl.SearchPerson(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Person")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PlanDefinition":
-		impl, ok := w.Concrete.(PlanDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for PlanDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPlanDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PlanDefinitionSearch); ok {
+			result, err := impl.SearchPlanDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "PlanDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Practitioner":
-		impl, ok := w.Concrete.(PractitionerSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Practitioner")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPractitioner(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PractitionerSearch); ok {
+			result, err := impl.SearchPractitioner(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Practitioner")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "PractitionerRole":
-		impl, ok := w.Concrete.(PractitionerRoleSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for PractitionerRole")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchPractitionerRole(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(PractitionerRoleSearch); ok {
+			result, err := impl.SearchPractitionerRole(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "PractitionerRole")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Procedure":
-		impl, ok := w.Concrete.(ProcedureSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Procedure")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchProcedure(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ProcedureSearch); ok {
+			result, err := impl.SearchProcedure(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Procedure")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Provenance":
-		impl, ok := w.Concrete.(ProvenanceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Provenance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchProvenance(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ProvenanceSearch); ok {
+			result, err := impl.SearchProvenance(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Provenance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Questionnaire":
-		impl, ok := w.Concrete.(QuestionnaireSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Questionnaire")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchQuestionnaire(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(QuestionnaireSearch); ok {
+			result, err := impl.SearchQuestionnaire(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Questionnaire")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "QuestionnaireResponse":
-		impl, ok := w.Concrete.(QuestionnaireResponseSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for QuestionnaireResponse")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchQuestionnaireResponse(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(QuestionnaireResponseSearch); ok {
+			result, err := impl.SearchQuestionnaireResponse(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "QuestionnaireResponse")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RegulatedAuthorization":
-		impl, ok := w.Concrete.(RegulatedAuthorizationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for RegulatedAuthorization")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchRegulatedAuthorization(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(RegulatedAuthorizationSearch); ok {
+			result, err := impl.SearchRegulatedAuthorization(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "RegulatedAuthorization")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RelatedPerson":
-		impl, ok := w.Concrete.(RelatedPersonSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for RelatedPerson")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchRelatedPerson(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(RelatedPersonSearch); ok {
+			result, err := impl.SearchRelatedPerson(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "RelatedPerson")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RequestOrchestration":
-		impl, ok := w.Concrete.(RequestOrchestrationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for RequestOrchestration")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchRequestOrchestration(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(RequestOrchestrationSearch); ok {
+			result, err := impl.SearchRequestOrchestration(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "RequestOrchestration")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Requirements":
-		impl, ok := w.Concrete.(RequirementsSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Requirements")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchRequirements(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(RequirementsSearch); ok {
+			result, err := impl.SearchRequirements(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Requirements")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ResearchStudy":
-		impl, ok := w.Concrete.(ResearchStudySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ResearchStudy")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchResearchStudy(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ResearchStudySearch); ok {
+			result, err := impl.SearchResearchStudy(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ResearchStudy")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "ResearchSubject":
-		impl, ok := w.Concrete.(ResearchSubjectSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ResearchSubject")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchResearchSubject(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ResearchSubjectSearch); ok {
+			result, err := impl.SearchResearchSubject(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ResearchSubject")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "RiskAssessment":
-		impl, ok := w.Concrete.(RiskAssessmentSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for RiskAssessment")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchRiskAssessment(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(RiskAssessmentSearch); ok {
+			result, err := impl.SearchRiskAssessment(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "RiskAssessment")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "Schedule":
-		impl, ok := w.Concrete.(ScheduleSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Schedule")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSchedule(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ScheduleSearch); ok {
+			result, err := impl.SearchSchedule(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Schedule")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
 	case "SearchParameter":
 		impl, ok := w.Concrete.(SearchParameterSearch)
 		if ok {
@@ -23152,633 +24641,686 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 			Resources: resources,
 		}, nil
 	case "ServiceRequest":
-		impl, ok := w.Concrete.(ServiceRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ServiceRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchServiceRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
+		if impl, ok := w.Concrete.(ServiceRequestSearch); ok {
+			result, err := impl.SearchServiceRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
 
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Slot":
-		impl, ok := w.Concrete.(SlotSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Slot")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
 		}
-		result, err := impl.SearchSlot(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
 		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Specimen":
-		impl, ok := w.Concrete.(SpecimenSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Specimen")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSpecimen(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SpecimenDefinition":
-		impl, ok := w.Concrete.(SpecimenDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SpecimenDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSpecimenDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "StructureDefinition":
-		impl, ok := w.Concrete.(StructureDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for StructureDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchStructureDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "StructureMap":
-		impl, ok := w.Concrete.(StructureMapSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for StructureMap")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchStructureMap(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Subscription":
-		impl, ok := w.Concrete.(SubscriptionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Subscription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubscription(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubscriptionStatus":
-		impl, ok := w.Concrete.(SubscriptionStatusSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubscriptionStatus")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubscriptionStatus(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubscriptionTopic":
-		impl, ok := w.Concrete.(SubscriptionTopicSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubscriptionTopic")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubscriptionTopic(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Substance":
-		impl, ok := w.Concrete.(SubstanceSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Substance")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstance(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstanceDefinition":
-		impl, ok := w.Concrete.(SubstanceDefinitionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstanceDefinition")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstanceDefinition(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstanceNucleicAcid":
-		impl, ok := w.Concrete.(SubstanceNucleicAcidSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstanceNucleicAcid")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstanceNucleicAcid(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstancePolymer":
-		impl, ok := w.Concrete.(SubstancePolymerSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstancePolymer")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstancePolymer(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstanceProtein":
-		impl, ok := w.Concrete.(SubstanceProteinSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstanceProtein")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstanceProtein(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstanceReferenceInformation":
-		impl, ok := w.Concrete.(SubstanceReferenceInformationSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstanceReferenceInformation")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstanceReferenceInformation(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SubstanceSourceMaterial":
-		impl, ok := w.Concrete.(SubstanceSourceMaterialSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SubstanceSourceMaterial")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSubstanceSourceMaterial(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SupplyDelivery":
-		impl, ok := w.Concrete.(SupplyDeliverySearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SupplyDelivery")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSupplyDelivery(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "SupplyRequest":
-		impl, ok := w.Concrete.(SupplyRequestSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for SupplyRequest")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchSupplyRequest(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Task":
-		impl, ok := w.Concrete.(TaskSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Task")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTask(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "TerminologyCapabilities":
-		impl, ok := w.Concrete.(TerminologyCapabilitiesSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for TerminologyCapabilities")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTerminologyCapabilities(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "TestPlan":
-		impl, ok := w.Concrete.(TestPlanSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for TestPlan")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTestPlan(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "TestReport":
-		impl, ok := w.Concrete.(TestReportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for TestReport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTestReport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "TestScript":
-		impl, ok := w.Concrete.(TestScriptSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for TestScript")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTestScript(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "Transport":
-		impl, ok := w.Concrete.(TransportSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for Transport")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchTransport(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "ValueSet":
-		impl, ok := w.Concrete.(ValueSetSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for ValueSet")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchValueSet(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "VerificationResult":
-		impl, ok := w.Concrete.(VerificationResultSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for VerificationResult")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchVerificationResult(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	case "VisionPrescription":
-		impl, ok := w.Concrete.(VisionPrescriptionSearch)
-		if !ok {
-			return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-				Code:        r5.Code{Value: ptr.To("not-supported")},
-				Diagnostics: &r5.String{Value: ptr.To("search not implemented for VisionPrescription")},
-				Severity:    r5.Code{Value: ptr.To("fatal")},
-			}}}
-		}
-		result, err := impl.SearchVisionPrescription(ctx, parameters, options)
-		if err != nil {
-			return search.Result[model.Resource]{}, err
-		}
-		genericResources := make([]model.Resource, len(result.Resources))
-		for i, r := range result.Resources {
-			genericResources[i] = r
-		}
-		return search.Result[model.Resource]{
-
-			Included:  result.Included,
-			Next:      result.Next,
-			Resources: genericResources,
-		}, nil
-	default:
 		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
-			Code:        r5.Code{Value: ptr.To("processing")},
-			Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ServiceRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Slot":
+		if impl, ok := w.Concrete.(SlotSearch); ok {
+			result, err := impl.SearchSlot(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Slot")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Specimen":
+		if impl, ok := w.Concrete.(SpecimenSearch); ok {
+			result, err := impl.SearchSpecimen(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Specimen")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SpecimenDefinition":
+		if impl, ok := w.Concrete.(SpecimenDefinitionSearch); ok {
+			result, err := impl.SearchSpecimenDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SpecimenDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureDefinition":
+		if impl, ok := w.Concrete.(StructureDefinitionSearch); ok {
+			result, err := impl.SearchStructureDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "StructureDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "StructureMap":
+		if impl, ok := w.Concrete.(StructureMapSearch); ok {
+			result, err := impl.SearchStructureMap(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "StructureMap")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Subscription":
+		if impl, ok := w.Concrete.(SubscriptionSearch); ok {
+			result, err := impl.SearchSubscription(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Subscription")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionStatus":
+		if impl, ok := w.Concrete.(SubscriptionStatusSearch); ok {
+			result, err := impl.SearchSubscriptionStatus(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubscriptionStatus")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubscriptionTopic":
+		if impl, ok := w.Concrete.(SubscriptionTopicSearch); ok {
+			result, err := impl.SearchSubscriptionTopic(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubscriptionTopic")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Substance":
+		if impl, ok := w.Concrete.(SubstanceSearch); ok {
+			result, err := impl.SearchSubstance(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Substance")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceDefinition":
+		if impl, ok := w.Concrete.(SubstanceDefinitionSearch); ok {
+			result, err := impl.SearchSubstanceDefinition(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstanceDefinition")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceNucleicAcid":
+		if impl, ok := w.Concrete.(SubstanceNucleicAcidSearch); ok {
+			result, err := impl.SearchSubstanceNucleicAcid(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstanceNucleicAcid")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstancePolymer":
+		if impl, ok := w.Concrete.(SubstancePolymerSearch); ok {
+			result, err := impl.SearchSubstancePolymer(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstancePolymer")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceProtein":
+		if impl, ok := w.Concrete.(SubstanceProteinSearch); ok {
+			result, err := impl.SearchSubstanceProtein(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstanceProtein")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceReferenceInformation":
+		if impl, ok := w.Concrete.(SubstanceReferenceInformationSearch); ok {
+			result, err := impl.SearchSubstanceReferenceInformation(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstanceReferenceInformation")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SubstanceSourceMaterial":
+		if impl, ok := w.Concrete.(SubstanceSourceMaterialSearch); ok {
+			result, err := impl.SearchSubstanceSourceMaterial(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SubstanceSourceMaterial")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyDelivery":
+		if impl, ok := w.Concrete.(SupplyDeliverySearch); ok {
+			result, err := impl.SearchSupplyDelivery(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SupplyDelivery")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "SupplyRequest":
+		if impl, ok := w.Concrete.(SupplyRequestSearch); ok {
+			result, err := impl.SearchSupplyRequest(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "SupplyRequest")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Task":
+		if impl, ok := w.Concrete.(TaskSearch); ok {
+			result, err := impl.SearchTask(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Task")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TerminologyCapabilities":
+		if impl, ok := w.Concrete.(TerminologyCapabilitiesSearch); ok {
+			result, err := impl.SearchTerminologyCapabilities(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "TerminologyCapabilities")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestPlan":
+		if impl, ok := w.Concrete.(TestPlanSearch); ok {
+			result, err := impl.SearchTestPlan(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "TestPlan")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestReport":
+		if impl, ok := w.Concrete.(TestReportSearch); ok {
+			result, err := impl.SearchTestReport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "TestReport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "TestScript":
+		if impl, ok := w.Concrete.(TestScriptSearch); ok {
+			result, err := impl.SearchTestScript(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "TestScript")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "Transport":
+		if impl, ok := w.Concrete.(TransportSearch); ok {
+			result, err := impl.SearchTransport(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "Transport")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "ValueSet":
+		if impl, ok := w.Concrete.(ValueSetSearch); ok {
+			result, err := impl.SearchValueSet(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "ValueSet")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VerificationResult":
+		if impl, ok := w.Concrete.(VerificationResultSearch); ok {
+			result, err := impl.SearchVerificationResult(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "VerificationResult")},
+			Severity:    r5.Code{Value: ptr.To("fatal")},
+		}}}
+	case "VisionPrescription":
+		if impl, ok := w.Concrete.(VisionPrescriptionSearch); ok {
+			result, err := impl.SearchVisionPrescription(ctx, parameters, options)
+			if err != nil {
+				return search.Result[model.Resource]{}, err
+			}
+			genericResources := make([]model.Resource, len(result.Resources))
+			for i, r := range result.Resources {
+				genericResources[i] = r
+			}
+			return search.Result[model.Resource]{
+
+				Included:  result.Included,
+				Next:      result.Next,
+				Resources: genericResources,
+			}, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+			return gen.Search(ctx, resourceType, parameters, options)
+		}
+		return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+			Code:        r5.Code{Value: ptr.To("not-supported")},
+			Diagnostics: &r5.String{Value: ptr.To("search not implemented for " + "VisionPrescription")},
 			Severity:    r5.Code{Value: ptr.To("fatal")},
 		}}}
 	}
+	return search.Result[model.Resource]{}, r5.OperationOutcome{Issue: []r5.OperationOutcomeIssue{{
+		Code:        r5.Code{Value: ptr.To("processing")},
+		Diagnostics: &r5.String{Value: ptr.To("invalid resource type: " + resourceType)},
+		Severity:    r5.Code{Value: ptr.To("fatal")},
+	}}}
 }
 func (w Generic) Invoke(ctx context.Context, resourceType string, resourceID string, code string, parameters model.Parameters) (model.Resource, error) {
 	crp, okCrp := parameters.(r5.ContainedResource)

@@ -165,11 +165,7 @@ func (s *Server[R]) registerRoutes() {
 }
 
 func (s *Server[R]) genericBackend() (capabilities.GenericCapabilities, error) {
-	genericBackend, ok := s.Backend.(capabilities.GenericCapabilities)
-	if ok {
-		return genericBackend, nil
-	}
-	// Attempt to wrap a concrete backend for the current release R
+	// Always wrap - wrapper handles concrete vs generic precedence
 	return wrap.Generic[R](s.Backend)
 }
 

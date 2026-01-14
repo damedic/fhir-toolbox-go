@@ -92,24 +92,22 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 		Params(params...).
 		Params(returns...).
 		BlockFunc(func(g *Group) {
-			g.List(Id("g"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName))
-			g.If(Id("ok")).Block(
-				Comment("// shortcut for the case that the underlying implementation already implements the generic API"),
-				Return(Id("g."+interactionName).Params(shortcutParams...)),
-			)
-
 			g.Switch(switchType).BlockFunc(func(g *Group) {
 				switch interaction {
 				case "create":
 					for _, r := range resources {
 						g.Case(Qual(moduleName+"/model/gen/"+strings.ToLower(release), r.Name)).BlockFunc(func(g *Group) {
-							g.List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name + interactionName))
-							g.If(Op("!").Id("ok")).Block(Return(Nil(), notImplementedError(release, interaction, r.Name)))
-							g.Return(Id("impl." + interactionName + r.Name).Call(passParams...))
+							g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
+								Return(Id("impl." + interactionName + r.Name).Call(passParams...)),
+							)
+							// Fallback to generic implementation for this valid resource type
+							g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName)), Id("ok")).Block(
+								Return(Id("gen." + interactionName).Params(shortcutParams...)),
+							)
+							// Neither concrete nor generic implemented for this resource type
+							g.Return(Nil(), notImplementedErrorDynamic(release, interaction, Lit(r.Name)))
 						})
 					}
-
-					g.Default().Block(Return(Nil(), invalidResourceTypeError(release, Id("resource").Dot("ResourceType").Call())))
 				case "read":
 					for _, r := range resources {
 						g.Case(Lit(r.Name)).BlockFunc(func(g *Group) {
@@ -167,46 +165,56 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								)
 								g.Return(Nil(), notFoundError(release, r.Name, Id("id")))
 							} else {
-								g.List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name + interactionName))
-								g.If(Op("!").Id("ok")).Block(Return(Nil(), notImplementedError(release, interaction, r.Name)))
-								g.Return(Id("impl." + interactionName + r.Name).Call(passParams...))
+								g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
+									Return(Id("impl." + interactionName + r.Name).Call(passParams...)),
+								)
+								// Fallback to generic implementation for this valid resource type
+								g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName)), Id("ok")).Block(
+									Return(Id("gen." + interactionName).Params(shortcutParams...)),
+								)
+								// Neither concrete nor generic implemented for this resource type
+								g.Return(Nil(), notImplementedErrorDynamic(release, interaction, Lit(r.Name)))
 							}
 						})
 					}
-
-					g.Default().Block(Return(Nil(), invalidResourceTypeError(release, Id("resourceType"))))
 				case "update":
 					for _, r := range resources {
 						g.Case(Qual(moduleName+"/model/gen/"+strings.ToLower(release), r.Name)).BlockFunc(func(g *Group) {
-							g.List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name + interactionName))
-							g.If(Op("!").Id("ok")).Block(
-								Return(returnType.Clone().Block(), notImplementedError(release, interaction, r.Name)),
+							g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
+								List(Id("result"), Id("err")).Op(":=").Id("impl."+interactionName+r.Name).Call(passParams...),
+								If(Id("err").Op("!=").Nil()).Block(
+									Return(returnType.Clone().Block(), Id("err")),
+								),
+								Return(
+									returnType.Clone().Block(Dict{
+										Id("Resource"): Id("result").Dot("Resource"),
+										Id("Created"):  Id("result").Dot("Created"),
+									}),
+									Nil(),
+								),
 							)
-							g.List(Id("result"), Id("err")).Op(":=").Id("impl." + interactionName + r.Name).Call(passParams...)
-							g.If(Id("err").Op("!=").Nil()).Block(
-								Return(returnType.Clone().Block(), Id("err")),
+							// Fallback to generic implementation for this valid resource type
+							g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName)), Id("ok")).Block(
+								Return(Id("gen." + interactionName).Params(shortcutParams...)),
 							)
-							g.Return(
-								returnType.Clone().Block(Dict{
-									Id("Resource"): Id("result").Dot("Resource"),
-									Id("Created"):  Id("result").Dot("Created"),
-								}),
-								Nil(),
-							)
+							// Neither concrete nor generic implemented for this resource type
+							g.Return(returnType.Clone().Block(), notImplementedErrorDynamic(release, interaction, Lit(r.Name)))
 						})
 					}
-
-					g.Default().Block(Return(returnType.Clone().Block(), invalidResourceTypeError(release, Id("resource").Dot("ResourceType").Call())))
 				case "delete":
 					for _, r := range resources {
 						g.Case(Lit(r.Name)).BlockFunc(func(g *Group) {
-							g.List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name + interactionName))
-							g.If(Op("!").Id("ok")).Block(Return(notImplementedError(release, interaction, r.Name)))
-							g.Return(Id("impl." + interactionName + r.Name).Call(passParams...))
+							g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
+								Return(Id("impl." + interactionName + r.Name).Call(passParams...)),
+							)
+							// Fallback to generic implementation for this valid resource type
+							g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName)), Id("ok")).Block(
+								Return(Id("gen." + interactionName).Params(shortcutParams...)),
+							)
+							// Neither concrete nor generic implemented for this resource type
+							g.Return(notImplementedErrorDynamic(release, interaction, Lit(r.Name)))
 						})
 					}
-
-					g.Default().Block(Return(invalidResourceTypeError(release, Id("resourceType"))))
 				case "search":
 					for _, r := range resources {
 						g.Case(Lit(r.Name)).BlockFunc(func(g *Group) {
@@ -404,32 +412,47 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 									Id("Next"):      Id("nextCursor"),
 								}), Nil())
 							} else {
-								g.List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name + interactionName))
-								g.If(Op("!").Id("ok")).Block(Return(returnType.Clone().Block(), notImplementedError(release, interaction, r.Name)))
-								g.List(Id("result"), Id("err")).Op(":=").Id("impl." + interactionName + r.Name).Call(passParams...)
-								g.If(Id("err").Op("!=").Nil()).Block(Return(returnType.Clone().Block(), Id("err")))
+								g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
+									List(Id("result"), Id("err")).Op(":=").Id("impl."+interactionName+r.Name).Call(passParams...),
+									If(Id("err").Op("!=").Nil()).Block(Return(returnType.Clone().Block(), Id("err"))),
 
-								g.Id("genericResources").Op(":=").Make(Index().Qual(moduleName+"/model", "Resource"), Len(Id("result.Resources")))
-								g.For(List(Id("i"), Id("r")).Op(":=").Range().Id("result.Resources")).Block(
-									Id("genericResources").Index(Id("i")).Op("=").Id("r"),
+									Id("genericResources").Op(":=").Make(Index().Qual(moduleName+"/model", "Resource"), Len(Id("result.Resources"))),
+									For(List(Id("i"), Id("r")).Op(":=").Range().Id("result.Resources")).Block(
+										Id("genericResources").Index(Id("i")).Op("=").Id("r"),
+									),
+
+									Return(returnType.Clone().Block(Dict{
+										Id("Resources"): Id("genericResources"),
+										Id("Included"):  Id("result").Dot("Included"),
+										Id("Next"):      Id("result").Dot("Next"),
+									}), Nil()),
 								)
-
-								g.Return(returnType.Clone().Block(Dict{
-									Id("Resources"): Id("genericResources"),
-									Id("Included"):  Id("result").Dot("Included"),
-									Id("Next"):      Id("result").Dot("Next"),
-								}), Nil())
+								// Fallback to generic implementation for this valid resource type
+								g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "Generic"+interactionName)), Id("ok")).Block(
+									Return(Id("gen." + interactionName).Params(shortcutParams...)),
+								)
+								// Neither concrete nor generic implemented for this resource type
+								g.Return(returnType.Clone().Block(), notImplementedErrorDynamic(release, interaction, Lit(r.Name)))
 							}
 						})
 					}
-
-					g.Default().Block(Return(
-						returnType.Clone().Block(),
-						invalidResourceTypeError(release, Id("resourceType")),
-					))
 				}
 
 			})
+
+			// Resource type not recognized - invalid FHIR resource type
+			switch interaction {
+			case "create":
+				g.Return(Nil(), invalidResourceTypeError(release, Id("resource").Dot("ResourceType").Call()))
+			case "read":
+				g.Return(Nil(), invalidResourceTypeError(release, Id("resourceType")))
+			case "update":
+				g.Return(returnType.Clone().Block(), invalidResourceTypeError(release, Id("resource").Dot("ResourceType").Call()))
+			case "delete":
+				g.Return(invalidResourceTypeError(release, Id("resourceType")))
+			case "search":
+				g.Return(returnType.Clone().Block(), invalidResourceTypeError(release, Id("resourceType")))
+			}
 		})
 }
 
@@ -1145,6 +1168,25 @@ func notFoundError(release, resourceType string, id *Statement) Code {
 				}),
 				Id("Diagnostics"): Op("&").Qual(moduleName+"/model/gen/"+r, "String").Values(Dict{
 					Id("Value"): Qual(moduleName+"/utils/ptr", "To").Call(Lit(resourceType + " with ID ").Op("+").Add(id).Op("+").Lit(" not found")),
+				}),
+			}),
+		),
+	})
+}
+
+func notImplementedErrorDynamic(release, interaction string, resourceType Code) Code {
+	r := strings.ToLower(release)
+	return Qual(moduleName+"/model/gen/"+r, "OperationOutcome").Values(Dict{
+		Id("Issue"): Index().Qual(moduleName+"/model/gen/"+r, "OperationOutcomeIssue").Values(
+			Values(Dict{
+				Id("Severity"): Qual(moduleName+"/model/gen/"+r, "Code").Values(Dict{
+					Id("Value"): Qual(moduleName+"/utils/ptr", "To").Call(Lit("fatal")),
+				}),
+				Id("Code"): Qual(moduleName+"/model/gen/"+r, "Code").Values(Dict{
+					Id("Value"): Qual(moduleName+"/utils/ptr", "To").Call(Lit("not-supported")),
+				}),
+				Id("Diagnostics"): Op("&").Qual(moduleName+"/model/gen/"+r, "String").Values(Dict{
+					Id("Value"): Qual(moduleName+"/utils/ptr", "To").Call(Lit(interaction + " not implemented for ").Op("+").Add(resourceType)),
 				}),
 			}),
 		),
