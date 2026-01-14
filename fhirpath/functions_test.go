@@ -1708,3 +1708,81 @@ func TestConvertsToLongFunction(t *testing.T) {
 		})
 	}
 }
+
+func TestIIFWithThisContext(t *testing.T) {
+	fn := defaultFunctions["iif"]
+
+	testCases := []struct {
+		name            string
+		target          Collection
+		params          []Expression
+		expected        Collection
+		expectedOrdered bool
+	}{
+		{
+			name:            "iif with $this in criterion (boolean result)",
+			target:          Collection{Boolean(true)},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("'false'")},
+			expected:        Collection{String("true")},
+			expectedOrdered: true,
+		},
+		{
+			name:            "iif with $this in criterion (false)",
+			target:          Collection{Boolean(false)},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("'false'")},
+			expected:        Collection{String("false")},
+			expectedOrdered: true,
+		},
+		{
+			name:            "iif with $this in true-result branch",
+			target:          Collection{Boolean(true)},
+			params:          []Expression{MustParse("$this"), MustParse("$this.not()"), MustParse("'otherwise'")},
+			expected:        Collection{Boolean(false)},
+			expectedOrdered: true,
+		},
+		{
+			name:            "iif with $this in otherwise-result branch",
+			target:          Collection{Boolean(false)},
+			params:          []Expression{MustParse("$this"), MustParse("'true'"), MustParse("$this.not()")},
+			expected:        Collection{Boolean(true)},
+			expectedOrdered: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			ctx = withEvaluationInstant(ctx)
+			result, ordered, err := fn(ctx, nil, tc.target, true, tc.params, func(ctx context.Context, target Collection, expr Expression, fnScope ...FunctionScope) (Collection, bool, error) {
+				// Set up function scope if provided
+				if len(fnScope) > 0 {
+					scope := functionScope{
+						index: fnScope[0].index,
+					}
+					if len(target) == 1 {
+						scope.this = target[0]
+					}
+					ctx = withFunctionScope(ctx, scope)
+				}
+				// Determine evaluation target
+				evalTarget := target
+				if len(evalTarget) == 0 {
+					if scope, err := getFunctionScope(ctx); err == nil && scope.this != nil {
+						evalTarget = Collection{scope.this}
+					}
+				}
+				return evalExpression(ctx, nil, evalTarget, true, expr.tree, false)
+			})
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if !reflect.DeepEqual(result, tc.expected) {
+				t.Errorf("expected %v, got %v", tc.expected, result)
+			}
+			if ordered != tc.expectedOrdered {
+				t.Errorf("expected ordered=%v, got %v", tc.expectedOrdered, ordered)
+			}
+		})
+	}
+}

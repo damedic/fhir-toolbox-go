@@ -4120,21 +4120,19 @@ var defaultFunctions = Functions{
 			return nil, false, fmt.Errorf("iif() requires an input collection with 0 or 1 items, got %d items", len(target))
 		}
 
-		// Determine the evaluation target for $this context
-		// If target has one item, use it; otherwise use nil
-		var evalTarget Collection
+		// Determine the evaluation target and scope for $this context
+		// Always set these, even for empty collections, to ensure proper scope resolution
+		evalTarget := target
 		var fnScope []FunctionScope
-		if len(target) == 1 {
-			evalTarget = Collection{target[0]}
-			// Preserve the parent function scope's index if it exists
-			parentScope, err := getFunctionScope(ctx)
-			if err == nil {
-				// Use parent scope's index
-				fnScope = []FunctionScope{{index: parentScope.index, total: target}}
-			} else {
-				// No parent scope, set index to 0
-				fnScope = []FunctionScope{{index: 0, total: target}}
-			}
+
+		// Preserve the parent function scope's index if it exists
+		parentScope, err := getFunctionScope(ctx)
+		if err == nil {
+			// Use parent scope's index
+			fnScope = []FunctionScope{{index: parentScope.index, total: target}}
+		} else {
+			// No parent scope, set index to 0
+			fnScope = []FunctionScope{{index: 0, total: target}}
 		}
 
 		// Evaluate the criterion expression with $this context
