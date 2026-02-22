@@ -2,7 +2,7 @@ module github.com/damedic/fhir-toolbox-go
 
 go 1.24.0
 
-toolchain go1.25.5
+toolchain go1.26.0
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1
