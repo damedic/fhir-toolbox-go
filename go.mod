@@ -1,6 +1,4 @@
-module github.com/DAMEDIC/fhir-toolbox-go
-
-retract [v0.0.0-0, v0.0.1]  // retract uppercased version
+module github.com/damedic/fhir-toolbox-go
 
 go 1.24.0
 
