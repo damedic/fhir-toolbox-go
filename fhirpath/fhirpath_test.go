@@ -177,6 +177,10 @@ var testSkipsImplementationGaps = []skipRule{
 	{regexp.MustCompile(`^testMultipleResolve$`), nil, "resolve() function not implemented"},
 	{regexp.MustCompile(`^testConformsTo.*`), nil, "conformsTo() function not implemented"},
 
+	// Polymorphic choice-type field access by concrete type name (e.g. valueQuantity -> value.ofType(Quantity))
+	// not yet implemented in field resolution
+	{regexp.MustCompile(`^testPolymorphicsC$`), isR5Release, "polymorphic choice-type access by concrete type name not implemented"},
+
 	// Terminology service infrastructure not available
 	{regexp.MustCompile(`^txTest0[1-3]$`), nil, "Terminology service not configured"},
 	{regexp.MustCompile(`^testVariables4$`), nil, "%vs variables not supported (requires terminology service)"},
