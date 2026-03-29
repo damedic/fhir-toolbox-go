@@ -2,11 +2,11 @@ module github.com/damedic/fhir-toolbox-go
 
 go 1.24.0
 
-toolchain go1.26.0
+toolchain go1.26.1
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1
-	github.com/cockroachdb/apd/v3 v3.2.1
+	github.com/cockroachdb/apd/v3 v3.2.3
 	github.com/dave/jennifer v1.7.1
 	github.com/google/go-cmp v0.7.0
 	github.com/iancoleman/strcase v0.3.0
