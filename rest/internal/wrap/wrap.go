@@ -22,6 +22,9 @@ func disabledErr[R model.Release]() error {
 }
 
 func Generic[R model.Release](api any) (capabilities.GenericCapabilities, error) {
+	if g, ok := api.(capabilities.GenericCapabilities); ok {
+		return g, nil
+	}
 	var r R
 	switch any(r).(type) {
 	case model.R4:

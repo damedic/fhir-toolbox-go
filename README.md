@@ -190,8 +190,8 @@ Wrapper structs facilitate interoperability between the generic and the concrete
 genericAPI := capabilitiesR4.Generic{Concrete: concreteAPI}
 ```
 
-This adapts an implementation of the concrete interfaces so it can be served through the generic REST layer without additional glue code.
-To host a concrete implementation using the REST layer, you do **not** have to call this sexplicitly.
+This adapts an implementation of the concrete interfaces so it exposes the generic API.
+To host a concrete implementation using the REST layer, you do **not** have to call this explicitly.
 The REST handler wraps concrete implementations for you!
 
 and vice versa:
