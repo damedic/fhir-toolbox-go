@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.4
+
+### Bug Fixes
+- Fix SearchParameter and OperationDefinition resolution failing silently for generic backends
+
 ## v0.0.3
 
 ### Bug Fixes

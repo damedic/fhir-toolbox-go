@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	capabilitiesR4 "github.com/damedic/fhir-toolbox-go/capabilities/gen/r4"
 	"github.com/damedic/fhir-toolbox-go/capabilities/search"
 	"github.com/damedic/fhir-toolbox-go/model"
 
@@ -994,4 +995,59 @@ func TestSearchParameterPaginationDeterministicOrdering(t *testing.T) {
 	}
 
 	t.Logf("All %d runs produced identical responses, confirming deterministic ordering", numRuns)
+}
+
+// genericWrapper wraps a concrete backend as a GenericCapabilities backend,
+// similar to how the facade's IKWrapper operates: it embeds a
+// capabilitiesR4.Generic (which provides CapabilityStatement, Read, Search)
+// and adds custom Search logic.
+type genericWrapper struct {
+	capabilitiesR4.Generic
+}
+
+func (g genericWrapper) Search(ctx context.Context, resourceType string, params search.Parameters, options search.Options) (search.Result[model.Resource], error) {
+	// Delegate to inner generic, potentially adding extra parameters (like IKWrapper adds ik).
+	return g.Generic.Search(ctx, resourceType, params, options)
+}
+
+// TestSearchParameterResolutionWithGenericWrapper verifies that SearchParameter
+// resolution works when the Server.Backend is a generic wrapper (implementing
+// GenericCapabilities) around a concrete backend. The wrapper does NOT implement
+// any SearchCapabilities* interfaces — those live on the inner concrete backend.
+// The REST server double-wraps: wrap.Generic detects GenericCapabilities on the
+// wrapper and wraps it in another Generic. The outer Generic must still be able
+// to resolve SearchParameters defined by the inner concrete backend.
+func TestSearchParameterResolutionWithGenericWrapper(t *testing.T) {
+	inner := mockBackendWithoutSearchParameterSearch{}
+	wrapper := genericWrapper{Generic: capabilitiesR4.Generic{Concrete: inner}}
+
+	server := &rest.Server[model.R4]{
+		Backend:                wrapper,
+		StrictSearchParameters: true,
+	}
+
+	// A strict search for Patient?_id=test123 must succeed: the _id parameter
+	// is declared in the inner backend's SearchCapabilitiesPatient, and the
+	// SearchParameter must be resolvable through the wrapper chain.
+	req := httptest.NewRequest("GET", "http://example.com/Patient?_id=test123", nil)
+	req.Header.Set("Accept", "application/fhir+json")
+
+	rr := httptest.NewRecorder()
+	server.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("Expected status 200, got %d. Body: %s", rr.Code, rr.Body.String())
+	}
+
+	body := rr.Body.String()
+	if !strings.Contains(body, `"resourceType":"Bundle"`) {
+		t.Error("Expected response to be a Bundle")
+	}
+	if !strings.Contains(body, `"type":"searchset"`) {
+		t.Error("Expected Bundle type to be searchset")
+	}
+	// The self link must contain the _id parameter, proving it was parsed.
+	if !strings.Contains(body, `_id=test123`) {
+		t.Errorf("Expected self link to contain _id=test123, got: %s", body)
+	}
 }

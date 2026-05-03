@@ -205,7 +205,8 @@ This wraps a generic implementation and exposes the strongly typed concrete inte
 #### Concrete overrides on generic backends
 
 You can add concrete methods to a generic backend to override behavior for specific resource types.
-Concrete methods always take precedence over the generic fallback.
+The wrapper follows a strict precedence: concrete methods first, then generic fallback.
+This applies to all interactions (create, read, update, delete, search).
 
 ```go
 type myBackend struct {
@@ -229,10 +230,21 @@ func (b *myBackend) ReadPatient(ctx context.Context, id string) (r4.Patient, err
     }
     return resource.(r4.Patient), nil
 }
+
+// Optional: add custom search parameters for Patient
+func (b *myBackend) SearchCapabilitiesPatient(ctx context.Context) (r4.SearchCapabilities, error) {
+    return r4.SearchCapabilities{
+        Parameters: map[string]r4.SearchParameter{
+            "custom-param": {Type: r4.SearchParamTypeToken},
+        },
+    }, nil
+}
 ```
 
-When served through the REST layer, `ReadPatient` handles all `GET /Patient/{id}` requests while other resource reads fall through to the generic `Read` method.
-The CapabilityStatement is automatically augmented to reflect concrete overrides.
+When served through the REST layer:
+- `ReadPatient` handles all `GET /Patient/{id}` requests; other resource reads fall through to the generic `Read`.
+- The CapabilityStatement from the generic backend is used as the base and automatically augmented with detected concrete overrides (interactions, search parameters, operations).
+- SearchParameter and OperationDefinition resolution first checks locally-defined concrete capabilities, then falls back to the generic backend if nothing is found locally.
 
 ### Operations
 

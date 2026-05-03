@@ -178,6 +178,11 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 									Return(Id("searchParam"), Nil()),
 								)
 
+								// Fallback to generic Read (e.g. when Concrete is a generic backend)
+								g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericRead")), Id("ok")).Block(
+									Return(Id("gen.Read").Params(Id("ctx"), Lit(r.Name), Id("id"))),
+								)
+
 								g.Return(Nil(), notFoundError(release, r.Name, Id("id")))
 							} else if r.Name == "OperationDefinition" {
 								// Special handling for OperationDefinition - fallback to generated definitions with canonical url
@@ -202,6 +207,12 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								g.If(List(Id("od"), Id("exists")).Op(":=").Id("defs").Index(Id("id")), Id("exists")).Block(
 									Return(Id("od"), Nil()),
 								)
+
+								// Fallback to generic Read (e.g. when Concrete is a generic backend)
+								g.If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericRead")), Id("ok")).Block(
+									Return(Id("gen.Read").Params(Id("ctx"), Lit(r.Name), Id("id"))),
+								)
+
 								g.Return(Nil(), notFoundError(release, r.Name, Id("id")))
 							} else {
 								g.If(List(Id("impl"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Id(r.Name+interactionName)), Id("ok")).Block(
@@ -354,6 +365,13 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 									),
 								)
 
+								// If gathering found nothing and backend supports generic search, delegate
+								g.If(Len(Id("allResources")).Op("==").Lit(0)).Block(
+									If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericSearch")), Id("ok")).Block(
+										Return(Id("gen.Search").Params(shortcutParams...)),
+									),
+								)
+
 								g.Return(returnType.Clone().Block(Dict{
 									Id("Resources"): Id("resources"),
 									Id("Included"):  Index().Qual(moduleName+"/model", "Resource").Values(),
@@ -445,6 +463,13 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 										Id("nextCursor").Op("=").Qual(moduleName+"/capabilities/search", "Cursor").Call(Qual("strconv", "Itoa").Call(Id("nextOffset"))),
 									)),
 								)
+								// If gathering found nothing and backend supports generic search, delegate
+								g.If(Len(Id("allResources")).Op("==").Lit(0)).Block(
+									If(List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericSearch")), Id("ok")).Block(
+										Return(Id("gen.Search").Params(shortcutParams...)),
+									),
+								)
+
 								g.Return(returnType.Clone().Block(Dict{
 									Id("Resources"): Id("resources"),
 									Id("Included"):  Index().Qual(moduleName+"/model", "Resource").Values(),

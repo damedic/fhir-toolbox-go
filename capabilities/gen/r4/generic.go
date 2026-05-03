@@ -14383,6 +14383,9 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 		if od, exists := defs[id]; exists {
 			return od, nil
 		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, "OperationDefinition", id)
+		}
 		return nil, r4.OperationOutcome{Issue: []r4.OperationOutcomeIssue{{
 			Code:        r4.Code{Value: ptr.To("not-found")},
 			Diagnostics: &r4.String{Value: ptr.To("OperationDefinition with ID " + id + " not found")},
@@ -14698,6 +14701,9 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 		searchParam, exists := searchParameters[id]
 		if exists {
 			return searchParam, nil
+		}
+		if gen, ok := w.Concrete.(capabilities.GenericRead); ok {
+			return gen.Read(ctx, "SearchParameter", id)
 		}
 		return nil, r4.OperationOutcome{Issue: []r4.OperationOutcomeIssue{{
 			Code:        r4.Code{Value: ptr.To("not-found")},
@@ -22182,6 +22188,11 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 				nextCursor = search.Cursor(strconv.Itoa(nextOffset))
 			}
 		}
+		if len(allResources) == 0 {
+			if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+				return gen.Search(ctx, resourceType, parameters, options)
+			}
+		}
 		return search.Result[model.Resource]{
 
 			Included:  []model.Resource{},
@@ -22867,6 +22878,11 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 			nextOffset := offset + opts.Count
 			if nextOffset < len(allResources) {
 				nextCursor = search.Cursor(strconv.Itoa(nextOffset))
+			}
+		}
+		if len(allResources) == 0 {
+			if gen, ok := w.Concrete.(capabilities.GenericSearch); ok {
+				return gen.Search(ctx, resourceType, parameters, options)
 			}
 		}
 		return search.Result[model.Resource]{
