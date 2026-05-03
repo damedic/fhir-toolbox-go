@@ -13,51 +13,51 @@ import search "github.com/damedic/fhir-toolbox-go/capabilities/search"
 // AccountParams contains typed search parameters for Account resources.
 type AccountParams struct {
 	// Account-specific search parameters
-	Guarantor      search.ReferenceOrString `json:"guarantor,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Name           search.StringOrString    `json:"name,omitempty"`
-	Owner          search.ReferenceOrString `json:"owner,omitempty"`
-	Patient        search.ReferenceOrString `json:"patient,omitempty"`
-	Period         search.DateOrString      `json:"period,omitempty"`
-	Relatedaccount search.ReferenceOrString `json:"relatedaccount,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
-	Subject        search.ReferenceOrString `json:"subject,omitempty"`
-	Type           search.TokenOrString     `json:"type,omitempty"`
+	Guarantor      search.Criteria[search.Reference] `json:"guarantor,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name           search.Criteria[search.String]    `json:"name,omitempty"`
+	Owner          search.Criteria[search.Reference] `json:"owner,omitempty"`
+	Patient        search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Period         search.Criteria[search.Date]      `json:"period,omitempty"`
+	Relatedaccount search.Criteria[search.Reference] `json:"relatedaccount,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject        search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type           search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AccountParams.
-func (p AccountParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AccountParams.
+func (p AccountParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Guarantor != nil {
-		m[search.ParameterKey{Name: "guarantor"}] = p.Guarantor.MatchesAll()
+		m["guarantor"] = p.Guarantor.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Owner != nil {
-		m[search.ParameterKey{Name: "owner"}] = p.Owner.MatchesAll()
+		m["owner"] = p.Owner.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Relatedaccount != nil {
-		m[search.ParameterKey{Name: "relatedaccount"}] = p.Relatedaccount.MatchesAll()
+		m["relatedaccount"] = p.Relatedaccount.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -66,103 +66,103 @@ func (p AccountParams) Map() map[search.ParameterKey]search.MatchAll {
 // ActivityDefinitionParams contains typed search parameters for ActivityDefinition resources.
 type ActivityDefinitionParams struct {
 	// ActivityDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ActivityDefinitionParams.
-func (p ActivityDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ActivityDefinitionParams.
+func (p ActivityDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Kind != nil {
-		m[search.ParameterKey{Name: "kind"}] = p.Kind.MatchesAll()
+		m["kind"] = p.Kind.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -171,71 +171,71 @@ func (p ActivityDefinitionParams) Map() map[search.ParameterKey]search.MatchAll 
 // ActorDefinitionParams contains typed search parameters for ActorDefinition resources.
 type ActorDefinitionParams struct {
 	// ActorDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ActorDefinitionParams.
-func (p ActorDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ActorDefinitionParams.
+func (p ActorDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -244,47 +244,47 @@ func (p ActorDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // AdministrableProductDefinitionParams contains typed search parameters for AdministrableProductDefinition resources.
 type AdministrableProductDefinitionParams struct {
 	// AdministrableProductDefinition-specific search parameters
-	Device           search.ReferenceOrString `json:"device,omitempty"`
-	DoseForm         search.TokenOrString     `json:"dose-form,omitempty"`
-	FormOf           search.ReferenceOrString `json:"form-of,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	Ingredient       search.TokenOrString     `json:"ingredient,omitempty"`
-	ManufacturedItem search.ReferenceOrString `json:"manufactured-item,omitempty"`
-	Route            search.TokenOrString     `json:"route,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
-	TargetSpecies    search.TokenOrString     `json:"target-species,omitempty"`
+	Device           search.Criteria[search.Reference] `json:"device,omitempty"`
+	DoseForm         search.Criteria[search.Token]     `json:"dose-form,omitempty"`
+	FormOf           search.Criteria[search.Reference] `json:"form-of,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Ingredient       search.Criteria[search.Token]     `json:"ingredient,omitempty"`
+	ManufacturedItem search.Criteria[search.Reference] `json:"manufactured-item,omitempty"`
+	Route            search.Criteria[search.Token]     `json:"route,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
+	TargetSpecies    search.Criteria[search.Token]     `json:"target-species,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AdministrableProductDefinitionParams.
-func (p AdministrableProductDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AdministrableProductDefinitionParams.
+func (p AdministrableProductDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.DoseForm != nil {
-		m[search.ParameterKey{Name: "dose-form"}] = p.DoseForm.MatchesAll()
+		m["dose-form"] = p.DoseForm.ToAndGroup()
 	}
 	if p.FormOf != nil {
-		m[search.ParameterKey{Name: "form-of"}] = p.FormOf.MatchesAll()
+		m["form-of"] = p.FormOf.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Ingredient != nil {
-		m[search.ParameterKey{Name: "ingredient"}] = p.Ingredient.MatchesAll()
+		m["ingredient"] = p.Ingredient.ToAndGroup()
 	}
 	if p.ManufacturedItem != nil {
-		m[search.ParameterKey{Name: "manufactured-item"}] = p.ManufacturedItem.MatchesAll()
+		m["manufactured-item"] = p.ManufacturedItem.ToAndGroup()
 	}
 	if p.Route != nil {
-		m[search.ParameterKey{Name: "route"}] = p.Route.MatchesAll()
+		m["route"] = p.Route.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.TargetSpecies != nil {
-		m[search.ParameterKey{Name: "target-species"}] = p.TargetSpecies.MatchesAll()
+		m["target-species"] = p.TargetSpecies.ToAndGroup()
 	}
 
 	return m
@@ -293,67 +293,67 @@ func (p AdministrableProductDefinitionParams) Map() map[search.ParameterKey]sear
 // AdverseEventParams contains typed search parameters for AdverseEvent resources.
 type AdverseEventParams struct {
 	// AdverseEvent-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Actuality       search.TokenOrString     `json:"actuality,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Code            search.TokenOrString     `json:"code,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	Recorder        search.ReferenceOrString `json:"recorder,omitempty"`
-	Resultingeffect search.ReferenceOrString `json:"resultingeffect,omitempty"`
-	Seriousness     search.TokenOrString     `json:"seriousness,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Study           search.ReferenceOrString `json:"study,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Substance       search.ReferenceOrString `json:"substance,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Actuality       search.Criteria[search.Token]     `json:"actuality,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Code            search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	Recorder        search.Criteria[search.Reference] `json:"recorder,omitempty"`
+	Resultingeffect search.Criteria[search.Reference] `json:"resultingeffect,omitempty"`
+	Seriousness     search.Criteria[search.Token]     `json:"seriousness,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Study           search.Criteria[search.Reference] `json:"study,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Substance       search.Criteria[search.Reference] `json:"substance,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AdverseEventParams.
-func (p AdverseEventParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AdverseEventParams.
+func (p AdverseEventParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Actuality != nil {
-		m[search.ParameterKey{Name: "actuality"}] = p.Actuality.MatchesAll()
+		m["actuality"] = p.Actuality.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Recorder != nil {
-		m[search.ParameterKey{Name: "recorder"}] = p.Recorder.MatchesAll()
+		m["recorder"] = p.Recorder.ToAndGroup()
 	}
 	if p.Resultingeffect != nil {
-		m[search.ParameterKey{Name: "resultingeffect"}] = p.Resultingeffect.MatchesAll()
+		m["resultingeffect"] = p.Resultingeffect.ToAndGroup()
 	}
 	if p.Seriousness != nil {
-		m[search.ParameterKey{Name: "seriousness"}] = p.Seriousness.MatchesAll()
+		m["seriousness"] = p.Seriousness.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Study != nil {
-		m[search.ParameterKey{Name: "study"}] = p.Study.MatchesAll()
+		m["study"] = p.Study.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Substance != nil {
-		m[search.ParameterKey{Name: "substance"}] = p.Substance.MatchesAll()
+		m["substance"] = p.Substance.ToAndGroup()
 	}
 
 	return m
@@ -362,71 +362,71 @@ func (p AdverseEventParams) Map() map[search.ParameterKey]search.MatchAll {
 // AllergyIntoleranceParams contains typed search parameters for AllergyIntolerance resources.
 type AllergyIntoleranceParams struct {
 	// AllergyIntolerance-specific search parameters
-	Identifier             search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                search.ReferenceOrString `json:"patient,omitempty"`
-	Type                   search.TokenOrString     `json:"type,omitempty"`
-	Code                   search.TokenOrString     `json:"code,omitempty"`
-	Date                   search.DateOrString      `json:"date,omitempty"`
-	Category               search.TokenOrString     `json:"category,omitempty"`
-	ClinicalStatus         search.TokenOrString     `json:"clinical-status,omitempty"`
-	Criticality            search.TokenOrString     `json:"criticality,omitempty"`
-	LastDate               search.DateOrString      `json:"last-date,omitempty"`
-	ManifestationCode      search.TokenOrString     `json:"manifestation-code,omitempty"`
-	ManifestationReference search.ReferenceOrString `json:"manifestation-reference,omitempty"`
-	Participant            search.ReferenceOrString `json:"participant,omitempty"`
-	Route                  search.TokenOrString     `json:"route,omitempty"`
-	Severity               search.TokenOrString     `json:"severity,omitempty"`
-	VerificationStatus     search.TokenOrString     `json:"verification-status,omitempty"`
+	Identifier             search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type                   search.Criteria[search.Token]     `json:"type,omitempty"`
+	Code                   search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                   search.Criteria[search.Date]      `json:"date,omitempty"`
+	Category               search.Criteria[search.Token]     `json:"category,omitempty"`
+	ClinicalStatus         search.Criteria[search.Token]     `json:"clinical-status,omitempty"`
+	Criticality            search.Criteria[search.Token]     `json:"criticality,omitempty"`
+	LastDate               search.Criteria[search.Date]      `json:"last-date,omitempty"`
+	ManifestationCode      search.Criteria[search.Token]     `json:"manifestation-code,omitempty"`
+	ManifestationReference search.Criteria[search.Reference] `json:"manifestation-reference,omitempty"`
+	Participant            search.Criteria[search.Reference] `json:"participant,omitempty"`
+	Route                  search.Criteria[search.Token]     `json:"route,omitempty"`
+	Severity               search.Criteria[search.Token]     `json:"severity,omitempty"`
+	VerificationStatus     search.Criteria[search.Token]     `json:"verification-status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AllergyIntoleranceParams.
-func (p AllergyIntoleranceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AllergyIntoleranceParams.
+func (p AllergyIntoleranceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.ClinicalStatus != nil {
-		m[search.ParameterKey{Name: "clinical-status"}] = p.ClinicalStatus.MatchesAll()
+		m["clinical-status"] = p.ClinicalStatus.ToAndGroup()
 	}
 	if p.Criticality != nil {
-		m[search.ParameterKey{Name: "criticality"}] = p.Criticality.MatchesAll()
+		m["criticality"] = p.Criticality.ToAndGroup()
 	}
 	if p.LastDate != nil {
-		m[search.ParameterKey{Name: "last-date"}] = p.LastDate.MatchesAll()
+		m["last-date"] = p.LastDate.ToAndGroup()
 	}
 	if p.ManifestationCode != nil {
-		m[search.ParameterKey{Name: "manifestation-code"}] = p.ManifestationCode.MatchesAll()
+		m["manifestation-code"] = p.ManifestationCode.ToAndGroup()
 	}
 	if p.ManifestationReference != nil {
-		m[search.ParameterKey{Name: "manifestation-reference"}] = p.ManifestationReference.MatchesAll()
+		m["manifestation-reference"] = p.ManifestationReference.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.Route != nil {
-		m[search.ParameterKey{Name: "route"}] = p.Route.MatchesAll()
+		m["route"] = p.Route.ToAndGroup()
 	}
 	if p.Severity != nil {
-		m[search.ParameterKey{Name: "severity"}] = p.Severity.MatchesAll()
+		m["severity"] = p.Severity.ToAndGroup()
 	}
 	if p.VerificationStatus != nil {
-		m[search.ParameterKey{Name: "verification-status"}] = p.VerificationStatus.MatchesAll()
+		m["verification-status"] = p.VerificationStatus.ToAndGroup()
 	}
 
 	return m
@@ -435,95 +435,95 @@ func (p AllergyIntoleranceParams) Map() map[search.ParameterKey]search.MatchAll 
 // AppointmentParams contains typed search parameters for Appointment resources.
 type AppointmentParams struct {
 	// Appointment-specific search parameters
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Patient              search.ReferenceOrString `json:"patient,omitempty"`
-	Date                 search.DateOrString      `json:"date,omitempty"`
-	Actor                search.ReferenceOrString `json:"actor,omitempty"`
-	AppointmentType      search.TokenOrString     `json:"appointment-type,omitempty"`
-	BasedOn              search.ReferenceOrString `json:"based-on,omitempty"`
-	Group                search.ReferenceOrString `json:"group,omitempty"`
-	Location             search.ReferenceOrString `json:"location,omitempty"`
-	PartStatus           search.TokenOrString     `json:"part-status,omitempty"`
-	Practitioner         search.ReferenceOrString `json:"practitioner,omitempty"`
-	ReasonCode           search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference      search.ReferenceOrString `json:"reason-reference,omitempty"`
-	RequestedPeriod      search.DateOrString      `json:"requested-period,omitempty"`
-	ServiceCategory      search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType          search.TokenOrString     `json:"service-type,omitempty"`
-	ServiceTypeReference search.ReferenceOrString `json:"service-type-reference,omitempty"`
-	Slot                 search.ReferenceOrString `json:"slot,omitempty"`
-	Specialty            search.TokenOrString     `json:"specialty,omitempty"`
-	Status               search.TokenOrString     `json:"status,omitempty"`
-	Subject              search.ReferenceOrString `json:"subject,omitempty"`
-	SupportingInfo       search.ReferenceOrString `json:"supporting-info,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient              search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date                 search.Criteria[search.Date]      `json:"date,omitempty"`
+	Actor                search.Criteria[search.Reference] `json:"actor,omitempty"`
+	AppointmentType      search.Criteria[search.Token]     `json:"appointment-type,omitempty"`
+	BasedOn              search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Group                search.Criteria[search.Reference] `json:"group,omitempty"`
+	Location             search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartStatus           search.Criteria[search.Token]     `json:"part-status,omitempty"`
+	Practitioner         search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	ReasonCode           search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference      search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	RequestedPeriod      search.Criteria[search.Date]      `json:"requested-period,omitempty"`
+	ServiceCategory      search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType          search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	ServiceTypeReference search.Criteria[search.Reference] `json:"service-type-reference,omitempty"`
+	Slot                 search.Criteria[search.Reference] `json:"slot,omitempty"`
+	Specialty            search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Status               search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject              search.Criteria[search.Reference] `json:"subject,omitempty"`
+	SupportingInfo       search.Criteria[search.Reference] `json:"supporting-info,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AppointmentParams.
-func (p AppointmentParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AppointmentParams.
+func (p AppointmentParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.AppointmentType != nil {
-		m[search.ParameterKey{Name: "appointment-type"}] = p.AppointmentType.MatchesAll()
+		m["appointment-type"] = p.AppointmentType.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Group != nil {
-		m[search.ParameterKey{Name: "group"}] = p.Group.MatchesAll()
+		m["group"] = p.Group.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.PartStatus != nil {
-		m[search.ParameterKey{Name: "part-status"}] = p.PartStatus.MatchesAll()
+		m["part-status"] = p.PartStatus.ToAndGroup()
 	}
 	if p.Practitioner != nil {
-		m[search.ParameterKey{Name: "practitioner"}] = p.Practitioner.MatchesAll()
+		m["practitioner"] = p.Practitioner.ToAndGroup()
 	}
 	if p.ReasonCode != nil {
-		m[search.ParameterKey{Name: "reason-code"}] = p.ReasonCode.MatchesAll()
+		m["reason-code"] = p.ReasonCode.ToAndGroup()
 	}
 	if p.ReasonReference != nil {
-		m[search.ParameterKey{Name: "reason-reference"}] = p.ReasonReference.MatchesAll()
+		m["reason-reference"] = p.ReasonReference.ToAndGroup()
 	}
 	if p.RequestedPeriod != nil {
-		m[search.ParameterKey{Name: "requested-period"}] = p.RequestedPeriod.MatchesAll()
+		m["requested-period"] = p.RequestedPeriod.ToAndGroup()
 	}
 	if p.ServiceCategory != nil {
-		m[search.ParameterKey{Name: "service-category"}] = p.ServiceCategory.MatchesAll()
+		m["service-category"] = p.ServiceCategory.ToAndGroup()
 	}
 	if p.ServiceType != nil {
-		m[search.ParameterKey{Name: "service-type"}] = p.ServiceType.MatchesAll()
+		m["service-type"] = p.ServiceType.ToAndGroup()
 	}
 	if p.ServiceTypeReference != nil {
-		m[search.ParameterKey{Name: "service-type-reference"}] = p.ServiceTypeReference.MatchesAll()
+		m["service-type-reference"] = p.ServiceTypeReference.ToAndGroup()
 	}
 	if p.Slot != nil {
-		m[search.ParameterKey{Name: "slot"}] = p.Slot.MatchesAll()
+		m["slot"] = p.Slot.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.SupportingInfo != nil {
-		m[search.ParameterKey{Name: "supporting-info"}] = p.SupportingInfo.MatchesAll()
+		m["supporting-info"] = p.SupportingInfo.ToAndGroup()
 	}
 
 	return m
@@ -532,43 +532,43 @@ func (p AppointmentParams) Map() map[search.ParameterKey]search.MatchAll {
 // AppointmentResponseParams contains typed search parameters for AppointmentResponse resources.
 type AppointmentResponseParams struct {
 	// AppointmentResponse-specific search parameters
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Actor        search.ReferenceOrString `json:"actor,omitempty"`
-	Appointment  search.ReferenceOrString `json:"appointment,omitempty"`
-	Group        search.ReferenceOrString `json:"group,omitempty"`
-	Location     search.ReferenceOrString `json:"location,omitempty"`
-	PartStatus   search.TokenOrString     `json:"part-status,omitempty"`
-	Practitioner search.ReferenceOrString `json:"practitioner,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Actor        search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Appointment  search.Criteria[search.Reference] `json:"appointment,omitempty"`
+	Group        search.Criteria[search.Reference] `json:"group,omitempty"`
+	Location     search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartStatus   search.Criteria[search.Token]     `json:"part-status,omitempty"`
+	Practitioner search.Criteria[search.Reference] `json:"practitioner,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AppointmentResponseParams.
-func (p AppointmentResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AppointmentResponseParams.
+func (p AppointmentResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.Appointment != nil {
-		m[search.ParameterKey{Name: "appointment"}] = p.Appointment.MatchesAll()
+		m["appointment"] = p.Appointment.ToAndGroup()
 	}
 	if p.Group != nil {
-		m[search.ParameterKey{Name: "group"}] = p.Group.MatchesAll()
+		m["group"] = p.Group.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.PartStatus != nil {
-		m[search.ParameterKey{Name: "part-status"}] = p.PartStatus.MatchesAll()
+		m["part-status"] = p.PartStatus.ToAndGroup()
 	}
 	if p.Practitioner != nil {
-		m[search.ParameterKey{Name: "practitioner"}] = p.Practitioner.MatchesAll()
+		m["practitioner"] = p.Practitioner.ToAndGroup()
 	}
 
 	return m
@@ -577,19 +577,19 @@ func (p AppointmentResponseParams) Map() map[search.ParameterKey]search.MatchAll
 // ArtifactAssessmentParams contains typed search parameters for ArtifactAssessment resources.
 type ArtifactAssessmentParams struct {
 	// ArtifactAssessment-specific search parameters
-	Date       search.DateOrString  `json:"date,omitempty"`
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
+	Date       search.Criteria[search.Date]  `json:"date,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ArtifactAssessmentParams.
-func (p ArtifactAssessmentParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ArtifactAssessmentParams.
+func (p ArtifactAssessmentParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 
 	return m
@@ -598,71 +598,71 @@ func (p ArtifactAssessmentParams) Map() map[search.ParameterKey]search.MatchAll 
 // AuditEventParams contains typed search parameters for AuditEvent resources.
 type AuditEventParams struct {
 	// AuditEvent-specific search parameters
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Action     search.TokenOrString     `json:"action,omitempty"`
-	Agent      search.ReferenceOrString `json:"agent,omitempty"`
-	AgentRole  search.TokenOrString     `json:"agent-role,omitempty"`
-	BasedOn    search.ReferenceOrString `json:"based-on,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Entity     search.ReferenceOrString `json:"entity,omitempty"`
-	EntityRole search.TokenOrString     `json:"entity-role,omitempty"`
-	Outcome    search.TokenOrString     `json:"outcome,omitempty"`
-	Policy     search.UriOrString       `json:"policy,omitempty"`
-	Purpose    search.TokenOrString     `json:"purpose,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Action     search.Criteria[search.Token]     `json:"action,omitempty"`
+	Agent      search.Criteria[search.Reference] `json:"agent,omitempty"`
+	AgentRole  search.Criteria[search.Token]     `json:"agent-role,omitempty"`
+	BasedOn    search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Entity     search.Criteria[search.Reference] `json:"entity,omitempty"`
+	EntityRole search.Criteria[search.Token]     `json:"entity-role,omitempty"`
+	Outcome    search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	Policy     search.Criteria[search.Uri]       `json:"policy,omitempty"`
+	Purpose    search.Criteria[search.Token]     `json:"purpose,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
 }
 
-// Map implements the search.Parameters interface for AuditEventParams.
-func (p AuditEventParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for AuditEventParams.
+func (p AuditEventParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Action != nil {
-		m[search.ParameterKey{Name: "action"}] = p.Action.MatchesAll()
+		m["action"] = p.Action.ToAndGroup()
 	}
 	if p.Agent != nil {
-		m[search.ParameterKey{Name: "agent"}] = p.Agent.MatchesAll()
+		m["agent"] = p.Agent.ToAndGroup()
 	}
 	if p.AgentRole != nil {
-		m[search.ParameterKey{Name: "agent-role"}] = p.AgentRole.MatchesAll()
+		m["agent-role"] = p.AgentRole.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Entity != nil {
-		m[search.ParameterKey{Name: "entity"}] = p.Entity.MatchesAll()
+		m["entity"] = p.Entity.ToAndGroup()
 	}
 	if p.EntityRole != nil {
-		m[search.ParameterKey{Name: "entity-role"}] = p.EntityRole.MatchesAll()
+		m["entity-role"] = p.EntityRole.ToAndGroup()
 	}
 	if p.Outcome != nil {
-		m[search.ParameterKey{Name: "outcome"}] = p.Outcome.MatchesAll()
+		m["outcome"] = p.Outcome.ToAndGroup()
 	}
 	if p.Policy != nil {
-		m[search.ParameterKey{Name: "policy"}] = p.Policy.MatchesAll()
+		m["policy"] = p.Policy.ToAndGroup()
 	}
 	if p.Purpose != nil {
-		m[search.ParameterKey{Name: "purpose"}] = p.Purpose.MatchesAll()
+		m["purpose"] = p.Purpose.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 
 	return m
@@ -671,35 +671,35 @@ func (p AuditEventParams) Map() map[search.ParameterKey]search.MatchAll {
 // BasicParams contains typed search parameters for Basic resources.
 type BasicParams struct {
 	// Basic-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Created    search.DateOrString      `json:"created,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Created    search.Criteria[search.Date]      `json:"created,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for BasicParams.
-func (p BasicParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BasicParams.
+func (p BasicParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -708,9 +708,9 @@ func (p BasicParams) Map() map[search.ParameterKey]search.MatchAll {
 // BinaryParams contains typed search parameters for Binary resources.
 type BinaryParams struct{}
 
-// Map implements the search.Parameters interface for BinaryParams.
-func (p BinaryParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BinaryParams.
+func (p BinaryParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -718,43 +718,43 @@ func (p BinaryParams) Map() map[search.ParameterKey]search.MatchAll {
 // BiologicallyDerivedProductParams contains typed search parameters for BiologicallyDerivedProduct resources.
 type BiologicallyDerivedProductParams struct {
 	// BiologicallyDerivedProduct-specific search parameters
-	BiologicalSourceEvent search.TokenOrString     `json:"biological-source-event,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Collector             search.ReferenceOrString `json:"collector,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	ProductCategory       search.TokenOrString     `json:"product-category,omitempty"`
-	ProductStatus         search.TokenOrString     `json:"product-status,omitempty"`
-	Request               search.ReferenceOrString `json:"request,omitempty"`
-	SerialNumber          search.TokenOrString     `json:"serial-number,omitempty"`
+	BiologicalSourceEvent search.Criteria[search.Token]     `json:"biological-source-event,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Collector             search.Criteria[search.Reference] `json:"collector,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ProductCategory       search.Criteria[search.Token]     `json:"product-category,omitempty"`
+	ProductStatus         search.Criteria[search.Token]     `json:"product-status,omitempty"`
+	Request               search.Criteria[search.Reference] `json:"request,omitempty"`
+	SerialNumber          search.Criteria[search.Token]     `json:"serial-number,omitempty"`
 }
 
-// Map implements the search.Parameters interface for BiologicallyDerivedProductParams.
-func (p BiologicallyDerivedProductParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BiologicallyDerivedProductParams.
+func (p BiologicallyDerivedProductParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.BiologicalSourceEvent != nil {
-		m[search.ParameterKey{Name: "biological-source-event"}] = p.BiologicalSourceEvent.MatchesAll()
+		m["biological-source-event"] = p.BiologicalSourceEvent.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Collector != nil {
-		m[search.ParameterKey{Name: "collector"}] = p.Collector.MatchesAll()
+		m["collector"] = p.Collector.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.ProductCategory != nil {
-		m[search.ParameterKey{Name: "product-category"}] = p.ProductCategory.MatchesAll()
+		m["product-category"] = p.ProductCategory.ToAndGroup()
 	}
 	if p.ProductStatus != nil {
-		m[search.ParameterKey{Name: "product-status"}] = p.ProductStatus.MatchesAll()
+		m["product-status"] = p.ProductStatus.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.SerialNumber != nil {
-		m[search.ParameterKey{Name: "serial-number"}] = p.SerialNumber.MatchesAll()
+		m["serial-number"] = p.SerialNumber.ToAndGroup()
 	}
 
 	return m
@@ -763,31 +763,31 @@ func (p BiologicallyDerivedProductParams) Map() map[search.ParameterKey]search.M
 // BiologicallyDerivedProductDispenseParams contains typed search parameters for BiologicallyDerivedProductDispense resources.
 type BiologicallyDerivedProductDispenseParams struct {
 	// BiologicallyDerivedProductDispense-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Performer  search.ReferenceOrString `json:"performer,omitempty"`
-	Product    search.ReferenceOrString `json:"product,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Performer  search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Product    search.Criteria[search.Reference] `json:"product,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for BiologicallyDerivedProductDispenseParams.
-func (p BiologicallyDerivedProductDispenseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BiologicallyDerivedProductDispenseParams.
+func (p BiologicallyDerivedProductDispenseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Product != nil {
-		m[search.ParameterKey{Name: "product"}] = p.Product.MatchesAll()
+		m["product"] = p.Product.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -796,31 +796,31 @@ func (p BiologicallyDerivedProductDispenseParams) Map() map[search.ParameterKey]
 // BodyStructureParams contains typed search parameters for BodyStructure resources.
 type BodyStructureParams struct {
 	// BodyStructure-specific search parameters
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Excluded_structure search.TokenOrString     `json:"excluded_structure,omitempty"`
-	Included_structure search.TokenOrString     `json:"included_structure,omitempty"`
-	Morphology         search.TokenOrString     `json:"morphology,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Excluded_structure search.Criteria[search.Token]     `json:"excluded_structure,omitempty"`
+	Included_structure search.Criteria[search.Token]     `json:"included_structure,omitempty"`
+	Morphology         search.Criteria[search.Token]     `json:"morphology,omitempty"`
 }
 
-// Map implements the search.Parameters interface for BodyStructureParams.
-func (p BodyStructureParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BodyStructureParams.
+func (p BodyStructureParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Excluded_structure != nil {
-		m[search.ParameterKey{Name: "excluded_structure"}] = p.Excluded_structure.MatchesAll()
+		m["excluded_structure"] = p.Excluded_structure.ToAndGroup()
 	}
 	if p.Included_structure != nil {
-		m[search.ParameterKey{Name: "included_structure"}] = p.Included_structure.MatchesAll()
+		m["included_structure"] = p.Included_structure.ToAndGroup()
 	}
 	if p.Morphology != nil {
-		m[search.ParameterKey{Name: "morphology"}] = p.Morphology.MatchesAll()
+		m["morphology"] = p.Morphology.ToAndGroup()
 	}
 
 	return m
@@ -829,31 +829,31 @@ func (p BodyStructureParams) Map() map[search.ParameterKey]search.MatchAll {
 // BundleParams contains typed search parameters for Bundle resources.
 type BundleParams struct {
 	// Bundle-specific search parameters
-	Composition search.ReferenceOrString `json:"composition,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Message     search.ReferenceOrString `json:"message,omitempty"`
-	Timestamp   search.DateOrString      `json:"timestamp,omitempty"`
-	Type        search.TokenOrString     `json:"type,omitempty"`
+	Composition search.Criteria[search.Reference] `json:"composition,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Message     search.Criteria[search.Reference] `json:"message,omitempty"`
+	Timestamp   search.Criteria[search.Date]      `json:"timestamp,omitempty"`
+	Type        search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for BundleParams.
-func (p BundleParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for BundleParams.
+func (p BundleParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Composition != nil {
-		m[search.ParameterKey{Name: "composition"}] = p.Composition.MatchesAll()
+		m["composition"] = p.Composition.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Message != nil {
-		m[search.ParameterKey{Name: "message"}] = p.Message.MatchesAll()
+		m["message"] = p.Message.ToAndGroup()
 	}
 	if p.Timestamp != nil {
-		m[search.ParameterKey{Name: "timestamp"}] = p.Timestamp.MatchesAll()
+		m["timestamp"] = p.Timestamp.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -862,107 +862,107 @@ func (p BundleParams) Map() map[search.ParameterKey]search.MatchAll {
 // CapabilityStatementParams contains typed search parameters for CapabilityStatement resources.
 type CapabilityStatementParams struct {
 	// CapabilityStatement-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Fhirversion         search.TokenOrString     `json:"fhirversion,omitempty"`
-	Format              search.TokenOrString     `json:"format,omitempty"`
-	Guide               search.ReferenceOrString `json:"guide,omitempty"`
-	Mode                search.TokenOrString     `json:"mode,omitempty"`
-	Resource            search.TokenOrString     `json:"resource,omitempty"`
-	ResourceProfile     search.ReferenceOrString `json:"resource-profile,omitempty"`
-	SecurityService     search.TokenOrString     `json:"security-service,omitempty"`
-	Software            search.StringOrString    `json:"software,omitempty"`
-	SupportedProfile    search.ReferenceOrString `json:"supported-profile,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Fhirversion         search.Criteria[search.Token]     `json:"fhirversion,omitempty"`
+	Format              search.Criteria[search.Token]     `json:"format,omitempty"`
+	Guide               search.Criteria[search.Reference] `json:"guide,omitempty"`
+	Mode                search.Criteria[search.Token]     `json:"mode,omitempty"`
+	Resource            search.Criteria[search.Token]     `json:"resource,omitempty"`
+	ResourceProfile     search.Criteria[search.Reference] `json:"resource-profile,omitempty"`
+	SecurityService     search.Criteria[search.Token]     `json:"security-service,omitempty"`
+	Software            search.Criteria[search.String]    `json:"software,omitempty"`
+	SupportedProfile    search.Criteria[search.Reference] `json:"supported-profile,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CapabilityStatementParams.
-func (p CapabilityStatementParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CapabilityStatementParams.
+func (p CapabilityStatementParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Fhirversion != nil {
-		m[search.ParameterKey{Name: "fhirversion"}] = p.Fhirversion.MatchesAll()
+		m["fhirversion"] = p.Fhirversion.ToAndGroup()
 	}
 	if p.Format != nil {
-		m[search.ParameterKey{Name: "format"}] = p.Format.MatchesAll()
+		m["format"] = p.Format.ToAndGroup()
 	}
 	if p.Guide != nil {
-		m[search.ParameterKey{Name: "guide"}] = p.Guide.MatchesAll()
+		m["guide"] = p.Guide.ToAndGroup()
 	}
 	if p.Mode != nil {
-		m[search.ParameterKey{Name: "mode"}] = p.Mode.MatchesAll()
+		m["mode"] = p.Mode.ToAndGroup()
 	}
 	if p.Resource != nil {
-		m[search.ParameterKey{Name: "resource"}] = p.Resource.MatchesAll()
+		m["resource"] = p.Resource.ToAndGroup()
 	}
 	if p.ResourceProfile != nil {
-		m[search.ParameterKey{Name: "resource-profile"}] = p.ResourceProfile.MatchesAll()
+		m["resource-profile"] = p.ResourceProfile.ToAndGroup()
 	}
 	if p.SecurityService != nil {
-		m[search.ParameterKey{Name: "security-service"}] = p.SecurityService.MatchesAll()
+		m["security-service"] = p.SecurityService.ToAndGroup()
 	}
 	if p.Software != nil {
-		m[search.ParameterKey{Name: "software"}] = p.Software.MatchesAll()
+		m["software"] = p.Software.ToAndGroup()
 	}
 	if p.SupportedProfile != nil {
-		m[search.ParameterKey{Name: "supported-profile"}] = p.SupportedProfile.MatchesAll()
+		m["supported-profile"] = p.SupportedProfile.ToAndGroup()
 	}
 
 	return m
@@ -971,83 +971,83 @@ func (p CapabilityStatementParams) Map() map[search.ParameterKey]search.MatchAll
 // CarePlanParams contains typed search parameters for CarePlan resources.
 type CarePlanParams struct {
 	// CarePlan-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	ActivityReference     search.ReferenceOrString `json:"activity-reference,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	CareTeam              search.ReferenceOrString `json:"care-team,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	Condition             search.ReferenceOrString `json:"condition,omitempty"`
-	Custodian             search.ReferenceOrString `json:"custodian,omitempty"`
-	Goal                  search.ReferenceOrString `json:"goal,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Replaces              search.ReferenceOrString `json:"replaces,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	ActivityReference     search.Criteria[search.Reference] `json:"activity-reference,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	CareTeam              search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	Condition             search.Criteria[search.Reference] `json:"condition,omitempty"`
+	Custodian             search.Criteria[search.Reference] `json:"custodian,omitempty"`
+	Goal                  search.Criteria[search.Reference] `json:"goal,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Replaces              search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CarePlanParams.
-func (p CarePlanParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CarePlanParams.
+func (p CarePlanParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.ActivityReference != nil {
-		m[search.ParameterKey{Name: "activity-reference"}] = p.ActivityReference.MatchesAll()
+		m["activity-reference"] = p.ActivityReference.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.CareTeam != nil {
-		m[search.ParameterKey{Name: "care-team"}] = p.CareTeam.MatchesAll()
+		m["care-team"] = p.CareTeam.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Condition != nil {
-		m[search.ParameterKey{Name: "condition"}] = p.Condition.MatchesAll()
+		m["condition"] = p.Condition.ToAndGroup()
 	}
 	if p.Custodian != nil {
-		m[search.ParameterKey{Name: "custodian"}] = p.Custodian.MatchesAll()
+		m["custodian"] = p.Custodian.ToAndGroup()
 	}
 	if p.Goal != nil {
-		m[search.ParameterKey{Name: "goal"}] = p.Goal.MatchesAll()
+		m["goal"] = p.Goal.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Replaces != nil {
-		m[search.ParameterKey{Name: "replaces"}] = p.Replaces.MatchesAll()
+		m["replaces"] = p.Replaces.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -1056,43 +1056,43 @@ func (p CarePlanParams) Map() map[search.ParameterKey]search.MatchAll {
 // CareTeamParams contains typed search parameters for CareTeam resources.
 type CareTeamParams struct {
 	// CareTeam-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Category    search.TokenOrString     `json:"category,omitempty"`
-	Name        search.StringOrString    `json:"name,omitempty"`
-	Participant search.ReferenceOrString `json:"participant,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Category    search.Criteria[search.Token]     `json:"category,omitempty"`
+	Name        search.Criteria[search.String]    `json:"name,omitempty"`
+	Participant search.Criteria[search.Reference] `json:"participant,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CareTeamParams.
-func (p CareTeamParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CareTeamParams.
+func (p CareTeamParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -1101,83 +1101,83 @@ func (p CareTeamParams) Map() map[search.ParameterKey]search.MatchAll {
 // ChargeItemParams contains typed search parameters for ChargeItem resources.
 type ChargeItemParams struct {
 	// ChargeItem-specific search parameters
-	Identifier             search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                search.ReferenceOrString `json:"patient,omitempty"`
-	Code                   search.TokenOrString     `json:"code,omitempty"`
-	Encounter              search.ReferenceOrString `json:"encounter,omitempty"`
-	Account                search.ReferenceOrString `json:"account,omitempty"`
-	EnteredDate            search.DateOrString      `json:"entered-date,omitempty"`
-	Enterer                search.ReferenceOrString `json:"enterer,omitempty"`
-	FactorOverride         search.NumberOrString    `json:"factor-override,omitempty"`
-	Occurrence             search.DateOrString      `json:"occurrence,omitempty"`
-	PerformerActor         search.ReferenceOrString `json:"performer-actor,omitempty"`
-	PerformerFunction      search.TokenOrString     `json:"performer-function,omitempty"`
-	PerformingOrganization search.ReferenceOrString `json:"performing-organization,omitempty"`
-	PriceOverride          search.QuantityOrString  `json:"price-override,omitempty"`
-	Quantity               search.QuantityOrString  `json:"quantity,omitempty"`
-	RequestingOrganization search.ReferenceOrString `json:"requesting-organization,omitempty"`
-	Service                search.ReferenceOrString `json:"service,omitempty"`
-	Status                 search.TokenOrString     `json:"status,omitempty"`
-	Subject                search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier             search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                   search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter              search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Account                search.Criteria[search.Reference] `json:"account,omitempty"`
+	EnteredDate            search.Criteria[search.Date]      `json:"entered-date,omitempty"`
+	Enterer                search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	FactorOverride         search.Criteria[search.Number]    `json:"factor-override,omitempty"`
+	Occurrence             search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	PerformerActor         search.Criteria[search.Reference] `json:"performer-actor,omitempty"`
+	PerformerFunction      search.Criteria[search.Token]     `json:"performer-function,omitempty"`
+	PerformingOrganization search.Criteria[search.Reference] `json:"performing-organization,omitempty"`
+	PriceOverride          search.Criteria[search.Quantity]  `json:"price-override,omitempty"`
+	Quantity               search.Criteria[search.Quantity]  `json:"quantity,omitempty"`
+	RequestingOrganization search.Criteria[search.Reference] `json:"requesting-organization,omitempty"`
+	Service                search.Criteria[search.Reference] `json:"service,omitempty"`
+	Status                 search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject                search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ChargeItemParams.
-func (p ChargeItemParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ChargeItemParams.
+func (p ChargeItemParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Account != nil {
-		m[search.ParameterKey{Name: "account"}] = p.Account.MatchesAll()
+		m["account"] = p.Account.ToAndGroup()
 	}
 	if p.EnteredDate != nil {
-		m[search.ParameterKey{Name: "entered-date"}] = p.EnteredDate.MatchesAll()
+		m["entered-date"] = p.EnteredDate.ToAndGroup()
 	}
 	if p.Enterer != nil {
-		m[search.ParameterKey{Name: "enterer"}] = p.Enterer.MatchesAll()
+		m["enterer"] = p.Enterer.ToAndGroup()
 	}
 	if p.FactorOverride != nil {
-		m[search.ParameterKey{Name: "factor-override"}] = p.FactorOverride.MatchesAll()
+		m["factor-override"] = p.FactorOverride.ToAndGroup()
 	}
 	if p.Occurrence != nil {
-		m[search.ParameterKey{Name: "occurrence"}] = p.Occurrence.MatchesAll()
+		m["occurrence"] = p.Occurrence.ToAndGroup()
 	}
 	if p.PerformerActor != nil {
-		m[search.ParameterKey{Name: "performer-actor"}] = p.PerformerActor.MatchesAll()
+		m["performer-actor"] = p.PerformerActor.ToAndGroup()
 	}
 	if p.PerformerFunction != nil {
-		m[search.ParameterKey{Name: "performer-function"}] = p.PerformerFunction.MatchesAll()
+		m["performer-function"] = p.PerformerFunction.ToAndGroup()
 	}
 	if p.PerformingOrganization != nil {
-		m[search.ParameterKey{Name: "performing-organization"}] = p.PerformingOrganization.MatchesAll()
+		m["performing-organization"] = p.PerformingOrganization.ToAndGroup()
 	}
 	if p.PriceOverride != nil {
-		m[search.ParameterKey{Name: "price-override"}] = p.PriceOverride.MatchesAll()
+		m["price-override"] = p.PriceOverride.ToAndGroup()
 	}
 	if p.Quantity != nil {
-		m[search.ParameterKey{Name: "quantity"}] = p.Quantity.MatchesAll()
+		m["quantity"] = p.Quantity.ToAndGroup()
 	}
 	if p.RequestingOrganization != nil {
-		m[search.ParameterKey{Name: "requesting-organization"}] = p.RequestingOrganization.MatchesAll()
+		m["requesting-organization"] = p.RequestingOrganization.ToAndGroup()
 	}
 	if p.Service != nil {
-		m[search.ParameterKey{Name: "service"}] = p.Service.MatchesAll()
+		m["service"] = p.Service.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -1186,71 +1186,71 @@ func (p ChargeItemParams) Map() map[search.ParameterKey]search.MatchAll {
 // ChargeItemDefinitionParams contains typed search parameters for ChargeItemDefinition resources.
 type ChargeItemDefinitionParams struct {
 	// ChargeItemDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ChargeItemDefinitionParams.
-func (p ChargeItemDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ChargeItemDefinitionParams.
+func (p ChargeItemDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -1259,87 +1259,87 @@ func (p ChargeItemDefinitionParams) Map() map[search.ParameterKey]search.MatchAl
 // CitationParams contains typed search parameters for Citation resources.
 type CitationParams struct {
 	// Citation-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	ClassificationType  search.TokenOrString     `json:"classification-type,omitempty"`
-	Classifier          search.TokenOrString     `json:"classifier,omitempty"`
-	Classification      search.CompositeOrString `json:"classification,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	ClassificationType  search.Criteria[search.Token]     `json:"classification-type,omitempty"`
+	Classifier          search.Criteria[search.Token]     `json:"classifier,omitempty"`
+	Classification      search.Criteria[search.Composite] `json:"classification,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CitationParams.
-func (p CitationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CitationParams.
+func (p CitationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.ClassificationType != nil {
-		m[search.ParameterKey{Name: "classification-type"}] = p.ClassificationType.MatchesAll()
+		m["classification-type"] = p.ClassificationType.ToAndGroup()
 	}
 	if p.Classifier != nil {
-		m[search.ParameterKey{Name: "classifier"}] = p.Classifier.MatchesAll()
+		m["classifier"] = p.Classifier.ToAndGroup()
 	}
 	if p.Classification != nil {
-		m[search.ParameterKey{Name: "classification"}] = p.Classification.MatchesAll()
+		m["classification"] = p.Classification.ToAndGroup()
 	}
 
 	return m
@@ -1348,79 +1348,79 @@ func (p CitationParams) Map() map[search.ParameterKey]search.MatchAll {
 // ClaimParams contains typed search parameters for Claim resources.
 type ClaimParams struct {
 	// Claim-specific search parameters
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter    search.ReferenceOrString `json:"encounter,omitempty"`
-	CareTeam     search.ReferenceOrString `json:"care-team,omitempty"`
-	Created      search.DateOrString      `json:"created,omitempty"`
-	DetailUdi    search.ReferenceOrString `json:"detail-udi,omitempty"`
-	Enterer      search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility     search.ReferenceOrString `json:"facility,omitempty"`
-	Insurer      search.ReferenceOrString `json:"insurer,omitempty"`
-	ItemUdi      search.ReferenceOrString `json:"item-udi,omitempty"`
-	Payee        search.ReferenceOrString `json:"payee,omitempty"`
-	Priority     search.TokenOrString     `json:"priority,omitempty"`
-	ProcedureUdi search.ReferenceOrString `json:"procedure-udi,omitempty"`
-	Provider     search.ReferenceOrString `json:"provider,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	SubdetailUdi search.ReferenceOrString `json:"subdetail-udi,omitempty"`
-	Use          search.TokenOrString     `json:"use,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter    search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	CareTeam     search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Created      search.Criteria[search.Date]      `json:"created,omitempty"`
+	DetailUdi    search.Criteria[search.Reference] `json:"detail-udi,omitempty"`
+	Enterer      search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility     search.Criteria[search.Reference] `json:"facility,omitempty"`
+	Insurer      search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	ItemUdi      search.Criteria[search.Reference] `json:"item-udi,omitempty"`
+	Payee        search.Criteria[search.Reference] `json:"payee,omitempty"`
+	Priority     search.Criteria[search.Token]     `json:"priority,omitempty"`
+	ProcedureUdi search.Criteria[search.Reference] `json:"procedure-udi,omitempty"`
+	Provider     search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubdetailUdi search.Criteria[search.Reference] `json:"subdetail-udi,omitempty"`
+	Use          search.Criteria[search.Token]     `json:"use,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ClaimParams.
-func (p ClaimParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ClaimParams.
+func (p ClaimParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.CareTeam != nil {
-		m[search.ParameterKey{Name: "care-team"}] = p.CareTeam.MatchesAll()
+		m["care-team"] = p.CareTeam.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.DetailUdi != nil {
-		m[search.ParameterKey{Name: "detail-udi"}] = p.DetailUdi.MatchesAll()
+		m["detail-udi"] = p.DetailUdi.ToAndGroup()
 	}
 	if p.Enterer != nil {
-		m[search.ParameterKey{Name: "enterer"}] = p.Enterer.MatchesAll()
+		m["enterer"] = p.Enterer.ToAndGroup()
 	}
 	if p.Facility != nil {
-		m[search.ParameterKey{Name: "facility"}] = p.Facility.MatchesAll()
+		m["facility"] = p.Facility.ToAndGroup()
 	}
 	if p.Insurer != nil {
-		m[search.ParameterKey{Name: "insurer"}] = p.Insurer.MatchesAll()
+		m["insurer"] = p.Insurer.ToAndGroup()
 	}
 	if p.ItemUdi != nil {
-		m[search.ParameterKey{Name: "item-udi"}] = p.ItemUdi.MatchesAll()
+		m["item-udi"] = p.ItemUdi.ToAndGroup()
 	}
 	if p.Payee != nil {
-		m[search.ParameterKey{Name: "payee"}] = p.Payee.MatchesAll()
+		m["payee"] = p.Payee.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.ProcedureUdi != nil {
-		m[search.ParameterKey{Name: "procedure-udi"}] = p.ProcedureUdi.MatchesAll()
+		m["procedure-udi"] = p.ProcedureUdi.ToAndGroup()
 	}
 	if p.Provider != nil {
-		m[search.ParameterKey{Name: "provider"}] = p.Provider.MatchesAll()
+		m["provider"] = p.Provider.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.SubdetailUdi != nil {
-		m[search.ParameterKey{Name: "subdetail-udi"}] = p.SubdetailUdi.MatchesAll()
+		m["subdetail-udi"] = p.SubdetailUdi.ToAndGroup()
 	}
 	if p.Use != nil {
-		m[search.ParameterKey{Name: "use"}] = p.Use.MatchesAll()
+		m["use"] = p.Use.ToAndGroup()
 	}
 
 	return m
@@ -1429,55 +1429,55 @@ func (p ClaimParams) Map() map[search.ParameterKey]search.MatchAll {
 // ClaimResponseParams contains typed search parameters for ClaimResponse resources.
 type ClaimResponseParams struct {
 	// ClaimResponse-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Created     search.DateOrString      `json:"created,omitempty"`
-	Disposition search.StringOrString    `json:"disposition,omitempty"`
-	Insurer     search.ReferenceOrString `json:"insurer,omitempty"`
-	Outcome     search.TokenOrString     `json:"outcome,omitempty"`
-	PaymentDate search.DateOrString      `json:"payment-date,omitempty"`
-	Request     search.ReferenceOrString `json:"request,omitempty"`
-	Requestor   search.ReferenceOrString `json:"requestor,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Use         search.TokenOrString     `json:"use,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Created     search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Insurer     search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	Outcome     search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	PaymentDate search.Criteria[search.Date]      `json:"payment-date,omitempty"`
+	Request     search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor   search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Use         search.Criteria[search.Token]     `json:"use,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ClaimResponseParams.
-func (p ClaimResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ClaimResponseParams.
+func (p ClaimResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Disposition != nil {
-		m[search.ParameterKey{Name: "disposition"}] = p.Disposition.MatchesAll()
+		m["disposition"] = p.Disposition.ToAndGroup()
 	}
 	if p.Insurer != nil {
-		m[search.ParameterKey{Name: "insurer"}] = p.Insurer.MatchesAll()
+		m["insurer"] = p.Insurer.ToAndGroup()
 	}
 	if p.Outcome != nil {
-		m[search.ParameterKey{Name: "outcome"}] = p.Outcome.MatchesAll()
+		m["outcome"] = p.Outcome.ToAndGroup()
 	}
 	if p.PaymentDate != nil {
-		m[search.ParameterKey{Name: "payment-date"}] = p.PaymentDate.MatchesAll()
+		m["payment-date"] = p.PaymentDate.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Requestor != nil {
-		m[search.ParameterKey{Name: "requestor"}] = p.Requestor.MatchesAll()
+		m["requestor"] = p.Requestor.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Use != nil {
-		m[search.ParameterKey{Name: "use"}] = p.Use.MatchesAll()
+		m["use"] = p.Use.ToAndGroup()
 	}
 
 	return m
@@ -1486,59 +1486,59 @@ func (p ClaimResponseParams) Map() map[search.ParameterKey]search.MatchAll {
 // ClinicalImpressionParams contains typed search parameters for ClinicalImpression resources.
 type ClinicalImpressionParams struct {
 	// ClinicalImpression-specific search parameters
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Patient        search.ReferenceOrString `json:"patient,omitempty"`
-	Date           search.DateOrString      `json:"date,omitempty"`
-	Encounter      search.ReferenceOrString `json:"encounter,omitempty"`
-	FindingCode    search.TokenOrString     `json:"finding-code,omitempty"`
-	FindingRef     search.ReferenceOrString `json:"finding-ref,omitempty"`
-	Performer      search.ReferenceOrString `json:"performer,omitempty"`
-	Previous       search.ReferenceOrString `json:"previous,omitempty"`
-	Problem        search.ReferenceOrString `json:"problem,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
-	Subject        search.ReferenceOrString `json:"subject,omitempty"`
-	SupportingInfo search.ReferenceOrString `json:"supporting-info,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient        search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date           search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter      search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	FindingCode    search.Criteria[search.Token]     `json:"finding-code,omitempty"`
+	FindingRef     search.Criteria[search.Reference] `json:"finding-ref,omitempty"`
+	Performer      search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Previous       search.Criteria[search.Reference] `json:"previous,omitempty"`
+	Problem        search.Criteria[search.Reference] `json:"problem,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject        search.Criteria[search.Reference] `json:"subject,omitempty"`
+	SupportingInfo search.Criteria[search.Reference] `json:"supporting-info,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ClinicalImpressionParams.
-func (p ClinicalImpressionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ClinicalImpressionParams.
+func (p ClinicalImpressionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.FindingCode != nil {
-		m[search.ParameterKey{Name: "finding-code"}] = p.FindingCode.MatchesAll()
+		m["finding-code"] = p.FindingCode.ToAndGroup()
 	}
 	if p.FindingRef != nil {
-		m[search.ParameterKey{Name: "finding-ref"}] = p.FindingRef.MatchesAll()
+		m["finding-ref"] = p.FindingRef.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Previous != nil {
-		m[search.ParameterKey{Name: "previous"}] = p.Previous.MatchesAll()
+		m["previous"] = p.Previous.ToAndGroup()
 	}
 	if p.Problem != nil {
-		m[search.ParameterKey{Name: "problem"}] = p.Problem.MatchesAll()
+		m["problem"] = p.Problem.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.SupportingInfo != nil {
-		m[search.ParameterKey{Name: "supporting-info"}] = p.SupportingInfo.MatchesAll()
+		m["supporting-info"] = p.SupportingInfo.ToAndGroup()
 	}
 
 	return m
@@ -1547,59 +1547,59 @@ func (p ClinicalImpressionParams) Map() map[search.ParameterKey]search.MatchAll 
 // ClinicalUseDefinitionParams contains typed search parameters for ClinicalUseDefinition resources.
 type ClinicalUseDefinitionParams struct {
 	// ClinicalUseDefinition-specific search parameters
-	Contraindication          search.TokenOrString     `json:"contraindication,omitempty"`
-	ContraindicationReference search.ReferenceOrString `json:"contraindication-reference,omitempty"`
-	Effect                    search.TokenOrString     `json:"effect,omitempty"`
-	EffectReference           search.ReferenceOrString `json:"effect-reference,omitempty"`
-	Identifier                search.TokenOrString     `json:"identifier,omitempty"`
-	Indication                search.TokenOrString     `json:"indication,omitempty"`
-	IndicationReference       search.ReferenceOrString `json:"indication-reference,omitempty"`
-	Interaction               search.TokenOrString     `json:"interaction,omitempty"`
-	Product                   search.ReferenceOrString `json:"product,omitempty"`
-	Status                    search.TokenOrString     `json:"status,omitempty"`
-	Subject                   search.ReferenceOrString `json:"subject,omitempty"`
-	Type                      search.TokenOrString     `json:"type,omitempty"`
+	Contraindication          search.Criteria[search.Token]     `json:"contraindication,omitempty"`
+	ContraindicationReference search.Criteria[search.Reference] `json:"contraindication-reference,omitempty"`
+	Effect                    search.Criteria[search.Token]     `json:"effect,omitempty"`
+	EffectReference           search.Criteria[search.Reference] `json:"effect-reference,omitempty"`
+	Identifier                search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Indication                search.Criteria[search.Token]     `json:"indication,omitempty"`
+	IndicationReference       search.Criteria[search.Reference] `json:"indication-reference,omitempty"`
+	Interaction               search.Criteria[search.Token]     `json:"interaction,omitempty"`
+	Product                   search.Criteria[search.Reference] `json:"product,omitempty"`
+	Status                    search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject                   search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type                      search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ClinicalUseDefinitionParams.
-func (p ClinicalUseDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ClinicalUseDefinitionParams.
+func (p ClinicalUseDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Contraindication != nil {
-		m[search.ParameterKey{Name: "contraindication"}] = p.Contraindication.MatchesAll()
+		m["contraindication"] = p.Contraindication.ToAndGroup()
 	}
 	if p.ContraindicationReference != nil {
-		m[search.ParameterKey{Name: "contraindication-reference"}] = p.ContraindicationReference.MatchesAll()
+		m["contraindication-reference"] = p.ContraindicationReference.ToAndGroup()
 	}
 	if p.Effect != nil {
-		m[search.ParameterKey{Name: "effect"}] = p.Effect.MatchesAll()
+		m["effect"] = p.Effect.ToAndGroup()
 	}
 	if p.EffectReference != nil {
-		m[search.ParameterKey{Name: "effect-reference"}] = p.EffectReference.MatchesAll()
+		m["effect-reference"] = p.EffectReference.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Indication != nil {
-		m[search.ParameterKey{Name: "indication"}] = p.Indication.MatchesAll()
+		m["indication"] = p.Indication.ToAndGroup()
 	}
 	if p.IndicationReference != nil {
-		m[search.ParameterKey{Name: "indication-reference"}] = p.IndicationReference.MatchesAll()
+		m["indication-reference"] = p.IndicationReference.ToAndGroup()
 	}
 	if p.Interaction != nil {
-		m[search.ParameterKey{Name: "interaction"}] = p.Interaction.MatchesAll()
+		m["interaction"] = p.Interaction.ToAndGroup()
 	}
 	if p.Product != nil {
-		m[search.ParameterKey{Name: "product"}] = p.Product.MatchesAll()
+		m["product"] = p.Product.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -1608,107 +1608,107 @@ func (p ClinicalUseDefinitionParams) Map() map[search.ParameterKey]search.MatchA
 // CodeSystemParams contains typed search parameters for CodeSystem resources.
 type CodeSystemParams struct {
 	// CodeSystem-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	ContentMode         search.TokenOrString     `json:"content-mode,omitempty"`
-	Language            search.TokenOrString     `json:"language,omitempty"`
-	Supplements         search.ReferenceOrString `json:"supplements,omitempty"`
-	System              search.UriOrString       `json:"system,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	ContentMode         search.Criteria[search.Token]     `json:"content-mode,omitempty"`
+	Language            search.Criteria[search.Token]     `json:"language,omitempty"`
+	Supplements         search.Criteria[search.Reference] `json:"supplements,omitempty"`
+	System              search.Criteria[search.Uri]       `json:"system,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CodeSystemParams.
-func (p CodeSystemParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CodeSystemParams.
+func (p CodeSystemParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.ContentMode != nil {
-		m[search.ParameterKey{Name: "content-mode"}] = p.ContentMode.MatchesAll()
+		m["content-mode"] = p.ContentMode.ToAndGroup()
 	}
 	if p.Language != nil {
-		m[search.ParameterKey{Name: "language"}] = p.Language.MatchesAll()
+		m["language"] = p.Language.ToAndGroup()
 	}
 	if p.Supplements != nil {
-		m[search.ParameterKey{Name: "supplements"}] = p.Supplements.MatchesAll()
+		m["supplements"] = p.Supplements.ToAndGroup()
 	}
 	if p.System != nil {
-		m[search.ParameterKey{Name: "system"}] = p.System.MatchesAll()
+		m["system"] = p.System.ToAndGroup()
 	}
 
 	return m
@@ -1717,75 +1717,75 @@ func (p CodeSystemParams) Map() map[search.ParameterKey]search.MatchAll {
 // CommunicationParams contains typed search parameters for Communication resources.
 type CommunicationParams struct {
 	// Communication-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Medium                search.TokenOrString     `json:"medium,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Received              search.DateOrString      `json:"received,omitempty"`
-	Recipient             search.ReferenceOrString `json:"recipient,omitempty"`
-	Sender                search.ReferenceOrString `json:"sender,omitempty"`
-	Sent                  search.DateOrString      `json:"sent,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
-	Topic                 search.TokenOrString     `json:"topic,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Medium                search.Criteria[search.Token]     `json:"medium,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Received              search.Criteria[search.Date]      `json:"received,omitempty"`
+	Recipient             search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Sender                search.Criteria[search.Reference] `json:"sender,omitempty"`
+	Sent                  search.Criteria[search.Date]      `json:"sent,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Topic                 search.Criteria[search.Token]     `json:"topic,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CommunicationParams.
-func (p CommunicationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CommunicationParams.
+func (p CommunicationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Medium != nil {
-		m[search.ParameterKey{Name: "medium"}] = p.Medium.MatchesAll()
+		m["medium"] = p.Medium.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Received != nil {
-		m[search.ParameterKey{Name: "received"}] = p.Received.MatchesAll()
+		m["received"] = p.Received.ToAndGroup()
 	}
 	if p.Recipient != nil {
-		m[search.ParameterKey{Name: "recipient"}] = p.Recipient.MatchesAll()
+		m["recipient"] = p.Recipient.ToAndGroup()
 	}
 	if p.Sender != nil {
-		m[search.ParameterKey{Name: "sender"}] = p.Sender.MatchesAll()
+		m["sender"] = p.Sender.ToAndGroup()
 	}
 	if p.Sent != nil {
-		m[search.ParameterKey{Name: "sent"}] = p.Sent.MatchesAll()
+		m["sent"] = p.Sent.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 
 	return m
@@ -1794,75 +1794,75 @@ func (p CommunicationParams) Map() map[search.ParameterKey]search.MatchAll {
 // CommunicationRequestParams contains typed search parameters for CommunicationRequest resources.
 type CommunicationRequestParams struct {
 	// CommunicationRequest-specific search parameters
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Patient             search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter           search.ReferenceOrString `json:"encounter,omitempty"`
-	Authored            search.DateOrString      `json:"authored,omitempty"`
-	BasedOn             search.ReferenceOrString `json:"based-on,omitempty"`
-	Category            search.TokenOrString     `json:"category,omitempty"`
-	GroupIdentifier     search.TokenOrString     `json:"group-identifier,omitempty"`
-	InformationProvider search.ReferenceOrString `json:"information-provider,omitempty"`
-	Medium              search.TokenOrString     `json:"medium,omitempty"`
-	Occurrence          search.DateOrString      `json:"occurrence,omitempty"`
-	Priority            search.TokenOrString     `json:"priority,omitempty"`
-	Recipient           search.ReferenceOrString `json:"recipient,omitempty"`
-	Replaces            search.ReferenceOrString `json:"replaces,omitempty"`
-	Requester           search.ReferenceOrString `json:"requester,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Subject             search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient             search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter           search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Authored            search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn             search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category            search.Criteria[search.Token]     `json:"category,omitempty"`
+	GroupIdentifier     search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	InformationProvider search.Criteria[search.Reference] `json:"information-provider,omitempty"`
+	Medium              search.Criteria[search.Token]     `json:"medium,omitempty"`
+	Occurrence          search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	Priority            search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Recipient           search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Replaces            search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Requester           search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject             search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CommunicationRequestParams.
-func (p CommunicationRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CommunicationRequestParams.
+func (p CommunicationRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Authored != nil {
-		m[search.ParameterKey{Name: "authored"}] = p.Authored.MatchesAll()
+		m["authored"] = p.Authored.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.InformationProvider != nil {
-		m[search.ParameterKey{Name: "information-provider"}] = p.InformationProvider.MatchesAll()
+		m["information-provider"] = p.InformationProvider.ToAndGroup()
 	}
 	if p.Medium != nil {
-		m[search.ParameterKey{Name: "medium"}] = p.Medium.MatchesAll()
+		m["medium"] = p.Medium.ToAndGroup()
 	}
 	if p.Occurrence != nil {
-		m[search.ParameterKey{Name: "occurrence"}] = p.Occurrence.MatchesAll()
+		m["occurrence"] = p.Occurrence.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.Recipient != nil {
-		m[search.ParameterKey{Name: "recipient"}] = p.Recipient.MatchesAll()
+		m["recipient"] = p.Recipient.ToAndGroup()
 	}
 	if p.Replaces != nil {
-		m[search.ParameterKey{Name: "replaces"}] = p.Replaces.MatchesAll()
+		m["replaces"] = p.Replaces.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -1871,67 +1871,67 @@ func (p CommunicationRequestParams) Map() map[search.ParameterKey]search.MatchAl
 // CompartmentDefinitionParams contains typed search parameters for CompartmentDefinition resources.
 type CompartmentDefinitionParams struct {
 	// CompartmentDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Resource            search.TokenOrString     `json:"resource,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Resource            search.Criteria[search.Token]     `json:"resource,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CompartmentDefinitionParams.
-func (p CompartmentDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CompartmentDefinitionParams.
+func (p CompartmentDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Resource != nil {
-		m[search.ParameterKey{Name: "resource"}] = p.Resource.MatchesAll()
+		m["resource"] = p.Resource.ToAndGroup()
 	}
 
 	return m
@@ -1940,95 +1940,95 @@ func (p CompartmentDefinitionParams) Map() map[search.ParameterKey]search.MatchA
 // CompositionParams contains typed search parameters for Composition resources.
 type CompositionParams struct {
 	// Composition-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Type            search.TokenOrString     `json:"type,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Encounter       search.ReferenceOrString `json:"encounter,omitempty"`
-	Attester        search.ReferenceOrString `json:"attester,omitempty"`
-	Author          search.ReferenceOrString `json:"author,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Entry           search.ReferenceOrString `json:"entry,omitempty"`
-	EventCode       search.TokenOrString     `json:"event-code,omitempty"`
-	EventReference  search.ReferenceOrString `json:"event-reference,omitempty"`
-	Period          search.DateOrString      `json:"period,omitempty"`
-	Related         search.ReferenceOrString `json:"related,omitempty"`
-	Section         search.TokenOrString     `json:"section,omitempty"`
-	SectionText     search.SpecialOrString   `json:"section-text,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Title           search.StringOrString    `json:"title,omitempty"`
-	Url             search.UriOrString       `json:"url,omitempty"`
-	Version         search.TokenOrString     `json:"version,omitempty"`
-	SectionCodeText search.CompositeOrString `json:"section-code-text,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type            search.Criteria[search.Token]     `json:"type,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter       search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Attester        search.Criteria[search.Reference] `json:"attester,omitempty"`
+	Author          search.Criteria[search.Reference] `json:"author,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Entry           search.Criteria[search.Reference] `json:"entry,omitempty"`
+	EventCode       search.Criteria[search.Token]     `json:"event-code,omitempty"`
+	EventReference  search.Criteria[search.Reference] `json:"event-reference,omitempty"`
+	Period          search.Criteria[search.Date]      `json:"period,omitempty"`
+	Related         search.Criteria[search.Reference] `json:"related,omitempty"`
+	Section         search.Criteria[search.Token]     `json:"section,omitempty"`
+	SectionText     search.Criteria[search.Special]   `json:"section-text,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Title           search.Criteria[search.String]    `json:"title,omitempty"`
+	Url             search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version         search.Criteria[search.Token]     `json:"version,omitempty"`
+	SectionCodeText search.Criteria[search.Composite] `json:"section-code-text,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CompositionParams.
-func (p CompositionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CompositionParams.
+func (p CompositionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Attester != nil {
-		m[search.ParameterKey{Name: "attester"}] = p.Attester.MatchesAll()
+		m["attester"] = p.Attester.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Entry != nil {
-		m[search.ParameterKey{Name: "entry"}] = p.Entry.MatchesAll()
+		m["entry"] = p.Entry.ToAndGroup()
 	}
 	if p.EventCode != nil {
-		m[search.ParameterKey{Name: "event-code"}] = p.EventCode.MatchesAll()
+		m["event-code"] = p.EventCode.ToAndGroup()
 	}
 	if p.EventReference != nil {
-		m[search.ParameterKey{Name: "event-reference"}] = p.EventReference.MatchesAll()
+		m["event-reference"] = p.EventReference.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Related != nil {
-		m[search.ParameterKey{Name: "related"}] = p.Related.MatchesAll()
+		m["related"] = p.Related.ToAndGroup()
 	}
 	if p.Section != nil {
-		m[search.ParameterKey{Name: "section"}] = p.Section.MatchesAll()
+		m["section"] = p.Section.ToAndGroup()
 	}
 	if p.SectionText != nil {
-		m[search.ParameterKey{Name: "section-text"}] = p.SectionText.MatchesAll()
+		m["section-text"] = p.SectionText.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.SectionCodeText != nil {
-		m[search.ParameterKey{Name: "section-code-text"}] = p.SectionCodeText.MatchesAll()
+		m["section-code-text"] = p.SectionCodeText.ToAndGroup()
 	}
 
 	return m
@@ -2037,127 +2037,127 @@ func (p CompositionParams) Map() map[search.ParameterKey]search.MatchAll {
 // ConceptMapParams contains typed search parameters for ConceptMap resources.
 type ConceptMapParams struct {
 	// ConceptMap-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	MappingProperty     search.UriOrString       `json:"mapping-property,omitempty"`
-	OtherMap            search.ReferenceOrString `json:"other-map,omitempty"`
-	SourceCode          search.TokenOrString     `json:"source-code,omitempty"`
-	SourceGroupSystem   search.ReferenceOrString `json:"source-group-system,omitempty"`
-	SourceScope         search.ReferenceOrString `json:"source-scope,omitempty"`
-	SourceScopeUri      search.UriOrString       `json:"source-scope-uri,omitempty"`
-	TargetCode          search.TokenOrString     `json:"target-code,omitempty"`
-	TargetGroupSystem   search.ReferenceOrString `json:"target-group-system,omitempty"`
-	TargetScope         search.ReferenceOrString `json:"target-scope,omitempty"`
-	TargetScopeUri      search.UriOrString       `json:"target-scope-uri,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	MappingProperty     search.Criteria[search.Uri]       `json:"mapping-property,omitempty"`
+	OtherMap            search.Criteria[search.Reference] `json:"other-map,omitempty"`
+	SourceCode          search.Criteria[search.Token]     `json:"source-code,omitempty"`
+	SourceGroupSystem   search.Criteria[search.Reference] `json:"source-group-system,omitempty"`
+	SourceScope         search.Criteria[search.Reference] `json:"source-scope,omitempty"`
+	SourceScopeUri      search.Criteria[search.Uri]       `json:"source-scope-uri,omitempty"`
+	TargetCode          search.Criteria[search.Token]     `json:"target-code,omitempty"`
+	TargetGroupSystem   search.Criteria[search.Reference] `json:"target-group-system,omitempty"`
+	TargetScope         search.Criteria[search.Reference] `json:"target-scope,omitempty"`
+	TargetScopeUri      search.Criteria[search.Uri]       `json:"target-scope-uri,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ConceptMapParams.
-func (p ConceptMapParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ConceptMapParams.
+func (p ConceptMapParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.MappingProperty != nil {
-		m[search.ParameterKey{Name: "mapping-property"}] = p.MappingProperty.MatchesAll()
+		m["mapping-property"] = p.MappingProperty.ToAndGroup()
 	}
 	if p.OtherMap != nil {
-		m[search.ParameterKey{Name: "other-map"}] = p.OtherMap.MatchesAll()
+		m["other-map"] = p.OtherMap.ToAndGroup()
 	}
 	if p.SourceCode != nil {
-		m[search.ParameterKey{Name: "source-code"}] = p.SourceCode.MatchesAll()
+		m["source-code"] = p.SourceCode.ToAndGroup()
 	}
 	if p.SourceGroupSystem != nil {
-		m[search.ParameterKey{Name: "source-group-system"}] = p.SourceGroupSystem.MatchesAll()
+		m["source-group-system"] = p.SourceGroupSystem.ToAndGroup()
 	}
 	if p.SourceScope != nil {
-		m[search.ParameterKey{Name: "source-scope"}] = p.SourceScope.MatchesAll()
+		m["source-scope"] = p.SourceScope.ToAndGroup()
 	}
 	if p.SourceScopeUri != nil {
-		m[search.ParameterKey{Name: "source-scope-uri"}] = p.SourceScopeUri.MatchesAll()
+		m["source-scope-uri"] = p.SourceScopeUri.ToAndGroup()
 	}
 	if p.TargetCode != nil {
-		m[search.ParameterKey{Name: "target-code"}] = p.TargetCode.MatchesAll()
+		m["target-code"] = p.TargetCode.ToAndGroup()
 	}
 	if p.TargetGroupSystem != nil {
-		m[search.ParameterKey{Name: "target-group-system"}] = p.TargetGroupSystem.MatchesAll()
+		m["target-group-system"] = p.TargetGroupSystem.ToAndGroup()
 	}
 	if p.TargetScope != nil {
-		m[search.ParameterKey{Name: "target-scope"}] = p.TargetScope.MatchesAll()
+		m["target-scope"] = p.TargetScope.ToAndGroup()
 	}
 	if p.TargetScopeUri != nil {
-		m[search.ParameterKey{Name: "target-scope-uri"}] = p.TargetScopeUri.MatchesAll()
+		m["target-scope-uri"] = p.TargetScopeUri.ToAndGroup()
 	}
 
 	return m
@@ -2166,99 +2166,99 @@ func (p ConceptMapParams) Map() map[search.ParameterKey]search.MatchAll {
 // ConditionParams contains typed search parameters for Condition resources.
 type ConditionParams struct {
 	// Condition-specific search parameters
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Patient             search.ReferenceOrString `json:"patient,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Encounter           search.ReferenceOrString `json:"encounter,omitempty"`
-	AbatementAge        search.QuantityOrString  `json:"abatement-age,omitempty"`
-	AbatementDate       search.DateOrString      `json:"abatement-date,omitempty"`
-	AbatementString     search.StringOrString    `json:"abatement-string,omitempty"`
-	BodySite            search.TokenOrString     `json:"body-site,omitempty"`
-	Category            search.TokenOrString     `json:"category,omitempty"`
-	ClinicalStatus      search.TokenOrString     `json:"clinical-status,omitempty"`
-	Evidence            search.TokenOrString     `json:"evidence,omitempty"`
-	EvidenceDetail      search.ReferenceOrString `json:"evidence-detail,omitempty"`
-	OnsetAge            search.QuantityOrString  `json:"onset-age,omitempty"`
-	OnsetDate           search.DateOrString      `json:"onset-date,omitempty"`
-	OnsetInfo           search.StringOrString    `json:"onset-info,omitempty"`
-	ParticipantActor    search.ReferenceOrString `json:"participant-actor,omitempty"`
-	ParticipantFunction search.TokenOrString     `json:"participant-function,omitempty"`
-	RecordedDate        search.DateOrString      `json:"recorded-date,omitempty"`
-	Severity            search.TokenOrString     `json:"severity,omitempty"`
-	Stage               search.TokenOrString     `json:"stage,omitempty"`
-	Subject             search.ReferenceOrString `json:"subject,omitempty"`
-	VerificationStatus  search.TokenOrString     `json:"verification-status,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient             search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter           search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	AbatementAge        search.Criteria[search.Quantity]  `json:"abatement-age,omitempty"`
+	AbatementDate       search.Criteria[search.Date]      `json:"abatement-date,omitempty"`
+	AbatementString     search.Criteria[search.String]    `json:"abatement-string,omitempty"`
+	BodySite            search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	Category            search.Criteria[search.Token]     `json:"category,omitempty"`
+	ClinicalStatus      search.Criteria[search.Token]     `json:"clinical-status,omitempty"`
+	Evidence            search.Criteria[search.Token]     `json:"evidence,omitempty"`
+	EvidenceDetail      search.Criteria[search.Reference] `json:"evidence-detail,omitempty"`
+	OnsetAge            search.Criteria[search.Quantity]  `json:"onset-age,omitempty"`
+	OnsetDate           search.Criteria[search.Date]      `json:"onset-date,omitempty"`
+	OnsetInfo           search.Criteria[search.String]    `json:"onset-info,omitempty"`
+	ParticipantActor    search.Criteria[search.Reference] `json:"participant-actor,omitempty"`
+	ParticipantFunction search.Criteria[search.Token]     `json:"participant-function,omitempty"`
+	RecordedDate        search.Criteria[search.Date]      `json:"recorded-date,omitempty"`
+	Severity            search.Criteria[search.Token]     `json:"severity,omitempty"`
+	Stage               search.Criteria[search.Token]     `json:"stage,omitempty"`
+	Subject             search.Criteria[search.Reference] `json:"subject,omitempty"`
+	VerificationStatus  search.Criteria[search.Token]     `json:"verification-status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ConditionParams.
-func (p ConditionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ConditionParams.
+func (p ConditionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.AbatementAge != nil {
-		m[search.ParameterKey{Name: "abatement-age"}] = p.AbatementAge.MatchesAll()
+		m["abatement-age"] = p.AbatementAge.ToAndGroup()
 	}
 	if p.AbatementDate != nil {
-		m[search.ParameterKey{Name: "abatement-date"}] = p.AbatementDate.MatchesAll()
+		m["abatement-date"] = p.AbatementDate.ToAndGroup()
 	}
 	if p.AbatementString != nil {
-		m[search.ParameterKey{Name: "abatement-string"}] = p.AbatementString.MatchesAll()
+		m["abatement-string"] = p.AbatementString.ToAndGroup()
 	}
 	if p.BodySite != nil {
-		m[search.ParameterKey{Name: "body-site"}] = p.BodySite.MatchesAll()
+		m["body-site"] = p.BodySite.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.ClinicalStatus != nil {
-		m[search.ParameterKey{Name: "clinical-status"}] = p.ClinicalStatus.MatchesAll()
+		m["clinical-status"] = p.ClinicalStatus.ToAndGroup()
 	}
 	if p.Evidence != nil {
-		m[search.ParameterKey{Name: "evidence"}] = p.Evidence.MatchesAll()
+		m["evidence"] = p.Evidence.ToAndGroup()
 	}
 	if p.EvidenceDetail != nil {
-		m[search.ParameterKey{Name: "evidence-detail"}] = p.EvidenceDetail.MatchesAll()
+		m["evidence-detail"] = p.EvidenceDetail.ToAndGroup()
 	}
 	if p.OnsetAge != nil {
-		m[search.ParameterKey{Name: "onset-age"}] = p.OnsetAge.MatchesAll()
+		m["onset-age"] = p.OnsetAge.ToAndGroup()
 	}
 	if p.OnsetDate != nil {
-		m[search.ParameterKey{Name: "onset-date"}] = p.OnsetDate.MatchesAll()
+		m["onset-date"] = p.OnsetDate.ToAndGroup()
 	}
 	if p.OnsetInfo != nil {
-		m[search.ParameterKey{Name: "onset-info"}] = p.OnsetInfo.MatchesAll()
+		m["onset-info"] = p.OnsetInfo.ToAndGroup()
 	}
 	if p.ParticipantActor != nil {
-		m[search.ParameterKey{Name: "participant-actor"}] = p.ParticipantActor.MatchesAll()
+		m["participant-actor"] = p.ParticipantActor.ToAndGroup()
 	}
 	if p.ParticipantFunction != nil {
-		m[search.ParameterKey{Name: "participant-function"}] = p.ParticipantFunction.MatchesAll()
+		m["participant-function"] = p.ParticipantFunction.ToAndGroup()
 	}
 	if p.RecordedDate != nil {
-		m[search.ParameterKey{Name: "recorded-date"}] = p.RecordedDate.MatchesAll()
+		m["recorded-date"] = p.RecordedDate.ToAndGroup()
 	}
 	if p.Severity != nil {
-		m[search.ParameterKey{Name: "severity"}] = p.Severity.MatchesAll()
+		m["severity"] = p.Severity.ToAndGroup()
 	}
 	if p.Stage != nil {
-		m[search.ParameterKey{Name: "stage"}] = p.Stage.MatchesAll()
+		m["stage"] = p.Stage.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.VerificationStatus != nil {
-		m[search.ParameterKey{Name: "verification-status"}] = p.VerificationStatus.MatchesAll()
+		m["verification-status"] = p.VerificationStatus.ToAndGroup()
 	}
 
 	return m
@@ -2267,71 +2267,71 @@ func (p ConditionParams) Map() map[search.ParameterKey]search.MatchAll {
 // ConditionDefinitionParams contains typed search parameters for ConditionDefinition resources.
 type ConditionDefinitionParams struct {
 	// ConditionDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ConditionDefinitionParams.
-func (p ConditionDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ConditionDefinitionParams.
+func (p ConditionDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -2340,83 +2340,83 @@ func (p ConditionDefinitionParams) Map() map[search.ParameterKey]search.MatchAll
 // ConsentParams contains typed search parameters for Consent resources.
 type ConsentParams struct {
 	// Consent-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Action          search.TokenOrString     `json:"action,omitempty"`
-	Actor           search.ReferenceOrString `json:"actor,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Controller      search.ReferenceOrString `json:"controller,omitempty"`
-	Data            search.ReferenceOrString `json:"data,omitempty"`
-	Grantee         search.ReferenceOrString `json:"grantee,omitempty"`
-	Manager         search.ReferenceOrString `json:"manager,omitempty"`
-	Period          search.DateOrString      `json:"period,omitempty"`
-	Purpose         search.TokenOrString     `json:"purpose,omitempty"`
-	SecurityLabel   search.TokenOrString     `json:"security-label,omitempty"`
-	SourceReference search.ReferenceOrString `json:"source-reference,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Verified        search.TokenOrString     `json:"verified,omitempty"`
-	VerifiedDate    search.DateOrString      `json:"verified-date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Action          search.Criteria[search.Token]     `json:"action,omitempty"`
+	Actor           search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Controller      search.Criteria[search.Reference] `json:"controller,omitempty"`
+	Data            search.Criteria[search.Reference] `json:"data,omitempty"`
+	Grantee         search.Criteria[search.Reference] `json:"grantee,omitempty"`
+	Manager         search.Criteria[search.Reference] `json:"manager,omitempty"`
+	Period          search.Criteria[search.Date]      `json:"period,omitempty"`
+	Purpose         search.Criteria[search.Token]     `json:"purpose,omitempty"`
+	SecurityLabel   search.Criteria[search.Token]     `json:"security-label,omitempty"`
+	SourceReference search.Criteria[search.Reference] `json:"source-reference,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Verified        search.Criteria[search.Token]     `json:"verified,omitempty"`
+	VerifiedDate    search.Criteria[search.Date]      `json:"verified-date,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ConsentParams.
-func (p ConsentParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ConsentParams.
+func (p ConsentParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Action != nil {
-		m[search.ParameterKey{Name: "action"}] = p.Action.MatchesAll()
+		m["action"] = p.Action.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Controller != nil {
-		m[search.ParameterKey{Name: "controller"}] = p.Controller.MatchesAll()
+		m["controller"] = p.Controller.ToAndGroup()
 	}
 	if p.Data != nil {
-		m[search.ParameterKey{Name: "data"}] = p.Data.MatchesAll()
+		m["data"] = p.Data.ToAndGroup()
 	}
 	if p.Grantee != nil {
-		m[search.ParameterKey{Name: "grantee"}] = p.Grantee.MatchesAll()
+		m["grantee"] = p.Grantee.ToAndGroup()
 	}
 	if p.Manager != nil {
-		m[search.ParameterKey{Name: "manager"}] = p.Manager.MatchesAll()
+		m["manager"] = p.Manager.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Purpose != nil {
-		m[search.ParameterKey{Name: "purpose"}] = p.Purpose.MatchesAll()
+		m["purpose"] = p.Purpose.ToAndGroup()
 	}
 	if p.SecurityLabel != nil {
-		m[search.ParameterKey{Name: "security-label"}] = p.SecurityLabel.MatchesAll()
+		m["security-label"] = p.SecurityLabel.ToAndGroup()
 	}
 	if p.SourceReference != nil {
-		m[search.ParameterKey{Name: "source-reference"}] = p.SourceReference.MatchesAll()
+		m["source-reference"] = p.SourceReference.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Verified != nil {
-		m[search.ParameterKey{Name: "verified"}] = p.Verified.MatchesAll()
+		m["verified"] = p.Verified.ToAndGroup()
 	}
 	if p.VerifiedDate != nil {
-		m[search.ParameterKey{Name: "verified-date"}] = p.VerifiedDate.MatchesAll()
+		m["verified-date"] = p.VerifiedDate.ToAndGroup()
 	}
 
 	return m
@@ -2425,51 +2425,51 @@ func (p ConsentParams) Map() map[search.ParameterKey]search.MatchAll {
 // ContractParams contains typed search parameters for Contract resources.
 type ContractParams struct {
 	// Contract-specific search parameters
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Authority    search.ReferenceOrString `json:"authority,omitempty"`
-	Domain       search.ReferenceOrString `json:"domain,omitempty"`
-	Instantiates search.UriOrString       `json:"instantiates,omitempty"`
-	Issued       search.DateOrString      `json:"issued,omitempty"`
-	Signer       search.ReferenceOrString `json:"signer,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	Subject      search.ReferenceOrString `json:"subject,omitempty"`
-	Url          search.UriOrString       `json:"url,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Authority    search.Criteria[search.Reference] `json:"authority,omitempty"`
+	Domain       search.Criteria[search.Reference] `json:"domain,omitempty"`
+	Instantiates search.Criteria[search.Uri]       `json:"instantiates,omitempty"`
+	Issued       search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Signer       search.Criteria[search.Reference] `json:"signer,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject      search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Url          search.Criteria[search.Uri]       `json:"url,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ContractParams.
-func (p ContractParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ContractParams.
+func (p ContractParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Authority != nil {
-		m[search.ParameterKey{Name: "authority"}] = p.Authority.MatchesAll()
+		m["authority"] = p.Authority.ToAndGroup()
 	}
 	if p.Domain != nil {
-		m[search.ParameterKey{Name: "domain"}] = p.Domain.MatchesAll()
+		m["domain"] = p.Domain.ToAndGroup()
 	}
 	if p.Instantiates != nil {
-		m[search.ParameterKey{Name: "instantiates"}] = p.Instantiates.MatchesAll()
+		m["instantiates"] = p.Instantiates.ToAndGroup()
 	}
 	if p.Issued != nil {
-		m[search.ParameterKey{Name: "issued"}] = p.Issued.MatchesAll()
+		m["issued"] = p.Issued.ToAndGroup()
 	}
 	if p.Signer != nil {
-		m[search.ParameterKey{Name: "signer"}] = p.Signer.MatchesAll()
+		m["signer"] = p.Signer.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 
 	return m
@@ -2478,63 +2478,63 @@ func (p ContractParams) Map() map[search.ParameterKey]search.MatchAll {
 // CoverageParams contains typed search parameters for Coverage resources.
 type CoverageParams struct {
 	// Coverage-specific search parameters
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Patient        search.ReferenceOrString `json:"patient,omitempty"`
-	Type           search.TokenOrString     `json:"type,omitempty"`
-	Beneficiary    search.ReferenceOrString `json:"beneficiary,omitempty"`
-	ClassType      search.TokenOrString     `json:"class-type,omitempty"`
-	ClassValue     search.TokenOrString     `json:"class-value,omitempty"`
-	Dependent      search.StringOrString    `json:"dependent,omitempty"`
-	Insurer        search.ReferenceOrString `json:"insurer,omitempty"`
-	PaymentbyParty search.ReferenceOrString `json:"paymentby-party,omitempty"`
-	PolicyHolder   search.ReferenceOrString `json:"policy-holder,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
-	Subscriber     search.ReferenceOrString `json:"subscriber,omitempty"`
-	Subscriberid   search.TokenOrString     `json:"subscriberid,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient        search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type           search.Criteria[search.Token]     `json:"type,omitempty"`
+	Beneficiary    search.Criteria[search.Reference] `json:"beneficiary,omitempty"`
+	ClassType      search.Criteria[search.Token]     `json:"class-type,omitempty"`
+	ClassValue     search.Criteria[search.Token]     `json:"class-value,omitempty"`
+	Dependent      search.Criteria[search.String]    `json:"dependent,omitempty"`
+	Insurer        search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	PaymentbyParty search.Criteria[search.Reference] `json:"paymentby-party,omitempty"`
+	PolicyHolder   search.Criteria[search.Reference] `json:"policy-holder,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subscriber     search.Criteria[search.Reference] `json:"subscriber,omitempty"`
+	Subscriberid   search.Criteria[search.Token]     `json:"subscriberid,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CoverageParams.
-func (p CoverageParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CoverageParams.
+func (p CoverageParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Beneficiary != nil {
-		m[search.ParameterKey{Name: "beneficiary"}] = p.Beneficiary.MatchesAll()
+		m["beneficiary"] = p.Beneficiary.ToAndGroup()
 	}
 	if p.ClassType != nil {
-		m[search.ParameterKey{Name: "class-type"}] = p.ClassType.MatchesAll()
+		m["class-type"] = p.ClassType.ToAndGroup()
 	}
 	if p.ClassValue != nil {
-		m[search.ParameterKey{Name: "class-value"}] = p.ClassValue.MatchesAll()
+		m["class-value"] = p.ClassValue.ToAndGroup()
 	}
 	if p.Dependent != nil {
-		m[search.ParameterKey{Name: "dependent"}] = p.Dependent.MatchesAll()
+		m["dependent"] = p.Dependent.ToAndGroup()
 	}
 	if p.Insurer != nil {
-		m[search.ParameterKey{Name: "insurer"}] = p.Insurer.MatchesAll()
+		m["insurer"] = p.Insurer.ToAndGroup()
 	}
 	if p.PaymentbyParty != nil {
-		m[search.ParameterKey{Name: "paymentby-party"}] = p.PaymentbyParty.MatchesAll()
+		m["paymentby-party"] = p.PaymentbyParty.ToAndGroup()
 	}
 	if p.PolicyHolder != nil {
-		m[search.ParameterKey{Name: "policy-holder"}] = p.PolicyHolder.MatchesAll()
+		m["policy-holder"] = p.PolicyHolder.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subscriber != nil {
-		m[search.ParameterKey{Name: "subscriber"}] = p.Subscriber.MatchesAll()
+		m["subscriber"] = p.Subscriber.ToAndGroup()
 	}
 	if p.Subscriberid != nil {
-		m[search.ParameterKey{Name: "subscriberid"}] = p.Subscriberid.MatchesAll()
+		m["subscriberid"] = p.Subscriberid.ToAndGroup()
 	}
 
 	return m
@@ -2543,39 +2543,39 @@ func (p CoverageParams) Map() map[search.ParameterKey]search.MatchAll {
 // CoverageEligibilityRequestParams contains typed search parameters for CoverageEligibilityRequest resources.
 type CoverageEligibilityRequestParams struct {
 	// CoverageEligibilityRequest-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Created    search.DateOrString      `json:"created,omitempty"`
-	Enterer    search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility   search.ReferenceOrString `json:"facility,omitempty"`
-	Provider   search.ReferenceOrString `json:"provider,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Created    search.Criteria[search.Date]      `json:"created,omitempty"`
+	Enterer    search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility   search.Criteria[search.Reference] `json:"facility,omitempty"`
+	Provider   search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CoverageEligibilityRequestParams.
-func (p CoverageEligibilityRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CoverageEligibilityRequestParams.
+func (p CoverageEligibilityRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Enterer != nil {
-		m[search.ParameterKey{Name: "enterer"}] = p.Enterer.MatchesAll()
+		m["enterer"] = p.Enterer.ToAndGroup()
 	}
 	if p.Facility != nil {
-		m[search.ParameterKey{Name: "facility"}] = p.Facility.MatchesAll()
+		m["facility"] = p.Facility.ToAndGroup()
 	}
 	if p.Provider != nil {
-		m[search.ParameterKey{Name: "provider"}] = p.Provider.MatchesAll()
+		m["provider"] = p.Provider.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -2584,47 +2584,47 @@ func (p CoverageEligibilityRequestParams) Map() map[search.ParameterKey]search.M
 // CoverageEligibilityResponseParams contains typed search parameters for CoverageEligibilityResponse resources.
 type CoverageEligibilityResponseParams struct {
 	// CoverageEligibilityResponse-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Created     search.DateOrString      `json:"created,omitempty"`
-	Disposition search.StringOrString    `json:"disposition,omitempty"`
-	Insurer     search.ReferenceOrString `json:"insurer,omitempty"`
-	Outcome     search.TokenOrString     `json:"outcome,omitempty"`
-	Request     search.ReferenceOrString `json:"request,omitempty"`
-	Requestor   search.ReferenceOrString `json:"requestor,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Created     search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Insurer     search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	Outcome     search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	Request     search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor   search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for CoverageEligibilityResponseParams.
-func (p CoverageEligibilityResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for CoverageEligibilityResponseParams.
+func (p CoverageEligibilityResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Disposition != nil {
-		m[search.ParameterKey{Name: "disposition"}] = p.Disposition.MatchesAll()
+		m["disposition"] = p.Disposition.ToAndGroup()
 	}
 	if p.Insurer != nil {
-		m[search.ParameterKey{Name: "insurer"}] = p.Insurer.MatchesAll()
+		m["insurer"] = p.Insurer.ToAndGroup()
 	}
 	if p.Outcome != nil {
-		m[search.ParameterKey{Name: "outcome"}] = p.Outcome.MatchesAll()
+		m["outcome"] = p.Outcome.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Requestor != nil {
-		m[search.ParameterKey{Name: "requestor"}] = p.Requestor.MatchesAll()
+		m["requestor"] = p.Requestor.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -2633,47 +2633,47 @@ func (p CoverageEligibilityResponseParams) Map() map[search.ParameterKey]search.
 // DetectedIssueParams contains typed search parameters for DetectedIssue resources.
 type DetectedIssueParams struct {
 	// DetectedIssue-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Identified search.DateOrString      `json:"identified,omitempty"`
-	Implicated search.ReferenceOrString `json:"implicated,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Identified search.Criteria[search.Date]      `json:"identified,omitempty"`
+	Implicated search.Criteria[search.Reference] `json:"implicated,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DetectedIssueParams.
-func (p DetectedIssueParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DetectedIssueParams.
+func (p DetectedIssueParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Identified != nil {
-		m[search.ParameterKey{Name: "identified"}] = p.Identified.MatchesAll()
+		m["identified"] = p.Identified.ToAndGroup()
 	}
 	if p.Implicated != nil {
-		m[search.ParameterKey{Name: "implicated"}] = p.Implicated.MatchesAll()
+		m["implicated"] = p.Implicated.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -2682,103 +2682,103 @@ func (p DetectedIssueParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceParams contains typed search parameters for Device resources.
 type DeviceParams struct {
 	// Device-specific search parameters
-	BiologicalSourceEvent search.TokenOrString     `json:"biological-source-event,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Definition            search.ReferenceOrString `json:"definition,omitempty"`
-	DeviceName            search.StringOrString    `json:"device-name,omitempty"`
-	ExpirationDate        search.DateOrString      `json:"expiration-date,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Location              search.ReferenceOrString `json:"location,omitempty"`
-	LotNumber             search.StringOrString    `json:"lot-number,omitempty"`
-	ManufactureDate       search.DateOrString      `json:"manufacture-date,omitempty"`
-	Manufacturer          search.StringOrString    `json:"manufacturer,omitempty"`
-	Model                 search.StringOrString    `json:"model,omitempty"`
-	Organization          search.ReferenceOrString `json:"organization,omitempty"`
-	Parent                search.ReferenceOrString `json:"parent,omitempty"`
-	SerialNumber          search.StringOrString    `json:"serial-number,omitempty"`
-	Specification         search.TokenOrString     `json:"specification,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Type                  search.TokenOrString     `json:"type,omitempty"`
-	UdiCarrier            search.StringOrString    `json:"udi-carrier,omitempty"`
-	UdiDi                 search.StringOrString    `json:"udi-di,omitempty"`
-	Url                   search.UriOrString       `json:"url,omitempty"`
-	Version               search.StringOrString    `json:"version,omitempty"`
-	CodeValueConcept      search.CompositeOrString `json:"code-value-concept,omitempty"`
-	SpecificationVersion  search.CompositeOrString `json:"specification-version,omitempty"`
+	BiologicalSourceEvent search.Criteria[search.Token]     `json:"biological-source-event,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Definition            search.Criteria[search.Reference] `json:"definition,omitempty"`
+	DeviceName            search.Criteria[search.String]    `json:"device-name,omitempty"`
+	ExpirationDate        search.Criteria[search.Date]      `json:"expiration-date,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location              search.Criteria[search.Reference] `json:"location,omitempty"`
+	LotNumber             search.Criteria[search.String]    `json:"lot-number,omitempty"`
+	ManufactureDate       search.Criteria[search.Date]      `json:"manufacture-date,omitempty"`
+	Manufacturer          search.Criteria[search.String]    `json:"manufacturer,omitempty"`
+	Model                 search.Criteria[search.String]    `json:"model,omitempty"`
+	Organization          search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Parent                search.Criteria[search.Reference] `json:"parent,omitempty"`
+	SerialNumber          search.Criteria[search.String]    `json:"serial-number,omitempty"`
+	Specification         search.Criteria[search.Token]     `json:"specification,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type                  search.Criteria[search.Token]     `json:"type,omitempty"`
+	UdiCarrier            search.Criteria[search.String]    `json:"udi-carrier,omitempty"`
+	UdiDi                 search.Criteria[search.String]    `json:"udi-di,omitempty"`
+	Url                   search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version               search.Criteria[search.String]    `json:"version,omitempty"`
+	CodeValueConcept      search.Criteria[search.Composite] `json:"code-value-concept,omitempty"`
+	SpecificationVersion  search.Criteria[search.Composite] `json:"specification-version,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceParams.
-func (p DeviceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceParams.
+func (p DeviceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.BiologicalSourceEvent != nil {
-		m[search.ParameterKey{Name: "biological-source-event"}] = p.BiologicalSourceEvent.MatchesAll()
+		m["biological-source-event"] = p.BiologicalSourceEvent.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Definition != nil {
-		m[search.ParameterKey{Name: "definition"}] = p.Definition.MatchesAll()
+		m["definition"] = p.Definition.ToAndGroup()
 	}
 	if p.DeviceName != nil {
-		m[search.ParameterKey{Name: "device-name"}] = p.DeviceName.MatchesAll()
+		m["device-name"] = p.DeviceName.ToAndGroup()
 	}
 	if p.ExpirationDate != nil {
-		m[search.ParameterKey{Name: "expiration-date"}] = p.ExpirationDate.MatchesAll()
+		m["expiration-date"] = p.ExpirationDate.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.LotNumber != nil {
-		m[search.ParameterKey{Name: "lot-number"}] = p.LotNumber.MatchesAll()
+		m["lot-number"] = p.LotNumber.ToAndGroup()
 	}
 	if p.ManufactureDate != nil {
-		m[search.ParameterKey{Name: "manufacture-date"}] = p.ManufactureDate.MatchesAll()
+		m["manufacture-date"] = p.ManufactureDate.ToAndGroup()
 	}
 	if p.Manufacturer != nil {
-		m[search.ParameterKey{Name: "manufacturer"}] = p.Manufacturer.MatchesAll()
+		m["manufacturer"] = p.Manufacturer.ToAndGroup()
 	}
 	if p.Model != nil {
-		m[search.ParameterKey{Name: "model"}] = p.Model.MatchesAll()
+		m["model"] = p.Model.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Parent != nil {
-		m[search.ParameterKey{Name: "parent"}] = p.Parent.MatchesAll()
+		m["parent"] = p.Parent.ToAndGroup()
 	}
 	if p.SerialNumber != nil {
-		m[search.ParameterKey{Name: "serial-number"}] = p.SerialNumber.MatchesAll()
+		m["serial-number"] = p.SerialNumber.ToAndGroup()
 	}
 	if p.Specification != nil {
-		m[search.ParameterKey{Name: "specification"}] = p.Specification.MatchesAll()
+		m["specification"] = p.Specification.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.UdiCarrier != nil {
-		m[search.ParameterKey{Name: "udi-carrier"}] = p.UdiCarrier.MatchesAll()
+		m["udi-carrier"] = p.UdiCarrier.ToAndGroup()
 	}
 	if p.UdiDi != nil {
-		m[search.ParameterKey{Name: "udi-di"}] = p.UdiDi.MatchesAll()
+		m["udi-di"] = p.UdiDi.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.CodeValueConcept != nil {
-		m[search.ParameterKey{Name: "code-value-concept"}] = p.CodeValueConcept.MatchesAll()
+		m["code-value-concept"] = p.CodeValueConcept.ToAndGroup()
 	}
 	if p.SpecificationVersion != nil {
-		m[search.ParameterKey{Name: "specification-version"}] = p.SpecificationVersion.MatchesAll()
+		m["specification-version"] = p.SpecificationVersion.ToAndGroup()
 	}
 
 	return m
@@ -2787,35 +2787,35 @@ func (p DeviceParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceAssociationParams contains typed search parameters for DeviceAssociation resources.
 type DeviceAssociationParams struct {
 	// DeviceAssociation-specific search parameters
-	Device     search.ReferenceOrString `json:"device,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Operator   search.ReferenceOrString `json:"operator,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Device     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Operator   search.Criteria[search.Reference] `json:"operator,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceAssociationParams.
-func (p DeviceAssociationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceAssociationParams.
+func (p DeviceAssociationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Operator != nil {
-		m[search.ParameterKey{Name: "operator"}] = p.Operator.MatchesAll()
+		m["operator"] = p.Operator.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -2824,39 +2824,39 @@ func (p DeviceAssociationParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceDefinitionParams contains typed search parameters for DeviceDefinition resources.
 type DeviceDefinitionParams struct {
 	// DeviceDefinition-specific search parameters
-	DeviceName           search.StringOrString    `json:"device-name,omitempty"`
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Manufacturer         search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Organization         search.ReferenceOrString `json:"organization,omitempty"`
-	Specification        search.TokenOrString     `json:"specification,omitempty"`
-	Type                 search.TokenOrString     `json:"type,omitempty"`
-	SpecificationVersion search.CompositeOrString `json:"specification-version,omitempty"`
+	DeviceName           search.Criteria[search.String]    `json:"device-name,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Manufacturer         search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Organization         search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Specification        search.Criteria[search.Token]     `json:"specification,omitempty"`
+	Type                 search.Criteria[search.Token]     `json:"type,omitempty"`
+	SpecificationVersion search.Criteria[search.Composite] `json:"specification-version,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceDefinitionParams.
-func (p DeviceDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceDefinitionParams.
+func (p DeviceDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.DeviceName != nil {
-		m[search.ParameterKey{Name: "device-name"}] = p.DeviceName.MatchesAll()
+		m["device-name"] = p.DeviceName.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Manufacturer != nil {
-		m[search.ParameterKey{Name: "manufacturer"}] = p.Manufacturer.MatchesAll()
+		m["manufacturer"] = p.Manufacturer.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Specification != nil {
-		m[search.ParameterKey{Name: "specification"}] = p.Specification.MatchesAll()
+		m["specification"] = p.Specification.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.SpecificationVersion != nil {
-		m[search.ParameterKey{Name: "specification-version"}] = p.SpecificationVersion.MatchesAll()
+		m["specification-version"] = p.SpecificationVersion.ToAndGroup()
 	}
 
 	return m
@@ -2865,31 +2865,31 @@ func (p DeviceDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceDispenseParams contains typed search parameters for DeviceDispense resources.
 type DeviceDispenseParams struct {
 	// DeviceDispense-specific search parameters
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceDispenseParams.
-func (p DeviceDispenseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceDispenseParams.
+func (p DeviceDispenseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -2898,27 +2898,27 @@ func (p DeviceDispenseParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceMetricParams contains typed search parameters for DeviceMetric resources.
 type DeviceMetricParams struct {
 	// DeviceMetric-specific search parameters
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Device     search.ReferenceOrString `json:"device,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Device     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceMetricParams.
-func (p DeviceMetricParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceMetricParams.
+func (p DeviceMetricParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -2927,87 +2927,87 @@ func (p DeviceMetricParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceRequestParams contains typed search parameters for DeviceRequest resources.
 type DeviceRequestParams struct {
 	// DeviceRequest-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	AuthoredOn            search.DateOrString      `json:"authored-on,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Device                search.ReferenceOrString `json:"device,omitempty"`
-	EventDate             search.DateOrString      `json:"event-date,omitempty"`
-	GroupIdentifier       search.TokenOrString     `json:"group-identifier,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Insurance             search.ReferenceOrString `json:"insurance,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	PerformerCode         search.TokenOrString     `json:"performer-code,omitempty"`
-	PriorRequest          search.ReferenceOrString `json:"prior-request,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	AuthoredOn            search.Criteria[search.Date]      `json:"authored-on,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Device                search.Criteria[search.Reference] `json:"device,omitempty"`
+	EventDate             search.Criteria[search.Date]      `json:"event-date,omitempty"`
+	GroupIdentifier       search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Insurance             search.Criteria[search.Reference] `json:"insurance,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	PerformerCode         search.Criteria[search.Token]     `json:"performer-code,omitempty"`
+	PriorRequest          search.Criteria[search.Reference] `json:"prior-request,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceRequestParams.
-func (p DeviceRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceRequestParams.
+func (p DeviceRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.AuthoredOn != nil {
-		m[search.ParameterKey{Name: "authored-on"}] = p.AuthoredOn.MatchesAll()
+		m["authored-on"] = p.AuthoredOn.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.EventDate != nil {
-		m[search.ParameterKey{Name: "event-date"}] = p.EventDate.MatchesAll()
+		m["event-date"] = p.EventDate.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Insurance != nil {
-		m[search.ParameterKey{Name: "insurance"}] = p.Insurance.MatchesAll()
+		m["insurance"] = p.Insurance.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.PerformerCode != nil {
-		m[search.ParameterKey{Name: "performer-code"}] = p.PerformerCode.MatchesAll()
+		m["performer-code"] = p.PerformerCode.ToAndGroup()
 	}
 	if p.PriorRequest != nil {
-		m[search.ParameterKey{Name: "prior-request"}] = p.PriorRequest.MatchesAll()
+		m["prior-request"] = p.PriorRequest.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -3016,27 +3016,27 @@ func (p DeviceRequestParams) Map() map[search.ParameterKey]search.MatchAll {
 // DeviceUsageParams contains typed search parameters for DeviceUsage resources.
 type DeviceUsageParams struct {
 	// DeviceUsage-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Device     search.TokenOrString     `json:"device,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Device     search.Criteria[search.Token]     `json:"device,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DeviceUsageParams.
-func (p DeviceUsageParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DeviceUsageParams.
+func (p DeviceUsageParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -3045,79 +3045,79 @@ func (p DeviceUsageParams) Map() map[search.ParameterKey]search.MatchAll {
 // DiagnosticReportParams contains typed search parameters for DiagnosticReport resources.
 type DiagnosticReportParams struct {
 	// DiagnosticReport-specific search parameters
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Code               search.TokenOrString     `json:"code,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Encounter          search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn            search.ReferenceOrString `json:"based-on,omitempty"`
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	Conclusion         search.TokenOrString     `json:"conclusion,omitempty"`
-	Issued             search.DateOrString      `json:"issued,omitempty"`
-	Media              search.ReferenceOrString `json:"media,omitempty"`
-	Performer          search.ReferenceOrString `json:"performer,omitempty"`
-	Result             search.ReferenceOrString `json:"result,omitempty"`
-	ResultsInterpreter search.ReferenceOrString `json:"results-interpreter,omitempty"`
-	Specimen           search.ReferenceOrString `json:"specimen,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
-	Study              search.ReferenceOrString `json:"study,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code               search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter          search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn            search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	Conclusion         search.Criteria[search.Token]     `json:"conclusion,omitempty"`
+	Issued             search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Media              search.Criteria[search.Reference] `json:"media,omitempty"`
+	Performer          search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Result             search.Criteria[search.Reference] `json:"result,omitempty"`
+	ResultsInterpreter search.Criteria[search.Reference] `json:"results-interpreter,omitempty"`
+	Specimen           search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
+	Study              search.Criteria[search.Reference] `json:"study,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DiagnosticReportParams.
-func (p DiagnosticReportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DiagnosticReportParams.
+func (p DiagnosticReportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Conclusion != nil {
-		m[search.ParameterKey{Name: "conclusion"}] = p.Conclusion.MatchesAll()
+		m["conclusion"] = p.Conclusion.ToAndGroup()
 	}
 	if p.Issued != nil {
-		m[search.ParameterKey{Name: "issued"}] = p.Issued.MatchesAll()
+		m["issued"] = p.Issued.ToAndGroup()
 	}
 	if p.Media != nil {
-		m[search.ParameterKey{Name: "media"}] = p.Media.MatchesAll()
+		m["media"] = p.Media.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Result != nil {
-		m[search.ParameterKey{Name: "result"}] = p.Result.MatchesAll()
+		m["result"] = p.Result.ToAndGroup()
 	}
 	if p.ResultsInterpreter != nil {
-		m[search.ParameterKey{Name: "results-interpreter"}] = p.ResultsInterpreter.MatchesAll()
+		m["results-interpreter"] = p.ResultsInterpreter.ToAndGroup()
 	}
 	if p.Specimen != nil {
-		m[search.ParameterKey{Name: "specimen"}] = p.Specimen.MatchesAll()
+		m["specimen"] = p.Specimen.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Study != nil {
-		m[search.ParameterKey{Name: "study"}] = p.Study.MatchesAll()
+		m["study"] = p.Study.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -3126,147 +3126,147 @@ func (p DiagnosticReportParams) Map() map[search.ParameterKey]search.MatchAll {
 // DocumentReferenceParams contains typed search parameters for DocumentReference resources.
 type DocumentReferenceParams struct {
 	// DocumentReference-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
-	Date              search.DateOrString      `json:"date,omitempty"`
-	Attester          search.ReferenceOrString `json:"attester,omitempty"`
-	Author            search.ReferenceOrString `json:"author,omitempty"`
-	BasedOn           search.ReferenceOrString `json:"based-on,omitempty"`
-	Bodysite          search.TokenOrString     `json:"bodysite,omitempty"`
-	BodysiteReference search.ReferenceOrString `json:"bodysite-reference,omitempty"`
-	Category          search.TokenOrString     `json:"category,omitempty"`
-	Contenttype       search.TokenOrString     `json:"contenttype,omitempty"`
-	Context           search.ReferenceOrString `json:"context,omitempty"`
-	Creation          search.DateOrString      `json:"creation,omitempty"`
-	Custodian         search.ReferenceOrString `json:"custodian,omitempty"`
-	Description       search.StringOrString    `json:"description,omitempty"`
-	DocStatus         search.TokenOrString     `json:"doc-status,omitempty"`
-	EventCode         search.TokenOrString     `json:"event-code,omitempty"`
-	EventReference    search.ReferenceOrString `json:"event-reference,omitempty"`
-	Facility          search.TokenOrString     `json:"facility,omitempty"`
-	FormatCanonical   search.ReferenceOrString `json:"format-canonical,omitempty"`
-	FormatCode        search.TokenOrString     `json:"format-code,omitempty"`
-	FormatUri         search.UriOrString       `json:"format-uri,omitempty"`
-	Language          search.TokenOrString     `json:"language,omitempty"`
-	Location          search.UriOrString       `json:"location,omitempty"`
-	Modality          search.TokenOrString     `json:"modality,omitempty"`
-	Period            search.DateOrString      `json:"period,omitempty"`
-	Relatesto         search.ReferenceOrString `json:"relatesto,omitempty"`
-	Relation          search.TokenOrString     `json:"relation,omitempty"`
-	SecurityLabel     search.TokenOrString     `json:"security-label,omitempty"`
-	Setting           search.TokenOrString     `json:"setting,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Subject           search.ReferenceOrString `json:"subject,omitempty"`
-	Version           search.StringOrString    `json:"version,omitempty"`
-	Relationship      search.CompositeOrString `json:"relationship,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
+	Date              search.Criteria[search.Date]      `json:"date,omitempty"`
+	Attester          search.Criteria[search.Reference] `json:"attester,omitempty"`
+	Author            search.Criteria[search.Reference] `json:"author,omitempty"`
+	BasedOn           search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Bodysite          search.Criteria[search.Token]     `json:"bodysite,omitempty"`
+	BodysiteReference search.Criteria[search.Reference] `json:"bodysite-reference,omitempty"`
+	Category          search.Criteria[search.Token]     `json:"category,omitempty"`
+	Contenttype       search.Criteria[search.Token]     `json:"contenttype,omitempty"`
+	Context           search.Criteria[search.Reference] `json:"context,omitempty"`
+	Creation          search.Criteria[search.Date]      `json:"creation,omitempty"`
+	Custodian         search.Criteria[search.Reference] `json:"custodian,omitempty"`
+	Description       search.Criteria[search.String]    `json:"description,omitempty"`
+	DocStatus         search.Criteria[search.Token]     `json:"doc-status,omitempty"`
+	EventCode         search.Criteria[search.Token]     `json:"event-code,omitempty"`
+	EventReference    search.Criteria[search.Reference] `json:"event-reference,omitempty"`
+	Facility          search.Criteria[search.Token]     `json:"facility,omitempty"`
+	FormatCanonical   search.Criteria[search.Reference] `json:"format-canonical,omitempty"`
+	FormatCode        search.Criteria[search.Token]     `json:"format-code,omitempty"`
+	FormatUri         search.Criteria[search.Uri]       `json:"format-uri,omitempty"`
+	Language          search.Criteria[search.Token]     `json:"language,omitempty"`
+	Location          search.Criteria[search.Uri]       `json:"location,omitempty"`
+	Modality          search.Criteria[search.Token]     `json:"modality,omitempty"`
+	Period            search.Criteria[search.Date]      `json:"period,omitempty"`
+	Relatesto         search.Criteria[search.Reference] `json:"relatesto,omitempty"`
+	Relation          search.Criteria[search.Token]     `json:"relation,omitempty"`
+	SecurityLabel     search.Criteria[search.Token]     `json:"security-label,omitempty"`
+	Setting           search.Criteria[search.Token]     `json:"setting,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject           search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Version           search.Criteria[search.String]    `json:"version,omitempty"`
+	Relationship      search.Criteria[search.Composite] `json:"relationship,omitempty"`
 }
 
-// Map implements the search.Parameters interface for DocumentReferenceParams.
-func (p DocumentReferenceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for DocumentReferenceParams.
+func (p DocumentReferenceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Attester != nil {
-		m[search.ParameterKey{Name: "attester"}] = p.Attester.MatchesAll()
+		m["attester"] = p.Attester.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Bodysite != nil {
-		m[search.ParameterKey{Name: "bodysite"}] = p.Bodysite.MatchesAll()
+		m["bodysite"] = p.Bodysite.ToAndGroup()
 	}
 	if p.BodysiteReference != nil {
-		m[search.ParameterKey{Name: "bodysite-reference"}] = p.BodysiteReference.MatchesAll()
+		m["bodysite-reference"] = p.BodysiteReference.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Contenttype != nil {
-		m[search.ParameterKey{Name: "contenttype"}] = p.Contenttype.MatchesAll()
+		m["contenttype"] = p.Contenttype.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.Creation != nil {
-		m[search.ParameterKey{Name: "creation"}] = p.Creation.MatchesAll()
+		m["creation"] = p.Creation.ToAndGroup()
 	}
 	if p.Custodian != nil {
-		m[search.ParameterKey{Name: "custodian"}] = p.Custodian.MatchesAll()
+		m["custodian"] = p.Custodian.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.DocStatus != nil {
-		m[search.ParameterKey{Name: "doc-status"}] = p.DocStatus.MatchesAll()
+		m["doc-status"] = p.DocStatus.ToAndGroup()
 	}
 	if p.EventCode != nil {
-		m[search.ParameterKey{Name: "event-code"}] = p.EventCode.MatchesAll()
+		m["event-code"] = p.EventCode.ToAndGroup()
 	}
 	if p.EventReference != nil {
-		m[search.ParameterKey{Name: "event-reference"}] = p.EventReference.MatchesAll()
+		m["event-reference"] = p.EventReference.ToAndGroup()
 	}
 	if p.Facility != nil {
-		m[search.ParameterKey{Name: "facility"}] = p.Facility.MatchesAll()
+		m["facility"] = p.Facility.ToAndGroup()
 	}
 	if p.FormatCanonical != nil {
-		m[search.ParameterKey{Name: "format-canonical"}] = p.FormatCanonical.MatchesAll()
+		m["format-canonical"] = p.FormatCanonical.ToAndGroup()
 	}
 	if p.FormatCode != nil {
-		m[search.ParameterKey{Name: "format-code"}] = p.FormatCode.MatchesAll()
+		m["format-code"] = p.FormatCode.ToAndGroup()
 	}
 	if p.FormatUri != nil {
-		m[search.ParameterKey{Name: "format-uri"}] = p.FormatUri.MatchesAll()
+		m["format-uri"] = p.FormatUri.ToAndGroup()
 	}
 	if p.Language != nil {
-		m[search.ParameterKey{Name: "language"}] = p.Language.MatchesAll()
+		m["language"] = p.Language.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Modality != nil {
-		m[search.ParameterKey{Name: "modality"}] = p.Modality.MatchesAll()
+		m["modality"] = p.Modality.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Relatesto != nil {
-		m[search.ParameterKey{Name: "relatesto"}] = p.Relatesto.MatchesAll()
+		m["relatesto"] = p.Relatesto.ToAndGroup()
 	}
 	if p.Relation != nil {
-		m[search.ParameterKey{Name: "relation"}] = p.Relation.MatchesAll()
+		m["relation"] = p.Relation.ToAndGroup()
 	}
 	if p.SecurityLabel != nil {
-		m[search.ParameterKey{Name: "security-label"}] = p.SecurityLabel.MatchesAll()
+		m["security-label"] = p.SecurityLabel.ToAndGroup()
 	}
 	if p.Setting != nil {
-		m[search.ParameterKey{Name: "setting"}] = p.Setting.MatchesAll()
+		m["setting"] = p.Setting.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.Relationship != nil {
-		m[search.ParameterKey{Name: "relationship"}] = p.Relationship.MatchesAll()
+		m["relationship"] = p.Relationship.ToAndGroup()
 	}
 
 	return m
@@ -3275,123 +3275,123 @@ func (p DocumentReferenceParams) Map() map[search.ParameterKey]search.MatchAll {
 // EncounterParams contains typed search parameters for Encounter resources.
 type EncounterParams struct {
 	// Encounter-specific search parameters
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Type               search.TokenOrString     `json:"type,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Account            search.ReferenceOrString `json:"account,omitempty"`
-	Appointment        search.ReferenceOrString `json:"appointment,omitempty"`
-	BasedOn            search.ReferenceOrString `json:"based-on,omitempty"`
-	Careteam           search.ReferenceOrString `json:"careteam,omitempty"`
-	Class              search.TokenOrString     `json:"class,omitempty"`
-	DateStart          search.DateOrString      `json:"date-start,omitempty"`
-	DiagnosisCode      search.TokenOrString     `json:"diagnosis-code,omitempty"`
-	DiagnosisReference search.ReferenceOrString `json:"diagnosis-reference,omitempty"`
-	EndDate            search.DateOrString      `json:"end-date,omitempty"`
-	EpisodeOfCare      search.ReferenceOrString `json:"episode-of-care,omitempty"`
-	Length             search.QuantityOrString  `json:"length,omitempty"`
-	Location           search.ReferenceOrString `json:"location,omitempty"`
-	PartOf             search.ReferenceOrString `json:"part-of,omitempty"`
-	Participant        search.ReferenceOrString `json:"participant,omitempty"`
-	ParticipantType    search.TokenOrString     `json:"participant-type,omitempty"`
-	Practitioner       search.ReferenceOrString `json:"practitioner,omitempty"`
-	ReasonCode         search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference    search.ReferenceOrString `json:"reason-reference,omitempty"`
-	ServiceProvider    search.ReferenceOrString `json:"service-provider,omitempty"`
-	SpecialArrangement search.TokenOrString     `json:"special-arrangement,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
-	SubjectStatus      search.TokenOrString     `json:"subject-status,omitempty"`
-	LocationPeriod     search.CompositeOrString `json:"location-period,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type               search.Criteria[search.Token]     `json:"type,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Account            search.Criteria[search.Reference] `json:"account,omitempty"`
+	Appointment        search.Criteria[search.Reference] `json:"appointment,omitempty"`
+	BasedOn            search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Careteam           search.Criteria[search.Reference] `json:"careteam,omitempty"`
+	Class              search.Criteria[search.Token]     `json:"class,omitempty"`
+	DateStart          search.Criteria[search.Date]      `json:"date-start,omitempty"`
+	DiagnosisCode      search.Criteria[search.Token]     `json:"diagnosis-code,omitempty"`
+	DiagnosisReference search.Criteria[search.Reference] `json:"diagnosis-reference,omitempty"`
+	EndDate            search.Criteria[search.Date]      `json:"end-date,omitempty"`
+	EpisodeOfCare      search.Criteria[search.Reference] `json:"episode-of-care,omitempty"`
+	Length             search.Criteria[search.Quantity]  `json:"length,omitempty"`
+	Location           search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartOf             search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Participant        search.Criteria[search.Reference] `json:"participant,omitempty"`
+	ParticipantType    search.Criteria[search.Token]     `json:"participant-type,omitempty"`
+	Practitioner       search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	ReasonCode         search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference    search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	ServiceProvider    search.Criteria[search.Reference] `json:"service-provider,omitempty"`
+	SpecialArrangement search.Criteria[search.Token]     `json:"special-arrangement,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
+	SubjectStatus      search.Criteria[search.Token]     `json:"subject-status,omitempty"`
+	LocationPeriod     search.Criteria[search.Composite] `json:"location-period,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EncounterParams.
-func (p EncounterParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EncounterParams.
+func (p EncounterParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Account != nil {
-		m[search.ParameterKey{Name: "account"}] = p.Account.MatchesAll()
+		m["account"] = p.Account.ToAndGroup()
 	}
 	if p.Appointment != nil {
-		m[search.ParameterKey{Name: "appointment"}] = p.Appointment.MatchesAll()
+		m["appointment"] = p.Appointment.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Careteam != nil {
-		m[search.ParameterKey{Name: "careteam"}] = p.Careteam.MatchesAll()
+		m["careteam"] = p.Careteam.ToAndGroup()
 	}
 	if p.Class != nil {
-		m[search.ParameterKey{Name: "class"}] = p.Class.MatchesAll()
+		m["class"] = p.Class.ToAndGroup()
 	}
 	if p.DateStart != nil {
-		m[search.ParameterKey{Name: "date-start"}] = p.DateStart.MatchesAll()
+		m["date-start"] = p.DateStart.ToAndGroup()
 	}
 	if p.DiagnosisCode != nil {
-		m[search.ParameterKey{Name: "diagnosis-code"}] = p.DiagnosisCode.MatchesAll()
+		m["diagnosis-code"] = p.DiagnosisCode.ToAndGroup()
 	}
 	if p.DiagnosisReference != nil {
-		m[search.ParameterKey{Name: "diagnosis-reference"}] = p.DiagnosisReference.MatchesAll()
+		m["diagnosis-reference"] = p.DiagnosisReference.ToAndGroup()
 	}
 	if p.EndDate != nil {
-		m[search.ParameterKey{Name: "end-date"}] = p.EndDate.MatchesAll()
+		m["end-date"] = p.EndDate.ToAndGroup()
 	}
 	if p.EpisodeOfCare != nil {
-		m[search.ParameterKey{Name: "episode-of-care"}] = p.EpisodeOfCare.MatchesAll()
+		m["episode-of-care"] = p.EpisodeOfCare.ToAndGroup()
 	}
 	if p.Length != nil {
-		m[search.ParameterKey{Name: "length"}] = p.Length.MatchesAll()
+		m["length"] = p.Length.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.ParticipantType != nil {
-		m[search.ParameterKey{Name: "participant-type"}] = p.ParticipantType.MatchesAll()
+		m["participant-type"] = p.ParticipantType.ToAndGroup()
 	}
 	if p.Practitioner != nil {
-		m[search.ParameterKey{Name: "practitioner"}] = p.Practitioner.MatchesAll()
+		m["practitioner"] = p.Practitioner.ToAndGroup()
 	}
 	if p.ReasonCode != nil {
-		m[search.ParameterKey{Name: "reason-code"}] = p.ReasonCode.MatchesAll()
+		m["reason-code"] = p.ReasonCode.ToAndGroup()
 	}
 	if p.ReasonReference != nil {
-		m[search.ParameterKey{Name: "reason-reference"}] = p.ReasonReference.MatchesAll()
+		m["reason-reference"] = p.ReasonReference.ToAndGroup()
 	}
 	if p.ServiceProvider != nil {
-		m[search.ParameterKey{Name: "service-provider"}] = p.ServiceProvider.MatchesAll()
+		m["service-provider"] = p.ServiceProvider.ToAndGroup()
 	}
 	if p.SpecialArrangement != nil {
-		m[search.ParameterKey{Name: "special-arrangement"}] = p.SpecialArrangement.MatchesAll()
+		m["special-arrangement"] = p.SpecialArrangement.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.SubjectStatus != nil {
-		m[search.ParameterKey{Name: "subject-status"}] = p.SubjectStatus.MatchesAll()
+		m["subject-status"] = p.SubjectStatus.ToAndGroup()
 	}
 	if p.LocationPeriod != nil {
-		m[search.ParameterKey{Name: "location-period"}] = p.LocationPeriod.MatchesAll()
+		m["location-period"] = p.LocationPeriod.ToAndGroup()
 	}
 
 	return m
@@ -3400,31 +3400,31 @@ func (p EncounterParams) Map() map[search.ParameterKey]search.MatchAll {
 // EncounterHistoryParams contains typed search parameters for EncounterHistory resources.
 type EncounterHistoryParams struct {
 	// EncounterHistory-specific search parameters
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EncounterHistoryParams.
-func (p EncounterHistoryParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EncounterHistoryParams.
+func (p EncounterHistoryParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -3433,35 +3433,35 @@ func (p EncounterHistoryParams) Map() map[search.ParameterKey]search.MatchAll {
 // EndpointParams contains typed search parameters for Endpoint resources.
 type EndpointParams struct {
 	// Endpoint-specific search parameters
-	ConnectionType search.TokenOrString     `json:"connection-type,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Name           search.StringOrString    `json:"name,omitempty"`
-	Organization   search.ReferenceOrString `json:"organization,omitempty"`
-	PayloadType    search.TokenOrString     `json:"payload-type,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
+	ConnectionType search.Criteria[search.Token]     `json:"connection-type,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name           search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization   search.Criteria[search.Reference] `json:"organization,omitempty"`
+	PayloadType    search.Criteria[search.Token]     `json:"payload-type,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EndpointParams.
-func (p EndpointParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EndpointParams.
+func (p EndpointParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ConnectionType != nil {
-		m[search.ParameterKey{Name: "connection-type"}] = p.ConnectionType.MatchesAll()
+		m["connection-type"] = p.ConnectionType.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.PayloadType != nil {
-		m[search.ParameterKey{Name: "payload-type"}] = p.PayloadType.MatchesAll()
+		m["payload-type"] = p.PayloadType.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -3470,27 +3470,27 @@ func (p EndpointParams) Map() map[search.ParameterKey]search.MatchAll {
 // EnrollmentRequestParams contains typed search parameters for EnrollmentRequest resources.
 type EnrollmentRequestParams struct {
 	// EnrollmentRequest-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EnrollmentRequestParams.
-func (p EnrollmentRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EnrollmentRequestParams.
+func (p EnrollmentRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -3499,23 +3499,23 @@ func (p EnrollmentRequestParams) Map() map[search.ParameterKey]search.MatchAll {
 // EnrollmentResponseParams contains typed search parameters for EnrollmentResponse resources.
 type EnrollmentResponseParams struct {
 	// EnrollmentResponse-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Request    search.ReferenceOrString `json:"request,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Request    search.Criteria[search.Reference] `json:"request,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EnrollmentResponseParams.
-func (p EnrollmentResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EnrollmentResponseParams.
+func (p EnrollmentResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -3524,59 +3524,59 @@ func (p EnrollmentResponseParams) Map() map[search.ParameterKey]search.MatchAll 
 // EpisodeOfCareParams contains typed search parameters for EpisodeOfCare resources.
 type EpisodeOfCareParams struct {
 	// EpisodeOfCare-specific search parameters
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Type               search.TokenOrString     `json:"type,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	CareManager        search.ReferenceOrString `json:"care-manager,omitempty"`
-	DiagnosisCode      search.TokenOrString     `json:"diagnosis-code,omitempty"`
-	DiagnosisReference search.ReferenceOrString `json:"diagnosis-reference,omitempty"`
-	IncomingReferral   search.ReferenceOrString `json:"incoming-referral,omitempty"`
-	Organization       search.ReferenceOrString `json:"organization,omitempty"`
-	ReasonCode         search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference    search.ReferenceOrString `json:"reason-reference,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type               search.Criteria[search.Token]     `json:"type,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	CareManager        search.Criteria[search.Reference] `json:"care-manager,omitempty"`
+	DiagnosisCode      search.Criteria[search.Token]     `json:"diagnosis-code,omitempty"`
+	DiagnosisReference search.Criteria[search.Reference] `json:"diagnosis-reference,omitempty"`
+	IncomingReferral   search.Criteria[search.Reference] `json:"incoming-referral,omitempty"`
+	Organization       search.Criteria[search.Reference] `json:"organization,omitempty"`
+	ReasonCode         search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference    search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EpisodeOfCareParams.
-func (p EpisodeOfCareParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EpisodeOfCareParams.
+func (p EpisodeOfCareParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.CareManager != nil {
-		m[search.ParameterKey{Name: "care-manager"}] = p.CareManager.MatchesAll()
+		m["care-manager"] = p.CareManager.ToAndGroup()
 	}
 	if p.DiagnosisCode != nil {
-		m[search.ParameterKey{Name: "diagnosis-code"}] = p.DiagnosisCode.MatchesAll()
+		m["diagnosis-code"] = p.DiagnosisCode.ToAndGroup()
 	}
 	if p.DiagnosisReference != nil {
-		m[search.ParameterKey{Name: "diagnosis-reference"}] = p.DiagnosisReference.MatchesAll()
+		m["diagnosis-reference"] = p.DiagnosisReference.ToAndGroup()
 	}
 	if p.IncomingReferral != nil {
-		m[search.ParameterKey{Name: "incoming-referral"}] = p.IncomingReferral.MatchesAll()
+		m["incoming-referral"] = p.IncomingReferral.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.ReasonCode != nil {
-		m[search.ParameterKey{Name: "reason-code"}] = p.ReasonCode.MatchesAll()
+		m["reason-code"] = p.ReasonCode.ToAndGroup()
 	}
 	if p.ReasonReference != nil {
-		m[search.ParameterKey{Name: "reason-reference"}] = p.ReasonReference.MatchesAll()
+		m["reason-reference"] = p.ReasonReference.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -3585,99 +3585,99 @@ func (p EpisodeOfCareParams) Map() map[search.ParameterKey]search.MatchAll {
 // EventDefinitionParams contains typed search parameters for EventDefinition resources.
 type EventDefinitionParams struct {
 	// EventDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EventDefinitionParams.
-func (p EventDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EventDefinitionParams.
+func (p EventDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -3686,63 +3686,63 @@ func (p EventDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // EvidenceParams contains typed search parameters for Evidence resources.
 type EvidenceParams struct {
 	// Evidence-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EvidenceParams.
-func (p EvidenceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EvidenceParams.
+func (p EvidenceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -3751,47 +3751,47 @@ func (p EvidenceParams) Map() map[search.ParameterKey]search.MatchAll {
 // EvidenceReportParams contains typed search parameters for EvidenceReport resources.
 type EvidenceReportParams struct {
 	// EvidenceReport-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EvidenceReportParams.
-func (p EvidenceReportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EvidenceReportParams.
+func (p EvidenceReportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -3800,91 +3800,91 @@ func (p EvidenceReportParams) Map() map[search.ParameterKey]search.MatchAll {
 // EvidenceVariableParams contains typed search parameters for EvidenceVariable resources.
 type EvidenceVariableParams struct {
 	// EvidenceVariable-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for EvidenceVariableParams.
-func (p EvidenceVariableParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for EvidenceVariableParams.
+func (p EvidenceVariableParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -3893,63 +3893,63 @@ func (p EvidenceVariableParams) Map() map[search.ParameterKey]search.MatchAll {
 // ExampleScenarioParams contains typed search parameters for ExampleScenario resources.
 type ExampleScenarioParams struct {
 	// ExampleScenario-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ExampleScenarioParams.
-func (p ExampleScenarioParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ExampleScenarioParams.
+func (p ExampleScenarioParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -3958,79 +3958,79 @@ func (p ExampleScenarioParams) Map() map[search.ParameterKey]search.MatchAll {
 // ExplanationOfBenefitParams contains typed search parameters for ExplanationOfBenefit resources.
 type ExplanationOfBenefitParams struct {
 	// ExplanationOfBenefit-specific search parameters
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter    search.ReferenceOrString `json:"encounter,omitempty"`
-	CareTeam     search.ReferenceOrString `json:"care-team,omitempty"`
-	Claim        search.ReferenceOrString `json:"claim,omitempty"`
-	Coverage     search.ReferenceOrString `json:"coverage,omitempty"`
-	Created      search.DateOrString      `json:"created,omitempty"`
-	DetailUdi    search.ReferenceOrString `json:"detail-udi,omitempty"`
-	Disposition  search.StringOrString    `json:"disposition,omitempty"`
-	Enterer      search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility     search.ReferenceOrString `json:"facility,omitempty"`
-	ItemUdi      search.ReferenceOrString `json:"item-udi,omitempty"`
-	Payee        search.ReferenceOrString `json:"payee,omitempty"`
-	ProcedureUdi search.ReferenceOrString `json:"procedure-udi,omitempty"`
-	Provider     search.ReferenceOrString `json:"provider,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	SubdetailUdi search.ReferenceOrString `json:"subdetail-udi,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter    search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	CareTeam     search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Claim        search.Criteria[search.Reference] `json:"claim,omitempty"`
+	Coverage     search.Criteria[search.Reference] `json:"coverage,omitempty"`
+	Created      search.Criteria[search.Date]      `json:"created,omitempty"`
+	DetailUdi    search.Criteria[search.Reference] `json:"detail-udi,omitempty"`
+	Disposition  search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Enterer      search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility     search.Criteria[search.Reference] `json:"facility,omitempty"`
+	ItemUdi      search.Criteria[search.Reference] `json:"item-udi,omitempty"`
+	Payee        search.Criteria[search.Reference] `json:"payee,omitempty"`
+	ProcedureUdi search.Criteria[search.Reference] `json:"procedure-udi,omitempty"`
+	Provider     search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubdetailUdi search.Criteria[search.Reference] `json:"subdetail-udi,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ExplanationOfBenefitParams.
-func (p ExplanationOfBenefitParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ExplanationOfBenefitParams.
+func (p ExplanationOfBenefitParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.CareTeam != nil {
-		m[search.ParameterKey{Name: "care-team"}] = p.CareTeam.MatchesAll()
+		m["care-team"] = p.CareTeam.ToAndGroup()
 	}
 	if p.Claim != nil {
-		m[search.ParameterKey{Name: "claim"}] = p.Claim.MatchesAll()
+		m["claim"] = p.Claim.ToAndGroup()
 	}
 	if p.Coverage != nil {
-		m[search.ParameterKey{Name: "coverage"}] = p.Coverage.MatchesAll()
+		m["coverage"] = p.Coverage.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.DetailUdi != nil {
-		m[search.ParameterKey{Name: "detail-udi"}] = p.DetailUdi.MatchesAll()
+		m["detail-udi"] = p.DetailUdi.ToAndGroup()
 	}
 	if p.Disposition != nil {
-		m[search.ParameterKey{Name: "disposition"}] = p.Disposition.MatchesAll()
+		m["disposition"] = p.Disposition.ToAndGroup()
 	}
 	if p.Enterer != nil {
-		m[search.ParameterKey{Name: "enterer"}] = p.Enterer.MatchesAll()
+		m["enterer"] = p.Enterer.ToAndGroup()
 	}
 	if p.Facility != nil {
-		m[search.ParameterKey{Name: "facility"}] = p.Facility.MatchesAll()
+		m["facility"] = p.Facility.ToAndGroup()
 	}
 	if p.ItemUdi != nil {
-		m[search.ParameterKey{Name: "item-udi"}] = p.ItemUdi.MatchesAll()
+		m["item-udi"] = p.ItemUdi.ToAndGroup()
 	}
 	if p.Payee != nil {
-		m[search.ParameterKey{Name: "payee"}] = p.Payee.MatchesAll()
+		m["payee"] = p.Payee.ToAndGroup()
 	}
 	if p.ProcedureUdi != nil {
-		m[search.ParameterKey{Name: "procedure-udi"}] = p.ProcedureUdi.MatchesAll()
+		m["procedure-udi"] = p.ProcedureUdi.ToAndGroup()
 	}
 	if p.Provider != nil {
-		m[search.ParameterKey{Name: "provider"}] = p.Provider.MatchesAll()
+		m["provider"] = p.Provider.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.SubdetailUdi != nil {
-		m[search.ParameterKey{Name: "subdetail-udi"}] = p.SubdetailUdi.MatchesAll()
+		m["subdetail-udi"] = p.SubdetailUdi.ToAndGroup()
 	}
 
 	return m
@@ -4039,47 +4039,47 @@ func (p ExplanationOfBenefitParams) Map() map[search.ParameterKey]search.MatchAl
 // FamilyMemberHistoryParams contains typed search parameters for FamilyMemberHistory resources.
 type FamilyMemberHistoryParams struct {
 	// FamilyMemberHistory-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Relationship          search.TokenOrString     `json:"relationship,omitempty"`
-	Sex                   search.TokenOrString     `json:"sex,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Relationship          search.Criteria[search.Token]     `json:"relationship,omitempty"`
+	Sex                   search.Criteria[search.Token]     `json:"sex,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for FamilyMemberHistoryParams.
-func (p FamilyMemberHistoryParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for FamilyMemberHistoryParams.
+func (p FamilyMemberHistoryParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Relationship != nil {
-		m[search.ParameterKey{Name: "relationship"}] = p.Relationship.MatchesAll()
+		m["relationship"] = p.Relationship.ToAndGroup()
 	}
 	if p.Sex != nil {
-		m[search.ParameterKey{Name: "sex"}] = p.Sex.MatchesAll()
+		m["sex"] = p.Sex.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -4088,43 +4088,43 @@ func (p FamilyMemberHistoryParams) Map() map[search.ParameterKey]search.MatchAll
 // FlagParams contains typed search parameters for Flag resources.
 type FlagParams struct {
 	// Flag-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for FlagParams.
-func (p FlagParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for FlagParams.
+func (p FlagParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -4133,19 +4133,19 @@ func (p FlagParams) Map() map[search.ParameterKey]search.MatchAll {
 // FormularyItemParams contains typed search parameters for FormularyItem resources.
 type FormularyItemParams struct {
 	// FormularyItem-specific search parameters
-	Code       search.TokenOrString `json:"code,omitempty"`
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
+	Code       search.Criteria[search.Token] `json:"code,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
 }
 
-// Map implements the search.Parameters interface for FormularyItemParams.
-func (p FormularyItemParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for FormularyItemParams.
+func (p FormularyItemParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 
 	return m
@@ -4154,31 +4154,31 @@ func (p FormularyItemParams) Map() map[search.ParameterKey]search.MatchAll {
 // GenomicStudyParams contains typed search parameters for GenomicStudy resources.
 type GenomicStudyParams struct {
 	// GenomicStudy-specific search parameters
-	Focus      search.ReferenceOrString `json:"focus,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Focus      search.Criteria[search.Reference] `json:"focus,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for GenomicStudyParams.
-func (p GenomicStudyParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for GenomicStudyParams.
+func (p GenomicStudyParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -4187,55 +4187,55 @@ func (p GenomicStudyParams) Map() map[search.ParameterKey]search.MatchAll {
 // GoalParams contains typed search parameters for Goal resources.
 type GoalParams struct {
 	// Goal-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	AchievementStatus search.TokenOrString     `json:"achievement-status,omitempty"`
-	Addresses         search.ReferenceOrString `json:"addresses,omitempty"`
-	Category          search.TokenOrString     `json:"category,omitempty"`
-	Description       search.TokenOrString     `json:"description,omitempty"`
-	LifecycleStatus   search.TokenOrString     `json:"lifecycle-status,omitempty"`
-	StartDate         search.DateOrString      `json:"start-date,omitempty"`
-	Subject           search.ReferenceOrString `json:"subject,omitempty"`
-	TargetDate        search.DateOrString      `json:"target-date,omitempty"`
-	TargetMeasure     search.TokenOrString     `json:"target-measure,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	AchievementStatus search.Criteria[search.Token]     `json:"achievement-status,omitempty"`
+	Addresses         search.Criteria[search.Reference] `json:"addresses,omitempty"`
+	Category          search.Criteria[search.Token]     `json:"category,omitempty"`
+	Description       search.Criteria[search.Token]     `json:"description,omitempty"`
+	LifecycleStatus   search.Criteria[search.Token]     `json:"lifecycle-status,omitempty"`
+	StartDate         search.Criteria[search.Date]      `json:"start-date,omitempty"`
+	Subject           search.Criteria[search.Reference] `json:"subject,omitempty"`
+	TargetDate        search.Criteria[search.Date]      `json:"target-date,omitempty"`
+	TargetMeasure     search.Criteria[search.Token]     `json:"target-measure,omitempty"`
 }
 
-// Map implements the search.Parameters interface for GoalParams.
-func (p GoalParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for GoalParams.
+func (p GoalParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.AchievementStatus != nil {
-		m[search.ParameterKey{Name: "achievement-status"}] = p.AchievementStatus.MatchesAll()
+		m["achievement-status"] = p.AchievementStatus.ToAndGroup()
 	}
 	if p.Addresses != nil {
-		m[search.ParameterKey{Name: "addresses"}] = p.Addresses.MatchesAll()
+		m["addresses"] = p.Addresses.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.LifecycleStatus != nil {
-		m[search.ParameterKey{Name: "lifecycle-status"}] = p.LifecycleStatus.MatchesAll()
+		m["lifecycle-status"] = p.LifecycleStatus.ToAndGroup()
 	}
 	if p.StartDate != nil {
-		m[search.ParameterKey{Name: "start-date"}] = p.StartDate.MatchesAll()
+		m["start-date"] = p.StartDate.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.TargetDate != nil {
-		m[search.ParameterKey{Name: "target-date"}] = p.TargetDate.MatchesAll()
+		m["target-date"] = p.TargetDate.ToAndGroup()
 	}
 	if p.TargetMeasure != nil {
-		m[search.ParameterKey{Name: "target-measure"}] = p.TargetMeasure.MatchesAll()
+		m["target-measure"] = p.TargetMeasure.ToAndGroup()
 	}
 
 	return m
@@ -4244,71 +4244,71 @@ func (p GoalParams) Map() map[search.ParameterKey]search.MatchAll {
 // GraphDefinitionParams contains typed search parameters for GraphDefinition resources.
 type GraphDefinitionParams struct {
 	// GraphDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Start               search.TokenOrString     `json:"start,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Start               search.Criteria[search.Token]     `json:"start,omitempty"`
 }
 
-// Map implements the search.Parameters interface for GraphDefinitionParams.
-func (p GraphDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for GraphDefinitionParams.
+func (p GraphDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Start != nil {
-		m[search.ParameterKey{Name: "start"}] = p.Start.MatchesAll()
+		m["start"] = p.Start.ToAndGroup()
 	}
 
 	return m
@@ -4317,59 +4317,59 @@ func (p GraphDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // GroupParams contains typed search parameters for Group resources.
 type GroupParams struct {
 	// Group-specific search parameters
-	Characteristic          search.TokenOrString     `json:"characteristic,omitempty"`
-	CharacteristicReference search.ReferenceOrString `json:"characteristic-reference,omitempty"`
-	Code                    search.TokenOrString     `json:"code,omitempty"`
-	Exclude                 search.TokenOrString     `json:"exclude,omitempty"`
-	Identifier              search.TokenOrString     `json:"identifier,omitempty"`
-	ManagingEntity          search.ReferenceOrString `json:"managing-entity,omitempty"`
-	Member                  search.ReferenceOrString `json:"member,omitempty"`
-	Membership              search.TokenOrString     `json:"membership,omitempty"`
-	Name                    search.StringOrString    `json:"name,omitempty"`
-	Type                    search.TokenOrString     `json:"type,omitempty"`
-	Value                   search.TokenOrString     `json:"value,omitempty"`
-	CharacteristicValue     search.CompositeOrString `json:"characteristic-value,omitempty"`
+	Characteristic          search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	CharacteristicReference search.Criteria[search.Reference] `json:"characteristic-reference,omitempty"`
+	Code                    search.Criteria[search.Token]     `json:"code,omitempty"`
+	Exclude                 search.Criteria[search.Token]     `json:"exclude,omitempty"`
+	Identifier              search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ManagingEntity          search.Criteria[search.Reference] `json:"managing-entity,omitempty"`
+	Member                  search.Criteria[search.Reference] `json:"member,omitempty"`
+	Membership              search.Criteria[search.Token]     `json:"membership,omitempty"`
+	Name                    search.Criteria[search.String]    `json:"name,omitempty"`
+	Type                    search.Criteria[search.Token]     `json:"type,omitempty"`
+	Value                   search.Criteria[search.Token]     `json:"value,omitempty"`
+	CharacteristicValue     search.Criteria[search.Composite] `json:"characteristic-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for GroupParams.
-func (p GroupParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for GroupParams.
+func (p GroupParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Characteristic != nil {
-		m[search.ParameterKey{Name: "characteristic"}] = p.Characteristic.MatchesAll()
+		m["characteristic"] = p.Characteristic.ToAndGroup()
 	}
 	if p.CharacteristicReference != nil {
-		m[search.ParameterKey{Name: "characteristic-reference"}] = p.CharacteristicReference.MatchesAll()
+		m["characteristic-reference"] = p.CharacteristicReference.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Exclude != nil {
-		m[search.ParameterKey{Name: "exclude"}] = p.Exclude.MatchesAll()
+		m["exclude"] = p.Exclude.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.ManagingEntity != nil {
-		m[search.ParameterKey{Name: "managing-entity"}] = p.ManagingEntity.MatchesAll()
+		m["managing-entity"] = p.ManagingEntity.ToAndGroup()
 	}
 	if p.Member != nil {
-		m[search.ParameterKey{Name: "member"}] = p.Member.MatchesAll()
+		m["member"] = p.Member.ToAndGroup()
 	}
 	if p.Membership != nil {
-		m[search.ParameterKey{Name: "membership"}] = p.Membership.MatchesAll()
+		m["membership"] = p.Membership.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Value != nil {
-		m[search.ParameterKey{Name: "value"}] = p.Value.MatchesAll()
+		m["value"] = p.Value.ToAndGroup()
 	}
 	if p.CharacteristicValue != nil {
-		m[search.ParameterKey{Name: "characteristic-value"}] = p.CharacteristicValue.MatchesAll()
+		m["characteristic-value"] = p.CharacteristicValue.ToAndGroup()
 	}
 
 	return m
@@ -4378,31 +4378,31 @@ func (p GroupParams) Map() map[search.ParameterKey]search.MatchAll {
 // GuidanceResponseParams contains typed search parameters for GuidanceResponse resources.
 type GuidanceResponseParams struct {
 	// GuidanceResponse-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Request    search.TokenOrString     `json:"request,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Request    search.Criteria[search.Token]     `json:"request,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for GuidanceResponseParams.
-func (p GuidanceResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for GuidanceResponseParams.
+func (p GuidanceResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -4411,71 +4411,71 @@ func (p GuidanceResponseParams) Map() map[search.ParameterKey]search.MatchAll {
 // HealthcareServiceParams contains typed search parameters for HealthcareService resources.
 type HealthcareServiceParams struct {
 	// HealthcareService-specific search parameters
-	Active          search.TokenOrString     `json:"active,omitempty"`
-	Characteristic  search.TokenOrString     `json:"characteristic,omitempty"`
-	Communication   search.TokenOrString     `json:"communication,omitempty"`
-	CoverageArea    search.ReferenceOrString `json:"coverage-area,omitempty"`
-	Eligibility     search.TokenOrString     `json:"eligibility,omitempty"`
-	Endpoint        search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	Name            search.StringOrString    `json:"name,omitempty"`
-	OfferedIn       search.ReferenceOrString `json:"offered-in,omitempty"`
-	Organization    search.ReferenceOrString `json:"organization,omitempty"`
-	Program         search.TokenOrString     `json:"program,omitempty"`
-	ServiceCategory search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType     search.TokenOrString     `json:"service-type,omitempty"`
-	Specialty       search.TokenOrString     `json:"specialty,omitempty"`
+	Active          search.Criteria[search.Token]     `json:"active,omitempty"`
+	Characteristic  search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	Communication   search.Criteria[search.Token]     `json:"communication,omitempty"`
+	CoverageArea    search.Criteria[search.Reference] `json:"coverage-area,omitempty"`
+	Eligibility     search.Criteria[search.Token]     `json:"eligibility,omitempty"`
+	Endpoint        search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	Name            search.Criteria[search.String]    `json:"name,omitempty"`
+	OfferedIn       search.Criteria[search.Reference] `json:"offered-in,omitempty"`
+	Organization    search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Program         search.Criteria[search.Token]     `json:"program,omitempty"`
+	ServiceCategory search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType     search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	Specialty       search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
-// Map implements the search.Parameters interface for HealthcareServiceParams.
-func (p HealthcareServiceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for HealthcareServiceParams.
+func (p HealthcareServiceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Characteristic != nil {
-		m[search.ParameterKey{Name: "characteristic"}] = p.Characteristic.MatchesAll()
+		m["characteristic"] = p.Characteristic.ToAndGroup()
 	}
 	if p.Communication != nil {
-		m[search.ParameterKey{Name: "communication"}] = p.Communication.MatchesAll()
+		m["communication"] = p.Communication.ToAndGroup()
 	}
 	if p.CoverageArea != nil {
-		m[search.ParameterKey{Name: "coverage-area"}] = p.CoverageArea.MatchesAll()
+		m["coverage-area"] = p.CoverageArea.ToAndGroup()
 	}
 	if p.Eligibility != nil {
-		m[search.ParameterKey{Name: "eligibility"}] = p.Eligibility.MatchesAll()
+		m["eligibility"] = p.Eligibility.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.OfferedIn != nil {
-		m[search.ParameterKey{Name: "offered-in"}] = p.OfferedIn.MatchesAll()
+		m["offered-in"] = p.OfferedIn.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Program != nil {
-		m[search.ParameterKey{Name: "program"}] = p.Program.MatchesAll()
+		m["program"] = p.Program.ToAndGroup()
 	}
 	if p.ServiceCategory != nil {
-		m[search.ParameterKey{Name: "service-category"}] = p.ServiceCategory.MatchesAll()
+		m["service-category"] = p.ServiceCategory.ToAndGroup()
 	}
 	if p.ServiceType != nil {
-		m[search.ParameterKey{Name: "service-type"}] = p.ServiceType.MatchesAll()
+		m["service-type"] = p.ServiceType.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 
 	return m
@@ -4484,55 +4484,55 @@ func (p HealthcareServiceParams) Map() map[search.ParameterKey]search.MatchAll {
 // ImagingSelectionParams contains typed search parameters for ImagingSelection resources.
 type ImagingSelectionParams struct {
 	// ImagingSelection-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Code          search.TokenOrString     `json:"code,omitempty"`
-	BasedOn       search.ReferenceOrString `json:"based-on,omitempty"`
-	BodySite      search.TokenOrString     `json:"body-site,omitempty"`
-	BodyStructure search.ReferenceOrString `json:"body-structure,omitempty"`
-	DerivedFrom   search.ReferenceOrString `json:"derived-from,omitempty"`
-	Issued        search.DateOrString      `json:"issued,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	StudyUid      search.TokenOrString     `json:"study-uid,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code          search.Criteria[search.Token]     `json:"code,omitempty"`
+	BasedOn       search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BodySite      search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	BodyStructure search.Criteria[search.Reference] `json:"body-structure,omitempty"`
+	DerivedFrom   search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Issued        search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	StudyUid      search.Criteria[search.Token]     `json:"study-uid,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImagingSelectionParams.
-func (p ImagingSelectionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImagingSelectionParams.
+func (p ImagingSelectionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.BodySite != nil {
-		m[search.ParameterKey{Name: "body-site"}] = p.BodySite.MatchesAll()
+		m["body-site"] = p.BodySite.ToAndGroup()
 	}
 	if p.BodyStructure != nil {
-		m[search.ParameterKey{Name: "body-structure"}] = p.BodyStructure.MatchesAll()
+		m["body-structure"] = p.BodyStructure.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Issued != nil {
-		m[search.ParameterKey{Name: "issued"}] = p.Issued.MatchesAll()
+		m["issued"] = p.Issued.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.StudyUid != nil {
-		m[search.ParameterKey{Name: "study-uid"}] = p.StudyUid.MatchesAll()
+		m["study-uid"] = p.StudyUid.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -4541,79 +4541,79 @@ func (p ImagingSelectionParams) Map() map[search.ParameterKey]search.MatchAll {
 // ImagingStudyParams contains typed search parameters for ImagingStudy resources.
 type ImagingStudyParams struct {
 	// ImagingStudy-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter     search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn       search.ReferenceOrString `json:"based-on,omitempty"`
-	BodySite      search.TokenOrString     `json:"body-site,omitempty"`
-	BodyStructure search.ReferenceOrString `json:"body-structure,omitempty"`
-	DicomClass    search.TokenOrString     `json:"dicom-class,omitempty"`
-	Endpoint      search.ReferenceOrString `json:"endpoint,omitempty"`
-	Instance      search.TokenOrString     `json:"instance,omitempty"`
-	Modality      search.TokenOrString     `json:"modality,omitempty"`
-	Performer     search.ReferenceOrString `json:"performer,omitempty"`
-	Reason        search.TokenOrString     `json:"reason,omitempty"`
-	Referrer      search.ReferenceOrString `json:"referrer,omitempty"`
-	Series        search.TokenOrString     `json:"series,omitempty"`
-	Started       search.DateOrString      `json:"started,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter     search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn       search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BodySite      search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	BodyStructure search.Criteria[search.Reference] `json:"body-structure,omitempty"`
+	DicomClass    search.Criteria[search.Token]     `json:"dicom-class,omitempty"`
+	Endpoint      search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Instance      search.Criteria[search.Token]     `json:"instance,omitempty"`
+	Modality      search.Criteria[search.Token]     `json:"modality,omitempty"`
+	Performer     search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Reason        search.Criteria[search.Token]     `json:"reason,omitempty"`
+	Referrer      search.Criteria[search.Reference] `json:"referrer,omitempty"`
+	Series        search.Criteria[search.Token]     `json:"series,omitempty"`
+	Started       search.Criteria[search.Date]      `json:"started,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImagingStudyParams.
-func (p ImagingStudyParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImagingStudyParams.
+func (p ImagingStudyParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.BodySite != nil {
-		m[search.ParameterKey{Name: "body-site"}] = p.BodySite.MatchesAll()
+		m["body-site"] = p.BodySite.ToAndGroup()
 	}
 	if p.BodyStructure != nil {
-		m[search.ParameterKey{Name: "body-structure"}] = p.BodyStructure.MatchesAll()
+		m["body-structure"] = p.BodyStructure.ToAndGroup()
 	}
 	if p.DicomClass != nil {
-		m[search.ParameterKey{Name: "dicom-class"}] = p.DicomClass.MatchesAll()
+		m["dicom-class"] = p.DicomClass.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Instance != nil {
-		m[search.ParameterKey{Name: "instance"}] = p.Instance.MatchesAll()
+		m["instance"] = p.Instance.ToAndGroup()
 	}
 	if p.Modality != nil {
-		m[search.ParameterKey{Name: "modality"}] = p.Modality.MatchesAll()
+		m["modality"] = p.Modality.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Reason != nil {
-		m[search.ParameterKey{Name: "reason"}] = p.Reason.MatchesAll()
+		m["reason"] = p.Reason.ToAndGroup()
 	}
 	if p.Referrer != nil {
-		m[search.ParameterKey{Name: "referrer"}] = p.Referrer.MatchesAll()
+		m["referrer"] = p.Referrer.ToAndGroup()
 	}
 	if p.Series != nil {
-		m[search.ParameterKey{Name: "series"}] = p.Series.MatchesAll()
+		m["series"] = p.Series.ToAndGroup()
 	}
 	if p.Started != nil {
-		m[search.ParameterKey{Name: "started"}] = p.Started.MatchesAll()
+		m["started"] = p.Started.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -4622,75 +4622,75 @@ func (p ImagingStudyParams) Map() map[search.ParameterKey]search.MatchAll {
 // ImmunizationParams contains typed search parameters for Immunization resources.
 type ImmunizationParams struct {
 	// Immunization-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	LotNumber       search.StringOrString    `json:"lot-number,omitempty"`
-	Manufacturer    search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Performer       search.ReferenceOrString `json:"performer,omitempty"`
-	Reaction        search.ReferenceOrString `json:"reaction,omitempty"`
-	ReactionDate    search.DateOrString      `json:"reaction-date,omitempty"`
-	ReasonCode      search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference search.ReferenceOrString `json:"reason-reference,omitempty"`
-	Series          search.StringOrString    `json:"series,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	StatusReason    search.TokenOrString     `json:"status-reason,omitempty"`
-	TargetDisease   search.TokenOrString     `json:"target-disease,omitempty"`
-	VaccineCode     search.TokenOrString     `json:"vaccine-code,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	LotNumber       search.Criteria[search.String]    `json:"lot-number,omitempty"`
+	Manufacturer    search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Performer       search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Reaction        search.Criteria[search.Reference] `json:"reaction,omitempty"`
+	ReactionDate    search.Criteria[search.Date]      `json:"reaction-date,omitempty"`
+	ReasonCode      search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	Series          search.Criteria[search.String]    `json:"series,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	StatusReason    search.Criteria[search.Token]     `json:"status-reason,omitempty"`
+	TargetDisease   search.Criteria[search.Token]     `json:"target-disease,omitempty"`
+	VaccineCode     search.Criteria[search.Token]     `json:"vaccine-code,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImmunizationParams.
-func (p ImmunizationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImmunizationParams.
+func (p ImmunizationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.LotNumber != nil {
-		m[search.ParameterKey{Name: "lot-number"}] = p.LotNumber.MatchesAll()
+		m["lot-number"] = p.LotNumber.ToAndGroup()
 	}
 	if p.Manufacturer != nil {
-		m[search.ParameterKey{Name: "manufacturer"}] = p.Manufacturer.MatchesAll()
+		m["manufacturer"] = p.Manufacturer.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Reaction != nil {
-		m[search.ParameterKey{Name: "reaction"}] = p.Reaction.MatchesAll()
+		m["reaction"] = p.Reaction.ToAndGroup()
 	}
 	if p.ReactionDate != nil {
-		m[search.ParameterKey{Name: "reaction-date"}] = p.ReactionDate.MatchesAll()
+		m["reaction-date"] = p.ReactionDate.ToAndGroup()
 	}
 	if p.ReasonCode != nil {
-		m[search.ParameterKey{Name: "reason-code"}] = p.ReasonCode.MatchesAll()
+		m["reason-code"] = p.ReasonCode.ToAndGroup()
 	}
 	if p.ReasonReference != nil {
-		m[search.ParameterKey{Name: "reason-reference"}] = p.ReasonReference.MatchesAll()
+		m["reason-reference"] = p.ReasonReference.ToAndGroup()
 	}
 	if p.Series != nil {
-		m[search.ParameterKey{Name: "series"}] = p.Series.MatchesAll()
+		m["series"] = p.Series.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.StatusReason != nil {
-		m[search.ParameterKey{Name: "status-reason"}] = p.StatusReason.MatchesAll()
+		m["status-reason"] = p.StatusReason.ToAndGroup()
 	}
 	if p.TargetDisease != nil {
-		m[search.ParameterKey{Name: "target-disease"}] = p.TargetDisease.MatchesAll()
+		m["target-disease"] = p.TargetDisease.ToAndGroup()
 	}
 	if p.VaccineCode != nil {
-		m[search.ParameterKey{Name: "vaccine-code"}] = p.VaccineCode.MatchesAll()
+		m["vaccine-code"] = p.VaccineCode.ToAndGroup()
 	}
 
 	return m
@@ -4699,39 +4699,39 @@ func (p ImmunizationParams) Map() map[search.ParameterKey]search.MatchAll {
 // ImmunizationEvaluationParams contains typed search parameters for ImmunizationEvaluation resources.
 type ImmunizationEvaluationParams struct {
 	// ImmunizationEvaluation-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Date              search.DateOrString      `json:"date,omitempty"`
-	DoseStatus        search.TokenOrString     `json:"dose-status,omitempty"`
-	ImmunizationEvent search.ReferenceOrString `json:"immunization-event,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	TargetDisease     search.TokenOrString     `json:"target-disease,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date              search.Criteria[search.Date]      `json:"date,omitempty"`
+	DoseStatus        search.Criteria[search.Token]     `json:"dose-status,omitempty"`
+	ImmunizationEvent search.Criteria[search.Reference] `json:"immunization-event,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	TargetDisease     search.Criteria[search.Token]     `json:"target-disease,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImmunizationEvaluationParams.
-func (p ImmunizationEvaluationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImmunizationEvaluationParams.
+func (p ImmunizationEvaluationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DoseStatus != nil {
-		m[search.ParameterKey{Name: "dose-status"}] = p.DoseStatus.MatchesAll()
+		m["dose-status"] = p.DoseStatus.ToAndGroup()
 	}
 	if p.ImmunizationEvent != nil {
-		m[search.ParameterKey{Name: "immunization-event"}] = p.ImmunizationEvent.MatchesAll()
+		m["immunization-event"] = p.ImmunizationEvent.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.TargetDisease != nil {
-		m[search.ParameterKey{Name: "target-disease"}] = p.TargetDisease.MatchesAll()
+		m["target-disease"] = p.TargetDisease.ToAndGroup()
 	}
 
 	return m
@@ -4740,43 +4740,43 @@ func (p ImmunizationEvaluationParams) Map() map[search.ParameterKey]search.Match
 // ImmunizationRecommendationParams contains typed search parameters for ImmunizationRecommendation resources.
 type ImmunizationRecommendationParams struct {
 	// ImmunizationRecommendation-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Date          search.DateOrString      `json:"date,omitempty"`
-	Information   search.ReferenceOrString `json:"information,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Support       search.ReferenceOrString `json:"support,omitempty"`
-	TargetDisease search.TokenOrString     `json:"target-disease,omitempty"`
-	VaccineType   search.TokenOrString     `json:"vaccine-type,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date          search.Criteria[search.Date]      `json:"date,omitempty"`
+	Information   search.Criteria[search.Reference] `json:"information,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Support       search.Criteria[search.Reference] `json:"support,omitempty"`
+	TargetDisease search.Criteria[search.Token]     `json:"target-disease,omitempty"`
+	VaccineType   search.Criteria[search.Token]     `json:"vaccine-type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImmunizationRecommendationParams.
-func (p ImmunizationRecommendationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImmunizationRecommendationParams.
+func (p ImmunizationRecommendationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Information != nil {
-		m[search.ParameterKey{Name: "information"}] = p.Information.MatchesAll()
+		m["information"] = p.Information.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Support != nil {
-		m[search.ParameterKey{Name: "support"}] = p.Support.MatchesAll()
+		m["support"] = p.Support.ToAndGroup()
 	}
 	if p.TargetDisease != nil {
-		m[search.ParameterKey{Name: "target-disease"}] = p.TargetDisease.MatchesAll()
+		m["target-disease"] = p.TargetDisease.ToAndGroup()
 	}
 	if p.VaccineType != nil {
-		m[search.ParameterKey{Name: "vaccine-type"}] = p.VaccineType.MatchesAll()
+		m["vaccine-type"] = p.VaccineType.ToAndGroup()
 	}
 
 	return m
@@ -4785,87 +4785,87 @@ func (p ImmunizationRecommendationParams) Map() map[search.ParameterKey]search.M
 // ImplementationGuideParams contains typed search parameters for ImplementationGuide resources.
 type ImplementationGuideParams struct {
 	// ImplementationGuide-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	Experimental        search.TokenOrString     `json:"experimental,omitempty"`
-	Global              search.ReferenceOrString `json:"global,omitempty"`
-	Resource            search.ReferenceOrString `json:"resource,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	Experimental        search.Criteria[search.Token]     `json:"experimental,omitempty"`
+	Global              search.Criteria[search.Reference] `json:"global,omitempty"`
+	Resource            search.Criteria[search.Reference] `json:"resource,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ImplementationGuideParams.
-func (p ImplementationGuideParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ImplementationGuideParams.
+func (p ImplementationGuideParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.Experimental != nil {
-		m[search.ParameterKey{Name: "experimental"}] = p.Experimental.MatchesAll()
+		m["experimental"] = p.Experimental.ToAndGroup()
 	}
 	if p.Global != nil {
-		m[search.ParameterKey{Name: "global"}] = p.Global.MatchesAll()
+		m["global"] = p.Global.ToAndGroup()
 	}
 	if p.Resource != nil {
-		m[search.ParameterKey{Name: "resource"}] = p.Resource.MatchesAll()
+		m["resource"] = p.Resource.ToAndGroup()
 	}
 
 	return m
@@ -4874,63 +4874,63 @@ func (p ImplementationGuideParams) Map() map[search.ParameterKey]search.MatchAll
 // IngredientParams contains typed search parameters for Ingredient resources.
 type IngredientParams struct {
 	// Ingredient-specific search parameters
-	For                           search.ReferenceOrString `json:"for,omitempty"`
-	Function                      search.TokenOrString     `json:"function,omitempty"`
-	Identifier                    search.TokenOrString     `json:"identifier,omitempty"`
-	Manufacturer                  search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Role                          search.TokenOrString     `json:"role,omitempty"`
-	Status                        search.TokenOrString     `json:"status,omitempty"`
-	StrengthConcentrationQuantity search.QuantityOrString  `json:"strength-concentration-quantity,omitempty"`
-	StrengthPresentationQuantity  search.QuantityOrString  `json:"strength-presentation-quantity,omitempty"`
-	Substance                     search.ReferenceOrString `json:"substance,omitempty"`
-	SubstanceCode                 search.TokenOrString     `json:"substance-code,omitempty"`
-	SubstanceDefinition           search.ReferenceOrString `json:"substance-definition,omitempty"`
-	StrengthConcentrationRatio    search.CompositeOrString `json:"strength-concentration-ratio,omitempty"`
-	StrengthPresentationRatio     search.CompositeOrString `json:"strength-presentation-ratio,omitempty"`
+	For                           search.Criteria[search.Reference] `json:"for,omitempty"`
+	Function                      search.Criteria[search.Token]     `json:"function,omitempty"`
+	Identifier                    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Manufacturer                  search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Role                          search.Criteria[search.Token]     `json:"role,omitempty"`
+	Status                        search.Criteria[search.Token]     `json:"status,omitempty"`
+	StrengthConcentrationQuantity search.Criteria[search.Quantity]  `json:"strength-concentration-quantity,omitempty"`
+	StrengthPresentationQuantity  search.Criteria[search.Quantity]  `json:"strength-presentation-quantity,omitempty"`
+	Substance                     search.Criteria[search.Reference] `json:"substance,omitempty"`
+	SubstanceCode                 search.Criteria[search.Token]     `json:"substance-code,omitempty"`
+	SubstanceDefinition           search.Criteria[search.Reference] `json:"substance-definition,omitempty"`
+	StrengthConcentrationRatio    search.Criteria[search.Composite] `json:"strength-concentration-ratio,omitempty"`
+	StrengthPresentationRatio     search.Criteria[search.Composite] `json:"strength-presentation-ratio,omitempty"`
 }
 
-// Map implements the search.Parameters interface for IngredientParams.
-func (p IngredientParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for IngredientParams.
+func (p IngredientParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.For != nil {
-		m[search.ParameterKey{Name: "for"}] = p.For.MatchesAll()
+		m["for"] = p.For.ToAndGroup()
 	}
 	if p.Function != nil {
-		m[search.ParameterKey{Name: "function"}] = p.Function.MatchesAll()
+		m["function"] = p.Function.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Manufacturer != nil {
-		m[search.ParameterKey{Name: "manufacturer"}] = p.Manufacturer.MatchesAll()
+		m["manufacturer"] = p.Manufacturer.ToAndGroup()
 	}
 	if p.Role != nil {
-		m[search.ParameterKey{Name: "role"}] = p.Role.MatchesAll()
+		m["role"] = p.Role.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.StrengthConcentrationQuantity != nil {
-		m[search.ParameterKey{Name: "strength-concentration-quantity"}] = p.StrengthConcentrationQuantity.MatchesAll()
+		m["strength-concentration-quantity"] = p.StrengthConcentrationQuantity.ToAndGroup()
 	}
 	if p.StrengthPresentationQuantity != nil {
-		m[search.ParameterKey{Name: "strength-presentation-quantity"}] = p.StrengthPresentationQuantity.MatchesAll()
+		m["strength-presentation-quantity"] = p.StrengthPresentationQuantity.ToAndGroup()
 	}
 	if p.Substance != nil {
-		m[search.ParameterKey{Name: "substance"}] = p.Substance.MatchesAll()
+		m["substance"] = p.Substance.ToAndGroup()
 	}
 	if p.SubstanceCode != nil {
-		m[search.ParameterKey{Name: "substance-code"}] = p.SubstanceCode.MatchesAll()
+		m["substance-code"] = p.SubstanceCode.ToAndGroup()
 	}
 	if p.SubstanceDefinition != nil {
-		m[search.ParameterKey{Name: "substance-definition"}] = p.SubstanceDefinition.MatchesAll()
+		m["substance-definition"] = p.SubstanceDefinition.ToAndGroup()
 	}
 	if p.StrengthConcentrationRatio != nil {
-		m[search.ParameterKey{Name: "strength-concentration-ratio"}] = p.StrengthConcentrationRatio.MatchesAll()
+		m["strength-concentration-ratio"] = p.StrengthConcentrationRatio.ToAndGroup()
 	}
 	if p.StrengthPresentationRatio != nil {
-		m[search.ParameterKey{Name: "strength-presentation-ratio"}] = p.StrengthPresentationRatio.MatchesAll()
+		m["strength-presentation-ratio"] = p.StrengthPresentationRatio.ToAndGroup()
 	}
 
 	return m
@@ -4939,67 +4939,67 @@ func (p IngredientParams) Map() map[search.ParameterKey]search.MatchAll {
 // InsurancePlanParams contains typed search parameters for InsurancePlan resources.
 type InsurancePlanParams struct {
 	// InsurancePlan-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	AdministeredBy    search.ReferenceOrString `json:"administered-by,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	OwnedBy           search.ReferenceOrString `json:"owned-by,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	AdministeredBy    search.Criteria[search.Reference] `json:"administered-by,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	OwnedBy           search.Criteria[search.Reference] `json:"owned-by,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for InsurancePlanParams.
-func (p InsurancePlanParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for InsurancePlanParams.
+func (p InsurancePlanParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.AdministeredBy != nil {
-		m[search.ParameterKey{Name: "administered-by"}] = p.AdministeredBy.MatchesAll()
+		m["administered-by"] = p.AdministeredBy.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.OwnedBy != nil {
-		m[search.ParameterKey{Name: "owned-by"}] = p.OwnedBy.MatchesAll()
+		m["owned-by"] = p.OwnedBy.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -5008,27 +5008,27 @@ func (p InsurancePlanParams) Map() map[search.ParameterKey]search.MatchAll {
 // InventoryItemParams contains typed search parameters for InventoryItem resources.
 type InventoryItemParams struct {
 	// InventoryItem-specific search parameters
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for InventoryItemParams.
-func (p InventoryItemParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for InventoryItemParams.
+func (p InventoryItemParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -5037,27 +5037,27 @@ func (p InventoryItemParams) Map() map[search.ParameterKey]search.MatchAll {
 // InventoryReportParams contains typed search parameters for InventoryReport resources.
 type InventoryReportParams struct {
 	// InventoryReport-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Item          search.TokenOrString     `json:"item,omitempty"`
-	ItemReference search.ReferenceOrString `json:"item-reference,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Item          search.Criteria[search.Token]     `json:"item,omitempty"`
+	ItemReference search.Criteria[search.Reference] `json:"item-reference,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for InventoryReportParams.
-func (p InventoryReportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for InventoryReportParams.
+func (p InventoryReportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Item != nil {
-		m[search.ParameterKey{Name: "item"}] = p.Item.MatchesAll()
+		m["item"] = p.Item.ToAndGroup()
 	}
 	if p.ItemReference != nil {
-		m[search.ParameterKey{Name: "item-reference"}] = p.ItemReference.MatchesAll()
+		m["item-reference"] = p.ItemReference.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -5066,63 +5066,63 @@ func (p InventoryReportParams) Map() map[search.ParameterKey]search.MatchAll {
 // InvoiceParams contains typed search parameters for Invoice resources.
 type InvoiceParams struct {
 	// Invoice-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Type            search.TokenOrString     `json:"type,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Account         search.ReferenceOrString `json:"account,omitempty"`
-	Issuer          search.ReferenceOrString `json:"issuer,omitempty"`
-	Participant     search.ReferenceOrString `json:"participant,omitempty"`
-	ParticipantRole search.TokenOrString     `json:"participant-role,omitempty"`
-	Recipient       search.ReferenceOrString `json:"recipient,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Totalgross      search.QuantityOrString  `json:"totalgross,omitempty"`
-	Totalnet        search.QuantityOrString  `json:"totalnet,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type            search.Criteria[search.Token]     `json:"type,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Account         search.Criteria[search.Reference] `json:"account,omitempty"`
+	Issuer          search.Criteria[search.Reference] `json:"issuer,omitempty"`
+	Participant     search.Criteria[search.Reference] `json:"participant,omitempty"`
+	ParticipantRole search.Criteria[search.Token]     `json:"participant-role,omitempty"`
+	Recipient       search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Totalgross      search.Criteria[search.Quantity]  `json:"totalgross,omitempty"`
+	Totalnet        search.Criteria[search.Quantity]  `json:"totalnet,omitempty"`
 }
 
-// Map implements the search.Parameters interface for InvoiceParams.
-func (p InvoiceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for InvoiceParams.
+func (p InvoiceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Account != nil {
-		m[search.ParameterKey{Name: "account"}] = p.Account.MatchesAll()
+		m["account"] = p.Account.ToAndGroup()
 	}
 	if p.Issuer != nil {
-		m[search.ParameterKey{Name: "issuer"}] = p.Issuer.MatchesAll()
+		m["issuer"] = p.Issuer.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.ParticipantRole != nil {
-		m[search.ParameterKey{Name: "participant-role"}] = p.ParticipantRole.MatchesAll()
+		m["participant-role"] = p.ParticipantRole.ToAndGroup()
 	}
 	if p.Recipient != nil {
-		m[search.ParameterKey{Name: "recipient"}] = p.Recipient.MatchesAll()
+		m["recipient"] = p.Recipient.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Totalgross != nil {
-		m[search.ParameterKey{Name: "totalgross"}] = p.Totalgross.MatchesAll()
+		m["totalgross"] = p.Totalgross.ToAndGroup()
 	}
 	if p.Totalnet != nil {
-		m[search.ParameterKey{Name: "totalnet"}] = p.Totalnet.MatchesAll()
+		m["totalnet"] = p.Totalnet.ToAndGroup()
 	}
 
 	return m
@@ -5131,107 +5131,107 @@ func (p InvoiceParams) Map() map[search.ParameterKey]search.MatchAll {
 // LibraryParams contains typed search parameters for Library resources.
 type LibraryParams struct {
 	// Library-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	ContentType         search.TokenOrString     `json:"content-type,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	ContentType         search.Criteria[search.Token]     `json:"content-type,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for LibraryParams.
-func (p LibraryParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for LibraryParams.
+func (p LibraryParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.ContentType != nil {
-		m[search.ParameterKey{Name: "content-type"}] = p.ContentType.MatchesAll()
+		m["content-type"] = p.ContentType.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -5240,23 +5240,23 @@ func (p LibraryParams) Map() map[search.ParameterKey]search.MatchAll {
 // LinkageParams contains typed search parameters for Linkage resources.
 type LinkageParams struct {
 	// Linkage-specific search parameters
-	Author search.ReferenceOrString `json:"author,omitempty"`
-	Item   search.ReferenceOrString `json:"item,omitempty"`
-	Source search.ReferenceOrString `json:"source,omitempty"`
+	Author search.Criteria[search.Reference] `json:"author,omitempty"`
+	Item   search.Criteria[search.Reference] `json:"item,omitempty"`
+	Source search.Criteria[search.Reference] `json:"source,omitempty"`
 }
 
-// Map implements the search.Parameters interface for LinkageParams.
-func (p LinkageParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for LinkageParams.
+func (p LinkageParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Item != nil {
-		m[search.ParameterKey{Name: "item"}] = p.Item.MatchesAll()
+		m["item"] = p.Item.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 
 	return m
@@ -5265,59 +5265,59 @@ func (p LinkageParams) Map() map[search.ParameterKey]search.MatchAll {
 // ListParams contains typed search parameters for List resources.
 type ListParams struct {
 	// List-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Code        search.TokenOrString     `json:"code,omitempty"`
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	EmptyReason search.TokenOrString     `json:"empty-reason,omitempty"`
-	Item        search.ReferenceOrString `json:"item,omitempty"`
-	Notes       search.StringOrString    `json:"notes,omitempty"`
-	Source      search.ReferenceOrString `json:"source,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
-	Title       search.StringOrString    `json:"title,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code        search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	EmptyReason search.Criteria[search.Token]     `json:"empty-reason,omitempty"`
+	Item        search.Criteria[search.Reference] `json:"item,omitempty"`
+	Notes       search.Criteria[search.String]    `json:"notes,omitempty"`
+	Source      search.Criteria[search.Reference] `json:"source,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Title       search.Criteria[search.String]    `json:"title,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ListParams.
-func (p ListParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ListParams.
+func (p ListParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.EmptyReason != nil {
-		m[search.ParameterKey{Name: "empty-reason"}] = p.EmptyReason.MatchesAll()
+		m["empty-reason"] = p.EmptyReason.ToAndGroup()
 	}
 	if p.Item != nil {
-		m[search.ParameterKey{Name: "item"}] = p.Item.MatchesAll()
+		m["item"] = p.Item.ToAndGroup()
 	}
 	if p.Notes != nil {
-		m[search.ParameterKey{Name: "notes"}] = p.Notes.MatchesAll()
+		m["notes"] = p.Notes.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 
 	return m
@@ -5326,79 +5326,79 @@ func (p ListParams) Map() map[search.ParameterKey]search.MatchAll {
 // LocationParams contains typed search parameters for Location resources.
 type LocationParams struct {
 	// Location-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Characteristic    search.TokenOrString     `json:"characteristic,omitempty"`
-	Contains          search.SpecialOrString   `json:"contains,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Near              search.SpecialOrString   `json:"near,omitempty"`
-	OperationalStatus search.TokenOrString     `json:"operational-status,omitempty"`
-	Organization      search.ReferenceOrString `json:"organization,omitempty"`
-	Partof            search.ReferenceOrString `json:"partof,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Characteristic    search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	Contains          search.Criteria[search.Special]   `json:"contains,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Near              search.Criteria[search.Special]   `json:"near,omitempty"`
+	OperationalStatus search.Criteria[search.Token]     `json:"operational-status,omitempty"`
+	Organization      search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Partof            search.Criteria[search.Reference] `json:"partof,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for LocationParams.
-func (p LocationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for LocationParams.
+func (p LocationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Characteristic != nil {
-		m[search.ParameterKey{Name: "characteristic"}] = p.Characteristic.MatchesAll()
+		m["characteristic"] = p.Characteristic.ToAndGroup()
 	}
 	if p.Contains != nil {
-		m[search.ParameterKey{Name: "contains"}] = p.Contains.MatchesAll()
+		m["contains"] = p.Contains.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Near != nil {
-		m[search.ParameterKey{Name: "near"}] = p.Near.MatchesAll()
+		m["near"] = p.Near.ToAndGroup()
 	}
 	if p.OperationalStatus != nil {
-		m[search.ParameterKey{Name: "operational-status"}] = p.OperationalStatus.MatchesAll()
+		m["operational-status"] = p.OperationalStatus.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Partof != nil {
-		m[search.ParameterKey{Name: "partof"}] = p.Partof.MatchesAll()
+		m["partof"] = p.Partof.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -5407,31 +5407,31 @@ func (p LocationParams) Map() map[search.ParameterKey]search.MatchAll {
 // ManufacturedItemDefinitionParams contains typed search parameters for ManufacturedItemDefinition resources.
 type ManufacturedItemDefinitionParams struct {
 	// ManufacturedItemDefinition-specific search parameters
-	DoseForm   search.TokenOrString `json:"dose-form,omitempty"`
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
-	Ingredient search.TokenOrString `json:"ingredient,omitempty"`
-	Name       search.TokenOrString `json:"name,omitempty"`
-	Status     search.TokenOrString `json:"status,omitempty"`
+	DoseForm   search.Criteria[search.Token] `json:"dose-form,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
+	Ingredient search.Criteria[search.Token] `json:"ingredient,omitempty"`
+	Name       search.Criteria[search.Token] `json:"name,omitempty"`
+	Status     search.Criteria[search.Token] `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ManufacturedItemDefinitionParams.
-func (p ManufacturedItemDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ManufacturedItemDefinitionParams.
+func (p ManufacturedItemDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.DoseForm != nil {
-		m[search.ParameterKey{Name: "dose-form"}] = p.DoseForm.MatchesAll()
+		m["dose-form"] = p.DoseForm.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Ingredient != nil {
-		m[search.ParameterKey{Name: "ingredient"}] = p.Ingredient.MatchesAll()
+		m["ingredient"] = p.Ingredient.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -5440,99 +5440,99 @@ func (p ManufacturedItemDefinitionParams) Map() map[search.ParameterKey]search.M
 // MeasureParams contains typed search parameters for Measure resources.
 type MeasureParams struct {
 	// Measure-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MeasureParams.
-func (p MeasureParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MeasureParams.
+func (p MeasureParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -5541,51 +5541,51 @@ func (p MeasureParams) Map() map[search.ParameterKey]search.MatchAll {
 // MeasureReportParams contains typed search parameters for MeasureReport resources.
 type MeasureReportParams struct {
 	// MeasureReport-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Date              search.DateOrString      `json:"date,omitempty"`
-	EvaluatedResource search.ReferenceOrString `json:"evaluated-resource,omitempty"`
-	Location          search.ReferenceOrString `json:"location,omitempty"`
-	Measure           search.ReferenceOrString `json:"measure,omitempty"`
-	Period            search.DateOrString      `json:"period,omitempty"`
-	Reporter          search.ReferenceOrString `json:"reporter,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Subject           search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date              search.Criteria[search.Date]      `json:"date,omitempty"`
+	EvaluatedResource search.Criteria[search.Reference] `json:"evaluated-resource,omitempty"`
+	Location          search.Criteria[search.Reference] `json:"location,omitempty"`
+	Measure           search.Criteria[search.Reference] `json:"measure,omitempty"`
+	Period            search.Criteria[search.Date]      `json:"period,omitempty"`
+	Reporter          search.Criteria[search.Reference] `json:"reporter,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject           search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MeasureReportParams.
-func (p MeasureReportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MeasureReportParams.
+func (p MeasureReportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.EvaluatedResource != nil {
-		m[search.ParameterKey{Name: "evaluated-resource"}] = p.EvaluatedResource.MatchesAll()
+		m["evaluated-resource"] = p.EvaluatedResource.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Measure != nil {
-		m[search.ParameterKey{Name: "measure"}] = p.Measure.MatchesAll()
+		m["measure"] = p.Measure.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Reporter != nil {
-		m[search.ParameterKey{Name: "reporter"}] = p.Reporter.MatchesAll()
+		m["reporter"] = p.Reporter.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -5594,51 +5594,51 @@ func (p MeasureReportParams) Map() map[search.ParameterKey]search.MatchAll {
 // MedicationParams contains typed search parameters for Medication resources.
 type MedicationParams struct {
 	// Medication-specific search parameters
-	Identifier                   search.TokenOrString     `json:"identifier,omitempty"`
-	Code                         search.TokenOrString     `json:"code,omitempty"`
-	ExpirationDate               search.DateOrString      `json:"expiration-date,omitempty"`
-	Form                         search.TokenOrString     `json:"form,omitempty"`
-	Ingredient                   search.ReferenceOrString `json:"ingredient,omitempty"`
-	IngredientCode               search.TokenOrString     `json:"ingredient-code,omitempty"`
-	LotNumber                    search.TokenOrString     `json:"lot-number,omitempty"`
-	Marketingauthorizationholder search.ReferenceOrString `json:"marketingauthorizationholder,omitempty"`
-	SerialNumber                 search.TokenOrString     `json:"serial-number,omitempty"`
-	Status                       search.TokenOrString     `json:"status,omitempty"`
+	Identifier                   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Code                         search.Criteria[search.Token]     `json:"code,omitempty"`
+	ExpirationDate               search.Criteria[search.Date]      `json:"expiration-date,omitempty"`
+	Form                         search.Criteria[search.Token]     `json:"form,omitempty"`
+	Ingredient                   search.Criteria[search.Reference] `json:"ingredient,omitempty"`
+	IngredientCode               search.Criteria[search.Token]     `json:"ingredient-code,omitempty"`
+	LotNumber                    search.Criteria[search.Token]     `json:"lot-number,omitempty"`
+	Marketingauthorizationholder search.Criteria[search.Reference] `json:"marketingauthorizationholder,omitempty"`
+	SerialNumber                 search.Criteria[search.Token]     `json:"serial-number,omitempty"`
+	Status                       search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationParams.
-func (p MedicationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationParams.
+func (p MedicationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.ExpirationDate != nil {
-		m[search.ParameterKey{Name: "expiration-date"}] = p.ExpirationDate.MatchesAll()
+		m["expiration-date"] = p.ExpirationDate.ToAndGroup()
 	}
 	if p.Form != nil {
-		m[search.ParameterKey{Name: "form"}] = p.Form.MatchesAll()
+		m["form"] = p.Form.ToAndGroup()
 	}
 	if p.Ingredient != nil {
-		m[search.ParameterKey{Name: "ingredient"}] = p.Ingredient.MatchesAll()
+		m["ingredient"] = p.Ingredient.ToAndGroup()
 	}
 	if p.IngredientCode != nil {
-		m[search.ParameterKey{Name: "ingredient-code"}] = p.IngredientCode.MatchesAll()
+		m["ingredient-code"] = p.IngredientCode.ToAndGroup()
 	}
 	if p.LotNumber != nil {
-		m[search.ParameterKey{Name: "lot-number"}] = p.LotNumber.MatchesAll()
+		m["lot-number"] = p.LotNumber.ToAndGroup()
 	}
 	if p.Marketingauthorizationholder != nil {
-		m[search.ParameterKey{Name: "marketingauthorizationholder"}] = p.Marketingauthorizationholder.MatchesAll()
+		m["marketingauthorizationholder"] = p.Marketingauthorizationholder.ToAndGroup()
 	}
 	if p.SerialNumber != nil {
-		m[search.ParameterKey{Name: "serial-number"}] = p.SerialNumber.MatchesAll()
+		m["serial-number"] = p.SerialNumber.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -5647,71 +5647,71 @@ func (p MedicationParams) Map() map[search.ParameterKey]search.MatchAll {
 // MedicationAdministrationParams contains typed search parameters for MedicationAdministration resources.
 type MedicationAdministrationParams struct {
 	// MedicationAdministration-specific search parameters
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Patient             search.ReferenceOrString `json:"patient,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Device              search.ReferenceOrString `json:"device,omitempty"`
-	Encounter           search.ReferenceOrString `json:"encounter,omitempty"`
-	Medication          search.ReferenceOrString `json:"medication,omitempty"`
-	Performer           search.ReferenceOrString `json:"performer,omitempty"`
-	PerformerDeviceCode search.TokenOrString     `json:"performer-device-code,omitempty"`
-	ReasonGiven         search.ReferenceOrString `json:"reason-given,omitempty"`
-	ReasonGivenCode     search.TokenOrString     `json:"reason-given-code,omitempty"`
-	ReasonNotGiven      search.TokenOrString     `json:"reason-not-given,omitempty"`
-	Request             search.ReferenceOrString `json:"request,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Subject             search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient             search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Device              search.Criteria[search.Reference] `json:"device,omitempty"`
+	Encounter           search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Medication          search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Performer           search.Criteria[search.Reference] `json:"performer,omitempty"`
+	PerformerDeviceCode search.Criteria[search.Token]     `json:"performer-device-code,omitempty"`
+	ReasonGiven         search.Criteria[search.Reference] `json:"reason-given,omitempty"`
+	ReasonGivenCode     search.Criteria[search.Token]     `json:"reason-given-code,omitempty"`
+	ReasonNotGiven      search.Criteria[search.Token]     `json:"reason-not-given,omitempty"`
+	Request             search.Criteria[search.Reference] `json:"request,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject             search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationAdministrationParams.
-func (p MedicationAdministrationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationAdministrationParams.
+func (p MedicationAdministrationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Medication != nil {
-		m[search.ParameterKey{Name: "medication"}] = p.Medication.MatchesAll()
+		m["medication"] = p.Medication.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.PerformerDeviceCode != nil {
-		m[search.ParameterKey{Name: "performer-device-code"}] = p.PerformerDeviceCode.MatchesAll()
+		m["performer-device-code"] = p.PerformerDeviceCode.ToAndGroup()
 	}
 	if p.ReasonGiven != nil {
-		m[search.ParameterKey{Name: "reason-given"}] = p.ReasonGiven.MatchesAll()
+		m["reason-given"] = p.ReasonGiven.ToAndGroup()
 	}
 	if p.ReasonGivenCode != nil {
-		m[search.ParameterKey{Name: "reason-given-code"}] = p.ReasonGivenCode.MatchesAll()
+		m["reason-given-code"] = p.ReasonGivenCode.ToAndGroup()
 	}
 	if p.ReasonNotGiven != nil {
-		m[search.ParameterKey{Name: "reason-not-given"}] = p.ReasonNotGiven.MatchesAll()
+		m["reason-not-given"] = p.ReasonNotGiven.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -5720,79 +5720,79 @@ func (p MedicationAdministrationParams) Map() map[search.ParameterKey]search.Mat
 // MedicationDispenseParams contains typed search parameters for MedicationDispense resources.
 type MedicationDispenseParams struct {
 	// MedicationDispense-specific search parameters
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	Patient          search.ReferenceOrString `json:"patient,omitempty"`
-	Type             search.TokenOrString     `json:"type,omitempty"`
-	Code             search.TokenOrString     `json:"code,omitempty"`
-	Encounter        search.ReferenceOrString `json:"encounter,omitempty"`
-	Medication       search.ReferenceOrString `json:"medication,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
-	Destination      search.ReferenceOrString `json:"destination,omitempty"`
-	Location         search.ReferenceOrString `json:"location,omitempty"`
-	Performer        search.ReferenceOrString `json:"performer,omitempty"`
-	Prescription     search.ReferenceOrString `json:"prescription,omitempty"`
-	Receiver         search.ReferenceOrString `json:"receiver,omitempty"`
-	Recorded         search.DateOrString      `json:"recorded,omitempty"`
-	Responsibleparty search.ReferenceOrString `json:"responsibleparty,omitempty"`
-	Subject          search.ReferenceOrString `json:"subject,omitempty"`
-	Whenhandedover   search.DateOrString      `json:"whenhandedover,omitempty"`
-	Whenprepared     search.DateOrString      `json:"whenprepared,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient          search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type             search.Criteria[search.Token]     `json:"type,omitempty"`
+	Code             search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter        search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Medication       search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
+	Destination      search.Criteria[search.Reference] `json:"destination,omitempty"`
+	Location         search.Criteria[search.Reference] `json:"location,omitempty"`
+	Performer        search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Prescription     search.Criteria[search.Reference] `json:"prescription,omitempty"`
+	Receiver         search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	Recorded         search.Criteria[search.Date]      `json:"recorded,omitempty"`
+	Responsibleparty search.Criteria[search.Reference] `json:"responsibleparty,omitempty"`
+	Subject          search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Whenhandedover   search.Criteria[search.Date]      `json:"whenhandedover,omitempty"`
+	Whenprepared     search.Criteria[search.Date]      `json:"whenprepared,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationDispenseParams.
-func (p MedicationDispenseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationDispenseParams.
+func (p MedicationDispenseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Medication != nil {
-		m[search.ParameterKey{Name: "medication"}] = p.Medication.MatchesAll()
+		m["medication"] = p.Medication.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Destination != nil {
-		m[search.ParameterKey{Name: "destination"}] = p.Destination.MatchesAll()
+		m["destination"] = p.Destination.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Prescription != nil {
-		m[search.ParameterKey{Name: "prescription"}] = p.Prescription.MatchesAll()
+		m["prescription"] = p.Prescription.ToAndGroup()
 	}
 	if p.Receiver != nil {
-		m[search.ParameterKey{Name: "receiver"}] = p.Receiver.MatchesAll()
+		m["receiver"] = p.Receiver.ToAndGroup()
 	}
 	if p.Recorded != nil {
-		m[search.ParameterKey{Name: "recorded"}] = p.Recorded.MatchesAll()
+		m["recorded"] = p.Recorded.ToAndGroup()
 	}
 	if p.Responsibleparty != nil {
-		m[search.ParameterKey{Name: "responsibleparty"}] = p.Responsibleparty.MatchesAll()
+		m["responsibleparty"] = p.Responsibleparty.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Whenhandedover != nil {
-		m[search.ParameterKey{Name: "whenhandedover"}] = p.Whenhandedover.MatchesAll()
+		m["whenhandedover"] = p.Whenhandedover.ToAndGroup()
 	}
 	if p.Whenprepared != nil {
-		m[search.ParameterKey{Name: "whenprepared"}] = p.Whenprepared.MatchesAll()
+		m["whenprepared"] = p.Whenprepared.ToAndGroup()
 	}
 
 	return m
@@ -5801,75 +5801,75 @@ func (p MedicationDispenseParams) Map() map[search.ParameterKey]search.MatchAll 
 // MedicationKnowledgeParams contains typed search parameters for MedicationKnowledge resources.
 type MedicationKnowledgeParams struct {
 	// MedicationKnowledge-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Classification        search.TokenOrString     `json:"classification,omitempty"`
-	ClassificationType    search.TokenOrString     `json:"classification-type,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Doseform              search.TokenOrString     `json:"doseform,omitempty"`
-	Ingredient            search.ReferenceOrString `json:"ingredient,omitempty"`
-	IngredientCode        search.TokenOrString     `json:"ingredient-code,omitempty"`
-	MonitoringProgramName search.TokenOrString     `json:"monitoring-program-name,omitempty"`
-	MonitoringProgramType search.TokenOrString     `json:"monitoring-program-type,omitempty"`
-	Monograph             search.ReferenceOrString `json:"monograph,omitempty"`
-	MonographType         search.TokenOrString     `json:"monograph-type,omitempty"`
-	PackagingCost         search.QuantityOrString  `json:"packaging-cost,omitempty"`
-	PackagingCostConcept  search.TokenOrString     `json:"packaging-cost-concept,omitempty"`
-	ProductType           search.TokenOrString     `json:"product-type,omitempty"`
-	SourceCost            search.TokenOrString     `json:"source-cost,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Classification        search.Criteria[search.Token]     `json:"classification,omitempty"`
+	ClassificationType    search.Criteria[search.Token]     `json:"classification-type,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Doseform              search.Criteria[search.Token]     `json:"doseform,omitempty"`
+	Ingredient            search.Criteria[search.Reference] `json:"ingredient,omitempty"`
+	IngredientCode        search.Criteria[search.Token]     `json:"ingredient-code,omitempty"`
+	MonitoringProgramName search.Criteria[search.Token]     `json:"monitoring-program-name,omitempty"`
+	MonitoringProgramType search.Criteria[search.Token]     `json:"monitoring-program-type,omitempty"`
+	Monograph             search.Criteria[search.Reference] `json:"monograph,omitempty"`
+	MonographType         search.Criteria[search.Token]     `json:"monograph-type,omitempty"`
+	PackagingCost         search.Criteria[search.Quantity]  `json:"packaging-cost,omitempty"`
+	PackagingCostConcept  search.Criteria[search.Token]     `json:"packaging-cost-concept,omitempty"`
+	ProductType           search.Criteria[search.Token]     `json:"product-type,omitempty"`
+	SourceCost            search.Criteria[search.Token]     `json:"source-cost,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationKnowledgeParams.
-func (p MedicationKnowledgeParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationKnowledgeParams.
+func (p MedicationKnowledgeParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Classification != nil {
-		m[search.ParameterKey{Name: "classification"}] = p.Classification.MatchesAll()
+		m["classification"] = p.Classification.ToAndGroup()
 	}
 	if p.ClassificationType != nil {
-		m[search.ParameterKey{Name: "classification-type"}] = p.ClassificationType.MatchesAll()
+		m["classification-type"] = p.ClassificationType.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Doseform != nil {
-		m[search.ParameterKey{Name: "doseform"}] = p.Doseform.MatchesAll()
+		m["doseform"] = p.Doseform.ToAndGroup()
 	}
 	if p.Ingredient != nil {
-		m[search.ParameterKey{Name: "ingredient"}] = p.Ingredient.MatchesAll()
+		m["ingredient"] = p.Ingredient.ToAndGroup()
 	}
 	if p.IngredientCode != nil {
-		m[search.ParameterKey{Name: "ingredient-code"}] = p.IngredientCode.MatchesAll()
+		m["ingredient-code"] = p.IngredientCode.ToAndGroup()
 	}
 	if p.MonitoringProgramName != nil {
-		m[search.ParameterKey{Name: "monitoring-program-name"}] = p.MonitoringProgramName.MatchesAll()
+		m["monitoring-program-name"] = p.MonitoringProgramName.ToAndGroup()
 	}
 	if p.MonitoringProgramType != nil {
-		m[search.ParameterKey{Name: "monitoring-program-type"}] = p.MonitoringProgramType.MatchesAll()
+		m["monitoring-program-type"] = p.MonitoringProgramType.ToAndGroup()
 	}
 	if p.Monograph != nil {
-		m[search.ParameterKey{Name: "monograph"}] = p.Monograph.MatchesAll()
+		m["monograph"] = p.Monograph.ToAndGroup()
 	}
 	if p.MonographType != nil {
-		m[search.ParameterKey{Name: "monograph-type"}] = p.MonographType.MatchesAll()
+		m["monograph-type"] = p.MonographType.ToAndGroup()
 	}
 	if p.PackagingCost != nil {
-		m[search.ParameterKey{Name: "packaging-cost"}] = p.PackagingCost.MatchesAll()
+		m["packaging-cost"] = p.PackagingCost.ToAndGroup()
 	}
 	if p.PackagingCostConcept != nil {
-		m[search.ParameterKey{Name: "packaging-cost-concept"}] = p.PackagingCostConcept.MatchesAll()
+		m["packaging-cost-concept"] = p.PackagingCostConcept.ToAndGroup()
 	}
 	if p.ProductType != nil {
-		m[search.ParameterKey{Name: "product-type"}] = p.ProductType.MatchesAll()
+		m["product-type"] = p.ProductType.ToAndGroup()
 	}
 	if p.SourceCost != nil {
-		m[search.ParameterKey{Name: "source-cost"}] = p.SourceCost.MatchesAll()
+		m["source-cost"] = p.SourceCost.ToAndGroup()
 	}
 
 	return m
@@ -5878,79 +5878,79 @@ func (p MedicationKnowledgeParams) Map() map[search.ParameterKey]search.MatchAll
 // MedicationRequestParams contains typed search parameters for MedicationRequest resources.
 type MedicationRequestParams struct {
 	// MedicationRequest-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Medication            search.ReferenceOrString `json:"medication,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Authoredon            search.DateOrString      `json:"authoredon,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	ComboDate             search.DateOrString      `json:"combo-date,omitempty"`
-	GroupIdentifier       search.TokenOrString     `json:"group-identifier,omitempty"`
-	IntendedDispenser     search.ReferenceOrString `json:"intended-dispenser,omitempty"`
-	IntendedPerformer     search.ReferenceOrString `json:"intended-performer,omitempty"`
-	IntendedPerformertype search.TokenOrString     `json:"intended-performertype,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Medication            search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Authoredon            search.Criteria[search.Date]      `json:"authoredon,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	ComboDate             search.Criteria[search.Date]      `json:"combo-date,omitempty"`
+	GroupIdentifier       search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	IntendedDispenser     search.Criteria[search.Reference] `json:"intended-dispenser,omitempty"`
+	IntendedPerformer     search.Criteria[search.Reference] `json:"intended-performer,omitempty"`
+	IntendedPerformertype search.Criteria[search.Token]     `json:"intended-performertype,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationRequestParams.
-func (p MedicationRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationRequestParams.
+func (p MedicationRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Medication != nil {
-		m[search.ParameterKey{Name: "medication"}] = p.Medication.MatchesAll()
+		m["medication"] = p.Medication.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Authoredon != nil {
-		m[search.ParameterKey{Name: "authoredon"}] = p.Authoredon.MatchesAll()
+		m["authoredon"] = p.Authoredon.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.ComboDate != nil {
-		m[search.ParameterKey{Name: "combo-date"}] = p.ComboDate.MatchesAll()
+		m["combo-date"] = p.ComboDate.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.IntendedDispenser != nil {
-		m[search.ParameterKey{Name: "intended-dispenser"}] = p.IntendedDispenser.MatchesAll()
+		m["intended-dispenser"] = p.IntendedDispenser.ToAndGroup()
 	}
 	if p.IntendedPerformer != nil {
-		m[search.ParameterKey{Name: "intended-performer"}] = p.IntendedPerformer.MatchesAll()
+		m["intended-performer"] = p.IntendedPerformer.ToAndGroup()
 	}
 	if p.IntendedPerformertype != nil {
-		m[search.ParameterKey{Name: "intended-performertype"}] = p.IntendedPerformertype.MatchesAll()
+		m["intended-performertype"] = p.IntendedPerformertype.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -5959,55 +5959,55 @@ func (p MedicationRequestParams) Map() map[search.ParameterKey]search.MatchAll {
 // MedicationStatementParams contains typed search parameters for MedicationStatement resources.
 type MedicationStatementParams struct {
 	// MedicationStatement-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Medication search.ReferenceOrString `json:"medication,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Adherence  search.TokenOrString     `json:"adherence,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Effective  search.DateOrString      `json:"effective,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Medication search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Adherence  search.Criteria[search.Token]     `json:"adherence,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Effective  search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicationStatementParams.
-func (p MedicationStatementParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicationStatementParams.
+func (p MedicationStatementParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Medication != nil {
-		m[search.ParameterKey{Name: "medication"}] = p.Medication.MatchesAll()
+		m["medication"] = p.Medication.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Adherence != nil {
-		m[search.ParameterKey{Name: "adherence"}] = p.Adherence.MatchesAll()
+		m["adherence"] = p.Adherence.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -6016,59 +6016,59 @@ func (p MedicationStatementParams) Map() map[search.ParameterKey]search.MatchAll
 // MedicinalProductDefinitionParams contains typed search parameters for MedicinalProductDefinition resources.
 type MedicinalProductDefinitionParams struct {
 	// MedicinalProductDefinition-specific search parameters
-	Characteristic        search.TokenOrString     `json:"characteristic,omitempty"`
-	CharacteristicType    search.TokenOrString     `json:"characteristic-type,omitempty"`
-	Contact               search.ReferenceOrString `json:"contact,omitempty"`
-	Domain                search.TokenOrString     `json:"domain,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Ingredient            search.TokenOrString     `json:"ingredient,omitempty"`
-	MasterFile            search.ReferenceOrString `json:"master-file,omitempty"`
-	Name                  search.StringOrString    `json:"name,omitempty"`
-	NameLanguage          search.TokenOrString     `json:"name-language,omitempty"`
-	ProductClassification search.TokenOrString     `json:"product-classification,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Type                  search.TokenOrString     `json:"type,omitempty"`
+	Characteristic        search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	CharacteristicType    search.Criteria[search.Token]     `json:"characteristic-type,omitempty"`
+	Contact               search.Criteria[search.Reference] `json:"contact,omitempty"`
+	Domain                search.Criteria[search.Token]     `json:"domain,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Ingredient            search.Criteria[search.Token]     `json:"ingredient,omitempty"`
+	MasterFile            search.Criteria[search.Reference] `json:"master-file,omitempty"`
+	Name                  search.Criteria[search.String]    `json:"name,omitempty"`
+	NameLanguage          search.Criteria[search.Token]     `json:"name-language,omitempty"`
+	ProductClassification search.Criteria[search.Token]     `json:"product-classification,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type                  search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MedicinalProductDefinitionParams.
-func (p MedicinalProductDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MedicinalProductDefinitionParams.
+func (p MedicinalProductDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Characteristic != nil {
-		m[search.ParameterKey{Name: "characteristic"}] = p.Characteristic.MatchesAll()
+		m["characteristic"] = p.Characteristic.ToAndGroup()
 	}
 	if p.CharacteristicType != nil {
-		m[search.ParameterKey{Name: "characteristic-type"}] = p.CharacteristicType.MatchesAll()
+		m["characteristic-type"] = p.CharacteristicType.ToAndGroup()
 	}
 	if p.Contact != nil {
-		m[search.ParameterKey{Name: "contact"}] = p.Contact.MatchesAll()
+		m["contact"] = p.Contact.ToAndGroup()
 	}
 	if p.Domain != nil {
-		m[search.ParameterKey{Name: "domain"}] = p.Domain.MatchesAll()
+		m["domain"] = p.Domain.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Ingredient != nil {
-		m[search.ParameterKey{Name: "ingredient"}] = p.Ingredient.MatchesAll()
+		m["ingredient"] = p.Ingredient.ToAndGroup()
 	}
 	if p.MasterFile != nil {
-		m[search.ParameterKey{Name: "master-file"}] = p.MasterFile.MatchesAll()
+		m["master-file"] = p.MasterFile.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.NameLanguage != nil {
-		m[search.ParameterKey{Name: "name-language"}] = p.NameLanguage.MatchesAll()
+		m["name-language"] = p.NameLanguage.ToAndGroup()
 	}
 	if p.ProductClassification != nil {
-		m[search.ParameterKey{Name: "product-classification"}] = p.ProductClassification.MatchesAll()
+		m["product-classification"] = p.ProductClassification.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -6077,87 +6077,87 @@ func (p MedicinalProductDefinitionParams) Map() map[search.ParameterKey]search.M
 // MessageDefinitionParams contains typed search parameters for MessageDefinition resources.
 type MessageDefinitionParams struct {
 	// MessageDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Category            search.TokenOrString     `json:"category,omitempty"`
-	Event               search.TokenOrString     `json:"event,omitempty"`
-	Focus               search.TokenOrString     `json:"focus,omitempty"`
-	Parent              search.ReferenceOrString `json:"parent,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Category            search.Criteria[search.Token]     `json:"category,omitempty"`
+	Event               search.Criteria[search.Token]     `json:"event,omitempty"`
+	Focus               search.Criteria[search.Token]     `json:"focus,omitempty"`
+	Parent              search.Criteria[search.Reference] `json:"parent,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MessageDefinitionParams.
-func (p MessageDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MessageDefinitionParams.
+func (p MessageDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Event != nil {
-		m[search.ParameterKey{Name: "event"}] = p.Event.MatchesAll()
+		m["event"] = p.Event.ToAndGroup()
 	}
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.Parent != nil {
-		m[search.ParameterKey{Name: "parent"}] = p.Parent.MatchesAll()
+		m["parent"] = p.Parent.ToAndGroup()
 	}
 
 	return m
@@ -6166,55 +6166,55 @@ func (p MessageDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // MessageHeaderParams contains typed search parameters for MessageHeader resources.
 type MessageHeaderParams struct {
 	// MessageHeader-specific search parameters
-	Author      search.ReferenceOrString `json:"author,omitempty"`
-	Code        search.TokenOrString     `json:"code,omitempty"`
-	Destination search.StringOrString    `json:"destination,omitempty"`
-	Event       search.TokenOrString     `json:"event,omitempty"`
-	Focus       search.ReferenceOrString `json:"focus,omitempty"`
-	Receiver    search.ReferenceOrString `json:"receiver,omitempty"`
-	ResponseId  search.TokenOrString     `json:"response-id,omitempty"`
-	Responsible search.ReferenceOrString `json:"responsible,omitempty"`
-	Sender      search.ReferenceOrString `json:"sender,omitempty"`
-	Source      search.StringOrString    `json:"source,omitempty"`
-	Target      search.ReferenceOrString `json:"target,omitempty"`
+	Author      search.Criteria[search.Reference] `json:"author,omitempty"`
+	Code        search.Criteria[search.Token]     `json:"code,omitempty"`
+	Destination search.Criteria[search.String]    `json:"destination,omitempty"`
+	Event       search.Criteria[search.Token]     `json:"event,omitempty"`
+	Focus       search.Criteria[search.Reference] `json:"focus,omitempty"`
+	Receiver    search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	ResponseId  search.Criteria[search.Token]     `json:"response-id,omitempty"`
+	Responsible search.Criteria[search.Reference] `json:"responsible,omitempty"`
+	Sender      search.Criteria[search.Reference] `json:"sender,omitempty"`
+	Source      search.Criteria[search.String]    `json:"source,omitempty"`
+	Target      search.Criteria[search.Reference] `json:"target,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MessageHeaderParams.
-func (p MessageHeaderParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MessageHeaderParams.
+func (p MessageHeaderParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Destination != nil {
-		m[search.ParameterKey{Name: "destination"}] = p.Destination.MatchesAll()
+		m["destination"] = p.Destination.ToAndGroup()
 	}
 	if p.Event != nil {
-		m[search.ParameterKey{Name: "event"}] = p.Event.MatchesAll()
+		m["event"] = p.Event.ToAndGroup()
 	}
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.Receiver != nil {
-		m[search.ParameterKey{Name: "receiver"}] = p.Receiver.MatchesAll()
+		m["receiver"] = p.Receiver.ToAndGroup()
 	}
 	if p.ResponseId != nil {
-		m[search.ParameterKey{Name: "response-id"}] = p.ResponseId.MatchesAll()
+		m["response-id"] = p.ResponseId.ToAndGroup()
 	}
 	if p.Responsible != nil {
-		m[search.ParameterKey{Name: "responsible"}] = p.Responsible.MatchesAll()
+		m["responsible"] = p.Responsible.ToAndGroup()
 	}
 	if p.Sender != nil {
-		m[search.ParameterKey{Name: "sender"}] = p.Sender.MatchesAll()
+		m["sender"] = p.Sender.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 	if p.Target != nil {
-		m[search.ParameterKey{Name: "target"}] = p.Target.MatchesAll()
+		m["target"] = p.Target.ToAndGroup()
 	}
 
 	return m
@@ -6223,31 +6223,31 @@ func (p MessageHeaderParams) Map() map[search.ParameterKey]search.MatchAll {
 // MolecularSequenceParams contains typed search parameters for MolecularSequence resources.
 type MolecularSequenceParams struct {
 	// MolecularSequence-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
-	Focus      search.ReferenceOrString `json:"focus,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
+	Focus      search.Criteria[search.Reference] `json:"focus,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for MolecularSequenceParams.
-func (p MolecularSequenceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for MolecularSequenceParams.
+func (p MolecularSequenceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -6256,115 +6256,115 @@ func (p MolecularSequenceParams) Map() map[search.ParameterKey]search.MatchAll {
 // NamingSystemParams contains typed search parameters for NamingSystem resources.
 type NamingSystemParams struct {
 	// NamingSystem-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Contact             search.StringOrString    `json:"contact,omitempty"`
-	IdType              search.TokenOrString     `json:"id-type,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	Period              search.DateOrString      `json:"period,omitempty"`
-	Responsible         search.StringOrString    `json:"responsible,omitempty"`
-	Telecom             search.TokenOrString     `json:"telecom,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
-	Value               search.StringOrString    `json:"value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Contact             search.Criteria[search.String]    `json:"contact,omitempty"`
+	IdType              search.Criteria[search.Token]     `json:"id-type,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	Period              search.Criteria[search.Date]      `json:"period,omitempty"`
+	Responsible         search.Criteria[search.String]    `json:"responsible,omitempty"`
+	Telecom             search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
+	Value               search.Criteria[search.String]    `json:"value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for NamingSystemParams.
-func (p NamingSystemParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for NamingSystemParams.
+func (p NamingSystemParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Contact != nil {
-		m[search.ParameterKey{Name: "contact"}] = p.Contact.MatchesAll()
+		m["contact"] = p.Contact.ToAndGroup()
 	}
 	if p.IdType != nil {
-		m[search.ParameterKey{Name: "id-type"}] = p.IdType.MatchesAll()
+		m["id-type"] = p.IdType.ToAndGroup()
 	}
 	if p.Kind != nil {
-		m[search.ParameterKey{Name: "kind"}] = p.Kind.MatchesAll()
+		m["kind"] = p.Kind.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Responsible != nil {
-		m[search.ParameterKey{Name: "responsible"}] = p.Responsible.MatchesAll()
+		m["responsible"] = p.Responsible.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Value != nil {
-		m[search.ParameterKey{Name: "value"}] = p.Value.MatchesAll()
+		m["value"] = p.Value.ToAndGroup()
 	}
 
 	return m
@@ -6373,47 +6373,47 @@ func (p NamingSystemParams) Map() map[search.ParameterKey]search.MatchAll {
 // NutritionIntakeParams contains typed search parameters for NutritionIntake resources.
 type NutritionIntakeParams struct {
 	// NutritionIntake-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Nutrition  search.TokenOrString     `json:"nutrition,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Nutrition  search.Criteria[search.Token]     `json:"nutrition,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for NutritionIntakeParams.
-func (p NutritionIntakeParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for NutritionIntakeParams.
+func (p NutritionIntakeParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Nutrition != nil {
-		m[search.ParameterKey{Name: "nutrition"}] = p.Nutrition.MatchesAll()
+		m["nutrition"] = p.Nutrition.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -6422,59 +6422,59 @@ func (p NutritionIntakeParams) Map() map[search.ParameterKey]search.MatchAll {
 // NutritionOrderParams contains typed search parameters for NutritionOrder resources.
 type NutritionOrderParams struct {
 	// NutritionOrder-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter       search.ReferenceOrString `json:"encounter,omitempty"`
-	Additive        search.TokenOrString     `json:"additive,omitempty"`
-	Datetime        search.DateOrString      `json:"datetime,omitempty"`
-	Formula         search.TokenOrString     `json:"formula,omitempty"`
-	GroupIdentifier search.TokenOrString     `json:"group-identifier,omitempty"`
-	Oraldiet        search.TokenOrString     `json:"oraldiet,omitempty"`
-	Provider        search.ReferenceOrString `json:"provider,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Supplement      search.TokenOrString     `json:"supplement,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter       search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Additive        search.Criteria[search.Token]     `json:"additive,omitempty"`
+	Datetime        search.Criteria[search.Date]      `json:"datetime,omitempty"`
+	Formula         search.Criteria[search.Token]     `json:"formula,omitempty"`
+	GroupIdentifier search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	Oraldiet        search.Criteria[search.Token]     `json:"oraldiet,omitempty"`
+	Provider        search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Supplement      search.Criteria[search.Token]     `json:"supplement,omitempty"`
 }
 
-// Map implements the search.Parameters interface for NutritionOrderParams.
-func (p NutritionOrderParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for NutritionOrderParams.
+func (p NutritionOrderParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Additive != nil {
-		m[search.ParameterKey{Name: "additive"}] = p.Additive.MatchesAll()
+		m["additive"] = p.Additive.ToAndGroup()
 	}
 	if p.Datetime != nil {
-		m[search.ParameterKey{Name: "datetime"}] = p.Datetime.MatchesAll()
+		m["datetime"] = p.Datetime.ToAndGroup()
 	}
 	if p.Formula != nil {
-		m[search.ParameterKey{Name: "formula"}] = p.Formula.MatchesAll()
+		m["formula"] = p.Formula.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.Oraldiet != nil {
-		m[search.ParameterKey{Name: "oraldiet"}] = p.Oraldiet.MatchesAll()
+		m["oraldiet"] = p.Oraldiet.ToAndGroup()
 	}
 	if p.Provider != nil {
-		m[search.ParameterKey{Name: "provider"}] = p.Provider.MatchesAll()
+		m["provider"] = p.Provider.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Supplement != nil {
-		m[search.ParameterKey{Name: "supplement"}] = p.Supplement.MatchesAll()
+		m["supplement"] = p.Supplement.ToAndGroup()
 	}
 
 	return m
@@ -6483,31 +6483,31 @@ func (p NutritionOrderParams) Map() map[search.ParameterKey]search.MatchAll {
 // NutritionProductParams contains typed search parameters for NutritionProduct resources.
 type NutritionProductParams struct {
 	// NutritionProduct-specific search parameters
-	Code         search.TokenOrString `json:"code,omitempty"`
-	Identifier   search.TokenOrString `json:"identifier,omitempty"`
-	LotNumber    search.TokenOrString `json:"lot-number,omitempty"`
-	SerialNumber search.TokenOrString `json:"serial-number,omitempty"`
-	Status       search.TokenOrString `json:"status,omitempty"`
+	Code         search.Criteria[search.Token] `json:"code,omitempty"`
+	Identifier   search.Criteria[search.Token] `json:"identifier,omitempty"`
+	LotNumber    search.Criteria[search.Token] `json:"lot-number,omitempty"`
+	SerialNumber search.Criteria[search.Token] `json:"serial-number,omitempty"`
+	Status       search.Criteria[search.Token] `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for NutritionProductParams.
-func (p NutritionProductParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for NutritionProductParams.
+func (p NutritionProductParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.LotNumber != nil {
-		m[search.ParameterKey{Name: "lot-number"}] = p.LotNumber.MatchesAll()
+		m["lot-number"] = p.LotNumber.ToAndGroup()
 	}
 	if p.SerialNumber != nil {
-		m[search.ParameterKey{Name: "serial-number"}] = p.SerialNumber.MatchesAll()
+		m["serial-number"] = p.SerialNumber.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -6516,179 +6516,179 @@ func (p NutritionProductParams) Map() map[search.ParameterKey]search.MatchAll {
 // ObservationParams contains typed search parameters for Observation resources.
 type ObservationParams struct {
 	// Observation-specific search parameters
-	Identifier                 search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                    search.ReferenceOrString `json:"patient,omitempty"`
-	Code                       search.TokenOrString     `json:"code,omitempty"`
-	Date                       search.DateOrString      `json:"date,omitempty"`
-	Encounter                  search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn                    search.ReferenceOrString `json:"based-on,omitempty"`
-	Category                   search.TokenOrString     `json:"category,omitempty"`
-	ComboCode                  search.TokenOrString     `json:"combo-code,omitempty"`
-	ComboDataAbsentReason      search.TokenOrString     `json:"combo-data-absent-reason,omitempty"`
-	ComboValueConcept          search.TokenOrString     `json:"combo-value-concept,omitempty"`
-	ComboValueQuantity         search.QuantityOrString  `json:"combo-value-quantity,omitempty"`
-	ComponentCode              search.TokenOrString     `json:"component-code,omitempty"`
-	ComponentDataAbsentReason  search.TokenOrString     `json:"component-data-absent-reason,omitempty"`
-	ComponentValueCanonical    search.UriOrString       `json:"component-value-canonical,omitempty"`
-	ComponentValueConcept      search.TokenOrString     `json:"component-value-concept,omitempty"`
-	ComponentValueQuantity     search.QuantityOrString  `json:"component-value-quantity,omitempty"`
-	ComponentValueReference    search.ReferenceOrString `json:"component-value-reference,omitempty"`
-	DataAbsentReason           search.TokenOrString     `json:"data-absent-reason,omitempty"`
-	DerivedFrom                search.ReferenceOrString `json:"derived-from,omitempty"`
-	Device                     search.ReferenceOrString `json:"device,omitempty"`
-	Focus                      search.ReferenceOrString `json:"focus,omitempty"`
-	HasMember                  search.ReferenceOrString `json:"has-member,omitempty"`
-	Method                     search.TokenOrString     `json:"method,omitempty"`
-	PartOf                     search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer                  search.ReferenceOrString `json:"performer,omitempty"`
-	Specimen                   search.ReferenceOrString `json:"specimen,omitempty"`
-	Status                     search.TokenOrString     `json:"status,omitempty"`
-	Subject                    search.ReferenceOrString `json:"subject,omitempty"`
-	ValueCanonical             search.UriOrString       `json:"value-canonical,omitempty"`
-	ValueConcept               search.TokenOrString     `json:"value-concept,omitempty"`
-	ValueDate                  search.DateOrString      `json:"value-date,omitempty"`
-	ValueMarkdown              search.StringOrString    `json:"value-markdown,omitempty"`
-	ValueQuantity              search.QuantityOrString  `json:"value-quantity,omitempty"`
-	ValueReference             search.ReferenceOrString `json:"value-reference,omitempty"`
-	CodeValueConcept           search.CompositeOrString `json:"code-value-concept,omitempty"`
-	CodeValueDate              search.CompositeOrString `json:"code-value-date,omitempty"`
-	CodeValueQuantity          search.CompositeOrString `json:"code-value-quantity,omitempty"`
-	CodeValueString            search.CompositeOrString `json:"code-value-string,omitempty"`
-	ComboCodeValueConcept      search.CompositeOrString `json:"combo-code-value-concept,omitempty"`
-	ComboCodeValueQuantity     search.CompositeOrString `json:"combo-code-value-quantity,omitempty"`
-	ComponentCodeValueConcept  search.CompositeOrString `json:"component-code-value-concept,omitempty"`
-	ComponentCodeValueQuantity search.CompositeOrString `json:"component-code-value-quantity,omitempty"`
+	Identifier                 search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter                  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn                    search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category                   search.Criteria[search.Token]     `json:"category,omitempty"`
+	ComboCode                  search.Criteria[search.Token]     `json:"combo-code,omitempty"`
+	ComboDataAbsentReason      search.Criteria[search.Token]     `json:"combo-data-absent-reason,omitempty"`
+	ComboValueConcept          search.Criteria[search.Token]     `json:"combo-value-concept,omitempty"`
+	ComboValueQuantity         search.Criteria[search.Quantity]  `json:"combo-value-quantity,omitempty"`
+	ComponentCode              search.Criteria[search.Token]     `json:"component-code,omitempty"`
+	ComponentDataAbsentReason  search.Criteria[search.Token]     `json:"component-data-absent-reason,omitempty"`
+	ComponentValueCanonical    search.Criteria[search.Uri]       `json:"component-value-canonical,omitempty"`
+	ComponentValueConcept      search.Criteria[search.Token]     `json:"component-value-concept,omitempty"`
+	ComponentValueQuantity     search.Criteria[search.Quantity]  `json:"component-value-quantity,omitempty"`
+	ComponentValueReference    search.Criteria[search.Reference] `json:"component-value-reference,omitempty"`
+	DataAbsentReason           search.Criteria[search.Token]     `json:"data-absent-reason,omitempty"`
+	DerivedFrom                search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Device                     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Focus                      search.Criteria[search.Reference] `json:"focus,omitempty"`
+	HasMember                  search.Criteria[search.Reference] `json:"has-member,omitempty"`
+	Method                     search.Criteria[search.Token]     `json:"method,omitempty"`
+	PartOf                     search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer                  search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Specimen                   search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status                     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject                    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	ValueCanonical             search.Criteria[search.Uri]       `json:"value-canonical,omitempty"`
+	ValueConcept               search.Criteria[search.Token]     `json:"value-concept,omitempty"`
+	ValueDate                  search.Criteria[search.Date]      `json:"value-date,omitempty"`
+	ValueMarkdown              search.Criteria[search.String]    `json:"value-markdown,omitempty"`
+	ValueQuantity              search.Criteria[search.Quantity]  `json:"value-quantity,omitempty"`
+	ValueReference             search.Criteria[search.Reference] `json:"value-reference,omitempty"`
+	CodeValueConcept           search.Criteria[search.Composite] `json:"code-value-concept,omitempty"`
+	CodeValueDate              search.Criteria[search.Composite] `json:"code-value-date,omitempty"`
+	CodeValueQuantity          search.Criteria[search.Composite] `json:"code-value-quantity,omitempty"`
+	CodeValueString            search.Criteria[search.Composite] `json:"code-value-string,omitempty"`
+	ComboCodeValueConcept      search.Criteria[search.Composite] `json:"combo-code-value-concept,omitempty"`
+	ComboCodeValueQuantity     search.Criteria[search.Composite] `json:"combo-code-value-quantity,omitempty"`
+	ComponentCodeValueConcept  search.Criteria[search.Composite] `json:"component-code-value-concept,omitempty"`
+	ComponentCodeValueQuantity search.Criteria[search.Composite] `json:"component-code-value-quantity,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ObservationParams.
-func (p ObservationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ObservationParams.
+func (p ObservationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.ComboCode != nil {
-		m[search.ParameterKey{Name: "combo-code"}] = p.ComboCode.MatchesAll()
+		m["combo-code"] = p.ComboCode.ToAndGroup()
 	}
 	if p.ComboDataAbsentReason != nil {
-		m[search.ParameterKey{Name: "combo-data-absent-reason"}] = p.ComboDataAbsentReason.MatchesAll()
+		m["combo-data-absent-reason"] = p.ComboDataAbsentReason.ToAndGroup()
 	}
 	if p.ComboValueConcept != nil {
-		m[search.ParameterKey{Name: "combo-value-concept"}] = p.ComboValueConcept.MatchesAll()
+		m["combo-value-concept"] = p.ComboValueConcept.ToAndGroup()
 	}
 	if p.ComboValueQuantity != nil {
-		m[search.ParameterKey{Name: "combo-value-quantity"}] = p.ComboValueQuantity.MatchesAll()
+		m["combo-value-quantity"] = p.ComboValueQuantity.ToAndGroup()
 	}
 	if p.ComponentCode != nil {
-		m[search.ParameterKey{Name: "component-code"}] = p.ComponentCode.MatchesAll()
+		m["component-code"] = p.ComponentCode.ToAndGroup()
 	}
 	if p.ComponentDataAbsentReason != nil {
-		m[search.ParameterKey{Name: "component-data-absent-reason"}] = p.ComponentDataAbsentReason.MatchesAll()
+		m["component-data-absent-reason"] = p.ComponentDataAbsentReason.ToAndGroup()
 	}
 	if p.ComponentValueCanonical != nil {
-		m[search.ParameterKey{Name: "component-value-canonical"}] = p.ComponentValueCanonical.MatchesAll()
+		m["component-value-canonical"] = p.ComponentValueCanonical.ToAndGroup()
 	}
 	if p.ComponentValueConcept != nil {
-		m[search.ParameterKey{Name: "component-value-concept"}] = p.ComponentValueConcept.MatchesAll()
+		m["component-value-concept"] = p.ComponentValueConcept.ToAndGroup()
 	}
 	if p.ComponentValueQuantity != nil {
-		m[search.ParameterKey{Name: "component-value-quantity"}] = p.ComponentValueQuantity.MatchesAll()
+		m["component-value-quantity"] = p.ComponentValueQuantity.ToAndGroup()
 	}
 	if p.ComponentValueReference != nil {
-		m[search.ParameterKey{Name: "component-value-reference"}] = p.ComponentValueReference.MatchesAll()
+		m["component-value-reference"] = p.ComponentValueReference.ToAndGroup()
 	}
 	if p.DataAbsentReason != nil {
-		m[search.ParameterKey{Name: "data-absent-reason"}] = p.DataAbsentReason.MatchesAll()
+		m["data-absent-reason"] = p.DataAbsentReason.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.HasMember != nil {
-		m[search.ParameterKey{Name: "has-member"}] = p.HasMember.MatchesAll()
+		m["has-member"] = p.HasMember.ToAndGroup()
 	}
 	if p.Method != nil {
-		m[search.ParameterKey{Name: "method"}] = p.Method.MatchesAll()
+		m["method"] = p.Method.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Specimen != nil {
-		m[search.ParameterKey{Name: "specimen"}] = p.Specimen.MatchesAll()
+		m["specimen"] = p.Specimen.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.ValueCanonical != nil {
-		m[search.ParameterKey{Name: "value-canonical"}] = p.ValueCanonical.MatchesAll()
+		m["value-canonical"] = p.ValueCanonical.ToAndGroup()
 	}
 	if p.ValueConcept != nil {
-		m[search.ParameterKey{Name: "value-concept"}] = p.ValueConcept.MatchesAll()
+		m["value-concept"] = p.ValueConcept.ToAndGroup()
 	}
 	if p.ValueDate != nil {
-		m[search.ParameterKey{Name: "value-date"}] = p.ValueDate.MatchesAll()
+		m["value-date"] = p.ValueDate.ToAndGroup()
 	}
 	if p.ValueMarkdown != nil {
-		m[search.ParameterKey{Name: "value-markdown"}] = p.ValueMarkdown.MatchesAll()
+		m["value-markdown"] = p.ValueMarkdown.ToAndGroup()
 	}
 	if p.ValueQuantity != nil {
-		m[search.ParameterKey{Name: "value-quantity"}] = p.ValueQuantity.MatchesAll()
+		m["value-quantity"] = p.ValueQuantity.ToAndGroup()
 	}
 	if p.ValueReference != nil {
-		m[search.ParameterKey{Name: "value-reference"}] = p.ValueReference.MatchesAll()
+		m["value-reference"] = p.ValueReference.ToAndGroup()
 	}
 	if p.CodeValueConcept != nil {
-		m[search.ParameterKey{Name: "code-value-concept"}] = p.CodeValueConcept.MatchesAll()
+		m["code-value-concept"] = p.CodeValueConcept.ToAndGroup()
 	}
 	if p.CodeValueDate != nil {
-		m[search.ParameterKey{Name: "code-value-date"}] = p.CodeValueDate.MatchesAll()
+		m["code-value-date"] = p.CodeValueDate.ToAndGroup()
 	}
 	if p.CodeValueQuantity != nil {
-		m[search.ParameterKey{Name: "code-value-quantity"}] = p.CodeValueQuantity.MatchesAll()
+		m["code-value-quantity"] = p.CodeValueQuantity.ToAndGroup()
 	}
 	if p.CodeValueString != nil {
-		m[search.ParameterKey{Name: "code-value-string"}] = p.CodeValueString.MatchesAll()
+		m["code-value-string"] = p.CodeValueString.ToAndGroup()
 	}
 	if p.ComboCodeValueConcept != nil {
-		m[search.ParameterKey{Name: "combo-code-value-concept"}] = p.ComboCodeValueConcept.MatchesAll()
+		m["combo-code-value-concept"] = p.ComboCodeValueConcept.ToAndGroup()
 	}
 	if p.ComboCodeValueQuantity != nil {
-		m[search.ParameterKey{Name: "combo-code-value-quantity"}] = p.ComboCodeValueQuantity.MatchesAll()
+		m["combo-code-value-quantity"] = p.ComboCodeValueQuantity.ToAndGroup()
 	}
 	if p.ComponentCodeValueConcept != nil {
-		m[search.ParameterKey{Name: "component-code-value-concept"}] = p.ComponentCodeValueConcept.MatchesAll()
+		m["component-code-value-concept"] = p.ComponentCodeValueConcept.ToAndGroup()
 	}
 	if p.ComponentCodeValueQuantity != nil {
-		m[search.ParameterKey{Name: "component-code-value-quantity"}] = p.ComponentCodeValueQuantity.MatchesAll()
+		m["component-code-value-quantity"] = p.ComponentCodeValueQuantity.ToAndGroup()
 	}
 
 	return m
@@ -6697,43 +6697,43 @@ func (p ObservationParams) Map() map[search.ParameterKey]search.MatchAll {
 // ObservationDefinitionParams contains typed search parameters for ObservationDefinition resources.
 type ObservationDefinitionParams struct {
 	// ObservationDefinition-specific search parameters
-	Identifier   search.TokenOrString  `json:"identifier,omitempty"`
-	Status       search.TokenOrString  `json:"status,omitempty"`
-	Title        search.StringOrString `json:"title,omitempty"`
-	Url          search.UriOrString    `json:"url,omitempty"`
-	Category     search.TokenOrString  `json:"category,omitempty"`
-	Code         search.TokenOrString  `json:"code,omitempty"`
-	Experimental search.TokenOrString  `json:"experimental,omitempty"`
-	Method       search.TokenOrString  `json:"method,omitempty"`
+	Identifier   search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Status       search.Criteria[search.Token]  `json:"status,omitempty"`
+	Title        search.Criteria[search.String] `json:"title,omitempty"`
+	Url          search.Criteria[search.Uri]    `json:"url,omitempty"`
+	Category     search.Criteria[search.Token]  `json:"category,omitempty"`
+	Code         search.Criteria[search.Token]  `json:"code,omitempty"`
+	Experimental search.Criteria[search.Token]  `json:"experimental,omitempty"`
+	Method       search.Criteria[search.Token]  `json:"method,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ObservationDefinitionParams.
-func (p ObservationDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ObservationDefinitionParams.
+func (p ObservationDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Experimental != nil {
-		m[search.ParameterKey{Name: "experimental"}] = p.Experimental.MatchesAll()
+		m["experimental"] = p.Experimental.ToAndGroup()
 	}
 	if p.Method != nil {
-		m[search.ParameterKey{Name: "method"}] = p.Method.MatchesAll()
+		m["method"] = p.Method.ToAndGroup()
 	}
 
 	return m
@@ -6742,103 +6742,103 @@ func (p ObservationDefinitionParams) Map() map[search.ParameterKey]search.MatchA
 // OperationDefinitionParams contains typed search parameters for OperationDefinition resources.
 type OperationDefinitionParams struct {
 	// OperationDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Base                search.ReferenceOrString `json:"base,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	InputProfile        search.ReferenceOrString `json:"input-profile,omitempty"`
-	Instance            search.TokenOrString     `json:"instance,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	OutputProfile       search.ReferenceOrString `json:"output-profile,omitempty"`
-	System              search.TokenOrString     `json:"system,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Base                search.Criteria[search.Reference] `json:"base,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	InputProfile        search.Criteria[search.Reference] `json:"input-profile,omitempty"`
+	Instance            search.Criteria[search.Token]     `json:"instance,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	OutputProfile       search.Criteria[search.Reference] `json:"output-profile,omitempty"`
+	System              search.Criteria[search.Token]     `json:"system,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for OperationDefinitionParams.
-func (p OperationDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for OperationDefinitionParams.
+func (p OperationDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Base != nil {
-		m[search.ParameterKey{Name: "base"}] = p.Base.MatchesAll()
+		m["base"] = p.Base.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.InputProfile != nil {
-		m[search.ParameterKey{Name: "input-profile"}] = p.InputProfile.MatchesAll()
+		m["input-profile"] = p.InputProfile.ToAndGroup()
 	}
 	if p.Instance != nil {
-		m[search.ParameterKey{Name: "instance"}] = p.Instance.MatchesAll()
+		m["instance"] = p.Instance.ToAndGroup()
 	}
 	if p.Kind != nil {
-		m[search.ParameterKey{Name: "kind"}] = p.Kind.MatchesAll()
+		m["kind"] = p.Kind.ToAndGroup()
 	}
 	if p.OutputProfile != nil {
-		m[search.ParameterKey{Name: "output-profile"}] = p.OutputProfile.MatchesAll()
+		m["output-profile"] = p.OutputProfile.ToAndGroup()
 	}
 	if p.System != nil {
-		m[search.ParameterKey{Name: "system"}] = p.System.MatchesAll()
+		m["system"] = p.System.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -6847,9 +6847,9 @@ func (p OperationDefinitionParams) Map() map[search.ParameterKey]search.MatchAll
 // OperationOutcomeParams contains typed search parameters for OperationOutcome resources.
 type OperationOutcomeParams struct{}
 
-// Map implements the search.Parameters interface for OperationOutcomeParams.
-func (p OperationOutcomeParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for OperationOutcomeParams.
+func (p OperationOutcomeParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -6857,63 +6857,63 @@ func (p OperationOutcomeParams) Map() map[search.ParameterKey]search.MatchAll {
 // OrganizationParams contains typed search parameters for Organization resources.
 type OrganizationParams struct {
 	// Organization-specific search parameters
-	Active            search.TokenOrString     `json:"active,omitempty"`
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Partof            search.ReferenceOrString `json:"partof,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Active            search.Criteria[search.Token]     `json:"active,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Partof            search.Criteria[search.Reference] `json:"partof,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for OrganizationParams.
-func (p OrganizationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for OrganizationParams.
+func (p OrganizationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Partof != nil {
-		m[search.ParameterKey{Name: "partof"}] = p.Partof.MatchesAll()
+		m["partof"] = p.Partof.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -6922,67 +6922,67 @@ func (p OrganizationParams) Map() map[search.ParameterKey]search.MatchAll {
 // OrganizationAffiliationParams contains typed search parameters for OrganizationAffiliation resources.
 type OrganizationAffiliationParams struct {
 	// OrganizationAffiliation-specific search parameters
-	Active                    search.TokenOrString     `json:"active,omitempty"`
-	Date                      search.DateOrString      `json:"date,omitempty"`
-	Email                     search.TokenOrString     `json:"email,omitempty"`
-	Endpoint                  search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier                search.TokenOrString     `json:"identifier,omitempty"`
-	Location                  search.ReferenceOrString `json:"location,omitempty"`
-	Network                   search.ReferenceOrString `json:"network,omitempty"`
-	ParticipatingOrganization search.ReferenceOrString `json:"participating-organization,omitempty"`
-	Phone                     search.TokenOrString     `json:"phone,omitempty"`
-	PrimaryOrganization       search.ReferenceOrString `json:"primary-organization,omitempty"`
-	Role                      search.TokenOrString     `json:"role,omitempty"`
-	Service                   search.ReferenceOrString `json:"service,omitempty"`
-	Specialty                 search.TokenOrString     `json:"specialty,omitempty"`
-	Telecom                   search.TokenOrString     `json:"telecom,omitempty"`
+	Active                    search.Criteria[search.Token]     `json:"active,omitempty"`
+	Date                      search.Criteria[search.Date]      `json:"date,omitempty"`
+	Email                     search.Criteria[search.Token]     `json:"email,omitempty"`
+	Endpoint                  search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier                search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location                  search.Criteria[search.Reference] `json:"location,omitempty"`
+	Network                   search.Criteria[search.Reference] `json:"network,omitempty"`
+	ParticipatingOrganization search.Criteria[search.Reference] `json:"participating-organization,omitempty"`
+	Phone                     search.Criteria[search.Token]     `json:"phone,omitempty"`
+	PrimaryOrganization       search.Criteria[search.Reference] `json:"primary-organization,omitempty"`
+	Role                      search.Criteria[search.Token]     `json:"role,omitempty"`
+	Service                   search.Criteria[search.Reference] `json:"service,omitempty"`
+	Specialty                 search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Telecom                   search.Criteria[search.Token]     `json:"telecom,omitempty"`
 }
 
-// Map implements the search.Parameters interface for OrganizationAffiliationParams.
-func (p OrganizationAffiliationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for OrganizationAffiliationParams.
+func (p OrganizationAffiliationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Network != nil {
-		m[search.ParameterKey{Name: "network"}] = p.Network.MatchesAll()
+		m["network"] = p.Network.ToAndGroup()
 	}
 	if p.ParticipatingOrganization != nil {
-		m[search.ParameterKey{Name: "participating-organization"}] = p.ParticipatingOrganization.MatchesAll()
+		m["participating-organization"] = p.ParticipatingOrganization.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.PrimaryOrganization != nil {
-		m[search.ParameterKey{Name: "primary-organization"}] = p.PrimaryOrganization.MatchesAll()
+		m["primary-organization"] = p.PrimaryOrganization.ToAndGroup()
 	}
 	if p.Role != nil {
-		m[search.ParameterKey{Name: "role"}] = p.Role.MatchesAll()
+		m["role"] = p.Role.ToAndGroup()
 	}
 	if p.Service != nil {
-		m[search.ParameterKey{Name: "service"}] = p.Service.MatchesAll()
+		m["service"] = p.Service.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 
 	return m
@@ -6991,55 +6991,55 @@ func (p OrganizationAffiliationParams) Map() map[search.ParameterKey]search.Matc
 // PackagedProductDefinitionParams contains typed search parameters for PackagedProductDefinition resources.
 type PackagedProductDefinitionParams struct {
 	// PackagedProductDefinition-specific search parameters
-	Biological       search.ReferenceOrString `json:"biological,omitempty"`
-	ContainedItem    search.ReferenceOrString `json:"contained-item,omitempty"`
-	Device           search.ReferenceOrString `json:"device,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	ManufacturedItem search.ReferenceOrString `json:"manufactured-item,omitempty"`
-	Medication       search.ReferenceOrString `json:"medication,omitempty"`
-	Name             search.TokenOrString     `json:"name,omitempty"`
-	Nutrition        search.ReferenceOrString `json:"nutrition,omitempty"`
-	Package          search.ReferenceOrString `json:"package,omitempty"`
-	PackageFor       search.ReferenceOrString `json:"package-for,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
+	Biological       search.Criteria[search.Reference] `json:"biological,omitempty"`
+	ContainedItem    search.Criteria[search.Reference] `json:"contained-item,omitempty"`
+	Device           search.Criteria[search.Reference] `json:"device,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ManufacturedItem search.Criteria[search.Reference] `json:"manufactured-item,omitempty"`
+	Medication       search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Name             search.Criteria[search.Token]     `json:"name,omitempty"`
+	Nutrition        search.Criteria[search.Reference] `json:"nutrition,omitempty"`
+	Package          search.Criteria[search.Reference] `json:"package,omitempty"`
+	PackageFor       search.Criteria[search.Reference] `json:"package-for,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PackagedProductDefinitionParams.
-func (p PackagedProductDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PackagedProductDefinitionParams.
+func (p PackagedProductDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Biological != nil {
-		m[search.ParameterKey{Name: "biological"}] = p.Biological.MatchesAll()
+		m["biological"] = p.Biological.ToAndGroup()
 	}
 	if p.ContainedItem != nil {
-		m[search.ParameterKey{Name: "contained-item"}] = p.ContainedItem.MatchesAll()
+		m["contained-item"] = p.ContainedItem.ToAndGroup()
 	}
 	if p.Device != nil {
-		m[search.ParameterKey{Name: "device"}] = p.Device.MatchesAll()
+		m["device"] = p.Device.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.ManufacturedItem != nil {
-		m[search.ParameterKey{Name: "manufactured-item"}] = p.ManufacturedItem.MatchesAll()
+		m["manufactured-item"] = p.ManufacturedItem.ToAndGroup()
 	}
 	if p.Medication != nil {
-		m[search.ParameterKey{Name: "medication"}] = p.Medication.MatchesAll()
+		m["medication"] = p.Medication.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Nutrition != nil {
-		m[search.ParameterKey{Name: "nutrition"}] = p.Nutrition.MatchesAll()
+		m["nutrition"] = p.Nutrition.ToAndGroup()
 	}
 	if p.Package != nil {
-		m[search.ParameterKey{Name: "package"}] = p.Package.MatchesAll()
+		m["package"] = p.Package.ToAndGroup()
 	}
 	if p.PackageFor != nil {
-		m[search.ParameterKey{Name: "package-for"}] = p.PackageFor.MatchesAll()
+		m["package-for"] = p.PackageFor.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -7048,9 +7048,9 @@ func (p PackagedProductDefinitionParams) Map() map[search.ParameterKey]search.Ma
 // ParametersParams contains typed search parameters for Parameters resources.
 type ParametersParams struct{}
 
-// Map implements the search.Parameters interface for ParametersParams.
-func (p ParametersParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ParametersParams.
+func (p ParametersParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -7058,103 +7058,103 @@ func (p ParametersParams) Map() map[search.ParameterKey]search.MatchAll {
 // PatientParams contains typed search parameters for Patient resources.
 type PatientParams struct {
 	// Patient-specific search parameters
-	Active              search.TokenOrString     `json:"active,omitempty"`
-	Address             search.StringOrString    `json:"address,omitempty"`
-	AddressCity         search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry      search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode   search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState        search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse          search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate           search.DateOrString      `json:"birthdate,omitempty"`
-	DeathDate           search.DateOrString      `json:"death-date,omitempty"`
-	Deceased            search.TokenOrString     `json:"deceased,omitempty"`
-	Email               search.TokenOrString     `json:"email,omitempty"`
-	Family              search.StringOrString    `json:"family,omitempty"`
-	Gender              search.TokenOrString     `json:"gender,omitempty"`
-	GeneralPractitioner search.ReferenceOrString `json:"general-practitioner,omitempty"`
-	Given               search.StringOrString    `json:"given,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Language            search.TokenOrString     `json:"language,omitempty"`
-	Link                search.ReferenceOrString `json:"link,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Organization        search.ReferenceOrString `json:"organization,omitempty"`
-	Phone               search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic            search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom             search.TokenOrString     `json:"telecom,omitempty"`
+	Active              search.Criteria[search.Token]     `json:"active,omitempty"`
+	Address             search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity         search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry      search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode   search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState        search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse          search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate           search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	DeathDate           search.Criteria[search.Date]      `json:"death-date,omitempty"`
+	Deceased            search.Criteria[search.Token]     `json:"deceased,omitempty"`
+	Email               search.Criteria[search.Token]     `json:"email,omitempty"`
+	Family              search.Criteria[search.String]    `json:"family,omitempty"`
+	Gender              search.Criteria[search.Token]     `json:"gender,omitempty"`
+	GeneralPractitioner search.Criteria[search.Reference] `json:"general-practitioner,omitempty"`
+	Given               search.Criteria[search.String]    `json:"given,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Language            search.Criteria[search.Token]     `json:"language,omitempty"`
+	Link                search.Criteria[search.Reference] `json:"link,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization        search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Phone               search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic            search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom             search.Criteria[search.Token]     `json:"telecom,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PatientParams.
-func (p PatientParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PatientParams.
+func (p PatientParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Birthdate != nil {
-		m[search.ParameterKey{Name: "birthdate"}] = p.Birthdate.MatchesAll()
+		m["birthdate"] = p.Birthdate.ToAndGroup()
 	}
 	if p.DeathDate != nil {
-		m[search.ParameterKey{Name: "death-date"}] = p.DeathDate.MatchesAll()
+		m["death-date"] = p.DeathDate.ToAndGroup()
 	}
 	if p.Deceased != nil {
-		m[search.ParameterKey{Name: "deceased"}] = p.Deceased.MatchesAll()
+		m["deceased"] = p.Deceased.ToAndGroup()
 	}
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Family != nil {
-		m[search.ParameterKey{Name: "family"}] = p.Family.MatchesAll()
+		m["family"] = p.Family.ToAndGroup()
 	}
 	if p.Gender != nil {
-		m[search.ParameterKey{Name: "gender"}] = p.Gender.MatchesAll()
+		m["gender"] = p.Gender.ToAndGroup()
 	}
 	if p.GeneralPractitioner != nil {
-		m[search.ParameterKey{Name: "general-practitioner"}] = p.GeneralPractitioner.MatchesAll()
+		m["general-practitioner"] = p.GeneralPractitioner.ToAndGroup()
 	}
 	if p.Given != nil {
-		m[search.ParameterKey{Name: "given"}] = p.Given.MatchesAll()
+		m["given"] = p.Given.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Language != nil {
-		m[search.ParameterKey{Name: "language"}] = p.Language.MatchesAll()
+		m["language"] = p.Language.ToAndGroup()
 	}
 	if p.Link != nil {
-		m[search.ParameterKey{Name: "link"}] = p.Link.MatchesAll()
+		m["link"] = p.Link.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 
 	return m
@@ -7163,39 +7163,39 @@ func (p PatientParams) Map() map[search.ParameterKey]search.MatchAll {
 // PaymentNoticeParams contains typed search parameters for PaymentNotice resources.
 type PaymentNoticeParams struct {
 	// PaymentNotice-specific search parameters
-	Created       search.DateOrString      `json:"created,omitempty"`
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	PaymentStatus search.TokenOrString     `json:"payment-status,omitempty"`
-	Reporter      search.ReferenceOrString `json:"reporter,omitempty"`
-	Request       search.ReferenceOrString `json:"request,omitempty"`
-	Response      search.ReferenceOrString `json:"response,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
+	Created       search.Criteria[search.Date]      `json:"created,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	PaymentStatus search.Criteria[search.Token]     `json:"payment-status,omitempty"`
+	Reporter      search.Criteria[search.Reference] `json:"reporter,omitempty"`
+	Request       search.Criteria[search.Reference] `json:"request,omitempty"`
+	Response      search.Criteria[search.Reference] `json:"response,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PaymentNoticeParams.
-func (p PaymentNoticeParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PaymentNoticeParams.
+func (p PaymentNoticeParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.PaymentStatus != nil {
-		m[search.ParameterKey{Name: "payment-status"}] = p.PaymentStatus.MatchesAll()
+		m["payment-status"] = p.PaymentStatus.ToAndGroup()
 	}
 	if p.Reporter != nil {
-		m[search.ParameterKey{Name: "reporter"}] = p.Reporter.MatchesAll()
+		m["reporter"] = p.Reporter.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Response != nil {
-		m[search.ParameterKey{Name: "response"}] = p.Response.MatchesAll()
+		m["response"] = p.Response.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -7204,51 +7204,51 @@ func (p PaymentNoticeParams) Map() map[search.ParameterKey]search.MatchAll {
 // PaymentReconciliationParams contains typed search parameters for PaymentReconciliation resources.
 type PaymentReconciliationParams struct {
 	// PaymentReconciliation-specific search parameters
-	AllocationAccount   search.ReferenceOrString `json:"allocation-account,omitempty"`
-	AllocationEncounter search.ReferenceOrString `json:"allocation-encounter,omitempty"`
-	Created             search.DateOrString      `json:"created,omitempty"`
-	Disposition         search.StringOrString    `json:"disposition,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Outcome             search.TokenOrString     `json:"outcome,omitempty"`
-	PaymentIssuer       search.ReferenceOrString `json:"payment-issuer,omitempty"`
-	Request             search.ReferenceOrString `json:"request,omitempty"`
-	Requestor           search.ReferenceOrString `json:"requestor,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
+	AllocationAccount   search.Criteria[search.Reference] `json:"allocation-account,omitempty"`
+	AllocationEncounter search.Criteria[search.Reference] `json:"allocation-encounter,omitempty"`
+	Created             search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition         search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Outcome             search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	PaymentIssuer       search.Criteria[search.Reference] `json:"payment-issuer,omitempty"`
+	Request             search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor           search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PaymentReconciliationParams.
-func (p PaymentReconciliationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PaymentReconciliationParams.
+func (p PaymentReconciliationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.AllocationAccount != nil {
-		m[search.ParameterKey{Name: "allocation-account"}] = p.AllocationAccount.MatchesAll()
+		m["allocation-account"] = p.AllocationAccount.ToAndGroup()
 	}
 	if p.AllocationEncounter != nil {
-		m[search.ParameterKey{Name: "allocation-encounter"}] = p.AllocationEncounter.MatchesAll()
+		m["allocation-encounter"] = p.AllocationEncounter.ToAndGroup()
 	}
 	if p.Created != nil {
-		m[search.ParameterKey{Name: "created"}] = p.Created.MatchesAll()
+		m["created"] = p.Created.ToAndGroup()
 	}
 	if p.Disposition != nil {
-		m[search.ParameterKey{Name: "disposition"}] = p.Disposition.MatchesAll()
+		m["disposition"] = p.Disposition.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Outcome != nil {
-		m[search.ParameterKey{Name: "outcome"}] = p.Outcome.MatchesAll()
+		m["outcome"] = p.Outcome.ToAndGroup()
 	}
 	if p.PaymentIssuer != nil {
-		m[search.ParameterKey{Name: "payment-issuer"}] = p.PaymentIssuer.MatchesAll()
+		m["payment-issuer"] = p.PaymentIssuer.ToAndGroup()
 	}
 	if p.Request != nil {
-		m[search.ParameterKey{Name: "request"}] = p.Request.MatchesAll()
+		m["request"] = p.Request.ToAndGroup()
 	}
 	if p.Requestor != nil {
-		m[search.ParameterKey{Name: "requestor"}] = p.Requestor.MatchesAll()
+		m["requestor"] = p.Requestor.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -7257,15 +7257,15 @@ func (p PaymentReconciliationParams) Map() map[search.ParameterKey]search.MatchA
 // PermissionParams contains typed search parameters for Permission resources.
 type PermissionParams struct {
 	// Permission-specific search parameters
-	Status search.TokenOrString `json:"status,omitempty"`
+	Status search.Criteria[search.Token] `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PermissionParams.
-func (p PermissionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PermissionParams.
+func (p PermissionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -7274,103 +7274,103 @@ func (p PermissionParams) Map() map[search.ParameterKey]search.MatchAll {
 // PersonParams contains typed search parameters for Person resources.
 type PersonParams struct {
 	// Person-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate         search.DateOrString      `json:"birthdate,omitempty"`
-	Email             search.TokenOrString     `json:"email,omitempty"`
-	Gender            search.TokenOrString     `json:"gender,omitempty"`
-	Phone             search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom           search.TokenOrString     `json:"telecom,omitempty"`
-	DeathDate         search.DateOrString      `json:"death-date,omitempty"`
-	Deceased          search.TokenOrString     `json:"deceased,omitempty"`
-	Family            search.StringOrString    `json:"family,omitempty"`
-	Given             search.StringOrString    `json:"given,omitempty"`
-	Link              search.ReferenceOrString `json:"link,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Organization      search.ReferenceOrString `json:"organization,omitempty"`
-	Practitioner      search.ReferenceOrString `json:"practitioner,omitempty"`
-	Relatedperson     search.ReferenceOrString `json:"relatedperson,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate         search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	Email             search.Criteria[search.Token]     `json:"email,omitempty"`
+	Gender            search.Criteria[search.Token]     `json:"gender,omitempty"`
+	Phone             search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom           search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	DeathDate         search.Criteria[search.Date]      `json:"death-date,omitempty"`
+	Deceased          search.Criteria[search.Token]     `json:"deceased,omitempty"`
+	Family            search.Criteria[search.String]    `json:"family,omitempty"`
+	Given             search.Criteria[search.String]    `json:"given,omitempty"`
+	Link              search.Criteria[search.Reference] `json:"link,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization      search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Practitioner      search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	Relatedperson     search.Criteria[search.Reference] `json:"relatedperson,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PersonParams.
-func (p PersonParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PersonParams.
+func (p PersonParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Birthdate != nil {
-		m[search.ParameterKey{Name: "birthdate"}] = p.Birthdate.MatchesAll()
+		m["birthdate"] = p.Birthdate.ToAndGroup()
 	}
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Gender != nil {
-		m[search.ParameterKey{Name: "gender"}] = p.Gender.MatchesAll()
+		m["gender"] = p.Gender.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 	if p.DeathDate != nil {
-		m[search.ParameterKey{Name: "death-date"}] = p.DeathDate.MatchesAll()
+		m["death-date"] = p.DeathDate.ToAndGroup()
 	}
 	if p.Deceased != nil {
-		m[search.ParameterKey{Name: "deceased"}] = p.Deceased.MatchesAll()
+		m["deceased"] = p.Deceased.ToAndGroup()
 	}
 	if p.Family != nil {
-		m[search.ParameterKey{Name: "family"}] = p.Family.MatchesAll()
+		m["family"] = p.Family.ToAndGroup()
 	}
 	if p.Given != nil {
-		m[search.ParameterKey{Name: "given"}] = p.Given.MatchesAll()
+		m["given"] = p.Given.ToAndGroup()
 	}
 	if p.Link != nil {
-		m[search.ParameterKey{Name: "link"}] = p.Link.MatchesAll()
+		m["link"] = p.Link.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Practitioner != nil {
-		m[search.ParameterKey{Name: "practitioner"}] = p.Practitioner.MatchesAll()
+		m["practitioner"] = p.Practitioner.ToAndGroup()
 	}
 	if p.Relatedperson != nil {
-		m[search.ParameterKey{Name: "relatedperson"}] = p.Relatedperson.MatchesAll()
+		m["relatedperson"] = p.Relatedperson.ToAndGroup()
 	}
 
 	return m
@@ -7379,107 +7379,107 @@ func (p PersonParams) Map() map[search.ParameterKey]search.MatchAll {
 // PlanDefinitionParams contains typed search parameters for PlanDefinition resources.
 type PlanDefinitionParams struct {
 	// PlanDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Definition          search.ReferenceOrString `json:"definition,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Definition          search.Criteria[search.Reference] `json:"definition,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PlanDefinitionParams.
-func (p PlanDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PlanDefinitionParams.
+func (p PlanDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.ComposedOf != nil {
-		m[search.ParameterKey{Name: "composed-of"}] = p.ComposedOf.MatchesAll()
+		m["composed-of"] = p.ComposedOf.ToAndGroup()
 	}
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DependsOn != nil {
-		m[search.ParameterKey{Name: "depends-on"}] = p.DependsOn.MatchesAll()
+		m["depends-on"] = p.DependsOn.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Successor != nil {
-		m[search.ParameterKey{Name: "successor"}] = p.Successor.MatchesAll()
+		m["successor"] = p.Successor.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Definition != nil {
-		m[search.ParameterKey{Name: "definition"}] = p.Definition.MatchesAll()
+		m["definition"] = p.Definition.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -7488,91 +7488,91 @@ func (p PlanDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
 // PractitionerParams contains typed search parameters for Practitioner resources.
 type PractitionerParams struct {
 	// Practitioner-specific search parameters
-	Address             search.StringOrString `json:"address,omitempty"`
-	AddressCity         search.StringOrString `json:"address-city,omitempty"`
-	AddressCountry      search.StringOrString `json:"address-country,omitempty"`
-	AddressPostalcode   search.StringOrString `json:"address-postalcode,omitempty"`
-	AddressState        search.StringOrString `json:"address-state,omitempty"`
-	AddressUse          search.TokenOrString  `json:"address-use,omitempty"`
-	Email               search.TokenOrString  `json:"email,omitempty"`
-	Family              search.StringOrString `json:"family,omitempty"`
-	Gender              search.TokenOrString  `json:"gender,omitempty"`
-	Given               search.StringOrString `json:"given,omitempty"`
-	Phone               search.TokenOrString  `json:"phone,omitempty"`
-	Phonetic            search.StringOrString `json:"phonetic,omitempty"`
-	Telecom             search.TokenOrString  `json:"telecom,omitempty"`
-	Active              search.TokenOrString  `json:"active,omitempty"`
-	Communication       search.TokenOrString  `json:"communication,omitempty"`
-	DeathDate           search.DateOrString   `json:"death-date,omitempty"`
-	Deceased            search.TokenOrString  `json:"deceased,omitempty"`
-	Identifier          search.TokenOrString  `json:"identifier,omitempty"`
-	Name                search.StringOrString `json:"name,omitempty"`
-	QualificationPeriod search.DateOrString   `json:"qualification-period,omitempty"`
+	Address             search.Criteria[search.String] `json:"address,omitempty"`
+	AddressCity         search.Criteria[search.String] `json:"address-city,omitempty"`
+	AddressCountry      search.Criteria[search.String] `json:"address-country,omitempty"`
+	AddressPostalcode   search.Criteria[search.String] `json:"address-postalcode,omitempty"`
+	AddressState        search.Criteria[search.String] `json:"address-state,omitempty"`
+	AddressUse          search.Criteria[search.Token]  `json:"address-use,omitempty"`
+	Email               search.Criteria[search.Token]  `json:"email,omitempty"`
+	Family              search.Criteria[search.String] `json:"family,omitempty"`
+	Gender              search.Criteria[search.Token]  `json:"gender,omitempty"`
+	Given               search.Criteria[search.String] `json:"given,omitempty"`
+	Phone               search.Criteria[search.Token]  `json:"phone,omitempty"`
+	Phonetic            search.Criteria[search.String] `json:"phonetic,omitempty"`
+	Telecom             search.Criteria[search.Token]  `json:"telecom,omitempty"`
+	Active              search.Criteria[search.Token]  `json:"active,omitempty"`
+	Communication       search.Criteria[search.Token]  `json:"communication,omitempty"`
+	DeathDate           search.Criteria[search.Date]   `json:"death-date,omitempty"`
+	Deceased            search.Criteria[search.Token]  `json:"deceased,omitempty"`
+	Identifier          search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Name                search.Criteria[search.String] `json:"name,omitempty"`
+	QualificationPeriod search.Criteria[search.Date]   `json:"qualification-period,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PractitionerParams.
-func (p PractitionerParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PractitionerParams.
+func (p PractitionerParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Family != nil {
-		m[search.ParameterKey{Name: "family"}] = p.Family.MatchesAll()
+		m["family"] = p.Family.ToAndGroup()
 	}
 	if p.Gender != nil {
-		m[search.ParameterKey{Name: "gender"}] = p.Gender.MatchesAll()
+		m["gender"] = p.Gender.ToAndGroup()
 	}
 	if p.Given != nil {
-		m[search.ParameterKey{Name: "given"}] = p.Given.MatchesAll()
+		m["given"] = p.Given.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Communication != nil {
-		m[search.ParameterKey{Name: "communication"}] = p.Communication.MatchesAll()
+		m["communication"] = p.Communication.ToAndGroup()
 	}
 	if p.DeathDate != nil {
-		m[search.ParameterKey{Name: "death-date"}] = p.DeathDate.MatchesAll()
+		m["death-date"] = p.DeathDate.ToAndGroup()
 	}
 	if p.Deceased != nil {
-		m[search.ParameterKey{Name: "deceased"}] = p.Deceased.MatchesAll()
+		m["deceased"] = p.Deceased.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.QualificationPeriod != nil {
-		m[search.ParameterKey{Name: "qualification-period"}] = p.QualificationPeriod.MatchesAll()
+		m["qualification-period"] = p.QualificationPeriod.ToAndGroup()
 	}
 
 	return m
@@ -7581,71 +7581,71 @@ func (p PractitionerParams) Map() map[search.ParameterKey]search.MatchAll {
 // PractitionerRoleParams contains typed search parameters for PractitionerRole resources.
 type PractitionerRoleParams struct {
 	// PractitionerRole-specific search parameters
-	Email          search.TokenOrString     `json:"email,omitempty"`
-	Phone          search.TokenOrString     `json:"phone,omitempty"`
-	Telecom        search.TokenOrString     `json:"telecom,omitempty"`
-	Active         search.TokenOrString     `json:"active,omitempty"`
-	Characteristic search.TokenOrString     `json:"characteristic,omitempty"`
-	Communication  search.TokenOrString     `json:"communication,omitempty"`
-	Date           search.DateOrString      `json:"date,omitempty"`
-	Endpoint       search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Location       search.ReferenceOrString `json:"location,omitempty"`
-	Organization   search.ReferenceOrString `json:"organization,omitempty"`
-	Practitioner   search.ReferenceOrString `json:"practitioner,omitempty"`
-	Role           search.TokenOrString     `json:"role,omitempty"`
-	Service        search.ReferenceOrString `json:"service,omitempty"`
-	Specialty      search.TokenOrString     `json:"specialty,omitempty"`
+	Email          search.Criteria[search.Token]     `json:"email,omitempty"`
+	Phone          search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Telecom        search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Active         search.Criteria[search.Token]     `json:"active,omitempty"`
+	Characteristic search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	Communication  search.Criteria[search.Token]     `json:"communication,omitempty"`
+	Date           search.Criteria[search.Date]      `json:"date,omitempty"`
+	Endpoint       search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location       search.Criteria[search.Reference] `json:"location,omitempty"`
+	Organization   search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Practitioner   search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	Role           search.Criteria[search.Token]     `json:"role,omitempty"`
+	Service        search.Criteria[search.Reference] `json:"service,omitempty"`
+	Specialty      search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
-// Map implements the search.Parameters interface for PractitionerRoleParams.
-func (p PractitionerRoleParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for PractitionerRoleParams.
+func (p PractitionerRoleParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Characteristic != nil {
-		m[search.ParameterKey{Name: "characteristic"}] = p.Characteristic.MatchesAll()
+		m["characteristic"] = p.Characteristic.ToAndGroup()
 	}
 	if p.Communication != nil {
-		m[search.ParameterKey{Name: "communication"}] = p.Communication.MatchesAll()
+		m["communication"] = p.Communication.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Endpoint != nil {
-		m[search.ParameterKey{Name: "endpoint"}] = p.Endpoint.MatchesAll()
+		m["endpoint"] = p.Endpoint.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Organization != nil {
-		m[search.ParameterKey{Name: "organization"}] = p.Organization.MatchesAll()
+		m["organization"] = p.Organization.ToAndGroup()
 	}
 	if p.Practitioner != nil {
-		m[search.ParameterKey{Name: "practitioner"}] = p.Practitioner.MatchesAll()
+		m["practitioner"] = p.Practitioner.ToAndGroup()
 	}
 	if p.Role != nil {
-		m[search.ParameterKey{Name: "role"}] = p.Role.MatchesAll()
+		m["role"] = p.Role.ToAndGroup()
 	}
 	if p.Service != nil {
-		m[search.ParameterKey{Name: "service"}] = p.Service.MatchesAll()
+		m["service"] = p.Service.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 
 	return m
@@ -7654,79 +7654,79 @@ func (p PractitionerRoleParams) Map() map[search.ParameterKey]search.MatchAll {
 // ProcedureParams contains typed search parameters for Procedure resources.
 type ProcedureParams struct {
 	// Procedure-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Location              search.ReferenceOrString `json:"location,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	ReasonCode            search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference       search.ReferenceOrString `json:"reason-reference,omitempty"`
-	Report                search.ReferenceOrString `json:"report,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Location              search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	ReasonCode            search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference       search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	Report                search.Criteria[search.Reference] `json:"report,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ProcedureParams.
-func (p ProcedureParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ProcedureParams.
+func (p ProcedureParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.ReasonCode != nil {
-		m[search.ParameterKey{Name: "reason-code"}] = p.ReasonCode.MatchesAll()
+		m["reason-code"] = p.ReasonCode.ToAndGroup()
 	}
 	if p.ReasonReference != nil {
-		m[search.ParameterKey{Name: "reason-reference"}] = p.ReasonReference.MatchesAll()
+		m["reason-reference"] = p.ReasonReference.ToAndGroup()
 	}
 	if p.Report != nil {
-		m[search.ParameterKey{Name: "report"}] = p.Report.MatchesAll()
+		m["report"] = p.Report.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -7735,63 +7735,63 @@ func (p ProcedureParams) Map() map[search.ParameterKey]search.MatchAll {
 // ProvenanceParams contains typed search parameters for Provenance resources.
 type ProvenanceParams struct {
 	// Provenance-specific search parameters
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter     search.ReferenceOrString `json:"encounter,omitempty"`
-	Activity      search.TokenOrString     `json:"activity,omitempty"`
-	Agent         search.ReferenceOrString `json:"agent,omitempty"`
-	AgentRole     search.TokenOrString     `json:"agent-role,omitempty"`
-	AgentType     search.TokenOrString     `json:"agent-type,omitempty"`
-	BasedOn       search.ReferenceOrString `json:"based-on,omitempty"`
-	Entity        search.ReferenceOrString `json:"entity,omitempty"`
-	Location      search.ReferenceOrString `json:"location,omitempty"`
-	Recorded      search.DateOrString      `json:"recorded,omitempty"`
-	SignatureType search.TokenOrString     `json:"signature-type,omitempty"`
-	Target        search.ReferenceOrString `json:"target,omitempty"`
-	When          search.DateOrString      `json:"when,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter     search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Activity      search.Criteria[search.Token]     `json:"activity,omitempty"`
+	Agent         search.Criteria[search.Reference] `json:"agent,omitempty"`
+	AgentRole     search.Criteria[search.Token]     `json:"agent-role,omitempty"`
+	AgentType     search.Criteria[search.Token]     `json:"agent-type,omitempty"`
+	BasedOn       search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Entity        search.Criteria[search.Reference] `json:"entity,omitempty"`
+	Location      search.Criteria[search.Reference] `json:"location,omitempty"`
+	Recorded      search.Criteria[search.Date]      `json:"recorded,omitempty"`
+	SignatureType search.Criteria[search.Token]     `json:"signature-type,omitempty"`
+	Target        search.Criteria[search.Reference] `json:"target,omitempty"`
+	When          search.Criteria[search.Date]      `json:"when,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ProvenanceParams.
-func (p ProvenanceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ProvenanceParams.
+func (p ProvenanceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Activity != nil {
-		m[search.ParameterKey{Name: "activity"}] = p.Activity.MatchesAll()
+		m["activity"] = p.Activity.ToAndGroup()
 	}
 	if p.Agent != nil {
-		m[search.ParameterKey{Name: "agent"}] = p.Agent.MatchesAll()
+		m["agent"] = p.Agent.ToAndGroup()
 	}
 	if p.AgentRole != nil {
-		m[search.ParameterKey{Name: "agent-role"}] = p.AgentRole.MatchesAll()
+		m["agent-role"] = p.AgentRole.ToAndGroup()
 	}
 	if p.AgentType != nil {
-		m[search.ParameterKey{Name: "agent-type"}] = p.AgentType.MatchesAll()
+		m["agent-type"] = p.AgentType.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.Entity != nil {
-		m[search.ParameterKey{Name: "entity"}] = p.Entity.MatchesAll()
+		m["entity"] = p.Entity.ToAndGroup()
 	}
 	if p.Location != nil {
-		m[search.ParameterKey{Name: "location"}] = p.Location.MatchesAll()
+		m["location"] = p.Location.ToAndGroup()
 	}
 	if p.Recorded != nil {
-		m[search.ParameterKey{Name: "recorded"}] = p.Recorded.MatchesAll()
+		m["recorded"] = p.Recorded.ToAndGroup()
 	}
 	if p.SignatureType != nil {
-		m[search.ParameterKey{Name: "signature-type"}] = p.SignatureType.MatchesAll()
+		m["signature-type"] = p.SignatureType.ToAndGroup()
 	}
 	if p.Target != nil {
-		m[search.ParameterKey{Name: "target"}] = p.Target.MatchesAll()
+		m["target"] = p.Target.ToAndGroup()
 	}
 	if p.When != nil {
-		m[search.ParameterKey{Name: "when"}] = p.When.MatchesAll()
+		m["when"] = p.When.ToAndGroup()
 	}
 
 	return m
@@ -7800,95 +7800,95 @@ func (p ProvenanceParams) Map() map[search.ParameterKey]search.MatchAll {
 // QuestionnaireParams contains typed search parameters for Questionnaire resources.
 type QuestionnaireParams struct {
 	// Questionnaire-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	ComboCode           search.TokenOrString     `json:"combo-code,omitempty"`
-	Definition          search.UriOrString       `json:"definition,omitempty"`
-	ItemCode            search.TokenOrString     `json:"item-code,omitempty"`
-	QuestionnaireCode   search.TokenOrString     `json:"questionnaire-code,omitempty"`
-	SubjectType         search.TokenOrString     `json:"subject-type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	ComboCode           search.Criteria[search.Token]     `json:"combo-code,omitempty"`
+	Definition          search.Criteria[search.Uri]       `json:"definition,omitempty"`
+	ItemCode            search.Criteria[search.Token]     `json:"item-code,omitempty"`
+	QuestionnaireCode   search.Criteria[search.Token]     `json:"questionnaire-code,omitempty"`
+	SubjectType         search.Criteria[search.Token]     `json:"subject-type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for QuestionnaireParams.
-func (p QuestionnaireParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for QuestionnaireParams.
+func (p QuestionnaireParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.ComboCode != nil {
-		m[search.ParameterKey{Name: "combo-code"}] = p.ComboCode.MatchesAll()
+		m["combo-code"] = p.ComboCode.ToAndGroup()
 	}
 	if p.Definition != nil {
-		m[search.ParameterKey{Name: "definition"}] = p.Definition.MatchesAll()
+		m["definition"] = p.Definition.ToAndGroup()
 	}
 	if p.ItemCode != nil {
-		m[search.ParameterKey{Name: "item-code"}] = p.ItemCode.MatchesAll()
+		m["item-code"] = p.ItemCode.ToAndGroup()
 	}
 	if p.QuestionnaireCode != nil {
-		m[search.ParameterKey{Name: "questionnaire-code"}] = p.QuestionnaireCode.MatchesAll()
+		m["questionnaire-code"] = p.QuestionnaireCode.ToAndGroup()
 	}
 	if p.SubjectType != nil {
-		m[search.ParameterKey{Name: "subject-type"}] = p.SubjectType.MatchesAll()
+		m["subject-type"] = p.SubjectType.ToAndGroup()
 	}
 
 	return m
@@ -7897,59 +7897,59 @@ func (p QuestionnaireParams) Map() map[search.ParameterKey]search.MatchAll {
 // QuestionnaireResponseParams contains typed search parameters for QuestionnaireResponse resources.
 type QuestionnaireResponseParams struct {
 	// QuestionnaireResponse-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter     search.ReferenceOrString `json:"encounter,omitempty"`
-	Author        search.ReferenceOrString `json:"author,omitempty"`
-	Authored      search.DateOrString      `json:"authored,omitempty"`
-	BasedOn       search.ReferenceOrString `json:"based-on,omitempty"`
-	ItemSubject   search.ReferenceOrString `json:"item-subject,omitempty"`
-	PartOf        search.ReferenceOrString `json:"part-of,omitempty"`
-	Questionnaire search.ReferenceOrString `json:"questionnaire,omitempty"`
-	Source        search.ReferenceOrString `json:"source,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter     search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Author        search.Criteria[search.Reference] `json:"author,omitempty"`
+	Authored      search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn       search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	ItemSubject   search.Criteria[search.Reference] `json:"item-subject,omitempty"`
+	PartOf        search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Questionnaire search.Criteria[search.Reference] `json:"questionnaire,omitempty"`
+	Source        search.Criteria[search.Reference] `json:"source,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for QuestionnaireResponseParams.
-func (p QuestionnaireResponseParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for QuestionnaireResponseParams.
+func (p QuestionnaireResponseParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Authored != nil {
-		m[search.ParameterKey{Name: "authored"}] = p.Authored.MatchesAll()
+		m["authored"] = p.Authored.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.ItemSubject != nil {
-		m[search.ParameterKey{Name: "item-subject"}] = p.ItemSubject.MatchesAll()
+		m["item-subject"] = p.ItemSubject.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Questionnaire != nil {
-		m[search.ParameterKey{Name: "questionnaire"}] = p.Questionnaire.MatchesAll()
+		m["questionnaire"] = p.Questionnaire.ToAndGroup()
 	}
 	if p.Source != nil {
-		m[search.ParameterKey{Name: "source"}] = p.Source.MatchesAll()
+		m["source"] = p.Source.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -7958,39 +7958,39 @@ func (p QuestionnaireResponseParams) Map() map[search.ParameterKey]search.MatchA
 // RegulatedAuthorizationParams contains typed search parameters for RegulatedAuthorization resources.
 type RegulatedAuthorizationParams struct {
 	// RegulatedAuthorization-specific search parameters
-	Case       search.TokenOrString     `json:"case,omitempty"`
-	CaseType   search.TokenOrString     `json:"case-type,omitempty"`
-	Holder     search.ReferenceOrString `json:"holder,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Region     search.TokenOrString     `json:"region,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Case       search.Criteria[search.Token]     `json:"case,omitempty"`
+	CaseType   search.Criteria[search.Token]     `json:"case-type,omitempty"`
+	Holder     search.Criteria[search.Reference] `json:"holder,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Region     search.Criteria[search.Token]     `json:"region,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for RegulatedAuthorizationParams.
-func (p RegulatedAuthorizationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for RegulatedAuthorizationParams.
+func (p RegulatedAuthorizationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Case != nil {
-		m[search.ParameterKey{Name: "case"}] = p.Case.MatchesAll()
+		m["case"] = p.Case.ToAndGroup()
 	}
 	if p.CaseType != nil {
-		m[search.ParameterKey{Name: "case-type"}] = p.CaseType.MatchesAll()
+		m["case-type"] = p.CaseType.ToAndGroup()
 	}
 	if p.Holder != nil {
-		m[search.ParameterKey{Name: "holder"}] = p.Holder.MatchesAll()
+		m["holder"] = p.Holder.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Region != nil {
-		m[search.ParameterKey{Name: "region"}] = p.Region.MatchesAll()
+		m["region"] = p.Region.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -7999,87 +7999,87 @@ func (p RegulatedAuthorizationParams) Map() map[search.ParameterKey]search.Match
 // RelatedPersonParams contains typed search parameters for RelatedPerson resources.
 type RelatedPersonParams struct {
 	// RelatedPerson-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate         search.DateOrString      `json:"birthdate,omitempty"`
-	Email             search.TokenOrString     `json:"email,omitempty"`
-	Gender            search.TokenOrString     `json:"gender,omitempty"`
-	Phone             search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom           search.TokenOrString     `json:"telecom,omitempty"`
-	Active            search.TokenOrString     `json:"active,omitempty"`
-	Family            search.StringOrString    `json:"family,omitempty"`
-	Given             search.StringOrString    `json:"given,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Relationship      search.TokenOrString     `json:"relationship,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate         search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	Email             search.Criteria[search.Token]     `json:"email,omitempty"`
+	Gender            search.Criteria[search.Token]     `json:"gender,omitempty"`
+	Phone             search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom           search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Active            search.Criteria[search.Token]     `json:"active,omitempty"`
+	Family            search.Criteria[search.String]    `json:"family,omitempty"`
+	Given             search.Criteria[search.String]    `json:"given,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Relationship      search.Criteria[search.Token]     `json:"relationship,omitempty"`
 }
 
-// Map implements the search.Parameters interface for RelatedPersonParams.
-func (p RelatedPersonParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for RelatedPersonParams.
+func (p RelatedPersonParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Address != nil {
-		m[search.ParameterKey{Name: "address"}] = p.Address.MatchesAll()
+		m["address"] = p.Address.ToAndGroup()
 	}
 	if p.AddressCity != nil {
-		m[search.ParameterKey{Name: "address-city"}] = p.AddressCity.MatchesAll()
+		m["address-city"] = p.AddressCity.ToAndGroup()
 	}
 	if p.AddressCountry != nil {
-		m[search.ParameterKey{Name: "address-country"}] = p.AddressCountry.MatchesAll()
+		m["address-country"] = p.AddressCountry.ToAndGroup()
 	}
 	if p.AddressPostalcode != nil {
-		m[search.ParameterKey{Name: "address-postalcode"}] = p.AddressPostalcode.MatchesAll()
+		m["address-postalcode"] = p.AddressPostalcode.ToAndGroup()
 	}
 	if p.AddressState != nil {
-		m[search.ParameterKey{Name: "address-state"}] = p.AddressState.MatchesAll()
+		m["address-state"] = p.AddressState.ToAndGroup()
 	}
 	if p.AddressUse != nil {
-		m[search.ParameterKey{Name: "address-use"}] = p.AddressUse.MatchesAll()
+		m["address-use"] = p.AddressUse.ToAndGroup()
 	}
 	if p.Birthdate != nil {
-		m[search.ParameterKey{Name: "birthdate"}] = p.Birthdate.MatchesAll()
+		m["birthdate"] = p.Birthdate.ToAndGroup()
 	}
 	if p.Email != nil {
-		m[search.ParameterKey{Name: "email"}] = p.Email.MatchesAll()
+		m["email"] = p.Email.ToAndGroup()
 	}
 	if p.Gender != nil {
-		m[search.ParameterKey{Name: "gender"}] = p.Gender.MatchesAll()
+		m["gender"] = p.Gender.ToAndGroup()
 	}
 	if p.Phone != nil {
-		m[search.ParameterKey{Name: "phone"}] = p.Phone.MatchesAll()
+		m["phone"] = p.Phone.ToAndGroup()
 	}
 	if p.Phonetic != nil {
-		m[search.ParameterKey{Name: "phonetic"}] = p.Phonetic.MatchesAll()
+		m["phonetic"] = p.Phonetic.ToAndGroup()
 	}
 	if p.Telecom != nil {
-		m[search.ParameterKey{Name: "telecom"}] = p.Telecom.MatchesAll()
+		m["telecom"] = p.Telecom.ToAndGroup()
 	}
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Family != nil {
-		m[search.ParameterKey{Name: "family"}] = p.Family.MatchesAll()
+		m["family"] = p.Family.ToAndGroup()
 	}
 	if p.Given != nil {
-		m[search.ParameterKey{Name: "given"}] = p.Given.MatchesAll()
+		m["given"] = p.Given.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Relationship != nil {
-		m[search.ParameterKey{Name: "relationship"}] = p.Relationship.MatchesAll()
+		m["relationship"] = p.Relationship.ToAndGroup()
 	}
 
 	return m
@@ -8088,71 +8088,71 @@ func (p RelatedPersonParams) Map() map[search.ParameterKey]search.MatchAll {
 // RequestOrchestrationParams contains typed search parameters for RequestOrchestration resources.
 type RequestOrchestrationParams struct {
 	// RequestOrchestration-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Author                search.ReferenceOrString `json:"author,omitempty"`
-	Authored              search.DateOrString      `json:"authored,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	GroupIdentifier       search.TokenOrString     `json:"group-identifier,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Participant           search.ReferenceOrString `json:"participant,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Author                search.Criteria[search.Reference] `json:"author,omitempty"`
+	Authored              search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	GroupIdentifier       search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Participant           search.Criteria[search.Reference] `json:"participant,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for RequestOrchestrationParams.
-func (p RequestOrchestrationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for RequestOrchestrationParams.
+func (p RequestOrchestrationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Author != nil {
-		m[search.ParameterKey{Name: "author"}] = p.Author.MatchesAll()
+		m["author"] = p.Author.ToAndGroup()
 	}
 	if p.Authored != nil {
-		m[search.ParameterKey{Name: "authored"}] = p.Authored.MatchesAll()
+		m["authored"] = p.Authored.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -8161,79 +8161,79 @@ func (p RequestOrchestrationParams) Map() map[search.ParameterKey]search.MatchAl
 // RequirementsParams contains typed search parameters for Requirements resources.
 type RequirementsParams struct {
 	// Requirements-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Actor               search.ReferenceOrString `json:"actor,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Actor               search.Criteria[search.Reference] `json:"actor,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
 }
 
-// Map implements the search.Parameters interface for RequirementsParams.
-func (p RequirementsParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for RequirementsParams.
+func (p RequirementsParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 
 	return m
@@ -8242,111 +8242,111 @@ func (p RequirementsParams) Map() map[search.ParameterKey]search.MatchAll {
 // ResearchStudyParams contains typed search parameters for ResearchStudy resources.
 type ResearchStudyParams struct {
 	// ResearchStudy-specific search parameters
-	Classifier                      search.TokenOrString     `json:"classifier,omitempty"`
-	Condition                       search.TokenOrString     `json:"condition,omitempty"`
-	Date                            search.DateOrString      `json:"date,omitempty"`
-	Description                     search.StringOrString    `json:"description,omitempty"`
-	Eligibility                     search.ReferenceOrString `json:"eligibility,omitempty"`
-	FocusCode                       search.TokenOrString     `json:"focus-code,omitempty"`
-	FocusReference                  search.ReferenceOrString `json:"focus-reference,omitempty"`
-	Identifier                      search.TokenOrString     `json:"identifier,omitempty"`
-	Keyword                         search.TokenOrString     `json:"keyword,omitempty"`
-	Name                            search.StringOrString    `json:"name,omitempty"`
-	ObjectiveDescription            search.StringOrString    `json:"objective-description,omitempty"`
-	ObjectiveType                   search.TokenOrString     `json:"objective-type,omitempty"`
-	PartOf                          search.ReferenceOrString `json:"part-of,omitempty"`
-	Phase                           search.TokenOrString     `json:"phase,omitempty"`
-	Protocol                        search.ReferenceOrString `json:"protocol,omitempty"`
-	RecruitmentActual               search.NumberOrString    `json:"recruitment-actual,omitempty"`
-	RecruitmentTarget               search.NumberOrString    `json:"recruitment-target,omitempty"`
-	Region                          search.TokenOrString     `json:"region,omitempty"`
-	Site                            search.ReferenceOrString `json:"site,omitempty"`
-	Status                          search.TokenOrString     `json:"status,omitempty"`
-	StudyDesign                     search.TokenOrString     `json:"study-design,omitempty"`
-	Title                           search.StringOrString    `json:"title,omitempty"`
-	ProgressStatusStateActual       search.CompositeOrString `json:"progress-status-state-actual,omitempty"`
-	ProgressStatusStatePeriod       search.CompositeOrString `json:"progress-status-state-period,omitempty"`
-	ProgressStatusStatePeriodActual search.CompositeOrString `json:"progress-status-state-period-actual,omitempty"`
+	Classifier                      search.Criteria[search.Token]     `json:"classifier,omitempty"`
+	Condition                       search.Criteria[search.Token]     `json:"condition,omitempty"`
+	Date                            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description                     search.Criteria[search.String]    `json:"description,omitempty"`
+	Eligibility                     search.Criteria[search.Reference] `json:"eligibility,omitempty"`
+	FocusCode                       search.Criteria[search.Token]     `json:"focus-code,omitempty"`
+	FocusReference                  search.Criteria[search.Reference] `json:"focus-reference,omitempty"`
+	Identifier                      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Keyword                         search.Criteria[search.Token]     `json:"keyword,omitempty"`
+	Name                            search.Criteria[search.String]    `json:"name,omitempty"`
+	ObjectiveDescription            search.Criteria[search.String]    `json:"objective-description,omitempty"`
+	ObjectiveType                   search.Criteria[search.Token]     `json:"objective-type,omitempty"`
+	PartOf                          search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Phase                           search.Criteria[search.Token]     `json:"phase,omitempty"`
+	Protocol                        search.Criteria[search.Reference] `json:"protocol,omitempty"`
+	RecruitmentActual               search.Criteria[search.Number]    `json:"recruitment-actual,omitempty"`
+	RecruitmentTarget               search.Criteria[search.Number]    `json:"recruitment-target,omitempty"`
+	Region                          search.Criteria[search.Token]     `json:"region,omitempty"`
+	Site                            search.Criteria[search.Reference] `json:"site,omitempty"`
+	Status                          search.Criteria[search.Token]     `json:"status,omitempty"`
+	StudyDesign                     search.Criteria[search.Token]     `json:"study-design,omitempty"`
+	Title                           search.Criteria[search.String]    `json:"title,omitempty"`
+	ProgressStatusStateActual       search.Criteria[search.Composite] `json:"progress-status-state-actual,omitempty"`
+	ProgressStatusStatePeriod       search.Criteria[search.Composite] `json:"progress-status-state-period,omitempty"`
+	ProgressStatusStatePeriodActual search.Criteria[search.Composite] `json:"progress-status-state-period-actual,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ResearchStudyParams.
-func (p ResearchStudyParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ResearchStudyParams.
+func (p ResearchStudyParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Classifier != nil {
-		m[search.ParameterKey{Name: "classifier"}] = p.Classifier.MatchesAll()
+		m["classifier"] = p.Classifier.ToAndGroup()
 	}
 	if p.Condition != nil {
-		m[search.ParameterKey{Name: "condition"}] = p.Condition.MatchesAll()
+		m["condition"] = p.Condition.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Eligibility != nil {
-		m[search.ParameterKey{Name: "eligibility"}] = p.Eligibility.MatchesAll()
+		m["eligibility"] = p.Eligibility.ToAndGroup()
 	}
 	if p.FocusCode != nil {
-		m[search.ParameterKey{Name: "focus-code"}] = p.FocusCode.MatchesAll()
+		m["focus-code"] = p.FocusCode.ToAndGroup()
 	}
 	if p.FocusReference != nil {
-		m[search.ParameterKey{Name: "focus-reference"}] = p.FocusReference.MatchesAll()
+		m["focus-reference"] = p.FocusReference.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Keyword != nil {
-		m[search.ParameterKey{Name: "keyword"}] = p.Keyword.MatchesAll()
+		m["keyword"] = p.Keyword.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.ObjectiveDescription != nil {
-		m[search.ParameterKey{Name: "objective-description"}] = p.ObjectiveDescription.MatchesAll()
+		m["objective-description"] = p.ObjectiveDescription.ToAndGroup()
 	}
 	if p.ObjectiveType != nil {
-		m[search.ParameterKey{Name: "objective-type"}] = p.ObjectiveType.MatchesAll()
+		m["objective-type"] = p.ObjectiveType.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Phase != nil {
-		m[search.ParameterKey{Name: "phase"}] = p.Phase.MatchesAll()
+		m["phase"] = p.Phase.ToAndGroup()
 	}
 	if p.Protocol != nil {
-		m[search.ParameterKey{Name: "protocol"}] = p.Protocol.MatchesAll()
+		m["protocol"] = p.Protocol.ToAndGroup()
 	}
 	if p.RecruitmentActual != nil {
-		m[search.ParameterKey{Name: "recruitment-actual"}] = p.RecruitmentActual.MatchesAll()
+		m["recruitment-actual"] = p.RecruitmentActual.ToAndGroup()
 	}
 	if p.RecruitmentTarget != nil {
-		m[search.ParameterKey{Name: "recruitment-target"}] = p.RecruitmentTarget.MatchesAll()
+		m["recruitment-target"] = p.RecruitmentTarget.ToAndGroup()
 	}
 	if p.Region != nil {
-		m[search.ParameterKey{Name: "region"}] = p.Region.MatchesAll()
+		m["region"] = p.Region.ToAndGroup()
 	}
 	if p.Site != nil {
-		m[search.ParameterKey{Name: "site"}] = p.Site.MatchesAll()
+		m["site"] = p.Site.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.StudyDesign != nil {
-		m[search.ParameterKey{Name: "study-design"}] = p.StudyDesign.MatchesAll()
+		m["study-design"] = p.StudyDesign.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.ProgressStatusStateActual != nil {
-		m[search.ParameterKey{Name: "progress-status-state-actual"}] = p.ProgressStatusStateActual.MatchesAll()
+		m["progress-status-state-actual"] = p.ProgressStatusStateActual.ToAndGroup()
 	}
 	if p.ProgressStatusStatePeriod != nil {
-		m[search.ParameterKey{Name: "progress-status-state-period"}] = p.ProgressStatusStatePeriod.MatchesAll()
+		m["progress-status-state-period"] = p.ProgressStatusStatePeriod.ToAndGroup()
 	}
 	if p.ProgressStatusStatePeriodActual != nil {
-		m[search.ParameterKey{Name: "progress-status-state-period-actual"}] = p.ProgressStatusStatePeriodActual.MatchesAll()
+		m["progress-status-state-period-actual"] = p.ProgressStatusStatePeriodActual.ToAndGroup()
 	}
 
 	return m
@@ -8355,39 +8355,39 @@ func (p ResearchStudyParams) Map() map[search.ParameterKey]search.MatchAll {
 // ResearchSubjectParams contains typed search parameters for ResearchSubject resources.
 type ResearchSubjectParams struct {
 	// ResearchSubject-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Date          search.DateOrString      `json:"date,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Study         search.ReferenceOrString `json:"study,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
-	Subject_state search.TokenOrString     `json:"subject_state,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date          search.Criteria[search.Date]      `json:"date,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Study         search.Criteria[search.Reference] `json:"study,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Subject_state search.Criteria[search.Token]     `json:"subject_state,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ResearchSubjectParams.
-func (p ResearchSubjectParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ResearchSubjectParams.
+func (p ResearchSubjectParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Study != nil {
-		m[search.ParameterKey{Name: "study"}] = p.Study.MatchesAll()
+		m["study"] = p.Study.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Subject_state != nil {
-		m[search.ParameterKey{Name: "subject_state"}] = p.Subject_state.MatchesAll()
+		m["subject_state"] = p.Subject_state.ToAndGroup()
 	}
 
 	return m
@@ -8396,51 +8396,51 @@ func (p ResearchSubjectParams) Map() map[search.ParameterKey]search.MatchAll {
 // RiskAssessmentParams contains typed search parameters for RiskAssessment resources.
 type RiskAssessmentParams struct {
 	// RiskAssessment-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Condition   search.ReferenceOrString `json:"condition,omitempty"`
-	Method      search.TokenOrString     `json:"method,omitempty"`
-	Performer   search.ReferenceOrString `json:"performer,omitempty"`
-	Probability search.NumberOrString    `json:"probability,omitempty"`
-	Risk        search.TokenOrString     `json:"risk,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Condition   search.Criteria[search.Reference] `json:"condition,omitempty"`
+	Method      search.Criteria[search.Token]     `json:"method,omitempty"`
+	Performer   search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Probability search.Criteria[search.Number]    `json:"probability,omitempty"`
+	Risk        search.Criteria[search.Token]     `json:"risk,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for RiskAssessmentParams.
-func (p RiskAssessmentParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for RiskAssessmentParams.
+func (p RiskAssessmentParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Condition != nil {
-		m[search.ParameterKey{Name: "condition"}] = p.Condition.MatchesAll()
+		m["condition"] = p.Condition.ToAndGroup()
 	}
 	if p.Method != nil {
-		m[search.ParameterKey{Name: "method"}] = p.Method.MatchesAll()
+		m["method"] = p.Method.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Probability != nil {
-		m[search.ParameterKey{Name: "probability"}] = p.Probability.MatchesAll()
+		m["probability"] = p.Probability.ToAndGroup()
 	}
 	if p.Risk != nil {
-		m[search.ParameterKey{Name: "risk"}] = p.Risk.MatchesAll()
+		m["risk"] = p.Risk.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -8449,47 +8449,47 @@ func (p RiskAssessmentParams) Map() map[search.ParameterKey]search.MatchAll {
 // ScheduleParams contains typed search parameters for Schedule resources.
 type ScheduleParams struct {
 	// Schedule-specific search parameters
-	Active               search.TokenOrString     `json:"active,omitempty"`
-	Actor                search.ReferenceOrString `json:"actor,omitempty"`
-	Date                 search.DateOrString      `json:"date,omitempty"`
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Name                 search.StringOrString    `json:"name,omitempty"`
-	ServiceCategory      search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType          search.TokenOrString     `json:"service-type,omitempty"`
-	ServiceTypeReference search.ReferenceOrString `json:"service-type-reference,omitempty"`
-	Specialty            search.TokenOrString     `json:"specialty,omitempty"`
+	Active               search.Criteria[search.Token]     `json:"active,omitempty"`
+	Actor                search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Date                 search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name                 search.Criteria[search.String]    `json:"name,omitempty"`
+	ServiceCategory      search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType          search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	ServiceTypeReference search.Criteria[search.Reference] `json:"service-type-reference,omitempty"`
+	Specialty            search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ScheduleParams.
-func (p ScheduleParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ScheduleParams.
+func (p ScheduleParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Active != nil {
-		m[search.ParameterKey{Name: "active"}] = p.Active.MatchesAll()
+		m["active"] = p.Active.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.ServiceCategory != nil {
-		m[search.ParameterKey{Name: "service-category"}] = p.ServiceCategory.MatchesAll()
+		m["service-category"] = p.ServiceCategory.ToAndGroup()
 	}
 	if p.ServiceType != nil {
-		m[search.ParameterKey{Name: "service-type"}] = p.ServiceType.MatchesAll()
+		m["service-type"] = p.ServiceType.ToAndGroup()
 	}
 	if p.ServiceTypeReference != nil {
-		m[search.ParameterKey{Name: "service-type-reference"}] = p.ServiceTypeReference.MatchesAll()
+		m["service-type-reference"] = p.ServiceTypeReference.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 
 	return m
@@ -8498,91 +8498,91 @@ func (p ScheduleParams) Map() map[search.ParameterKey]search.MatchAll {
 // SearchParameterParams contains typed search parameters for SearchParameter resources.
 type SearchParameterParams struct {
 	// SearchParameter-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Base                search.TokenOrString     `json:"base,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Component           search.ReferenceOrString `json:"component,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Target              search.TokenOrString     `json:"target,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Base                search.Criteria[search.Token]     `json:"base,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Component           search.Criteria[search.Reference] `json:"component,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Target              search.Criteria[search.Token]     `json:"target,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SearchParameterParams.
-func (p SearchParameterParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SearchParameterParams.
+func (p SearchParameterParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Base != nil {
-		m[search.ParameterKey{Name: "base"}] = p.Base.MatchesAll()
+		m["base"] = p.Base.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Component != nil {
-		m[search.ParameterKey{Name: "component"}] = p.Component.MatchesAll()
+		m["component"] = p.Component.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Target != nil {
-		m[search.ParameterKey{Name: "target"}] = p.Target.MatchesAll()
+		m["target"] = p.Target.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 
 	return m
@@ -8591,103 +8591,103 @@ func (p SearchParameterParams) Map() map[search.ParameterKey]search.MatchAll {
 // ServiceRequestParams contains typed search parameters for ServiceRequest resources.
 type ServiceRequestParams struct {
 	// ServiceRequest-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Authored              search.DateOrString      `json:"authored,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	BodySite              search.TokenOrString     `json:"body-site,omitempty"`
-	BodyStructure         search.ReferenceOrString `json:"body-structure,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	CodeConcept           search.TokenOrString     `json:"code-concept,omitempty"`
-	CodeReference         search.ReferenceOrString `json:"code-reference,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Occurrence            search.DateOrString      `json:"occurrence,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	PerformerType         search.TokenOrString     `json:"performer-type,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Replaces              search.ReferenceOrString `json:"replaces,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Requisition           search.TokenOrString     `json:"requisition,omitempty"`
-	Specimen              search.ReferenceOrString `json:"specimen,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Authored              search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BodySite              search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	BodyStructure         search.Criteria[search.Reference] `json:"body-structure,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	CodeConcept           search.Criteria[search.Token]     `json:"code-concept,omitempty"`
+	CodeReference         search.Criteria[search.Reference] `json:"code-reference,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Occurrence            search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	PerformerType         search.Criteria[search.Token]     `json:"performer-type,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Replaces              search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Requisition           search.Criteria[search.Token]     `json:"requisition,omitempty"`
+	Specimen              search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ServiceRequestParams.
-func (p ServiceRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ServiceRequestParams.
+func (p ServiceRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Authored != nil {
-		m[search.ParameterKey{Name: "authored"}] = p.Authored.MatchesAll()
+		m["authored"] = p.Authored.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.BodySite != nil {
-		m[search.ParameterKey{Name: "body-site"}] = p.BodySite.MatchesAll()
+		m["body-site"] = p.BodySite.ToAndGroup()
 	}
 	if p.BodyStructure != nil {
-		m[search.ParameterKey{Name: "body-structure"}] = p.BodyStructure.MatchesAll()
+		m["body-structure"] = p.BodyStructure.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.CodeConcept != nil {
-		m[search.ParameterKey{Name: "code-concept"}] = p.CodeConcept.MatchesAll()
+		m["code-concept"] = p.CodeConcept.ToAndGroup()
 	}
 	if p.CodeReference != nil {
-		m[search.ParameterKey{Name: "code-reference"}] = p.CodeReference.MatchesAll()
+		m["code-reference"] = p.CodeReference.ToAndGroup()
 	}
 	if p.InstantiatesCanonical != nil {
-		m[search.ParameterKey{Name: "instantiates-canonical"}] = p.InstantiatesCanonical.MatchesAll()
+		m["instantiates-canonical"] = p.InstantiatesCanonical.ToAndGroup()
 	}
 	if p.InstantiatesUri != nil {
-		m[search.ParameterKey{Name: "instantiates-uri"}] = p.InstantiatesUri.MatchesAll()
+		m["instantiates-uri"] = p.InstantiatesUri.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.Occurrence != nil {
-		m[search.ParameterKey{Name: "occurrence"}] = p.Occurrence.MatchesAll()
+		m["occurrence"] = p.Occurrence.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.PerformerType != nil {
-		m[search.ParameterKey{Name: "performer-type"}] = p.PerformerType.MatchesAll()
+		m["performer-type"] = p.PerformerType.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.Replaces != nil {
-		m[search.ParameterKey{Name: "replaces"}] = p.Replaces.MatchesAll()
+		m["replaces"] = p.Replaces.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Requisition != nil {
-		m[search.ParameterKey{Name: "requisition"}] = p.Requisition.MatchesAll()
+		m["requisition"] = p.Requisition.ToAndGroup()
 	}
 	if p.Specimen != nil {
-		m[search.ParameterKey{Name: "specimen"}] = p.Specimen.MatchesAll()
+		m["specimen"] = p.Specimen.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -8696,47 +8696,47 @@ func (p ServiceRequestParams) Map() map[search.ParameterKey]search.MatchAll {
 // SlotParams contains typed search parameters for Slot resources.
 type SlotParams struct {
 	// Slot-specific search parameters
-	AppointmentType      search.TokenOrString     `json:"appointment-type,omitempty"`
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Schedule             search.ReferenceOrString `json:"schedule,omitempty"`
-	ServiceCategory      search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType          search.TokenOrString     `json:"service-type,omitempty"`
-	ServiceTypeReference search.ReferenceOrString `json:"service-type-reference,omitempty"`
-	Specialty            search.TokenOrString     `json:"specialty,omitempty"`
-	Start                search.DateOrString      `json:"start,omitempty"`
-	Status               search.TokenOrString     `json:"status,omitempty"`
+	AppointmentType      search.Criteria[search.Token]     `json:"appointment-type,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Schedule             search.Criteria[search.Reference] `json:"schedule,omitempty"`
+	ServiceCategory      search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType          search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	ServiceTypeReference search.Criteria[search.Reference] `json:"service-type-reference,omitempty"`
+	Specialty            search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Start                search.Criteria[search.Date]      `json:"start,omitempty"`
+	Status               search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SlotParams.
-func (p SlotParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SlotParams.
+func (p SlotParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.AppointmentType != nil {
-		m[search.ParameterKey{Name: "appointment-type"}] = p.AppointmentType.MatchesAll()
+		m["appointment-type"] = p.AppointmentType.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Schedule != nil {
-		m[search.ParameterKey{Name: "schedule"}] = p.Schedule.MatchesAll()
+		m["schedule"] = p.Schedule.ToAndGroup()
 	}
 	if p.ServiceCategory != nil {
-		m[search.ParameterKey{Name: "service-category"}] = p.ServiceCategory.MatchesAll()
+		m["service-category"] = p.ServiceCategory.ToAndGroup()
 	}
 	if p.ServiceType != nil {
-		m[search.ParameterKey{Name: "service-type"}] = p.ServiceType.MatchesAll()
+		m["service-type"] = p.ServiceType.ToAndGroup()
 	}
 	if p.ServiceTypeReference != nil {
-		m[search.ParameterKey{Name: "service-type-reference"}] = p.ServiceTypeReference.MatchesAll()
+		m["service-type-reference"] = p.ServiceTypeReference.ToAndGroup()
 	}
 	if p.Specialty != nil {
-		m[search.ParameterKey{Name: "specialty"}] = p.Specialty.MatchesAll()
+		m["specialty"] = p.Specialty.ToAndGroup()
 	}
 	if p.Start != nil {
-		m[search.ParameterKey{Name: "start"}] = p.Start.MatchesAll()
+		m["start"] = p.Start.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -8745,59 +8745,59 @@ func (p SlotParams) Map() map[search.ParameterKey]search.MatchAll {
 // SpecimenParams contains typed search parameters for Specimen resources.
 type SpecimenParams struct {
 	// Specimen-specific search parameters
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Type            search.TokenOrString     `json:"type,omitempty"`
-	Accession       search.TokenOrString     `json:"accession,omitempty"`
-	Bodysite        search.ReferenceOrString `json:"bodysite,omitempty"`
-	Collected       search.DateOrString      `json:"collected,omitempty"`
-	Collector       search.ReferenceOrString `json:"collector,omitempty"`
-	ContainerDevice search.ReferenceOrString `json:"container-device,omitempty"`
-	Parent          search.ReferenceOrString `json:"parent,omitempty"`
-	Procedure       search.ReferenceOrString `json:"procedure,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type            search.Criteria[search.Token]     `json:"type,omitempty"`
+	Accession       search.Criteria[search.Token]     `json:"accession,omitempty"`
+	Bodysite        search.Criteria[search.Reference] `json:"bodysite,omitempty"`
+	Collected       search.Criteria[search.Date]      `json:"collected,omitempty"`
+	Collector       search.Criteria[search.Reference] `json:"collector,omitempty"`
+	ContainerDevice search.Criteria[search.Reference] `json:"container-device,omitempty"`
+	Parent          search.Criteria[search.Reference] `json:"parent,omitempty"`
+	Procedure       search.Criteria[search.Reference] `json:"procedure,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SpecimenParams.
-func (p SpecimenParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SpecimenParams.
+func (p SpecimenParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Accession != nil {
-		m[search.ParameterKey{Name: "accession"}] = p.Accession.MatchesAll()
+		m["accession"] = p.Accession.ToAndGroup()
 	}
 	if p.Bodysite != nil {
-		m[search.ParameterKey{Name: "bodysite"}] = p.Bodysite.MatchesAll()
+		m["bodysite"] = p.Bodysite.ToAndGroup()
 	}
 	if p.Collected != nil {
-		m[search.ParameterKey{Name: "collected"}] = p.Collected.MatchesAll()
+		m["collected"] = p.Collected.ToAndGroup()
 	}
 	if p.Collector != nil {
-		m[search.ParameterKey{Name: "collector"}] = p.Collector.MatchesAll()
+		m["collector"] = p.Collector.ToAndGroup()
 	}
 	if p.ContainerDevice != nil {
-		m[search.ParameterKey{Name: "container-device"}] = p.ContainerDevice.MatchesAll()
+		m["container-device"] = p.ContainerDevice.ToAndGroup()
 	}
 	if p.Parent != nil {
-		m[search.ParameterKey{Name: "parent"}] = p.Parent.MatchesAll()
+		m["parent"] = p.Parent.ToAndGroup()
 	}
 	if p.Procedure != nil {
-		m[search.ParameterKey{Name: "procedure"}] = p.Procedure.MatchesAll()
+		m["procedure"] = p.Procedure.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -8806,47 +8806,47 @@ func (p SpecimenParams) Map() map[search.ParameterKey]search.MatchAll {
 // SpecimenDefinitionParams contains typed search parameters for SpecimenDefinition resources.
 type SpecimenDefinitionParams struct {
 	// SpecimenDefinition-specific search parameters
-	Identifier   search.TokenOrString  `json:"identifier,omitempty"`
-	Status       search.TokenOrString  `json:"status,omitempty"`
-	Title        search.StringOrString `json:"title,omitempty"`
-	Url          search.UriOrString    `json:"url,omitempty"`
-	Container    search.TokenOrString  `json:"container,omitempty"`
-	Experimental search.TokenOrString  `json:"experimental,omitempty"`
-	IsDerived    search.TokenOrString  `json:"is-derived,omitempty"`
-	Type         search.TokenOrString  `json:"type,omitempty"`
-	TypeTested   search.TokenOrString  `json:"type-tested,omitempty"`
+	Identifier   search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Status       search.Criteria[search.Token]  `json:"status,omitempty"`
+	Title        search.Criteria[search.String] `json:"title,omitempty"`
+	Url          search.Criteria[search.Uri]    `json:"url,omitempty"`
+	Container    search.Criteria[search.Token]  `json:"container,omitempty"`
+	Experimental search.Criteria[search.Token]  `json:"experimental,omitempty"`
+	IsDerived    search.Criteria[search.Token]  `json:"is-derived,omitempty"`
+	Type         search.Criteria[search.Token]  `json:"type,omitempty"`
+	TypeTested   search.Criteria[search.Token]  `json:"type-tested,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SpecimenDefinitionParams.
-func (p SpecimenDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SpecimenDefinitionParams.
+func (p SpecimenDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Container != nil {
-		m[search.ParameterKey{Name: "container"}] = p.Container.MatchesAll()
+		m["container"] = p.Container.ToAndGroup()
 	}
 	if p.Experimental != nil {
-		m[search.ParameterKey{Name: "experimental"}] = p.Experimental.MatchesAll()
+		m["experimental"] = p.Experimental.ToAndGroup()
 	}
 	if p.IsDerived != nil {
-		m[search.ParameterKey{Name: "is-derived"}] = p.IsDerived.MatchesAll()
+		m["is-derived"] = p.IsDerived.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.TypeTested != nil {
-		m[search.ParameterKey{Name: "type-tested"}] = p.TypeTested.MatchesAll()
+		m["type-tested"] = p.TypeTested.ToAndGroup()
 	}
 
 	return m
@@ -8855,123 +8855,123 @@ func (p SpecimenDefinitionParams) Map() map[search.ParameterKey]search.MatchAll 
 // StructureDefinitionParams contains typed search parameters for StructureDefinition resources.
 type StructureDefinitionParams struct {
 	// StructureDefinition-specific search parameters
-	Context              search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity      search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType          search.TokenOrString     `json:"context-type,omitempty"`
-	Date                 search.DateOrString      `json:"date,omitempty"`
-	Description          search.StringOrString    `json:"description,omitempty"`
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction         search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                 search.StringOrString    `json:"name,omitempty"`
-	Publisher            search.StringOrString    `json:"publisher,omitempty"`
-	Status               search.TokenOrString     `json:"status,omitempty"`
-	Title                search.StringOrString    `json:"title,omitempty"`
-	Url                  search.UriOrString       `json:"url,omitempty"`
-	Version              search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity  search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue     search.CompositeOrString `json:"context-type-value,omitempty"`
-	Abstract             search.TokenOrString     `json:"abstract,omitempty"`
-	Base                 search.ReferenceOrString `json:"base,omitempty"`
-	BasePath             search.TokenOrString     `json:"base-path,omitempty"`
-	Derivation           search.TokenOrString     `json:"derivation,omitempty"`
-	Experimental         search.TokenOrString     `json:"experimental,omitempty"`
-	ExtContextExpression search.TokenOrString     `json:"ext-context-expression,omitempty"`
-	ExtContextType       search.TokenOrString     `json:"ext-context-type,omitempty"`
-	Keyword              search.TokenOrString     `json:"keyword,omitempty"`
-	Kind                 search.TokenOrString     `json:"kind,omitempty"`
-	Path                 search.TokenOrString     `json:"path,omitempty"`
-	Type                 search.UriOrString       `json:"type,omitempty"`
-	Valueset             search.ReferenceOrString `json:"valueset,omitempty"`
-	ExtContext           search.CompositeOrString `json:"ext-context,omitempty"`
+	Context              search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity      search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType          search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                 search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description          search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction         search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                 search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher            search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status               search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title                search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                  search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version              search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity  search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue     search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Abstract             search.Criteria[search.Token]     `json:"abstract,omitempty"`
+	Base                 search.Criteria[search.Reference] `json:"base,omitempty"`
+	BasePath             search.Criteria[search.Token]     `json:"base-path,omitempty"`
+	Derivation           search.Criteria[search.Token]     `json:"derivation,omitempty"`
+	Experimental         search.Criteria[search.Token]     `json:"experimental,omitempty"`
+	ExtContextExpression search.Criteria[search.Token]     `json:"ext-context-expression,omitempty"`
+	ExtContextType       search.Criteria[search.Token]     `json:"ext-context-type,omitempty"`
+	Keyword              search.Criteria[search.Token]     `json:"keyword,omitempty"`
+	Kind                 search.Criteria[search.Token]     `json:"kind,omitempty"`
+	Path                 search.Criteria[search.Token]     `json:"path,omitempty"`
+	Type                 search.Criteria[search.Uri]       `json:"type,omitempty"`
+	Valueset             search.Criteria[search.Reference] `json:"valueset,omitempty"`
+	ExtContext           search.Criteria[search.Composite] `json:"ext-context,omitempty"`
 }
 
-// Map implements the search.Parameters interface for StructureDefinitionParams.
-func (p StructureDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for StructureDefinitionParams.
+func (p StructureDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Abstract != nil {
-		m[search.ParameterKey{Name: "abstract"}] = p.Abstract.MatchesAll()
+		m["abstract"] = p.Abstract.ToAndGroup()
 	}
 	if p.Base != nil {
-		m[search.ParameterKey{Name: "base"}] = p.Base.MatchesAll()
+		m["base"] = p.Base.ToAndGroup()
 	}
 	if p.BasePath != nil {
-		m[search.ParameterKey{Name: "base-path"}] = p.BasePath.MatchesAll()
+		m["base-path"] = p.BasePath.ToAndGroup()
 	}
 	if p.Derivation != nil {
-		m[search.ParameterKey{Name: "derivation"}] = p.Derivation.MatchesAll()
+		m["derivation"] = p.Derivation.ToAndGroup()
 	}
 	if p.Experimental != nil {
-		m[search.ParameterKey{Name: "experimental"}] = p.Experimental.MatchesAll()
+		m["experimental"] = p.Experimental.ToAndGroup()
 	}
 	if p.ExtContextExpression != nil {
-		m[search.ParameterKey{Name: "ext-context-expression"}] = p.ExtContextExpression.MatchesAll()
+		m["ext-context-expression"] = p.ExtContextExpression.ToAndGroup()
 	}
 	if p.ExtContextType != nil {
-		m[search.ParameterKey{Name: "ext-context-type"}] = p.ExtContextType.MatchesAll()
+		m["ext-context-type"] = p.ExtContextType.ToAndGroup()
 	}
 	if p.Keyword != nil {
-		m[search.ParameterKey{Name: "keyword"}] = p.Keyword.MatchesAll()
+		m["keyword"] = p.Keyword.ToAndGroup()
 	}
 	if p.Kind != nil {
-		m[search.ParameterKey{Name: "kind"}] = p.Kind.MatchesAll()
+		m["kind"] = p.Kind.ToAndGroup()
 	}
 	if p.Path != nil {
-		m[search.ParameterKey{Name: "path"}] = p.Path.MatchesAll()
+		m["path"] = p.Path.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Valueset != nil {
-		m[search.ParameterKey{Name: "valueset"}] = p.Valueset.MatchesAll()
+		m["valueset"] = p.Valueset.ToAndGroup()
 	}
 	if p.ExtContext != nil {
-		m[search.ParameterKey{Name: "ext-context"}] = p.ExtContext.MatchesAll()
+		m["ext-context"] = p.ExtContext.ToAndGroup()
 	}
 
 	return m
@@ -8980,71 +8980,71 @@ func (p StructureDefinitionParams) Map() map[search.ParameterKey]search.MatchAll
 // StructureMapParams contains typed search parameters for StructureMap resources.
 type StructureMapParams struct {
 	// StructureMap-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for StructureMapParams.
-func (p StructureMapParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for StructureMapParams.
+func (p StructureMapParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -9053,55 +9053,55 @@ func (p StructureMapParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubscriptionParams contains typed search parameters for Subscription resources.
 type SubscriptionParams struct {
 	// Subscription-specific search parameters
-	Contact      search.TokenOrString     `json:"contact,omitempty"`
-	ContentLevel search.TokenOrString     `json:"content-level,omitempty"`
-	FilterValue  search.StringOrString    `json:"filter-value,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Name         search.StringOrString    `json:"name,omitempty"`
-	Owner        search.ReferenceOrString `json:"owner,omitempty"`
-	Payload      search.TokenOrString     `json:"payload,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	Topic        search.UriOrString       `json:"topic,omitempty"`
-	Type         search.TokenOrString     `json:"type,omitempty"`
-	Url          search.UriOrString       `json:"url,omitempty"`
+	Contact      search.Criteria[search.Token]     `json:"contact,omitempty"`
+	ContentLevel search.Criteria[search.Token]     `json:"content-level,omitempty"`
+	FilterValue  search.Criteria[search.String]    `json:"filter-value,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name         search.Criteria[search.String]    `json:"name,omitempty"`
+	Owner        search.Criteria[search.Reference] `json:"owner,omitempty"`
+	Payload      search.Criteria[search.Token]     `json:"payload,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	Topic        search.Criteria[search.Uri]       `json:"topic,omitempty"`
+	Type         search.Criteria[search.Token]     `json:"type,omitempty"`
+	Url          search.Criteria[search.Uri]       `json:"url,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SubscriptionParams.
-func (p SubscriptionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubscriptionParams.
+func (p SubscriptionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Contact != nil {
-		m[search.ParameterKey{Name: "contact"}] = p.Contact.MatchesAll()
+		m["contact"] = p.Contact.ToAndGroup()
 	}
 	if p.ContentLevel != nil {
-		m[search.ParameterKey{Name: "content-level"}] = p.ContentLevel.MatchesAll()
+		m["content-level"] = p.ContentLevel.ToAndGroup()
 	}
 	if p.FilterValue != nil {
-		m[search.ParameterKey{Name: "filter-value"}] = p.FilterValue.MatchesAll()
+		m["filter-value"] = p.FilterValue.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Owner != nil {
-		m[search.ParameterKey{Name: "owner"}] = p.Owner.MatchesAll()
+		m["owner"] = p.Owner.ToAndGroup()
 	}
 	if p.Payload != nil {
-		m[search.ParameterKey{Name: "payload"}] = p.Payload.MatchesAll()
+		m["payload"] = p.Payload.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Type != nil {
-		m[search.ParameterKey{Name: "type"}] = p.Type.MatchesAll()
+		m["type"] = p.Type.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 
 	return m
@@ -9110,9 +9110,9 @@ func (p SubscriptionParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubscriptionStatusParams contains typed search parameters for SubscriptionStatus resources.
 type SubscriptionStatusParams struct{}
 
-// Map implements the search.Parameters interface for SubscriptionStatusParams.
-func (p SubscriptionStatusParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubscriptionStatusParams.
+func (p SubscriptionStatusParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9120,55 +9120,55 @@ func (p SubscriptionStatusParams) Map() map[search.ParameterKey]search.MatchAll 
 // SubscriptionTopicParams contains typed search parameters for SubscriptionTopic resources.
 type SubscriptionTopicParams struct {
 	// SubscriptionTopic-specific search parameters
-	Date               search.DateOrString   `json:"date,omitempty"`
-	Identifier         search.TokenOrString  `json:"identifier,omitempty"`
-	Status             search.TokenOrString  `json:"status,omitempty"`
-	Title              search.StringOrString `json:"title,omitempty"`
-	Url                search.UriOrString    `json:"url,omitempty"`
-	Version            search.TokenOrString  `json:"version,omitempty"`
-	DerivedOrSelf      search.UriOrString    `json:"derived-or-self,omitempty"`
-	Effective          search.DateOrString   `json:"effective,omitempty"`
-	Event              search.TokenOrString  `json:"event,omitempty"`
-	Resource           search.UriOrString    `json:"resource,omitempty"`
-	TriggerDescription search.StringOrString `json:"trigger-description,omitempty"`
+	Date               search.Criteria[search.Date]   `json:"date,omitempty"`
+	Identifier         search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Status             search.Criteria[search.Token]  `json:"status,omitempty"`
+	Title              search.Criteria[search.String] `json:"title,omitempty"`
+	Url                search.Criteria[search.Uri]    `json:"url,omitempty"`
+	Version            search.Criteria[search.Token]  `json:"version,omitempty"`
+	DerivedOrSelf      search.Criteria[search.Uri]    `json:"derived-or-self,omitempty"`
+	Effective          search.Criteria[search.Date]   `json:"effective,omitempty"`
+	Event              search.Criteria[search.Token]  `json:"event,omitempty"`
+	Resource           search.Criteria[search.Uri]    `json:"resource,omitempty"`
+	TriggerDescription search.Criteria[search.String] `json:"trigger-description,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SubscriptionTopicParams.
-func (p SubscriptionTopicParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubscriptionTopicParams.
+func (p SubscriptionTopicParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.DerivedOrSelf != nil {
-		m[search.ParameterKey{Name: "derived-or-self"}] = p.DerivedOrSelf.MatchesAll()
+		m["derived-or-self"] = p.DerivedOrSelf.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Event != nil {
-		m[search.ParameterKey{Name: "event"}] = p.Event.MatchesAll()
+		m["event"] = p.Event.ToAndGroup()
 	}
 	if p.Resource != nil {
-		m[search.ParameterKey{Name: "resource"}] = p.Resource.MatchesAll()
+		m["resource"] = p.Resource.ToAndGroup()
 	}
 	if p.TriggerDescription != nil {
-		m[search.ParameterKey{Name: "trigger-description"}] = p.TriggerDescription.MatchesAll()
+		m["trigger-description"] = p.TriggerDescription.ToAndGroup()
 	}
 
 	return m
@@ -9177,43 +9177,43 @@ func (p SubscriptionTopicParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubstanceParams contains typed search parameters for Substance resources.
 type SubstanceParams struct {
 	// Substance-specific search parameters
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	Code               search.TokenOrString     `json:"code,omitempty"`
-	CodeReference      search.ReferenceOrString `json:"code-reference,omitempty"`
-	Expiry             search.DateOrString      `json:"expiry,omitempty"`
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Quantity           search.QuantityOrString  `json:"quantity,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
-	SubstanceReference search.ReferenceOrString `json:"substance-reference,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	Code               search.Criteria[search.Token]     `json:"code,omitempty"`
+	CodeReference      search.Criteria[search.Reference] `json:"code-reference,omitempty"`
+	Expiry             search.Criteria[search.Date]      `json:"expiry,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Quantity           search.Criteria[search.Quantity]  `json:"quantity,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubstanceReference search.Criteria[search.Reference] `json:"substance-reference,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SubstanceParams.
-func (p SubstanceParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceParams.
+func (p SubstanceParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.CodeReference != nil {
-		m[search.ParameterKey{Name: "code-reference"}] = p.CodeReference.MatchesAll()
+		m["code-reference"] = p.CodeReference.ToAndGroup()
 	}
 	if p.Expiry != nil {
-		m[search.ParameterKey{Name: "expiry"}] = p.Expiry.MatchesAll()
+		m["expiry"] = p.Expiry.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Quantity != nil {
-		m[search.ParameterKey{Name: "quantity"}] = p.Quantity.MatchesAll()
+		m["quantity"] = p.Quantity.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.SubstanceReference != nil {
-		m[search.ParameterKey{Name: "substance-reference"}] = p.SubstanceReference.MatchesAll()
+		m["substance-reference"] = p.SubstanceReference.ToAndGroup()
 	}
 
 	return m
@@ -9222,31 +9222,31 @@ func (p SubstanceParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubstanceDefinitionParams contains typed search parameters for SubstanceDefinition resources.
 type SubstanceDefinitionParams struct {
 	// SubstanceDefinition-specific search parameters
-	Classification search.TokenOrString  `json:"classification,omitempty"`
-	Code           search.TokenOrString  `json:"code,omitempty"`
-	Domain         search.TokenOrString  `json:"domain,omitempty"`
-	Identifier     search.TokenOrString  `json:"identifier,omitempty"`
-	Name           search.StringOrString `json:"name,omitempty"`
+	Classification search.Criteria[search.Token]  `json:"classification,omitempty"`
+	Code           search.Criteria[search.Token]  `json:"code,omitempty"`
+	Domain         search.Criteria[search.Token]  `json:"domain,omitempty"`
+	Identifier     search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Name           search.Criteria[search.String] `json:"name,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SubstanceDefinitionParams.
-func (p SubstanceDefinitionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceDefinitionParams.
+func (p SubstanceDefinitionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Classification != nil {
-		m[search.ParameterKey{Name: "classification"}] = p.Classification.MatchesAll()
+		m["classification"] = p.Classification.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Domain != nil {
-		m[search.ParameterKey{Name: "domain"}] = p.Domain.MatchesAll()
+		m["domain"] = p.Domain.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 
 	return m
@@ -9255,9 +9255,9 @@ func (p SubstanceDefinitionParams) Map() map[search.ParameterKey]search.MatchAll
 // SubstanceNucleicAcidParams contains typed search parameters for SubstanceNucleicAcid resources.
 type SubstanceNucleicAcidParams struct{}
 
-// Map implements the search.Parameters interface for SubstanceNucleicAcidParams.
-func (p SubstanceNucleicAcidParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceNucleicAcidParams.
+func (p SubstanceNucleicAcidParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9265,9 +9265,9 @@ func (p SubstanceNucleicAcidParams) Map() map[search.ParameterKey]search.MatchAl
 // SubstancePolymerParams contains typed search parameters for SubstancePolymer resources.
 type SubstancePolymerParams struct{}
 
-// Map implements the search.Parameters interface for SubstancePolymerParams.
-func (p SubstancePolymerParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstancePolymerParams.
+func (p SubstancePolymerParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9275,9 +9275,9 @@ func (p SubstancePolymerParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubstanceProteinParams contains typed search parameters for SubstanceProtein resources.
 type SubstanceProteinParams struct{}
 
-// Map implements the search.Parameters interface for SubstanceProteinParams.
-func (p SubstanceProteinParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceProteinParams.
+func (p SubstanceProteinParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9285,9 +9285,9 @@ func (p SubstanceProteinParams) Map() map[search.ParameterKey]search.MatchAll {
 // SubstanceReferenceInformationParams contains typed search parameters for SubstanceReferenceInformation resources.
 type SubstanceReferenceInformationParams struct{}
 
-// Map implements the search.Parameters interface for SubstanceReferenceInformationParams.
-func (p SubstanceReferenceInformationParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceReferenceInformationParams.
+func (p SubstanceReferenceInformationParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9295,9 +9295,9 @@ func (p SubstanceReferenceInformationParams) Map() map[search.ParameterKey]searc
 // SubstanceSourceMaterialParams contains typed search parameters for SubstanceSourceMaterial resources.
 type SubstanceSourceMaterialParams struct{}
 
-// Map implements the search.Parameters interface for SubstanceSourceMaterialParams.
-func (p SubstanceSourceMaterialParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SubstanceSourceMaterialParams.
+func (p SubstanceSourceMaterialParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	return m
 }
@@ -9305,31 +9305,31 @@ func (p SubstanceSourceMaterialParams) Map() map[search.ParameterKey]search.Matc
 // SupplyDeliveryParams contains typed search parameters for SupplyDelivery resources.
 type SupplyDeliveryParams struct {
 	// SupplyDelivery-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Receiver   search.ReferenceOrString `json:"receiver,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Supplier   search.ReferenceOrString `json:"supplier,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Receiver   search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Supplier   search.Criteria[search.Reference] `json:"supplier,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SupplyDeliveryParams.
-func (p SupplyDeliveryParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SupplyDeliveryParams.
+func (p SupplyDeliveryParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Receiver != nil {
-		m[search.ParameterKey{Name: "receiver"}] = p.Receiver.MatchesAll()
+		m["receiver"] = p.Receiver.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Supplier != nil {
-		m[search.ParameterKey{Name: "supplier"}] = p.Supplier.MatchesAll()
+		m["supplier"] = p.Supplier.ToAndGroup()
 	}
 
 	return m
@@ -9338,43 +9338,43 @@ func (p SupplyDeliveryParams) Map() map[search.ParameterKey]search.MatchAll {
 // SupplyRequestParams contains typed search parameters for SupplyRequest resources.
 type SupplyRequestParams struct {
 	// SupplyRequest-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Requester  search.ReferenceOrString `json:"requester,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
-	Supplier   search.ReferenceOrString `json:"supplier,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Requester  search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Supplier   search.Criteria[search.Reference] `json:"supplier,omitempty"`
 }
 
-// Map implements the search.Parameters interface for SupplyRequestParams.
-func (p SupplyRequestParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for SupplyRequestParams.
+func (p SupplyRequestParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Category != nil {
-		m[search.ParameterKey{Name: "category"}] = p.Category.MatchesAll()
+		m["category"] = p.Category.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 	if p.Supplier != nil {
-		m[search.ParameterKey{Name: "supplier"}] = p.Supplier.MatchesAll()
+		m["supplier"] = p.Supplier.ToAndGroup()
 	}
 
 	return m
@@ -9383,99 +9383,99 @@ func (p SupplyRequestParams) Map() map[search.ParameterKey]search.MatchAll {
 // TaskParams contains typed search parameters for Task resources.
 type TaskParams struct {
 	// Task-specific search parameters
-	Identifier                  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                     search.ReferenceOrString `json:"patient,omitempty"`
-	Code                        search.TokenOrString     `json:"code,omitempty"`
-	Encounter                   search.ReferenceOrString `json:"encounter,omitempty"`
-	Actor                       search.ReferenceOrString `json:"actor,omitempty"`
-	AuthoredOn                  search.DateOrString      `json:"authored-on,omitempty"`
-	BasedOn                     search.ReferenceOrString `json:"based-on,omitempty"`
-	BusinessStatus              search.TokenOrString     `json:"business-status,omitempty"`
-	Focus                       search.ReferenceOrString `json:"focus,omitempty"`
-	GroupIdentifier             search.TokenOrString     `json:"group-identifier,omitempty"`
-	Intent                      search.TokenOrString     `json:"intent,omitempty"`
-	Modified                    search.DateOrString      `json:"modified,omitempty"`
-	Output                      search.ReferenceOrString `json:"output,omitempty"`
-	Owner                       search.ReferenceOrString `json:"owner,omitempty"`
-	PartOf                      search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer                   search.TokenOrString     `json:"performer,omitempty"`
-	Period                      search.DateOrString      `json:"period,omitempty"`
-	Priority                    search.TokenOrString     `json:"priority,omitempty"`
-	RequestedperformerReference search.ReferenceOrString `json:"requestedperformer-reference,omitempty"`
-	Requester                   search.ReferenceOrString `json:"requester,omitempty"`
-	Status                      search.TokenOrString     `json:"status,omitempty"`
-	Subject                     search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier                  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Code                        search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter                   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Actor                       search.Criteria[search.Reference] `json:"actor,omitempty"`
+	AuthoredOn                  search.Criteria[search.Date]      `json:"authored-on,omitempty"`
+	BasedOn                     search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BusinessStatus              search.Criteria[search.Token]     `json:"business-status,omitempty"`
+	Focus                       search.Criteria[search.Reference] `json:"focus,omitempty"`
+	GroupIdentifier             search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	Intent                      search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Modified                    search.Criteria[search.Date]      `json:"modified,omitempty"`
+	Output                      search.Criteria[search.Reference] `json:"output,omitempty"`
+	Owner                       search.Criteria[search.Reference] `json:"owner,omitempty"`
+	PartOf                      search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer                   search.Criteria[search.Token]     `json:"performer,omitempty"`
+	Period                      search.Criteria[search.Date]      `json:"period,omitempty"`
+	Priority                    search.Criteria[search.Token]     `json:"priority,omitempty"`
+	RequestedperformerReference search.Criteria[search.Reference] `json:"requestedperformer-reference,omitempty"`
+	Requester                   search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status                      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject                     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TaskParams.
-func (p TaskParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TaskParams.
+func (p TaskParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Actor != nil {
-		m[search.ParameterKey{Name: "actor"}] = p.Actor.MatchesAll()
+		m["actor"] = p.Actor.ToAndGroup()
 	}
 	if p.AuthoredOn != nil {
-		m[search.ParameterKey{Name: "authored-on"}] = p.AuthoredOn.MatchesAll()
+		m["authored-on"] = p.AuthoredOn.ToAndGroup()
 	}
 	if p.BasedOn != nil {
-		m[search.ParameterKey{Name: "based-on"}] = p.BasedOn.MatchesAll()
+		m["based-on"] = p.BasedOn.ToAndGroup()
 	}
 	if p.BusinessStatus != nil {
-		m[search.ParameterKey{Name: "business-status"}] = p.BusinessStatus.MatchesAll()
+		m["business-status"] = p.BusinessStatus.ToAndGroup()
 	}
 	if p.Focus != nil {
-		m[search.ParameterKey{Name: "focus"}] = p.Focus.MatchesAll()
+		m["focus"] = p.Focus.ToAndGroup()
 	}
 	if p.GroupIdentifier != nil {
-		m[search.ParameterKey{Name: "group-identifier"}] = p.GroupIdentifier.MatchesAll()
+		m["group-identifier"] = p.GroupIdentifier.ToAndGroup()
 	}
 	if p.Intent != nil {
-		m[search.ParameterKey{Name: "intent"}] = p.Intent.MatchesAll()
+		m["intent"] = p.Intent.ToAndGroup()
 	}
 	if p.Modified != nil {
-		m[search.ParameterKey{Name: "modified"}] = p.Modified.MatchesAll()
+		m["modified"] = p.Modified.ToAndGroup()
 	}
 	if p.Output != nil {
-		m[search.ParameterKey{Name: "output"}] = p.Output.MatchesAll()
+		m["output"] = p.Output.ToAndGroup()
 	}
 	if p.Owner != nil {
-		m[search.ParameterKey{Name: "owner"}] = p.Owner.MatchesAll()
+		m["owner"] = p.Owner.ToAndGroup()
 	}
 	if p.PartOf != nil {
-		m[search.ParameterKey{Name: "part-of"}] = p.PartOf.MatchesAll()
+		m["part-of"] = p.PartOf.ToAndGroup()
 	}
 	if p.Performer != nil {
-		m[search.ParameterKey{Name: "performer"}] = p.Performer.MatchesAll()
+		m["performer"] = p.Performer.ToAndGroup()
 	}
 	if p.Period != nil {
-		m[search.ParameterKey{Name: "period"}] = p.Period.MatchesAll()
+		m["period"] = p.Period.ToAndGroup()
 	}
 	if p.Priority != nil {
-		m[search.ParameterKey{Name: "priority"}] = p.Priority.MatchesAll()
+		m["priority"] = p.Priority.ToAndGroup()
 	}
 	if p.RequestedperformerReference != nil {
-		m[search.ParameterKey{Name: "requestedperformer-reference"}] = p.RequestedperformerReference.MatchesAll()
+		m["requestedperformer-reference"] = p.RequestedperformerReference.ToAndGroup()
 	}
 	if p.Requester != nil {
-		m[search.ParameterKey{Name: "requester"}] = p.Requester.MatchesAll()
+		m["requester"] = p.Requester.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Subject != nil {
-		m[search.ParameterKey{Name: "subject"}] = p.Subject.MatchesAll()
+		m["subject"] = p.Subject.ToAndGroup()
 	}
 
 	return m
@@ -9484,71 +9484,71 @@ func (p TaskParams) Map() map[search.ParameterKey]search.MatchAll {
 // TerminologyCapabilitiesParams contains typed search parameters for TerminologyCapabilities resources.
 type TerminologyCapabilitiesParams struct {
 	// TerminologyCapabilities-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TerminologyCapabilitiesParams.
-func (p TerminologyCapabilitiesParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TerminologyCapabilitiesParams.
+func (p TerminologyCapabilitiesParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 
 	return m
@@ -9557,27 +9557,27 @@ func (p TerminologyCapabilitiesParams) Map() map[search.ParameterKey]search.Matc
 // TestPlanParams contains typed search parameters for TestPlan resources.
 type TestPlanParams struct {
 	// TestPlan-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Url        search.UriOrString       `json:"url,omitempty"`
-	Scope      search.ReferenceOrString `json:"scope,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url        search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Scope      search.Criteria[search.Reference] `json:"scope,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TestPlanParams.
-func (p TestPlanParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TestPlanParams.
+func (p TestPlanParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Scope != nil {
-		m[search.ParameterKey{Name: "scope"}] = p.Scope.MatchesAll()
+		m["scope"] = p.Scope.ToAndGroup()
 	}
 
 	return m
@@ -9586,39 +9586,39 @@ func (p TestPlanParams) Map() map[search.ParameterKey]search.MatchAll {
 // TestReportParams contains typed search parameters for TestReport resources.
 type TestReportParams struct {
 	// TestReport-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Issued      search.DateOrString      `json:"issued,omitempty"`
-	Participant search.UriOrString       `json:"participant,omitempty"`
-	Result      search.TokenOrString     `json:"result,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Tester      search.StringOrString    `json:"tester,omitempty"`
-	Testscript  search.ReferenceOrString `json:"testscript,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Issued      search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Participant search.Criteria[search.Uri]       `json:"participant,omitempty"`
+	Result      search.Criteria[search.Token]     `json:"result,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Tester      search.Criteria[search.String]    `json:"tester,omitempty"`
+	Testscript  search.Criteria[search.Reference] `json:"testscript,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TestReportParams.
-func (p TestReportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TestReportParams.
+func (p TestReportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Issued != nil {
-		m[search.ParameterKey{Name: "issued"}] = p.Issued.MatchesAll()
+		m["issued"] = p.Issued.ToAndGroup()
 	}
 	if p.Participant != nil {
-		m[search.ParameterKey{Name: "participant"}] = p.Participant.MatchesAll()
+		m["participant"] = p.Participant.ToAndGroup()
 	}
 	if p.Result != nil {
-		m[search.ParameterKey{Name: "result"}] = p.Result.MatchesAll()
+		m["result"] = p.Result.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Tester != nil {
-		m[search.ParameterKey{Name: "tester"}] = p.Tester.MatchesAll()
+		m["tester"] = p.Tester.ToAndGroup()
 	}
 	if p.Testscript != nil {
-		m[search.ParameterKey{Name: "testscript"}] = p.Testscript.MatchesAll()
+		m["testscript"] = p.Testscript.ToAndGroup()
 	}
 
 	return m
@@ -9627,87 +9627,87 @@ func (p TestReportParams) Map() map[search.ParameterKey]search.MatchAll {
 // TestScriptParams contains typed search parameters for TestScript resources.
 type TestScriptParams struct {
 	// TestScript-specific search parameters
-	Context                  search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity          search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType              search.TokenOrString     `json:"context-type,omitempty"`
-	Date                     search.DateOrString      `json:"date,omitempty"`
-	Description              search.StringOrString    `json:"description,omitempty"`
-	Identifier               search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction             search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                     search.StringOrString    `json:"name,omitempty"`
-	Publisher                search.StringOrString    `json:"publisher,omitempty"`
-	Status                   search.TokenOrString     `json:"status,omitempty"`
-	Title                    search.StringOrString    `json:"title,omitempty"`
-	Url                      search.UriOrString       `json:"url,omitempty"`
-	Version                  search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity      search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue         search.CompositeOrString `json:"context-type-value,omitempty"`
-	ScopeArtifact            search.ReferenceOrString `json:"scope-artifact,omitempty"`
-	TestscriptCapability     search.StringOrString    `json:"testscript-capability,omitempty"`
-	ScopeArtifactConformance search.CompositeOrString `json:"scope-artifact-conformance,omitempty"`
-	ScopeArtifactPhase       search.CompositeOrString `json:"scope-artifact-phase,omitempty"`
+	Context                  search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity          search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType              search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                     search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description              search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier               search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction             search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                     search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher                search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status                   search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title                    search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                      search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version                  search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity      search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue         search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	ScopeArtifact            search.Criteria[search.Reference] `json:"scope-artifact,omitempty"`
+	TestscriptCapability     search.Criteria[search.String]    `json:"testscript-capability,omitempty"`
+	ScopeArtifactConformance search.Criteria[search.Composite] `json:"scope-artifact-conformance,omitempty"`
+	ScopeArtifactPhase       search.Criteria[search.Composite] `json:"scope-artifact-phase,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TestScriptParams.
-func (p TestScriptParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TestScriptParams.
+func (p TestScriptParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.ScopeArtifact != nil {
-		m[search.ParameterKey{Name: "scope-artifact"}] = p.ScopeArtifact.MatchesAll()
+		m["scope-artifact"] = p.ScopeArtifact.ToAndGroup()
 	}
 	if p.TestscriptCapability != nil {
-		m[search.ParameterKey{Name: "testscript-capability"}] = p.TestscriptCapability.MatchesAll()
+		m["testscript-capability"] = p.TestscriptCapability.ToAndGroup()
 	}
 	if p.ScopeArtifactConformance != nil {
-		m[search.ParameterKey{Name: "scope-artifact-conformance"}] = p.ScopeArtifactConformance.MatchesAll()
+		m["scope-artifact-conformance"] = p.ScopeArtifactConformance.ToAndGroup()
 	}
 	if p.ScopeArtifactPhase != nil {
-		m[search.ParameterKey{Name: "scope-artifact-phase"}] = p.ScopeArtifactPhase.MatchesAll()
+		m["scope-artifact-phase"] = p.ScopeArtifactPhase.ToAndGroup()
 	}
 
 	return m
@@ -9716,19 +9716,19 @@ func (p TestScriptParams) Map() map[search.ParameterKey]search.MatchAll {
 // TransportParams contains typed search parameters for Transport resources.
 type TransportParams struct {
 	// Transport-specific search parameters
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
-	Status     search.TokenOrString `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
+	Status     search.Criteria[search.Token] `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for TransportParams.
-func (p TransportParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for TransportParams.
+func (p TransportParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m
@@ -9737,99 +9737,99 @@ func (p TransportParams) Map() map[search.ParameterKey]search.MatchAll {
 // ValueSetParams contains typed search parameters for ValueSet resources.
 type ValueSetParams struct {
 	// ValueSet-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Expansion           search.UriOrString       `json:"expansion,omitempty"`
-	Reference           search.UriOrString       `json:"reference,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Expansion           search.Criteria[search.Uri]       `json:"expansion,omitempty"`
+	Reference           search.Criteria[search.Uri]       `json:"reference,omitempty"`
 }
 
-// Map implements the search.Parameters interface for ValueSetParams.
-func (p ValueSetParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for ValueSetParams.
+func (p ValueSetParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Context != nil {
-		m[search.ParameterKey{Name: "context"}] = p.Context.MatchesAll()
+		m["context"] = p.Context.ToAndGroup()
 	}
 	if p.ContextQuantity != nil {
-		m[search.ParameterKey{Name: "context-quantity"}] = p.ContextQuantity.MatchesAll()
+		m["context-quantity"] = p.ContextQuantity.ToAndGroup()
 	}
 	if p.ContextType != nil {
-		m[search.ParameterKey{Name: "context-type"}] = p.ContextType.MatchesAll()
+		m["context-type"] = p.ContextType.ToAndGroup()
 	}
 	if p.Date != nil {
-		m[search.ParameterKey{Name: "date"}] = p.Date.MatchesAll()
+		m["date"] = p.Date.ToAndGroup()
 	}
 	if p.DerivedFrom != nil {
-		m[search.ParameterKey{Name: "derived-from"}] = p.DerivedFrom.MatchesAll()
+		m["derived-from"] = p.DerivedFrom.ToAndGroup()
 	}
 	if p.Description != nil {
-		m[search.ParameterKey{Name: "description"}] = p.Description.MatchesAll()
+		m["description"] = p.Description.ToAndGroup()
 	}
 	if p.Effective != nil {
-		m[search.ParameterKey{Name: "effective"}] = p.Effective.MatchesAll()
+		m["effective"] = p.Effective.ToAndGroup()
 	}
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Jurisdiction != nil {
-		m[search.ParameterKey{Name: "jurisdiction"}] = p.Jurisdiction.MatchesAll()
+		m["jurisdiction"] = p.Jurisdiction.ToAndGroup()
 	}
 	if p.Name != nil {
-		m[search.ParameterKey{Name: "name"}] = p.Name.MatchesAll()
+		m["name"] = p.Name.ToAndGroup()
 	}
 	if p.Predecessor != nil {
-		m[search.ParameterKey{Name: "predecessor"}] = p.Predecessor.MatchesAll()
+		m["predecessor"] = p.Predecessor.ToAndGroup()
 	}
 	if p.Publisher != nil {
-		m[search.ParameterKey{Name: "publisher"}] = p.Publisher.MatchesAll()
+		m["publisher"] = p.Publisher.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.Title != nil {
-		m[search.ParameterKey{Name: "title"}] = p.Title.MatchesAll()
+		m["title"] = p.Title.ToAndGroup()
 	}
 	if p.Topic != nil {
-		m[search.ParameterKey{Name: "topic"}] = p.Topic.MatchesAll()
+		m["topic"] = p.Topic.ToAndGroup()
 	}
 	if p.Url != nil {
-		m[search.ParameterKey{Name: "url"}] = p.Url.MatchesAll()
+		m["url"] = p.Url.ToAndGroup()
 	}
 	if p.Version != nil {
-		m[search.ParameterKey{Name: "version"}] = p.Version.MatchesAll()
+		m["version"] = p.Version.ToAndGroup()
 	}
 	if p.ContextTypeQuantity != nil {
-		m[search.ParameterKey{Name: "context-type-quantity"}] = p.ContextTypeQuantity.MatchesAll()
+		m["context-type-quantity"] = p.ContextTypeQuantity.ToAndGroup()
 	}
 	if p.ContextTypeValue != nil {
-		m[search.ParameterKey{Name: "context-type-value"}] = p.ContextTypeValue.MatchesAll()
+		m["context-type-value"] = p.ContextTypeValue.ToAndGroup()
 	}
 	if p.Code != nil {
-		m[search.ParameterKey{Name: "code"}] = p.Code.MatchesAll()
+		m["code"] = p.Code.ToAndGroup()
 	}
 	if p.Expansion != nil {
-		m[search.ParameterKey{Name: "expansion"}] = p.Expansion.MatchesAll()
+		m["expansion"] = p.Expansion.ToAndGroup()
 	}
 	if p.Reference != nil {
-		m[search.ParameterKey{Name: "reference"}] = p.Reference.MatchesAll()
+		m["reference"] = p.Reference.ToAndGroup()
 	}
 
 	return m
@@ -9838,51 +9838,51 @@ func (p ValueSetParams) Map() map[search.ParameterKey]search.MatchAll {
 // VerificationResultParams contains typed search parameters for VerificationResult resources.
 type VerificationResultParams struct {
 	// VerificationResult-specific search parameters
-	AttestationMethod     search.TokenOrString     `json:"attestation-method,omitempty"`
-	AttestationOnbehalfof search.ReferenceOrString `json:"attestation-onbehalfof,omitempty"`
-	AttestationWho        search.ReferenceOrString `json:"attestation-who,omitempty"`
-	PrimarysourceDate     search.DateOrString      `json:"primarysource-date,omitempty"`
-	PrimarysourceType     search.TokenOrString     `json:"primarysource-type,omitempty"`
-	PrimarysourceWho      search.ReferenceOrString `json:"primarysource-who,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	StatusDate            search.DateOrString      `json:"status-date,omitempty"`
-	Target                search.ReferenceOrString `json:"target,omitempty"`
-	ValidatorOrganization search.ReferenceOrString `json:"validator-organization,omitempty"`
+	AttestationMethod     search.Criteria[search.Token]     `json:"attestation-method,omitempty"`
+	AttestationOnbehalfof search.Criteria[search.Reference] `json:"attestation-onbehalfof,omitempty"`
+	AttestationWho        search.Criteria[search.Reference] `json:"attestation-who,omitempty"`
+	PrimarysourceDate     search.Criteria[search.Date]      `json:"primarysource-date,omitempty"`
+	PrimarysourceType     search.Criteria[search.Token]     `json:"primarysource-type,omitempty"`
+	PrimarysourceWho      search.Criteria[search.Reference] `json:"primarysource-who,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	StatusDate            search.Criteria[search.Date]      `json:"status-date,omitempty"`
+	Target                search.Criteria[search.Reference] `json:"target,omitempty"`
+	ValidatorOrganization search.Criteria[search.Reference] `json:"validator-organization,omitempty"`
 }
 
-// Map implements the search.Parameters interface for VerificationResultParams.
-func (p VerificationResultParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for VerificationResultParams.
+func (p VerificationResultParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.AttestationMethod != nil {
-		m[search.ParameterKey{Name: "attestation-method"}] = p.AttestationMethod.MatchesAll()
+		m["attestation-method"] = p.AttestationMethod.ToAndGroup()
 	}
 	if p.AttestationOnbehalfof != nil {
-		m[search.ParameterKey{Name: "attestation-onbehalfof"}] = p.AttestationOnbehalfof.MatchesAll()
+		m["attestation-onbehalfof"] = p.AttestationOnbehalfof.ToAndGroup()
 	}
 	if p.AttestationWho != nil {
-		m[search.ParameterKey{Name: "attestation-who"}] = p.AttestationWho.MatchesAll()
+		m["attestation-who"] = p.AttestationWho.ToAndGroup()
 	}
 	if p.PrimarysourceDate != nil {
-		m[search.ParameterKey{Name: "primarysource-date"}] = p.PrimarysourceDate.MatchesAll()
+		m["primarysource-date"] = p.PrimarysourceDate.ToAndGroup()
 	}
 	if p.PrimarysourceType != nil {
-		m[search.ParameterKey{Name: "primarysource-type"}] = p.PrimarysourceType.MatchesAll()
+		m["primarysource-type"] = p.PrimarysourceType.ToAndGroup()
 	}
 	if p.PrimarysourceWho != nil {
-		m[search.ParameterKey{Name: "primarysource-who"}] = p.PrimarysourceWho.MatchesAll()
+		m["primarysource-who"] = p.PrimarysourceWho.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 	if p.StatusDate != nil {
-		m[search.ParameterKey{Name: "status-date"}] = p.StatusDate.MatchesAll()
+		m["status-date"] = p.StatusDate.ToAndGroup()
 	}
 	if p.Target != nil {
-		m[search.ParameterKey{Name: "target"}] = p.Target.MatchesAll()
+		m["target"] = p.Target.ToAndGroup()
 	}
 	if p.ValidatorOrganization != nil {
-		m[search.ParameterKey{Name: "validator-organization"}] = p.ValidatorOrganization.MatchesAll()
+		m["validator-organization"] = p.ValidatorOrganization.ToAndGroup()
 	}
 
 	return m
@@ -9891,35 +9891,35 @@ func (p VerificationResultParams) Map() map[search.ParameterKey]search.MatchAll 
 // VisionPrescriptionParams contains typed search parameters for VisionPrescription resources.
 type VisionPrescriptionParams struct {
 	// VisionPrescription-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Datewritten search.DateOrString      `json:"datewritten,omitempty"`
-	Prescriber  search.ReferenceOrString `json:"prescriber,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Datewritten search.Criteria[search.Date]      `json:"datewritten,omitempty"`
+	Prescriber  search.Criteria[search.Reference] `json:"prescriber,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
-// Map implements the search.Parameters interface for VisionPrescriptionParams.
-func (p VisionPrescriptionParams) Map() map[search.ParameterKey]search.MatchAll {
-	m := make(map[search.ParameterKey]search.MatchAll)
+// Parse implements the search.Parameters interface for VisionPrescriptionParams.
+func (p VisionPrescriptionParams) Parse() map[string]search.AndGroup {
+	m := make(map[string]search.AndGroup)
 
 	if p.Identifier != nil {
-		m[search.ParameterKey{Name: "identifier"}] = p.Identifier.MatchesAll()
+		m["identifier"] = p.Identifier.ToAndGroup()
 	}
 	if p.Patient != nil {
-		m[search.ParameterKey{Name: "patient"}] = p.Patient.MatchesAll()
+		m["patient"] = p.Patient.ToAndGroup()
 	}
 	if p.Encounter != nil {
-		m[search.ParameterKey{Name: "encounter"}] = p.Encounter.MatchesAll()
+		m["encounter"] = p.Encounter.ToAndGroup()
 	}
 	if p.Datewritten != nil {
-		m[search.ParameterKey{Name: "datewritten"}] = p.Datewritten.MatchesAll()
+		m["datewritten"] = p.Datewritten.ToAndGroup()
 	}
 	if p.Prescriber != nil {
-		m[search.ParameterKey{Name: "prescriber"}] = p.Prescriber.MatchesAll()
+		m["prescriber"] = p.Prescriber.ToAndGroup()
 	}
 	if p.Status != nil {
-		m[search.ParameterKey{Name: "status"}] = p.Status.MatchesAll()
+		m["status"] = p.Status.ToAndGroup()
 	}
 
 	return m

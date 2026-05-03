@@ -27,14 +27,15 @@ package search
 
 import (
 	"fmt"
-	"github.com/cockroachdb/apd/v3"
-	"github.com/damedic/fhir-toolbox-go/fhirpath"
-	"github.com/damedic/fhir-toolbox-go/model"
 	"net/url"
 	"slices"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 // Result contains the result of a search operation.
@@ -60,36 +61,130 @@ type Options struct {
 	Cursor Cursor
 }
 
+// Parameters is implemented by search parameter types to produce
+// a normalized map of parameter name to AND-groups of OR-values.
 type Parameters interface {
-	Map() map[ParameterKey]MatchAll
+	Parse() map[string]AndGroup
 }
 
-// ParameterKey represents a key for a search parameter,
-// consisting of a name and an optional modifier.
-type ParameterKey struct {
-	// Name is the name of the search parameter.
-	Name string
-	// Modifier is an optional modifier that can be applied to the search parameter,
-	// such as `exact`, `contains`, `identifier`, etc.
+// OrGroup is a slice of values where one must match (OR logic).
+// In FHIR query terms: comma-separated values param=v1,v2
+type OrGroup []Value
+
+// AndEntry is one entry in an AND group.
+// Each entry has a group of OR'd values and an optional modifier.
+type AndEntry struct {
+	OrGroup
 	Modifier string
 }
 
-func (p ParameterKey) String() string {
-	if p.Modifier == "" {
-		return p.Name
-	} else {
-		return fmt.Sprintf("%s:%s", p.Name, p.Modifier)
+// AndGroup is a slice of AND entries where all must match.
+// In FHIR query terms: repeated parameters &param=v1&param=v2
+type AndGroup []AndEntry
+
+// Criteria is a sealed generic interface for search parameter field types.
+// The type parameter T documents which value types are valid for a given field.
+// Single values, Or, and And all satisfy this interface.
+type Criteria[T any] interface {
+	ToAndGroup() AndGroup
+	sealedCriteria()
+}
+
+// AndArg is what can appear in a client-side And: single values or Or groups.
+type AndArg interface {
+	toAndEntry() AndEntry
+}
+
+// And is a client-side AND group. Elements can be single values or Or groups.
+type And []AndArg
+
+func (a And) ToAndGroup() AndGroup {
+	result := make(AndGroup, len(a))
+	for i, arg := range a {
+		result[i] = arg.toAndEntry()
 	}
+	return result
 }
 
-func (p ParameterKey) MarshalText() ([]byte, error) {
-	return []byte(p.String()), nil
+func (a And) sealedCriteria() {}
+
+// OrArg is what can appear in a client-side Or: single values only.
+type OrArg interface {
+	toOrEntry() Value
 }
 
-type GenericParams map[string]Criteria
+// Or is a client-side OR group. Elements are single values.
+type Or []OrArg
 
-func (p GenericParams) Map() map[ParameterKey]MatchAll {
-	m := make(map[ParameterKey]MatchAll, len(p))
+func (o Or) toOrGroup() OrGroup {
+	result := make(OrGroup, len(o))
+	for i, arg := range o {
+		result[i] = arg.toOrEntry()
+	}
+	return result
+}
+
+func (o Or) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: o.toOrGroup()}}
+}
+
+func (o Or) toAndEntry() AndEntry {
+	return AndEntry{OrGroup: o.toOrGroup()}
+}
+
+func (o Or) sealedCriteria() {}
+
+// ModifierArg is what modifier constructors accept: values and Or groups.
+// Modified and And do NOT satisfy this, this prevents nesting modifiers.
+type ModifierArg interface {
+	toModifiedAndEntry(modifier string) AndEntry
+}
+
+// Modified wraps a value or Or group with a search modifier (:exact, :not, etc.).
+// It satisfies Criteria[T] (top-level field assignment) and AndArg (inside And).
+// It does NOT satisfy OrArg (can't go in Or) or ModifierArg (can't nest modifiers).
+type Modified struct {
+	modifier string
+	arg      ModifierArg
+}
+
+func (m Modified) ToAndGroup() AndGroup {
+	return AndGroup{m.arg.toModifiedAndEntry(m.modifier)}
+}
+
+func (m Modified) toAndEntry() AndEntry {
+	return m.arg.toModifiedAndEntry(m.modifier)
+}
+
+func (m Modified) sealedCriteria() {}
+
+// Convenience constructors for FHIR search modifiers.
+// See https://hl7.org/fhir/search.html#modifiers for full spec.
+func Exact(v ModifierArg) Modified        { return Modified{modifier: "exact", arg: v} }
+func Contains(v ModifierArg) Modified     { return Modified{modifier: "contains", arg: v} }
+func Text(v ModifierArg) Modified         { return Modified{modifier: "text", arg: v} }
+func TextAdvanced(v ModifierArg) Modified { return Modified{modifier: "text-advanced", arg: v} }
+func CodeText(v ModifierArg) Modified     { return Modified{modifier: "code-text", arg: v} }
+func Not(v ModifierArg) Modified          { return Modified{modifier: "not", arg: v} }
+func Missing(v ModifierArg) Modified      { return Modified{modifier: "missing", arg: v} }
+func In(v ModifierArg) Modified           { return Modified{modifier: "in", arg: v} }
+func NotIn(v ModifierArg) Modified        { return Modified{modifier: "not-in", arg: v} }
+func Above(v ModifierArg) Modified        { return Modified{modifier: "above", arg: v} }
+func Below(v ModifierArg) Modified        { return Modified{modifier: "below", arg: v} }
+func OfType(v ModifierArg) Modified       { return Modified{modifier: "of-type", arg: v} }
+func Identifier(v ModifierArg) Modified   { return Modified{modifier: "identifier", arg: v} }
+
+// As specifies a concrete resource type for a reference modifier (e.g., :Patient).
+func As(resourceType string, v ModifierArg) Modified {
+	return Modified{modifier: resourceType, arg: v}
+}
+
+// GenericParams is a map of parameter names (with optional :modifier suffix)
+// to search criteria.
+type GenericParams map[string]Criteria[Value]
+
+func (p GenericParams) Parse() map[string]AndGroup {
+	m := make(map[string]AndGroup, len(p))
 	for k, v := range p {
 		splits := strings.Split(k, ":")
 		paramName := splits[0]
@@ -97,34 +192,20 @@ func (p GenericParams) Map() map[ParameterKey]MatchAll {
 		if len(splits) > 1 {
 			paramModifier = splits[1]
 		}
-		m[ParameterKey{Name: paramName, Modifier: paramModifier}] = v.MatchesAll()
+		for _, entry := range v.ToAndGroup() {
+			if paramModifier != "" && entry.Modifier == "" {
+				entry.Modifier = paramModifier
+			}
+			m[paramName] = append(m[paramName], entry)
+		}
 	}
 	return m
 }
 
-type internalParams map[ParameterKey]MatchAll
+type internalParams map[string]AndGroup
 
-func (p internalParams) Map() map[ParameterKey]MatchAll {
+func (p internalParams) Parse() map[string]AndGroup {
 	return p
-}
-
-type Criteria interface {
-	MatchesAll() MatchAll
-}
-
-// All represents a slice of possible values for a single search parameter where each of the entry has to match.
-type MatchAll []MatchAny
-
-func (a MatchAll) MatchesAll() MatchAll {
-	return a
-}
-
-// MatchAny represents a slice of possible values for a single search parameter,
-// where only one of the values has to match.
-type MatchAny []Value
-
-func (o MatchAny) MatchesAll() MatchAll {
-	return MatchAll{o}
 }
 
 type Type string
@@ -260,17 +341,16 @@ func ParseQuery(
 
 		default:
 			splits := strings.Split(k, ":")
-			param := ParameterKey{
-				Name: splits[0],
-			}
+			paramName := splits[0]
+			var paramModifier string
 			if len(splits) > 1 {
-				param.Modifier = splits[1]
+				paramModifier = splits[1]
 			}
 
-			canonical, ok := parameterDefinitions[param.Name]
+			canonical, ok := parameterDefinitions[paramName]
 			if !ok {
 				if strict {
-					return nil, Options{}, fmt.Errorf("unsupported search parameter: %s", param.String())
+					return nil, Options{}, fmt.Errorf("unsupported search parameter: %s", k)
 				}
 				// only known parameters are forwarded
 				continue
@@ -283,12 +363,12 @@ func ParseQuery(
 				continue
 			}
 
-			ands, err := parseSearchParam(param, v, sp, tz)
+			ands, err := parseSearchParam(paramName, paramModifier, v, sp, tz)
 			if err != nil {
 				return nil, Options{}, err
 			}
 
-			parameters[param] = ands
+			parameters[paramName] = append(parameters[paramName], ands...)
 		}
 	}
 
@@ -313,10 +393,10 @@ func parseCursor(values []string) (Cursor, error) {
 	return Cursor(values[0]), nil
 }
 
-func parseSearchParam(param ParameterKey, urlValues []string, sp model.Element, tz *time.Location) (MatchAll, error) {
+func parseSearchParam(paramName string, modifier string, urlValues []string, sp model.Element, tz *time.Location) (AndGroup, error) {
 	fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](sp.Children("type"))
 	if !ok || err != nil {
-		return MatchAll{}, fmt.Errorf("Parameter has no type: %v", sp)
+		return nil, fmt.Errorf("parameter has no type: %v", sp)
 	}
 	resolvedType := Type(fhirpathType)
 
@@ -324,37 +404,37 @@ func parseSearchParam(param ParameterKey, urlValues []string, sp model.Element, 
 	for _, e := range sp.Children("modifier") {
 		m, ok, err := e.ToString(false)
 		if !ok || err != nil {
-			return MatchAll{}, fmt.Errorf("parameter error reading modifiers: %v", sp)
+			return nil, fmt.Errorf("parameter error reading modifiers: %v", sp)
 		}
 		supportedModifiers = append(supportedModifiers, string(m))
 	}
 
 	// When the :identifier modifier is used, the search value works as a token search.
-	if resolvedType == TypeReference && param.Modifier == "identifier" {
+	if resolvedType == TypeReference && modifier == "identifier" {
 		resolvedType = TypeToken
 	}
 
 	// empty modifiers in SearchParameters should mean all are supported
-	if param.Modifier != "" && (len(supportedModifiers) == 0 || !slices.Contains(supportedModifiers, string(param.Modifier))) {
-		return nil, fmt.Errorf("unsupported modifier for parameter %s, supported are: %s", param, supportedModifiers)
+	if modifier != "" && (len(supportedModifiers) == 0 || !slices.Contains(supportedModifiers, modifier)) {
+		return nil, fmt.Errorf("unsupported modifier for parameter %s:%s, supported are: %s", paramName, modifier, supportedModifiers)
 	}
 
-	matchAll := make(MatchAll, 0, len(urlValues))
+	result := make(AndGroup, 0, len(urlValues))
 	for _, urlValue := range urlValues {
 		splitStrings := strings.Split(urlValue, ",")
 
-		matchAny := make(MatchAny, 0, len(splitStrings))
+		orGroup := make(OrGroup, 0, len(splitStrings))
 		for _, s := range splitStrings {
 			value, err := parseSearchValue(resolvedType, s, tz)
 			if err != nil {
-				return nil, fmt.Errorf("invalid search value for parameter %s: %w", param, err)
+				return nil, fmt.Errorf("invalid search value for parameter %s: %w", paramName, err)
 			}
-			matchAny = append(matchAny, value)
+			orGroup = append(orGroup, value)
 		}
 
-		matchAll = append(matchAll, matchAny)
+		result = append(result, AndEntry{OrGroup: orGroup, Modifier: modifier})
 	}
-	return matchAll, nil
+	return result, nil
 }
 
 func parseSearchValue(paramType Type, value string, tz *time.Location) (Value, error) {
@@ -563,27 +643,24 @@ func BuildQuery(parameters Parameters, opts Options) string {
 	return builder.String()
 }
 
-// Query representing the search parameters.
-//
-// All contained values are sorted, but the returned [url.Values] is backed by a map.
-// To obtain a deterministic query string you can call [url.Values.Encode], because
-// it will sort the keys alphabetically.
+// parameterQuery builds url.Values from parsed parameters.
+// All contained values are sorted for deterministic output.
 func parameterQuery(p Parameters) url.Values {
 	values := url.Values{}
 
-	for key, criteria := range p.Map() {
-		for _, matchAny := range criteria.MatchesAll() {
-			if len(matchAny) == 0 {
+	for name, andGroup := range p.Parse() {
+		for _, entry := range andGroup {
+			if len(entry.OrGroup) == 0 {
 				continue
 			}
 
-			nameWithModifier := key.Name
-			if key.Modifier != "" {
-				nameWithModifier = fmt.Sprintf("%s:%s", key.Name, key.Modifier)
+			nameWithModifier := name
+			if entry.Modifier != "" {
+				nameWithModifier = fmt.Sprintf("%s:%s", name, entry.Modifier)
 			}
 
-			s := make([]string, 0, len(matchAny))
-			for _, v := range matchAny {
+			s := make([]string, 0, len(entry.OrGroup))
+			for _, v := range entry.OrGroup {
 				s = append(s, v.String())
 			}
 			slices.Sort(s)
@@ -591,7 +668,6 @@ func parameterQuery(p Parameters) url.Values {
 			values.Add(nameWithModifier, strings.Join(s, ","))
 			slices.Sort(values[nameWithModifier])
 		}
-
 	}
 
 	return values
@@ -604,8 +680,8 @@ func parameterQuery(p Parameters) url.Values {
 //	  // handle search parameter of type number
 //	}
 type Value interface {
-	Criteria
 	fmt.Stringer
+	sealedValue()
 }
 
 type Number struct {
@@ -613,8 +689,8 @@ type Number struct {
 	Value  *apd.Decimal
 }
 
-func (n Number) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{n}}
+func (n Number) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{n}}}
 }
 
 func (n Number) String() string {
@@ -675,8 +751,8 @@ func ParseDate(value string, tz *time.Location) (time.Time, DatePrecision, error
 	return time.Time{}, "", err
 }
 
-func (d Date) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{d}}
+func (d Date) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{d}}}
 }
 
 func (d Date) String() string {
@@ -701,8 +777,8 @@ func (d Date) String() string {
 
 type String string
 
-func (s String) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{s}}
+func (s String) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{s}}}
 }
 
 func (s String) String() string {
@@ -723,8 +799,8 @@ func (t Token) String() string {
 	}
 }
 
-func (t Token) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{t}}
+func (t Token) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{t}}}
 }
 
 type Reference struct {
@@ -735,8 +811,8 @@ type Reference struct {
 	Version  string
 }
 
-func (r Reference) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{r}}
+func (r Reference) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{r}}}
 }
 
 func (r Reference) String() string {
@@ -771,8 +847,8 @@ func (c Composite) String() string {
 	return strings.Join(c, "$")
 }
 
-func (c Composite) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{c}}
+func (c Composite) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{c}}}
 }
 
 type Quantity struct {
@@ -782,8 +858,8 @@ type Quantity struct {
 	Code   string
 }
 
-func (q Quantity) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{q}}
+func (q Quantity) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{q}}}
 }
 
 func (q Quantity) String() string {
@@ -808,104 +884,95 @@ func (u Uri) String() string {
 	return u.Value.String()
 }
 
-func (u Uri) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{u}}
+func (u Uri) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{u}}}
 }
 
 // Special string contains potential prefixes
 type Special string
 
-func (s Special) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{s}}
+func (s Special) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{s}}}
 }
 
 func (s Special) String() string {
 	return string(s)
 }
 
-// Sealed interfaces for search parameters that accept both typed values and String
-//
-// These interfaces provide more flexible client usage by allowing both strongly-typed
-// search values (like Date, Token) and simple string values.
-//
-// Examples:
-//   params.Birthdate = search.Date{Value: time.Now(), Prefix: "ge"}  // strongly typed
-//   params.Birthdate = search.String("ge2000-01-01")                 // string-based
-//
-// The sealed nature (via private methods) ensures only the appropriate search types
-// can implement these interfaces, maintaining type safety while providing flexibility.
+// AndArg implementations for value types (wraps single value in AndEntry)
+func (n Number) toAndEntry() AndEntry    { return AndEntry{OrGroup: OrGroup{n}} }
+func (d Date) toAndEntry() AndEntry      { return AndEntry{OrGroup: OrGroup{d}} }
+func (s String) toAndEntry() AndEntry    { return AndEntry{OrGroup: OrGroup{s}} }
+func (t Token) toAndEntry() AndEntry     { return AndEntry{OrGroup: OrGroup{t}} }
+func (r Reference) toAndEntry() AndEntry { return AndEntry{OrGroup: OrGroup{r}} }
+func (c Composite) toAndEntry() AndEntry { return AndEntry{OrGroup: OrGroup{c}} }
+func (q Quantity) toAndEntry() AndEntry  { return AndEntry{OrGroup: OrGroup{q}} }
+func (u Uri) toAndEntry() AndEntry       { return AndEntry{OrGroup: OrGroup{u}} }
+func (s Special) toAndEntry() AndEntry   { return AndEntry{OrGroup: OrGroup{s}} }
 
-// StringOrString is a sealed interface that accepts String values
-type StringOrString interface {
-	Criteria
-	sealedStringOrString()
+// ModifierArg implementations for value types
+func (n Number) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{n}, Modifier: mod}
+}
+func (d Date) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{d}, Modifier: mod}
+}
+func (s String) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{s}, Modifier: mod}
+}
+func (t Token) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{t}, Modifier: mod}
+}
+func (r Reference) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{r}, Modifier: mod}
+}
+func (c Composite) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{c}, Modifier: mod}
+}
+func (q Quantity) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{q}, Modifier: mod}
+}
+func (u Uri) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{u}, Modifier: mod}
+}
+func (s Special) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{s}, Modifier: mod}
 }
 
-// TokenOrString is a sealed interface that accepts Token and String values
-type TokenOrString interface {
-	Criteria
-	sealedTokenOrString()
+// ModifierArg implementation for Or
+func (o Or) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: o.toOrGroup(), Modifier: mod}
 }
 
-// DateOrString is a sealed interface that accepts Date and String values
-type DateOrString interface {
-	Criteria
-	sealedDateOrString()
-}
+// OrArg implementations for value types
+func (n Number) toOrEntry() Value    { return n }
+func (d Date) toOrEntry() Value      { return d }
+func (s String) toOrEntry() Value    { return s }
+func (t Token) toOrEntry() Value     { return t }
+func (r Reference) toOrEntry() Value { return r }
+func (c Composite) toOrEntry() Value { return c }
+func (q Quantity) toOrEntry() Value  { return q }
+func (u Uri) toOrEntry() Value       { return u }
+func (s Special) toOrEntry() Value   { return s }
 
-// ReferenceOrString is a sealed interface that accepts Reference and String values
-type ReferenceOrString interface {
-	Criteria
-	sealedReferenceOrString()
-}
+// Value sealed implementations
+func (n Number) sealedValue()    {}
+func (d Date) sealedValue()      {}
+func (s String) sealedValue()    {}
+func (t Token) sealedValue()     {}
+func (r Reference) sealedValue() {}
+func (c Composite) sealedValue() {}
+func (q Quantity) sealedValue()  {}
+func (u Uri) sealedValue()       {}
+func (s Special) sealedValue()   {}
 
-// QuantityOrString is a sealed interface that accepts Quantity and String values
-type QuantityOrString interface {
-	Criteria
-	sealedQuantityOrString()
-}
-
-// NumberOrString is a sealed interface that accepts Number and String values
-type NumberOrString interface {
-	Criteria
-	sealedNumberOrString()
-}
-
-// UriOrString is a sealed interface that accepts Uri and String values
-type UriOrString interface {
-	Criteria
-	sealedUriOrString()
-}
-
-// CompositeOrString is a sealed interface that accepts Composite and String values
-type CompositeOrString interface {
-	Criteria
-	sealedCompositeOrString()
-}
-
-// SpecialOrString is a sealed interface that accepts Special and String values
-type SpecialOrString interface {
-	Criteria
-	sealedSpecialOrString()
-}
-
-// Sealed interface implementations - String can be used for any parameter type
-func (s String) sealedStringOrString()    {}
-func (s String) sealedTokenOrString()     {}
-func (s String) sealedDateOrString()      {}
-func (s String) sealedReferenceOrString() {}
-func (s String) sealedQuantityOrString()  {}
-func (s String) sealedNumberOrString()    {}
-func (s String) sealedUriOrString()       {}
-func (s String) sealedCompositeOrString() {}
-func (s String) sealedSpecialOrString()   {}
-
-// Typed implementations
-func (t Token) sealedTokenOrString()         {}
-func (d Date) sealedDateOrString()           {}
-func (r Reference) sealedReferenceOrString() {}
-func (q Quantity) sealedQuantityOrString()   {}
-func (n Number) sealedNumberOrString()       {}
-func (u Uri) sealedUriOrString()             {}
-func (c Composite) sealedCompositeOrString() {}
-func (s Special) sealedSpecialOrString()     {}
+// Criteria sealed implementations
+func (n Number) sealedCriteria()    {}
+func (d Date) sealedCriteria()      {}
+func (s String) sealedCriteria()    {}
+func (t Token) sealedCriteria()     {}
+func (r Reference) sealedCriteria() {}
+func (c Composite) sealedCriteria() {}
+func (q Quantity) sealedCriteria()  {}
+func (u Uri) sealedCriteria()       {}
+func (s Special) sealedCriteria()   {}

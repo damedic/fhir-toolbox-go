@@ -81,8 +81,9 @@ func parseSearchParams(bundle model.Bundle) map[string][]SearchParamInfo {
 	return result
 }
 
-// Convert FHIR search parameter type to Go type
-func fhirTypeToGoType(fhirType string) string {
+// fhirTypeToCriteriaType returns the concrete Value type name for the Criteria[T] type parameter.
+// T documents the primary typed value for the field (String is always accepted via raw syntax).
+func fhirTypeToCriteriaType(fhirType string) string {
 	switch fhirType {
 	case "string":
 		return "String"
@@ -166,8 +167,8 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 				g.Comment("// Common search parameters")
 				for _, param := range commonParams {
 					fieldName := codeToFieldName(param.Code)
-					interfaceType := fhirTypeToGoType(param.Type) + "OrString"
-					g.Id(fieldName).Qual(searchPkg, interfaceType).Tag(map[string]string{"json": param.Code + ",omitempty"})
+					criteriaType := fhirTypeToCriteriaType(param.Type)
+					g.Id(fieldName).Qual(searchPkg, "Criteria").Types(Qual(searchPkg, criteriaType)).Tag(map[string]string{"json": param.Code + ",omitempty"})
 				}
 				g.Line()
 			}
@@ -177,19 +178,19 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 				g.Commentf("// %s-specific search parameters", r.Name)
 				for _, param := range specificParams {
 					fieldName := codeToFieldName(param.Code)
-					interfaceType := fhirTypeToGoType(param.Type) + "OrString"
-					g.Id(fieldName).Qual(searchPkg, interfaceType).Tag(map[string]string{"json": param.Code + ",omitempty"})
+					criteriaType := fhirTypeToCriteriaType(param.Type)
+					g.Id(fieldName).Qual(searchPkg, "Criteria").Types(Qual(searchPkg, criteriaType)).Tag(map[string]string{"json": param.Code + ",omitempty"})
 				}
 			}
 		})
 		f.Line()
 
-		// Generate the Map method for the Parameters interface
-		f.Commentf("// Map implements the search.Parameters interface for %s.", structName)
-		f.Func().Params(Id("p").Id(structName)).Id("Map").Params().Map(
-			Qual(searchPkg, "ParameterKey"),
-		).Qual(searchPkg, "MatchAll").BlockFunc(func(g *Group) {
-			g.Id("m").Op(":=").Make(Map(Qual(searchPkg, "ParameterKey")).Qual(searchPkg, "MatchAll"))
+		// Generate the Parse method for the Parameters interface
+		f.Commentf("// Parse implements the search.Parameters interface for %s.", structName)
+		f.Func().Params(Id("p").Id(structName)).Id("Parse").Params().Map(
+			String(),
+		).Qual(searchPkg, "AndGroup").BlockFunc(func(g *Group) {
+			g.Id("m").Op(":=").Make(Map(String()).Qual(searchPkg, "AndGroup"))
 			g.Line()
 
 			// Add the parameter mapping logic for all parameters
@@ -197,9 +198,7 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 			for _, param := range resourceParams {
 				fieldName := codeToFieldName(param.Code)
 				g.If(Id("p").Dot(fieldName).Op("!=").Nil()).Block(
-					Id("m").Index(Qual(searchPkg, "ParameterKey").Values(Dict{
-						Id("Name"): Lit(param.Code),
-					})).Op("=").Id("p").Dot(fieldName).Dot("MatchesAll").Call(),
+					Id("m").Index(Lit(param.Code)).Op("=").Id("p").Dot(fieldName).Dot("ToAndGroup").Call(),
 				)
 			}
 

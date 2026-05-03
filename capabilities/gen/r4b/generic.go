@@ -21384,10 +21384,10 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 		for id, od := range defs {
 			filtered[id] = od
 		}
-		if idParams, ok := parameters.Map()[search.ParameterKey{Name: "_id"}]; ok {
+		if idParams, ok := parameters.Parse()["_id"]; ok {
 			filtered = make(map[string]r4b.OperationDefinition)
-			for _, idValues := range idParams {
-				for _, idValue := range idValues {
+			for _, idEntry := range idParams {
+				for _, idValue := range idEntry.OrGroup {
 					idStr := idValue.String()
 					if od, exists := defs[idStr]; exists {
 						filtered[idStr] = od
@@ -22095,10 +22095,10 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 		for id, searchParam := range searchParameters {
 			filteredParameters[id] = searchParam
 		}
-		if idParams, ok := parameters.Map()[search.ParameterKey{Name: "_id"}]; ok {
+		if idParams, ok := parameters.Parse()["_id"]; ok {
 			filteredParameters = make(map[string]r4b.SearchParameter)
-			for _, idValues := range idParams {
-				for _, idValue := range idValues {
+			for _, idEntry := range idParams {
+				for _, idValue := range idEntry.OrGroup {
 					idStr := idValue.String()
 					if searchParam, exists := searchParameters[idStr]; exists {
 						filteredParameters[idStr] = searchParam

@@ -260,10 +260,10 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								)
 
 								// Check for _id parameter in search options
-								g.If(List(Id("idParams"), Id("ok")).Op(":=").Id("parameters.Map()").Index(Qual(moduleName+"/capabilities/search", "ParameterKey").Values(Dict{Id("Name"): Lit("_id")})), Id("ok")).Block(
+								g.If(List(Id("idParams"), Id("ok")).Op(":=").Id("parameters.Parse()").Index(Lit("_id")), Id("ok")).Block(
 									Id("filteredParameters").Op("=").Make(Map(String()).Qual(moduleName+"/model/gen/"+strings.ToLower(release), "SearchParameter")),
-									For(List(Id("_"), Id("idValues")).Op(":=").Range().Id("idParams")).Block(
-										For(List(Id("_"), Id("idValue")).Op(":=").Range().Id("idValues")).Block(
+									For(List(Id("_"), Id("idEntry")).Op(":=").Range().Id("idParams")).Block(
+										For(List(Id("_"), Id("idValue")).Op(":=").Range().Id("idEntry").Dot("OrGroup")).Block(
 											Id("idStr").Op(":=").Id("idValue").Dot("String").Call(),
 											If(List(Id("searchParam"), Id("exists")).Op(":=").Id("searchParameters").Index(Id("idStr")), Id("exists")).Block(
 												Id("filteredParameters").Index(Id("idStr")).Op("=").Id("searchParam"),
@@ -358,10 +358,10 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								g.For(List(Id("id"), Id("od")).Op(":=").Range().Id("defs")).Block(
 									Id("filtered").Index(Id("id")).Op("=").Id("od"),
 								)
-								g.If(List(Id("idParams"), Id("ok")).Op(":=").Id("parameters.Map()").Index(Qual(moduleName+"/capabilities/search", "ParameterKey").Values(Dict{Id("Name"): Lit("_id")})), Id("ok")).Block(
+								g.If(List(Id("idParams"), Id("ok")).Op(":=").Id("parameters.Parse()").Index(Lit("_id")), Id("ok")).Block(
 									Id("filtered").Op("=").Make(Map(String()).Qual(moduleName+"/model/gen/"+strings.ToLower(release), "OperationDefinition")),
-									For(List(Id("_"), Id("idValues")).Op(":=").Range().Id("idParams")).Block(
-										For(List(Id("_"), Id("idValue")).Op(":=").Range().Id("idValues")).Block(
+									For(List(Id("_"), Id("idEntry")).Op(":=").Range().Id("idParams")).Block(
+										For(List(Id("_"), Id("idValue")).Op(":=").Range().Id("idEntry").Dot("OrGroup")).Block(
 											Id("idStr").Op(":=").Id("idValue").Dot("String").Call(),
 											If(List(Id("od"), Id("exists")).Op(":=").Id("defs").Index(Id("idStr")), Id("exists")).Block(
 												Id("filtered").Index(Id("idStr")).Op("=").Id("od"),
