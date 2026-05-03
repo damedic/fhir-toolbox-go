@@ -18,6 +18,7 @@ type CapabilitiesWrapperGenerator struct {
 
 func (g CapabilitiesWrapperGenerator) GenerateAdditional(f func(fileName string, pkgName string) *File, release string, rt []ir.ResourceOrType) {
 	generateGenericWrapperStruct(f("generic", "capabilities"+release), release)
+	generateCapabilityBaseHelper(f("generic", "capabilities"+release), release)
 	generateWrapperCapabilityStatement(f("generic", "capabilities"+release), release, ir.FilterResources(rt))
 	generateSearchParametersFn(f("generic", "capabilities"+release), release, ir.FilterResources(rt))
 	generatePopulateSearchParameterFn(f("generic", "capabilities"+release), release)
@@ -40,9 +41,47 @@ func (g CapabilitiesWrapperGenerator) GenerateAdditional(f func(fileName string,
 }
 
 func generateGenericWrapperStruct(f *File, release string) {
+	f.Comment("// Concrete holds the backend implementation. It may implement")
+	f.Comment("// ConcreteCapabilities (with CapabilityBase) or GenericCapabilities")
+	f.Comment("// (with CapabilityStatement). Concrete method type assertions are")
+	f.Comment("// used to detect resource-specific overrides on either kind of backend.")
 	f.Type().Id(genericWrapperName).Struct(
-		Id("Concrete").Qual(moduleName+"/capabilities", "ConcreteCapabilities").Index(Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatement")),
+		Id("Concrete").Any(),
 	)
+}
+
+func generateCapabilityBaseHelper(f *File, release string) {
+	releasePackage := moduleName + "/model/gen/" + strings.ToLower(release)
+	f.Comment("// capabilityBase resolves the base CapabilityStatement from the backend,")
+	f.Comment("// regardless of whether it implements GenericCapabilities or ConcreteCapabilities.")
+	f.Comment("// GenericCapabilities is checked first so that a generic backend's full capability")
+	f.Comment("// set (e.g. from an upstream server) is preserved as the base for augmentation.")
+	f.Func().Params(Id("w").Id(genericWrapperName)).Id("capabilityBase").
+		Params(Id("ctx").Qual("context", "Context")).
+		Params(Qual(releasePackage, "CapabilityStatement"), Error()).
+		Block(
+			If(
+				List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericCapabilities")),
+				Id("ok"),
+			).Block(
+				List(Id("cs"), Id("err")).Op(":=").Id("gen.CapabilityStatement").Call(Id("ctx")),
+				If(Id("err").Op("!=").Nil()).Block(
+					Return(Qual(releasePackage, "CapabilityStatement").Values(), Id("err")),
+				),
+				List(Id("r4cs"), Id("ok")).Op(":=").Id("cs").Assert(Qual(releasePackage, "CapabilityStatement")),
+				If(Op("!").Id("ok")).Block(
+					Return(Qual(releasePackage, "CapabilityStatement").Values(), Qual("fmt", "Errorf").Call(Lit("expected "+release+".CapabilityStatement, got %T"), Id("cs"))),
+				),
+				Return(Id("r4cs"), Nil()),
+			),
+			If(
+				List(Id("cc"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "ConcreteCapabilities").Index(Qual(releasePackage, "CapabilityStatement"))),
+				Id("ok"),
+			).Block(
+				Return(Id("cc.CapabilityBase").Call(Id("ctx"))),
+			),
+			Return(Qual(releasePackage, "CapabilityStatement").Values(), Qual("fmt", "Errorf").Call(Lit("backend implements neither GenericCapabilities nor ConcreteCapabilities for "+release))),
+		)
 }
 
 func generateGeneric(f *File, release string, resources []ir.ResourceOrType, interaction string) {
@@ -121,7 +160,7 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								// Fallback: gather SearchParameter from SearchCapabilities methods
 								g.Comment("// Fallback: gather SearchParameter from SearchCapabilities methods if ReadSearchParameter not implemented")
 								g.Comment("// Get base URL from CapabilityStatement for canonical references")
-								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("Concrete").Dot("CapabilityBase").Call(Id("ctx"))
+								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("capabilityBase").Call(Id("ctx"))
 								g.If(Id("err").Op("!=").Nil()).Block(
 									Return(Nil(), Id("err")),
 								)
@@ -148,7 +187,7 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								)
 
 								// Fallback: get baseUrl and resolve populated OperationDefinitions
-								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("Concrete").Dot("CapabilityBase").Call(Id("ctx"))
+								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("capabilityBase").Call(Id("ctx"))
 								g.If(Id("err").Op("!=").Nil()).Block(
 									Return(Nil(), Id("err")),
 								)
@@ -240,7 +279,7 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								// Fallback: gather SearchParameter from SearchCapabilities methods
 								g.Comment("// Fallback: gather SearchParameter from SearchCapabilities methods if SearchSearchParameter not implemented")
 								g.Comment("// Get base URL from CapabilityStatement for canonical references")
-								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("Concrete").Dot("CapabilityBase").Call(Id("ctx"))
+								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("capabilityBase").Call(Id("ctx"))
 								g.If(Id("err").Op("!=").Nil()).Block(
 									Return(returnType.Clone().Block(), Id("err")),
 								)
@@ -340,7 +379,7 @@ func generateGeneric(f *File, release string, resources []ir.ResourceOrType, int
 								)
 
 								// Fallback: Get base URL and resolve populated OperationDefinitions
-								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("Concrete").Dot("CapabilityBase").Call(Id("ctx"))
+								g.List(Id("cs"), Id("err")).Op(":=").Id("w").Dot("capabilityBase").Call(Id("ctx"))
 								g.If(Id("err").Op("!=").Nil()).Block(
 									Return(returnType.Clone().Block(), Id("err")),
 								)
@@ -466,16 +505,8 @@ func generateWrapperCapabilityStatement(f *File, release string, resources []ir.
 			Error(),
 		).
 		BlockFunc(func(g *Group) {
-			// Check if concrete implementation also implements GenericCapabilities for shortcut
-			g.List(Id("gen"), Id("ok")).Op(":=").Id("w.Concrete").Assert(Qual(moduleName+"/capabilities", "GenericCapabilities"))
-			g.If(Id("ok")).Block(
-				Comment("// shortcut for the case that the underlying implementation already implements the generic API"),
-				Return(Id("gen.CapabilityStatement").Params(Id("ctx"))),
-			)
-
-			// Generate CapabilityStatement from ConcreteCapabilities
-			g.Comment("// Generate CapabilityStatement from concrete implementation")
-			g.List(Id("baseCapabilityStatement"), Id("err")).Op(":=").Id("w.Concrete.CapabilityBase").Call(Id("ctx"))
+			// Resolve base CapabilityStatement via helper (handles both GenericCapabilities and ConcreteCapabilities)
+			g.List(Id("baseCapabilityStatement"), Id("err")).Op(":=").Id("w.capabilityBase").Call(Id("ctx"))
 			g.If(Id("err").Op("!=").Nil()).Block(
 				Return(Nil(), Id("err")),
 			)

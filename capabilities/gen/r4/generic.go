@@ -23,18 +23,37 @@ import (
 	"strings"
 )
 
+// Concrete holds the backend implementation. It may implement
+// ConcreteCapabilities (with CapabilityBase) or GenericCapabilities
+// (with CapabilityStatement). Concrete method type assertions are
+// used to detect resource-specific overrides on either kind of backend.
 type Generic struct {
-	Concrete capabilities.ConcreteCapabilities[r4.CapabilityStatement]
+	Concrete any
 }
 
-func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityStatement, error) {
-	gen, ok := w.Concrete.(capabilities.GenericCapabilities)
-	if ok {
-		// shortcut for the case that the underlying implementation already implements the generic API
-		return gen.CapabilityStatement(ctx)
+// capabilityBase resolves the base CapabilityStatement from the backend,
+// regardless of whether it implements GenericCapabilities or ConcreteCapabilities.
+// GenericCapabilities is checked first so that a generic backend's full capability
+// set (e.g. from an upstream server) is preserved as the base for augmentation.
+func (w Generic) capabilityBase(ctx context.Context) (r4.CapabilityStatement, error) {
+	if gen, ok := w.Concrete.(capabilities.GenericCapabilities); ok {
+		cs, err := gen.CapabilityStatement(ctx)
+		if err != nil {
+			return r4.CapabilityStatement{}, err
+		}
+		r4cs, ok := cs.(r4.CapabilityStatement)
+		if !ok {
+			return r4.CapabilityStatement{}, fmt.Errorf("expected R4.CapabilityStatement, got %T", cs)
+		}
+		return r4cs, nil
 	}
-	// Generate CapabilityStatement from concrete implementation
-	baseCapabilityStatement, err := w.Concrete.CapabilityBase(ctx)
+	if cc, ok := w.Concrete.(capabilities.ConcreteCapabilities[r4.CapabilityStatement]); ok {
+		return cc.CapabilityBase(ctx)
+	}
+	return r4.CapabilityStatement{}, fmt.Errorf("backend implements neither GenericCapabilities nor ConcreteCapabilities for R4")
+}
+func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityStatement, error) {
+	baseCapabilityStatement, err := w.capabilityBase(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -14349,7 +14368,7 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 		if ok {
 			return impl.ReadOperationDefinition(ctx, id)
 		}
-		cs, err := w.Concrete.CapabilityBase(ctx)
+		cs, err := w.capabilityBase(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -14664,7 +14683,7 @@ func (w Generic) Read(ctx context.Context, resourceType string, id string) (mode
 		}
 		// Fallback: gather SearchParameter from SearchCapabilities methods if ReadSearchParameter not implemented
 		// Get base URL from CapabilityStatement for canonical references
-		cs, err := w.Concrete.CapabilityBase(ctx)
+		cs, err := w.capabilityBase(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -22103,7 +22122,7 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 				Resources: genericResources,
 			}, nil
 		}
-		cs, err := w.Concrete.CapabilityBase(ctx)
+		cs, err := w.capabilityBase(ctx)
 		if err != nil {
 			return search.Result[model.Resource]{}, err
 		}
@@ -22789,7 +22808,7 @@ func (w Generic) Search(ctx context.Context, resourceType string, parameters sea
 		}
 		// Fallback: gather SearchParameter from SearchCapabilities methods if SearchSearchParameter not implemented
 		// Get base URL from CapabilityStatement for canonical references
-		cs, err := w.Concrete.CapabilityBase(ctx)
+		cs, err := w.capabilityBase(ctx)
 		if err != nil {
 			return search.Result[model.Resource]{}, err
 		}

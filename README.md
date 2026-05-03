@@ -202,6 +202,38 @@ concreteAPI := capabilitiesR4.Concrete{Generic: genericAPI}
 
 This wraps a generic implementation and exposes the strongly typed concrete interfaces (e.g. `ReadPatient`) for consumers that prefer compile-time types.
 
+#### Concrete overrides on generic backends
+
+You can add concrete methods to a generic backend to override behavior for specific resource types.
+Concrete methods always take precedence over the generic fallback.
+
+```go
+type myBackend struct {
+    upstream *rest.ClientR4 // generic implementation
+}
+
+// Generic API: delegates everything to upstream
+func (b *myBackend) CapabilityStatement(ctx context.Context) (model.CapabilityStatement, error) {
+    return b.upstream.CapabilityStatement(ctx)
+}
+func (b *myBackend) Read(ctx context.Context, resourceType, id string) (model.Resource, error) {
+    return b.upstream.Read(ctx, resourceType, id)
+}
+
+// Concrete override: custom caching for Patient reads
+func (b *myBackend) ReadPatient(ctx context.Context, id string) (r4.Patient, error) {
+    // custom logic (caching, validation, auditing, ...)
+    resource, err := b.upstream.Read(ctx, "Patient", id)
+    if err != nil {
+        return r4.Patient{}, err
+    }
+    return resource.(r4.Patient), nil
+}
+```
+
+When served through the REST layer, `ReadPatient` handles all `GET /Patient/{id}` requests while other resource reads fall through to the generic `Read` method.
+The CapabilityStatement is automatically augmented to reflect concrete overrides.
+
 ### Operations
 
 FHIR operations are supported at system, type, and instance levels.

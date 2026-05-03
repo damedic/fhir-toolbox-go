@@ -12,10 +12,13 @@ import (
 
 func init() {
 	genericR4B = func(api any) (capabilities.GenericCapabilities, error) {
-		c, ok := api.(capabilities.ConcreteCapabilities[r4b.CapabilityStatement])
-		if !ok {
-			return nil, fmt.Errorf("backend does not implement capabilities.ConcreteCapabilities for R4B")
+		switch api.(type) {
+		case capabilities.ConcreteCapabilities[r4b.CapabilityStatement], capabilities.GenericCapabilities:
+			// Always wrap so that concrete method overrides on the backend
+			// are detected and given precedence over generic fallbacks.
+			return capabilitiesR4B.Generic{Concrete: api}, nil
+		default:
+			return nil, fmt.Errorf("backend does not implement capabilities.GenericCapabilities or capabilities.ConcreteCapabilities for R4B")
 		}
-		return capabilitiesR4B.Generic{Concrete: c}, nil
 	}
 }

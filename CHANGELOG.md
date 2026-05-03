@@ -5,6 +5,9 @@
 ### Bug Fixes
 - Fix generic-only backends (e.g. REST client used as proxy) failing for R4 and R4B with "backend does not implement capabilities.ConcreteCapabilities" error
 
+### Improvements
+- Generic wrapper (`capabilitiesR4.Generic` etc.) now accepts both `GenericCapabilities` and `ConcreteCapabilities` backends, enabling concrete method overrides on generic implementations
+
 ## v0.0.2 (v0.0.1 redacted because of repo rename)
 
 ### FHIR Model
