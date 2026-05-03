@@ -184,12 +184,12 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 		})
 		f.Line()
 
-		// Generate the Map method for the Parameters interface
-		f.Commentf("// Map implements the search.Parameters interface for %s.", structName)
-		f.Func().Params(Id("p").Id(structName)).Id("Map").Params().Map(
-			Qual(searchPkg, "ParameterKey"),
-		).Qual(searchPkg, "MatchAll").BlockFunc(func(g *Group) {
-			g.Id("m").Op(":=").Make(Map(Qual(searchPkg, "ParameterKey")).Qual(searchPkg, "MatchAll"))
+		// Generate the Parse method for the Parameters interface
+		f.Commentf("// Parse implements the search.Parameters interface for %s.", structName)
+		f.Func().Params(Id("p").Id(structName)).Id("Parse").Params().Map(
+			String(),
+		).Qual(searchPkg, "AndGroup").BlockFunc(func(g *Group) {
+			g.Id("m").Op(":=").Make(Map(String()).Qual(searchPkg, "AndGroup"))
 			g.Line()
 
 			// Add the parameter mapping logic for all parameters
@@ -197,9 +197,7 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 			for _, param := range resourceParams {
 				fieldName := codeToFieldName(param.Code)
 				g.If(Id("p").Dot(fieldName).Op("!=").Nil()).Block(
-					Id("m").Index(Qual(searchPkg, "ParameterKey").Values(Dict{
-						Id("Name"): Lit(param.Code),
-					})).Op("=").Id("p").Dot(fieldName).Dot("MatchesAll").Call(),
+					Id("m").Index(Lit(param.Code)).Op("=").Id("p").Dot(fieldName).Dot("ToAndGroup").Call(),
 				)
 			}
 

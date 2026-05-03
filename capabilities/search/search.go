@@ -60,36 +60,46 @@ type Options struct {
 	Cursor Cursor
 }
 
+// Parameters is implemented by search parameter types to produce
+// a normalized map of parameter name to AND-groups of OR-values.
 type Parameters interface {
-	Map() map[ParameterKey]MatchAll
+	Parse() map[string]AndGroup
 }
 
-// ParameterKey represents a key for a search parameter,
-// consisting of a name and an optional modifier.
-type ParameterKey struct {
-	// Name is the name of the search parameter.
-	Name string
-	// Modifier is an optional modifier that can be applied to the search parameter,
-	// such as `exact`, `contains`, `identifier`, etc.
+// OrGroup is a slice of values where one must match (OR logic).
+// In FHIR query terms: comma-separated values param=v1,v2
+type OrGroup []Value
+
+// AndGroup is a slice of AND entries where all must match.
+// In FHIR query terms: repeated parameters &param=v1&param=v2
+type AndGroup []AndEntry
+
+// AndEntry is one entry in an AND group.
+// Each entry has a group of OR'd values and an optional modifier.
+type AndEntry struct {
+	OrGroup
 	Modifier string
 }
 
-func (p ParameterKey) String() string {
-	if p.Modifier == "" {
-		return p.Name
-	} else {
-		return fmt.Sprintf("%s:%s", p.Name, p.Modifier)
-	}
+// Criteria is implemented by types that can be used as search parameter values.
+type Criteria interface {
+	ToAndGroup() AndGroup
 }
 
-func (p ParameterKey) MarshalText() ([]byte, error) {
-	return []byte(p.String()), nil
+func (a AndGroup) ToAndGroup() AndGroup {
+	return a
 }
 
+func (o OrGroup) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: o}}
+}
+
+// GenericParams is a map of parameter names (with optional :modifier suffix)
+// to search criteria.
 type GenericParams map[string]Criteria
 
-func (p GenericParams) Map() map[ParameterKey]MatchAll {
-	m := make(map[ParameterKey]MatchAll, len(p))
+func (p GenericParams) Parse() map[string]AndGroup {
+	m := make(map[string]AndGroup, len(p))
 	for k, v := range p {
 		splits := strings.Split(k, ":")
 		paramName := splits[0]
@@ -97,34 +107,20 @@ func (p GenericParams) Map() map[ParameterKey]MatchAll {
 		if len(splits) > 1 {
 			paramModifier = splits[1]
 		}
-		m[ParameterKey{Name: paramName, Modifier: paramModifier}] = v.MatchesAll()
+		for _, entry := range v.ToAndGroup() {
+			if paramModifier != "" && entry.Modifier == "" {
+				entry.Modifier = paramModifier
+			}
+			m[paramName] = append(m[paramName], entry)
+		}
 	}
 	return m
 }
 
-type internalParams map[ParameterKey]MatchAll
+type internalParams map[string]AndGroup
 
-func (p internalParams) Map() map[ParameterKey]MatchAll {
+func (p internalParams) Parse() map[string]AndGroup {
 	return p
-}
-
-type Criteria interface {
-	MatchesAll() MatchAll
-}
-
-// All represents a slice of possible values for a single search parameter where each of the entry has to match.
-type MatchAll []MatchAny
-
-func (a MatchAll) MatchesAll() MatchAll {
-	return a
-}
-
-// MatchAny represents a slice of possible values for a single search parameter,
-// where only one of the values has to match.
-type MatchAny []Value
-
-func (o MatchAny) MatchesAll() MatchAll {
-	return MatchAll{o}
 }
 
 type Type string
@@ -260,17 +256,16 @@ func ParseQuery(
 
 		default:
 			splits := strings.Split(k, ":")
-			param := ParameterKey{
-				Name: splits[0],
-			}
+			paramName := splits[0]
+			var paramModifier string
 			if len(splits) > 1 {
-				param.Modifier = splits[1]
+				paramModifier = splits[1]
 			}
 
-			canonical, ok := parameterDefinitions[param.Name]
+			canonical, ok := parameterDefinitions[paramName]
 			if !ok {
 				if strict {
-					return nil, Options{}, fmt.Errorf("unsupported search parameter: %s", param.String())
+					return nil, Options{}, fmt.Errorf("unsupported search parameter: %s", k)
 				}
 				// only known parameters are forwarded
 				continue
@@ -283,12 +278,12 @@ func ParseQuery(
 				continue
 			}
 
-			ands, err := parseSearchParam(param, v, sp, tz)
+			ands, err := parseSearchParam(paramName, paramModifier, v, sp, tz)
 			if err != nil {
 				return nil, Options{}, err
 			}
 
-			parameters[param] = ands
+			parameters[paramName] = append(parameters[paramName], ands...)
 		}
 	}
 
@@ -313,10 +308,10 @@ func parseCursor(values []string) (Cursor, error) {
 	return Cursor(values[0]), nil
 }
 
-func parseSearchParam(param ParameterKey, urlValues []string, sp model.Element, tz *time.Location) (MatchAll, error) {
+func parseSearchParam(paramName string, modifier string, urlValues []string, sp model.Element, tz *time.Location) (AndGroup, error) {
 	fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](sp.Children("type"))
 	if !ok || err != nil {
-		return MatchAll{}, fmt.Errorf("Parameter has no type: %v", sp)
+		return nil, fmt.Errorf("parameter has no type: %v", sp)
 	}
 	resolvedType := Type(fhirpathType)
 
@@ -324,37 +319,37 @@ func parseSearchParam(param ParameterKey, urlValues []string, sp model.Element, 
 	for _, e := range sp.Children("modifier") {
 		m, ok, err := e.ToString(false)
 		if !ok || err != nil {
-			return MatchAll{}, fmt.Errorf("parameter error reading modifiers: %v", sp)
+			return nil, fmt.Errorf("parameter error reading modifiers: %v", sp)
 		}
 		supportedModifiers = append(supportedModifiers, string(m))
 	}
 
 	// When the :identifier modifier is used, the search value works as a token search.
-	if resolvedType == TypeReference && param.Modifier == "identifier" {
+	if resolvedType == TypeReference && modifier == "identifier" {
 		resolvedType = TypeToken
 	}
 
 	// empty modifiers in SearchParameters should mean all are supported
-	if param.Modifier != "" && (len(supportedModifiers) == 0 || !slices.Contains(supportedModifiers, string(param.Modifier))) {
-		return nil, fmt.Errorf("unsupported modifier for parameter %s, supported are: %s", param, supportedModifiers)
+	if modifier != "" && (len(supportedModifiers) == 0 || !slices.Contains(supportedModifiers, modifier)) {
+		return nil, fmt.Errorf("unsupported modifier for parameter %s:%s, supported are: %s", paramName, modifier, supportedModifiers)
 	}
 
-	matchAll := make(MatchAll, 0, len(urlValues))
+	result := make(AndGroup, 0, len(urlValues))
 	for _, urlValue := range urlValues {
 		splitStrings := strings.Split(urlValue, ",")
 
-		matchAny := make(MatchAny, 0, len(splitStrings))
+		orGroup := make(OrGroup, 0, len(splitStrings))
 		for _, s := range splitStrings {
 			value, err := parseSearchValue(resolvedType, s, tz)
 			if err != nil {
-				return nil, fmt.Errorf("invalid search value for parameter %s: %w", param, err)
+				return nil, fmt.Errorf("invalid search value for parameter %s: %w", paramName, err)
 			}
-			matchAny = append(matchAny, value)
+			orGroup = append(orGroup, value)
 		}
 
-		matchAll = append(matchAll, matchAny)
+		result = append(result, AndEntry{OrGroup: orGroup, Modifier: modifier})
 	}
-	return matchAll, nil
+	return result, nil
 }
 
 func parseSearchValue(paramType Type, value string, tz *time.Location) (Value, error) {
@@ -563,27 +558,24 @@ func BuildQuery(parameters Parameters, opts Options) string {
 	return builder.String()
 }
 
-// Query representing the search parameters.
-//
-// All contained values are sorted, but the returned [url.Values] is backed by a map.
-// To obtain a deterministic query string you can call [url.Values.Encode], because
-// it will sort the keys alphabetically.
+// parameterQuery builds url.Values from parsed parameters.
+// All contained values are sorted for deterministic output.
 func parameterQuery(p Parameters) url.Values {
 	values := url.Values{}
 
-	for key, criteria := range p.Map() {
-		for _, matchAny := range criteria.MatchesAll() {
-			if len(matchAny) == 0 {
+	for name, andGroup := range p.Parse() {
+		for _, entry := range andGroup {
+			if len(entry.OrGroup) == 0 {
 				continue
 			}
 
-			nameWithModifier := key.Name
-			if key.Modifier != "" {
-				nameWithModifier = fmt.Sprintf("%s:%s", key.Name, key.Modifier)
+			nameWithModifier := name
+			if entry.Modifier != "" {
+				nameWithModifier = fmt.Sprintf("%s:%s", name, entry.Modifier)
 			}
 
-			s := make([]string, 0, len(matchAny))
-			for _, v := range matchAny {
+			s := make([]string, 0, len(entry.OrGroup))
+			for _, v := range entry.OrGroup {
 				s = append(s, v.String())
 			}
 			slices.Sort(s)
@@ -591,7 +583,6 @@ func parameterQuery(p Parameters) url.Values {
 			values.Add(nameWithModifier, strings.Join(s, ","))
 			slices.Sort(values[nameWithModifier])
 		}
-
 	}
 
 	return values
@@ -613,8 +604,8 @@ type Number struct {
 	Value  *apd.Decimal
 }
 
-func (n Number) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{n}}
+func (n Number) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{n}}}
 }
 
 func (n Number) String() string {
@@ -675,8 +666,8 @@ func ParseDate(value string, tz *time.Location) (time.Time, DatePrecision, error
 	return time.Time{}, "", err
 }
 
-func (d Date) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{d}}
+func (d Date) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{d}}}
 }
 
 func (d Date) String() string {
@@ -701,8 +692,8 @@ func (d Date) String() string {
 
 type String string
 
-func (s String) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{s}}
+func (s String) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{s}}}
 }
 
 func (s String) String() string {
@@ -723,8 +714,8 @@ func (t Token) String() string {
 	}
 }
 
-func (t Token) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{t}}
+func (t Token) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{t}}}
 }
 
 type Reference struct {
@@ -735,8 +726,8 @@ type Reference struct {
 	Version  string
 }
 
-func (r Reference) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{r}}
+func (r Reference) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{r}}}
 }
 
 func (r Reference) String() string {
@@ -771,8 +762,8 @@ func (c Composite) String() string {
 	return strings.Join(c, "$")
 }
 
-func (c Composite) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{c}}
+func (c Composite) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{c}}}
 }
 
 type Quantity struct {
@@ -782,8 +773,8 @@ type Quantity struct {
 	Code   string
 }
 
-func (q Quantity) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{q}}
+func (q Quantity) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{q}}}
 }
 
 func (q Quantity) String() string {
@@ -808,15 +799,15 @@ func (u Uri) String() string {
 	return u.Value.String()
 }
 
-func (u Uri) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{u}}
+func (u Uri) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{u}}}
 }
 
 // Special string contains potential prefixes
 type Special string
 
-func (s Special) MatchesAll() MatchAll {
-	return MatchAll{MatchAny{s}}
+func (s Special) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: OrGroup{s}}}
 }
 
 func (s Special) String() string {

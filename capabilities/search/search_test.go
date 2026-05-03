@@ -1,7 +1,6 @@
 package search_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/cockroachdb/apd/v3"
 	"github.com/damedic/fhir-toolbox-go/capabilities/search"
@@ -33,7 +32,7 @@ func TestParseAndToString(t *testing.T) {
 					},
 				},
 			},
-			parameters: search.GenericParams{"number": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
+			parameters: search.GenericParams{"number": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Number{Value: apd.New(100, -3)}}}}},
 			options:    search.Options{},
 			want:       "number=0.100",
 		},
@@ -46,7 +45,7 @@ func TestParseAndToString(t *testing.T) {
 					},
 				},
 			},
-			parameters: search.GenericParams{"number": search.MatchAll{{search.Number{Prefix: search.PrefixGreaterOrEqual, Value: apd.New(100, -3)}}}},
+			parameters: search.GenericParams{"number": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Number{Prefix: search.PrefixGreaterOrEqual, Value: apd.New(100, -3)}}}}},
 			options:    search.Options{},
 			want:       "number=ge0.100",
 		},
@@ -60,7 +59,7 @@ func TestParseAndToString(t *testing.T) {
 					},
 				},
 			},
-			parameters: search.GenericParams{"number:missing": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
+			parameters: search.GenericParams{"number:missing": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Number{Value: apd.New(100, -3)}}}}},
 			options:    search.Options{},
 			want:       "number:missing=0.100",
 		},
@@ -73,7 +72,7 @@ func TestParseAndToString(t *testing.T) {
 					},
 				},
 			},
-			parameters: search.GenericParams{"number": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
+			parameters: search.GenericParams{"number": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Number{Value: apd.New(100, -3)}}}}},
 			options:    search.Options{Count: 100},
 			want:       "number=0.100&_count=100",
 		},
@@ -86,7 +85,7 @@ func TestParseAndToString(t *testing.T) {
 					},
 				},
 			},
-			parameters: search.GenericParams{"number": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
+			parameters: search.GenericParams{"number": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Number{Value: apd.New(100, -3)}}}}},
 			options:    search.Options{Count: 1000},
 			want:       "number=0.100&_count=500",
 		},
@@ -100,10 +99,10 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"date": search.MatchAll{{search.Date{
+				"date": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Date{
 					Value:     time.Date(2024, time.December, 25, 0, 0, 0, 0, time.UTC),
 					Precision: search.PrecisionDay,
-				}}},
+				}}}},
 			},
 			options: search.Options{},
 			want:    "date=2024-12-25",
@@ -118,7 +117,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"string": search.MatchAll{{search.String("example")}},
+				"string": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.String("example")}}},
 			},
 			options: search.Options{},
 			want:    "string=example",
@@ -133,9 +132,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"token": search.MatchAll{
-					{search.Token{Code: "value"}},
-				},
+				"token": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Token{Code: "value"}}}},
 			},
 			options: search.Options{},
 			want:    "token=value",
@@ -150,7 +147,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"token": search.MatchAll{{search.Token{System: &url.URL{Scheme: "scheme", Host: "system"}, Code: "value"}}},
+				"token": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Token{System: &url.URL{Scheme: "scheme", Host: "system"}, Code: "value"}}}},
 			},
 			options: search.Options{},
 			want:    "token=scheme://system|value",
@@ -165,7 +162,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"ref": search.MatchAll{{search.Reference{Type: "Patient", Id: "123"}}},
+				"ref": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Reference{Type: "Patient", Id: "123"}}}},
 			},
 			options: search.Options{},
 			want:    "ref=Patient/123",
@@ -180,7 +177,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"ref": search.MatchAll{{search.Reference{Type: "Patient", Id: "123", Version: "456"}}},
+				"ref": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Reference{Type: "Patient", Id: "123", Version: "456"}}}},
 			},
 			options: search.Options{},
 			want:    "ref=Patient/123/_history/456",
@@ -195,7 +192,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"ref": search.MatchAll{{search.Reference{URL: &url.URL{Scheme: "scheme", Host: "host"}}}},
+				"ref": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Reference{URL: &url.URL{Scheme: "scheme", Host: "host"}}}}},
 			},
 			options: search.Options{},
 			want:    "ref=scheme://host",
@@ -210,7 +207,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"ref": search.MatchAll{{search.Reference{URL: &url.URL{Scheme: "scheme", Host: "host"}, Version: "456"}}},
+				"ref": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Reference{URL: &url.URL{Scheme: "scheme", Host: "host"}, Version: "456"}}}},
 			},
 			options: search.Options{},
 			want:    "ref=scheme://host|456",
@@ -226,7 +223,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"ref:identifier": search.MatchAll{{search.Token{System: &url.URL{Scheme: "scheme", Host: "system"}, Code: "value"}}},
+				"ref:identifier": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Token{System: &url.URL{Scheme: "scheme", Host: "system"}, Code: "value"}}}},
 			},
 			options: search.Options{},
 			want:    "ref:identifier=scheme://system|value",
@@ -241,7 +238,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"composite": search.MatchAll{{search.Composite{"a", "b"}}},
+				"composite": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Composite{"a", "b"}}}},
 			},
 			options: search.Options{},
 			want:    "composite=a$b",
@@ -256,7 +253,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"quantity": search.MatchAll{{search.Quantity{Prefix: search.PrefixGreaterOrEqual, Value: apd.New(100, -3), System: &url.URL{Scheme: "scheme", Host: "host"}, Code: "code"}}},
+				"quantity": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Quantity{Prefix: search.PrefixGreaterOrEqual, Value: apd.New(100, -3), System: &url.URL{Scheme: "scheme", Host: "host"}, Code: "code"}}}},
 			},
 			options: search.Options{},
 			want:    "quantity=ge0.100|scheme://host|code",
@@ -271,7 +268,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"uri": search.MatchAll{{search.Uri{&url.URL{Scheme: "urn", Opaque: "oid:1.2.3.4.5"}}}},
+				"uri": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Uri{&url.URL{Scheme: "urn", Opaque: "oid:1.2.3.4.5"}}}}},
 			},
 			options: search.Options{},
 			want:    "uri=urn:oid:1.2.3.4.5",
@@ -286,7 +283,7 @@ func TestParseAndToString(t *testing.T) {
 				},
 			},
 			parameters: search.GenericParams{
-				"special": search.MatchAll{{search.Special("abc")}},
+				"special": search.AndGroup{search.AndEntry{OrGroup: search.OrGroup{search.Special("abc")}}},
 			},
 			options: search.Options{},
 			want:    "special=abc",
@@ -344,8 +341,8 @@ func TestParseAndToString(t *testing.T) {
 
 			tt.options.Count = min(tt.options.Count, 500)
 
-			if !cmp.Equal(parsedParameters.Map(), tt.parameters.Map(), cmpopts.EquateComparable(apd.Decimal{})) {
-				t.Errorf("ParseQuery() parameters = %v, want %v, diff: %s", parsedParameters.Map(), tt.parameters.Map(), cmp.Diff(parsedParameters.Map(), tt.parameters.Map(), cmpopts.EquateComparable(apd.Decimal{})))
+			if !cmp.Equal(parsedParameters.Parse(), tt.parameters.Parse(), cmpopts.EquateComparable(apd.Decimal{})) {
+				t.Errorf("ParseQuery() parameters = %v, want %v, diff: %s", parsedParameters.Parse(), tt.parameters.Parse(), cmp.Diff(parsedParameters.Parse(), tt.parameters.Parse(), cmpopts.EquateComparable(apd.Decimal{})))
 			}
 
 			if !cmp.Equal(parsedOptions, tt.options, cmpopts.EquateComparable(apd.Decimal{})) {
@@ -448,45 +445,6 @@ func TestParseQueryStrict(t *testing.T) {
 				if err != nil {
 					t.Errorf("Expected no error but got: %v", err)
 				}
-			}
-		})
-	}
-}
-
-func TestParametersMarshalJSON(t *testing.T) {
-	tests := []struct {
-		name      string
-		parameter search.GenericParams
-		expected  string
-	}{
-		{
-			name:      "No Modifier",
-			parameter: search.GenericParams{"exampleName": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
-			expected:  `{"exampleName":[[{"Prefix":"","Value":"0.100"}]]}`},
-		{
-			name:      "Modifier",
-			parameter: search.GenericParams{"exampleName:exact": search.MatchAll{{search.Number{Value: apd.New(100, -3)}}}},
-			expected:  `{"exampleName:exact":[[{"Prefix":"","Value":"0.100"}]]}`},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			data, err := json.Marshal(tt.parameter)
-			if err != nil {
-				t.Fatalf("MarshalJSON should not return an error: %v", err)
-			}
-
-			// Compare JSON by unmarshaling both strings to ensure they're equivalent
-			var expected, actual interface{}
-			if err := json.Unmarshal([]byte(tt.expected), &expected); err != nil {
-				t.Fatalf("Failed to unmarshal expected JSON: %v", err)
-			}
-			if err := json.Unmarshal(data, &actual); err != nil {
-				t.Fatalf("Failed to unmarshal actual JSON: %v", err)
-			}
-
-			if !cmp.Equal(expected, actual, cmpopts.EquateComparable(apd.Decimal{})) {
-				t.Errorf("JSON output does not match expected.\nExpected: %s\nActual: %s\nDiff: %s", tt.expected, string(data), cmp.Diff(expected, actual, cmpopts.EquateComparable(apd.Decimal{})))
 			}
 		})
 	}
