@@ -92,6 +92,36 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Modifier: name:exact=John
+	result, err = client.SearchPatient(context.Background(),
+		r4.PatientParams{
+			Name: search.Exact(search.String("John")),
+		},
+		search.Options{
+			Count: 5,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Mixed modifiers in AND: name:exact=John AND name:contains=Smith AND name=Peter
+	result, err = client.SearchPatient(context.Background(),
+		r4.PatientParams{
+			Name: search.And{
+				search.Exact(search.String("John")),
+				search.Contains(search.String("Smith")),
+				search.String("Peter"),
+			},
+		},
+		search.Options{
+			Count: 5,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Generic search parameters allow setting of modifiers
 	result, err = client.SearchPatient(context.Background(),
 		search.GenericParams{

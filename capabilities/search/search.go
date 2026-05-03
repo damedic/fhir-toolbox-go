@@ -134,6 +134,51 @@ func (o Or) toAndEntry() AndEntry {
 
 func (o Or) sealedCriteria() {}
 
+// ModifierArg is what modifier constructors accept: values and Or groups.
+// Modified and And do NOT satisfy this, this prevents nesting modifiers.
+type ModifierArg interface {
+	toModifiedAndEntry(modifier string) AndEntry
+}
+
+// Modified wraps a value or Or group with a search modifier (:exact, :not, etc.).
+// It satisfies Criteria[T] (top-level field assignment) and AndArg (inside And).
+// It does NOT satisfy OrArg (can't go in Or) or ModifierArg (can't nest modifiers).
+type Modified struct {
+	modifier string
+	arg      ModifierArg
+}
+
+func (m Modified) ToAndGroup() AndGroup {
+	return AndGroup{m.arg.toModifiedAndEntry(m.modifier)}
+}
+
+func (m Modified) toAndEntry() AndEntry {
+	return m.arg.toModifiedAndEntry(m.modifier)
+}
+
+func (m Modified) sealedCriteria() {}
+
+// Convenience constructors for FHIR search modifiers.
+// See https://hl7.org/fhir/search.html#modifiers for full spec.
+func Exact(v ModifierArg) Modified        { return Modified{modifier: "exact", arg: v} }
+func Contains(v ModifierArg) Modified     { return Modified{modifier: "contains", arg: v} }
+func Text(v ModifierArg) Modified         { return Modified{modifier: "text", arg: v} }
+func TextAdvanced(v ModifierArg) Modified { return Modified{modifier: "text-advanced", arg: v} }
+func CodeText(v ModifierArg) Modified     { return Modified{modifier: "code-text", arg: v} }
+func Not(v ModifierArg) Modified          { return Modified{modifier: "not", arg: v} }
+func Missing(v ModifierArg) Modified      { return Modified{modifier: "missing", arg: v} }
+func In(v ModifierArg) Modified           { return Modified{modifier: "in", arg: v} }
+func NotIn(v ModifierArg) Modified        { return Modified{modifier: "not-in", arg: v} }
+func Above(v ModifierArg) Modified        { return Modified{modifier: "above", arg: v} }
+func Below(v ModifierArg) Modified        { return Modified{modifier: "below", arg: v} }
+func OfType(v ModifierArg) Modified       { return Modified{modifier: "of-type", arg: v} }
+func Identifier(v ModifierArg) Modified   { return Modified{modifier: "identifier", arg: v} }
+
+// As specifies a concrete resource type for a reference modifier (e.g., :Patient).
+func As(resourceType string, v ModifierArg) Modified {
+	return Modified{modifier: resourceType, arg: v}
+}
+
 // GenericParams is a map of parameter names (with optional :modifier suffix)
 // to search criteria.
 type GenericParams map[string]Criteria[Value]
@@ -864,6 +909,40 @@ func (c Composite) toAndEntry() AndEntry { return AndEntry{OrGroup: OrGroup{c}} 
 func (q Quantity) toAndEntry() AndEntry  { return AndEntry{OrGroup: OrGroup{q}} }
 func (u Uri) toAndEntry() AndEntry       { return AndEntry{OrGroup: OrGroup{u}} }
 func (s Special) toAndEntry() AndEntry   { return AndEntry{OrGroup: OrGroup{s}} }
+
+// ModifierArg implementations for value types
+func (n Number) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{n}, Modifier: mod}
+}
+func (d Date) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{d}, Modifier: mod}
+}
+func (s String) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{s}, Modifier: mod}
+}
+func (t Token) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{t}, Modifier: mod}
+}
+func (r Reference) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{r}, Modifier: mod}
+}
+func (c Composite) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{c}, Modifier: mod}
+}
+func (q Quantity) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{q}, Modifier: mod}
+}
+func (u Uri) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{u}, Modifier: mod}
+}
+func (s Special) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: OrGroup{s}, Modifier: mod}
+}
+
+// ModifierArg implementation for Or
+func (o Or) toModifiedAndEntry(mod string) AndEntry {
+	return AndEntry{OrGroup: o.toOrGroup(), Modifier: mod}
+}
 
 // OrArg implementations for value types
 func (n Number) toOrEntry() Value    { return n }

@@ -50,7 +50,7 @@ func TestParseAndToString(t *testing.T) {
 			want:       "number=ge0.100",
 		},
 		{
-			name: "number with modifer (disabled - modifiers need constants)",
+			name: "number with modifer",
 			capabilities: r4.SearchCapabilities{
 				Parameters: map[string]r4.SearchParameter{
 					"number": {
@@ -213,7 +213,7 @@ func TestParseAndToString(t *testing.T) {
 			want:    "ref=scheme://host|456",
 		},
 		{
-			name: "reference identifier modifier (treated as token) (disabled - modifiers need constants)",
+			name: "reference identifier modifier (treated as token)",
 			capabilities: r4.SearchCapabilities{
 				Parameters: map[string]r4.SearchParameter{
 					"ref": {
@@ -445,6 +445,60 @@ func TestParseQueryStrict(t *testing.T) {
 				if err != nil {
 					t.Errorf("Expected no error but got: %v", err)
 				}
+			}
+		})
+	}
+}
+
+func TestModifiedBuildQuery(t *testing.T) {
+	tests := []struct {
+		name       string
+		parameters search.Parameters
+		want       string
+	}{
+		{
+			name:       "single modifier",
+			parameters: search.GenericParams{"name": search.Exact(search.String("John"))},
+			want:       "name:exact=John",
+		},
+		{
+			name:       "modifier on Or group",
+			parameters: search.GenericParams{"name": search.Exact(search.Or{search.String("John"), search.String("Jane")})},
+			want:       "name:exact=Jane,John",
+		},
+		{
+			name: "mixed modifiers in And",
+			parameters: search.GenericParams{"name": search.And{
+				search.Exact(search.String("John")),
+				search.Contains(search.String("Smith")),
+				search.String("Peter"),
+			}},
+			want: "name:contains=Smith&name:exact=John&name=Peter",
+		},
+		{
+			name:       "missing modifier",
+			parameters: search.GenericParams{"date": search.Missing(search.String("true"))},
+			want:       "date:missing=true",
+		},
+		{
+			name:       "reference type modifier with As",
+			parameters: search.GenericParams{"subject": search.As("Patient", search.String("123"))},
+			want:       "subject:Patient=123",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := search.BuildQuery(tt.parameters, search.Options{})
+			wantValues, err := url.ParseQuery(tt.want)
+			if err != nil {
+				t.Fatalf("Failed to parse want query: %v", err)
+			}
+			gotValues, err := url.ParseQuery(got)
+			if err != nil {
+				t.Fatalf("Failed to parse got query: %v", err)
+			}
+			if !cmp.Equal(wantValues, gotValues) {
+				t.Errorf("BuildQuery() = %q, want %q, diff: %s", got, tt.want, cmp.Diff(wantValues, gotValues))
 			}
 		})
 	}
