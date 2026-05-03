@@ -27,14 +27,15 @@ package search
 
 import (
 	"fmt"
-	"github.com/cockroachdb/apd/v3"
-	"github.com/damedic/fhir-toolbox-go/fhirpath"
-	"github.com/damedic/fhir-toolbox-go/model"
 	"net/url"
 	"slices"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/cockroachdb/apd/v3"
+	"github.com/damedic/fhir-toolbox-go/fhirpath"
+	"github.com/damedic/fhir-toolbox-go/model"
 )
 
 // Result contains the result of a search operation.
@@ -70,10 +71,6 @@ type Parameters interface {
 // In FHIR query terms: comma-separated values param=v1,v2
 type OrGroup []Value
 
-// AndGroup is a slice of AND entries where all must match.
-// In FHIR query terms: repeated parameters &param=v1&param=v2
-type AndGroup []AndEntry
-
 // AndEntry is one entry in an AND group.
 // Each entry has a group of OR'd values and an optional modifier.
 type AndEntry struct {
@@ -81,22 +78,65 @@ type AndEntry struct {
 	Modifier string
 }
 
-// Criteria is implemented by types that can be used as search parameter values.
-type Criteria interface {
+// AndGroup is a slice of AND entries where all must match.
+// In FHIR query terms: repeated parameters &param=v1&param=v2
+type AndGroup []AndEntry
+
+// Criteria is a sealed generic interface for search parameter field types.
+// The type parameter T documents which value types are valid for a given field.
+// Single values, Or, and And all satisfy this interface.
+type Criteria[T any] interface {
 	ToAndGroup() AndGroup
+	sealedCriteria()
 }
 
-func (a AndGroup) ToAndGroup() AndGroup {
-	return a
+// AndArg is what can appear in a client-side And: single values or Or groups.
+type AndArg interface {
+	toAndEntry() AndEntry
 }
 
-func (o OrGroup) ToAndGroup() AndGroup {
-	return AndGroup{AndEntry{OrGroup: o}}
+// And is a client-side AND group. Elements can be single values or Or groups.
+type And []AndArg
+
+func (a And) ToAndGroup() AndGroup {
+	result := make(AndGroup, len(a))
+	for i, arg := range a {
+		result[i] = arg.toAndEntry()
+	}
+	return result
 }
+
+func (a And) sealedCriteria() {}
+
+// OrArg is what can appear in a client-side Or: single values only.
+type OrArg interface {
+	toOrEntry() Value
+}
+
+// Or is a client-side OR group. Elements are single values.
+type Or []OrArg
+
+func (o Or) toOrGroup() OrGroup {
+	result := make(OrGroup, len(o))
+	for i, arg := range o {
+		result[i] = arg.toOrEntry()
+	}
+	return result
+}
+
+func (o Or) ToAndGroup() AndGroup {
+	return AndGroup{AndEntry{OrGroup: o.toOrGroup()}}
+}
+
+func (o Or) toAndEntry() AndEntry {
+	return AndEntry{OrGroup: o.toOrGroup()}
+}
+
+func (o Or) sealedCriteria() {}
 
 // GenericParams is a map of parameter names (with optional :modifier suffix)
 // to search criteria.
-type GenericParams map[string]Criteria
+type GenericParams map[string]Criteria[Value]
 
 func (p GenericParams) Parse() map[string]AndGroup {
 	m := make(map[string]AndGroup, len(p))
@@ -595,8 +635,8 @@ func parameterQuery(p Parameters) url.Values {
 //	  // handle search parameter of type number
 //	}
 type Value interface {
-	Criteria
 	fmt.Stringer
+	sealedValue()
 }
 
 type Number struct {
@@ -814,89 +854,46 @@ func (s Special) String() string {
 	return string(s)
 }
 
-// Sealed interfaces for search parameters that accept both typed values and String
-//
-// These interfaces provide more flexible client usage by allowing both strongly-typed
-// search values (like Date, Token) and simple string values.
-//
-// Examples:
-//   params.Birthdate = search.Date{Value: time.Now(), Prefix: "ge"}  // strongly typed
-//   params.Birthdate = search.String("ge2000-01-01")                 // string-based
-//
-// The sealed nature (via private methods) ensures only the appropriate search types
-// can implement these interfaces, maintaining type safety while providing flexibility.
+// AndArg implementations for value types (wraps single value in AndEntry)
+func (n Number) toAndEntry() AndEntry    { return AndEntry{OrGroup: OrGroup{n}} }
+func (d Date) toAndEntry() AndEntry      { return AndEntry{OrGroup: OrGroup{d}} }
+func (s String) toAndEntry() AndEntry    { return AndEntry{OrGroup: OrGroup{s}} }
+func (t Token) toAndEntry() AndEntry     { return AndEntry{OrGroup: OrGroup{t}} }
+func (r Reference) toAndEntry() AndEntry { return AndEntry{OrGroup: OrGroup{r}} }
+func (c Composite) toAndEntry() AndEntry { return AndEntry{OrGroup: OrGroup{c}} }
+func (q Quantity) toAndEntry() AndEntry  { return AndEntry{OrGroup: OrGroup{q}} }
+func (u Uri) toAndEntry() AndEntry       { return AndEntry{OrGroup: OrGroup{u}} }
+func (s Special) toAndEntry() AndEntry   { return AndEntry{OrGroup: OrGroup{s}} }
 
-// StringOrString is a sealed interface that accepts String values
-type StringOrString interface {
-	Criteria
-	sealedStringOrString()
-}
+// OrArg implementations for value types
+func (n Number) toOrEntry() Value    { return n }
+func (d Date) toOrEntry() Value      { return d }
+func (s String) toOrEntry() Value    { return s }
+func (t Token) toOrEntry() Value     { return t }
+func (r Reference) toOrEntry() Value { return r }
+func (c Composite) toOrEntry() Value { return c }
+func (q Quantity) toOrEntry() Value  { return q }
+func (u Uri) toOrEntry() Value       { return u }
+func (s Special) toOrEntry() Value   { return s }
 
-// TokenOrString is a sealed interface that accepts Token and String values
-type TokenOrString interface {
-	Criteria
-	sealedTokenOrString()
-}
+// Value sealed implementations
+func (n Number) sealedValue()    {}
+func (d Date) sealedValue()      {}
+func (s String) sealedValue()    {}
+func (t Token) sealedValue()     {}
+func (r Reference) sealedValue() {}
+func (c Composite) sealedValue() {}
+func (q Quantity) sealedValue()  {}
+func (u Uri) sealedValue()       {}
+func (s Special) sealedValue()   {}
 
-// DateOrString is a sealed interface that accepts Date and String values
-type DateOrString interface {
-	Criteria
-	sealedDateOrString()
-}
-
-// ReferenceOrString is a sealed interface that accepts Reference and String values
-type ReferenceOrString interface {
-	Criteria
-	sealedReferenceOrString()
-}
-
-// QuantityOrString is a sealed interface that accepts Quantity and String values
-type QuantityOrString interface {
-	Criteria
-	sealedQuantityOrString()
-}
-
-// NumberOrString is a sealed interface that accepts Number and String values
-type NumberOrString interface {
-	Criteria
-	sealedNumberOrString()
-}
-
-// UriOrString is a sealed interface that accepts Uri and String values
-type UriOrString interface {
-	Criteria
-	sealedUriOrString()
-}
-
-// CompositeOrString is a sealed interface that accepts Composite and String values
-type CompositeOrString interface {
-	Criteria
-	sealedCompositeOrString()
-}
-
-// SpecialOrString is a sealed interface that accepts Special and String values
-type SpecialOrString interface {
-	Criteria
-	sealedSpecialOrString()
-}
-
-// Sealed interface implementations - String can be used for any parameter type
-func (s String) sealedStringOrString()    {}
-func (s String) sealedTokenOrString()     {}
-func (s String) sealedDateOrString()      {}
-func (s String) sealedReferenceOrString() {}
-func (s String) sealedQuantityOrString()  {}
-func (s String) sealedNumberOrString()    {}
-func (s String) sealedUriOrString()       {}
-func (s String) sealedCompositeOrString() {}
-func (s String) sealedSpecialOrString()   {}
-
-// Typed implementations
-func (t Token) sealedTokenOrString()         {}
-func (d Date) sealedDateOrString()           {}
-func (r Reference) sealedReferenceOrString() {}
-func (q Quantity) sealedQuantityOrString()   {}
-func (n Number) sealedNumberOrString()       {}
-func (u Uri) sealedUriOrString()             {}
-func (c Composite) sealedCompositeOrString() {}
-func (s Special) sealedSpecialOrString()     {}
+// Criteria sealed implementations
+func (n Number) sealedCriteria()    {}
+func (d Date) sealedCriteria()      {}
+func (s String) sealedCriteria()    {}
+func (t Token) sealedCriteria()     {}
+func (r Reference) sealedCriteria() {}
+func (c Composite) sealedCriteria() {}
+func (q Quantity) sealedCriteria()  {}
+func (u Uri) sealedCriteria()       {}
+func (s Special) sealedCriteria()   {}

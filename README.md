@@ -41,7 +41,7 @@ go get github.com/damedic/fhir-toolbox-go
       interactions)
     - Advanced search parameter handling with full SearchParameter resource support
     - Cursor-based pagination
-- Fully typed client implementation
+- Client implementation with resource-specific methods and typed search parameters
     - Interactions: `create`, `read`, `update`, `delete`, `search`, `$operations`
 - FHIRPath evaluation
 	- [FHIRPath v2.0.0](https://hl7.org/fhirpath/N1/) support, including UCUM quantity conversions (see [below for more information](#fhirpath))

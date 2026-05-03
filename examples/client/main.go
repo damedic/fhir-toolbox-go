@@ -3,16 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/damedic/fhir-toolbox-go/capabilities/search"
-	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
-	"github.com/damedic/fhir-toolbox-go/rest"
 	"io"
 	"log"
 	"net/url"
+
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
+	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
+	"github.com/damedic/fhir-toolbox-go/rest"
 )
 
 func main() {
-	baseURL, err := url.Parse("https://server.fire.ly")
+	baseURL, err := url.Parse("https://hapi.fhir.org/baseR4")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,11 +30,59 @@ func main() {
 
 	fmt.Printf("Read patient:\n%s\n", patient)
 
-	// Search for patients using typed search parameters
+	// Search for patients using typed search parameters.
+	// Fields are Criteria[T] where T documents the primary value type (e.g., Date, Token).
+	// The correct type is not enforced at compile time, search.String can always be
+	// used as a convenient alternative to the typed value (e.g., String("ge2000") instead of Date{...}).
 	result, err := client.SearchPatient(context.Background(),
 		r4.PatientParams{
-			Birthdate: search.String("ge2000-01-01"), // Using String for date - search parameters accept string values for convenience
+			Birthdate: search.String("ge2000-01-01"),
 			Gender:    search.Token{Code: "female"},
+		},
+		search.Options{
+			Count: 5,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// AND: birthdate >= 2000 AND birthdate <= 2024
+	// Produces: ?birthdate=ge2000-01-01&birthdate=le2024-12-31
+	result, err = client.SearchPatient(context.Background(),
+		r4.PatientParams{
+			Birthdate: search.And{search.String("ge2000-01-01"), search.String("le2024-12-31")},
+		},
+		search.Options{
+			Count: 5,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// OR: name = "John" OR "Jane"
+	// Produces: ?name=Jane,John
+	result, err = client.SearchPatient(context.Background(),
+		r4.PatientParams{
+			Name: search.Or{search.String("John"), search.String("Jane")},
+		},
+		search.Options{
+			Count: 5,
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// AND of OR: (name = "John" OR "Jane") AND (name = "Smith" OR "Doe")
+	// Produces: ?name=Jane,John&name=Doe,Smith
+	result, err = client.SearchPatient(context.Background(),
+		r4.PatientParams{
+			Name: search.And{
+				search.Or{search.String("John"), search.String("Jane")},
+				search.Or{search.String("Smith"), search.String("Doe")},
+			},
 		},
 		search.Options{
 			Count: 5,

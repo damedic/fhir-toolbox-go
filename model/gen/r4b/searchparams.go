@@ -13,14 +13,14 @@ import search "github.com/damedic/fhir-toolbox-go/capabilities/search"
 // AccountParams contains typed search parameters for Account resources.
 type AccountParams struct {
 	// Account-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Name       search.StringOrString    `json:"name,omitempty"`
-	Owner      search.ReferenceOrString `json:"owner,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Period     search.DateOrString      `json:"period,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name       search.Criteria[search.String]    `json:"name,omitempty"`
+	Owner      search.Criteria[search.Reference] `json:"owner,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Period     search.Criteria[search.Date]      `json:"period,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AccountParams.
@@ -58,28 +58,28 @@ func (p AccountParams) Parse() map[string]search.AndGroup {
 // ActivityDefinitionParams contains typed search parameters for ActivityDefinition resources.
 type ActivityDefinitionParams struct {
 	// ActivityDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ActivityDefinitionParams.
@@ -159,14 +159,14 @@ func (p ActivityDefinitionParams) Parse() map[string]search.AndGroup {
 // AdministrableProductDefinitionParams contains typed search parameters for AdministrableProductDefinition resources.
 type AdministrableProductDefinitionParams struct {
 	// AdministrableProductDefinition-specific search parameters
-	Device           search.ReferenceOrString `json:"device,omitempty"`
-	DoseForm         search.TokenOrString     `json:"dose-form,omitempty"`
-	FormOf           search.ReferenceOrString `json:"form-of,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	Ingredient       search.TokenOrString     `json:"ingredient,omitempty"`
-	ManufacturedItem search.ReferenceOrString `json:"manufactured-item,omitempty"`
-	Route            search.TokenOrString     `json:"route,omitempty"`
-	TargetSpecies    search.TokenOrString     `json:"target-species,omitempty"`
+	Device           search.Criteria[search.Reference] `json:"device,omitempty"`
+	DoseForm         search.Criteria[search.Token]     `json:"dose-form,omitempty"`
+	FormOf           search.Criteria[search.Reference] `json:"form-of,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Ingredient       search.Criteria[search.Token]     `json:"ingredient,omitempty"`
+	ManufacturedItem search.Criteria[search.Reference] `json:"manufactured-item,omitempty"`
+	Route            search.Criteria[search.Token]     `json:"route,omitempty"`
+	TargetSpecies    search.Criteria[search.Token]     `json:"target-species,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AdministrableProductDefinitionParams.
@@ -204,18 +204,18 @@ func (p AdministrableProductDefinitionParams) Parse() map[string]search.AndGroup
 // AdverseEventParams contains typed search parameters for AdverseEvent resources.
 type AdverseEventParams struct {
 	// AdverseEvent-specific search parameters
-	Actuality          search.TokenOrString     `json:"actuality,omitempty"`
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Event              search.TokenOrString     `json:"event,omitempty"`
-	Location           search.ReferenceOrString `json:"location,omitempty"`
-	Recorder           search.ReferenceOrString `json:"recorder,omitempty"`
-	Resultingcondition search.ReferenceOrString `json:"resultingcondition,omitempty"`
-	Seriousness        search.TokenOrString     `json:"seriousness,omitempty"`
-	Severity           search.TokenOrString     `json:"severity,omitempty"`
-	Study              search.ReferenceOrString `json:"study,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
-	Substance          search.ReferenceOrString `json:"substance,omitempty"`
+	Actuality          search.Criteria[search.Token]     `json:"actuality,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Event              search.Criteria[search.Token]     `json:"event,omitempty"`
+	Location           search.Criteria[search.Reference] `json:"location,omitempty"`
+	Recorder           search.Criteria[search.Reference] `json:"recorder,omitempty"`
+	Resultingcondition search.Criteria[search.Reference] `json:"resultingcondition,omitempty"`
+	Seriousness        search.Criteria[search.Token]     `json:"seriousness,omitempty"`
+	Severity           search.Criteria[search.Token]     `json:"severity,omitempty"`
+	Study              search.Criteria[search.Reference] `json:"study,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Substance          search.Criteria[search.Reference] `json:"substance,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AdverseEventParams.
@@ -265,22 +265,22 @@ func (p AdverseEventParams) Parse() map[string]search.AndGroup {
 // AllergyIntoleranceParams contains typed search parameters for AllergyIntolerance resources.
 type AllergyIntoleranceParams struct {
 	// AllergyIntolerance-specific search parameters
-	Asserter           search.ReferenceOrString `json:"asserter,omitempty"`
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	ClinicalStatus     search.TokenOrString     `json:"clinical-status,omitempty"`
-	Code               search.TokenOrString     `json:"code,omitempty"`
-	Criticality        search.TokenOrString     `json:"criticality,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	LastDate           search.DateOrString      `json:"last-date,omitempty"`
-	Manifestation      search.TokenOrString     `json:"manifestation,omitempty"`
-	Onset              search.DateOrString      `json:"onset,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Recorder           search.ReferenceOrString `json:"recorder,omitempty"`
-	Route              search.TokenOrString     `json:"route,omitempty"`
-	Severity           search.TokenOrString     `json:"severity,omitempty"`
-	Type               search.TokenOrString     `json:"type,omitempty"`
-	VerificationStatus search.TokenOrString     `json:"verification-status,omitempty"`
+	Asserter           search.Criteria[search.Reference] `json:"asserter,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	ClinicalStatus     search.Criteria[search.Token]     `json:"clinical-status,omitempty"`
+	Code               search.Criteria[search.Token]     `json:"code,omitempty"`
+	Criticality        search.Criteria[search.Token]     `json:"criticality,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	LastDate           search.Criteria[search.Date]      `json:"last-date,omitempty"`
+	Manifestation      search.Criteria[search.Token]     `json:"manifestation,omitempty"`
+	Onset              search.Criteria[search.Date]      `json:"onset,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Recorder           search.Criteria[search.Reference] `json:"recorder,omitempty"`
+	Route              search.Criteria[search.Token]     `json:"route,omitempty"`
+	Severity           search.Criteria[search.Token]     `json:"severity,omitempty"`
+	Type               search.Criteria[search.Token]     `json:"type,omitempty"`
+	VerificationStatus search.Criteria[search.Token]     `json:"verification-status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AllergyIntoleranceParams.
@@ -342,23 +342,23 @@ func (p AllergyIntoleranceParams) Parse() map[string]search.AndGroup {
 // AppointmentParams contains typed search parameters for Appointment resources.
 type AppointmentParams struct {
 	// Appointment-specific search parameters
-	Actor           search.ReferenceOrString `json:"actor,omitempty"`
-	AppointmentType search.TokenOrString     `json:"appointment-type,omitempty"`
-	BasedOn         search.ReferenceOrString `json:"based-on,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	PartStatus      search.TokenOrString     `json:"part-status,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Practitioner    search.ReferenceOrString `json:"practitioner,omitempty"`
-	ReasonCode      search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference search.ReferenceOrString `json:"reason-reference,omitempty"`
-	ServiceCategory search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType     search.TokenOrString     `json:"service-type,omitempty"`
-	Slot            search.ReferenceOrString `json:"slot,omitempty"`
-	Specialty       search.TokenOrString     `json:"specialty,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	SupportingInfo  search.ReferenceOrString `json:"supporting-info,omitempty"`
+	Actor           search.Criteria[search.Reference] `json:"actor,omitempty"`
+	AppointmentType search.Criteria[search.Token]     `json:"appointment-type,omitempty"`
+	BasedOn         search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartStatus      search.Criteria[search.Token]     `json:"part-status,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Practitioner    search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	ReasonCode      search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	ServiceCategory search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType     search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	Slot            search.Criteria[search.Reference] `json:"slot,omitempty"`
+	Specialty       search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	SupportingInfo  search.Criteria[search.Reference] `json:"supporting-info,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AppointmentParams.
@@ -423,13 +423,13 @@ func (p AppointmentParams) Parse() map[string]search.AndGroup {
 // AppointmentResponseParams contains typed search parameters for AppointmentResponse resources.
 type AppointmentResponseParams struct {
 	// AppointmentResponse-specific search parameters
-	Actor        search.ReferenceOrString `json:"actor,omitempty"`
-	Appointment  search.ReferenceOrString `json:"appointment,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Location     search.ReferenceOrString `json:"location,omitempty"`
-	PartStatus   search.TokenOrString     `json:"part-status,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Practitioner search.ReferenceOrString `json:"practitioner,omitempty"`
+	Actor        search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Appointment  search.Criteria[search.Reference] `json:"appointment,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location     search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartStatus   search.Criteria[search.Token]     `json:"part-status,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Practitioner search.Criteria[search.Reference] `json:"practitioner,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AppointmentResponseParams.
@@ -464,24 +464,24 @@ func (p AppointmentResponseParams) Parse() map[string]search.AndGroup {
 // AuditEventParams contains typed search parameters for AuditEvent resources.
 type AuditEventParams struct {
 	// AuditEvent-specific search parameters
-	Action     search.TokenOrString     `json:"action,omitempty"`
-	Address    search.StringOrString    `json:"address,omitempty"`
-	Agent      search.ReferenceOrString `json:"agent,omitempty"`
-	AgentName  search.StringOrString    `json:"agent-name,omitempty"`
-	AgentRole  search.TokenOrString     `json:"agent-role,omitempty"`
-	Altid      search.TokenOrString     `json:"altid,omitempty"`
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Entity     search.ReferenceOrString `json:"entity,omitempty"`
-	EntityName search.StringOrString    `json:"entity-name,omitempty"`
-	EntityRole search.TokenOrString     `json:"entity-role,omitempty"`
-	EntityType search.TokenOrString     `json:"entity-type,omitempty"`
-	Outcome    search.TokenOrString     `json:"outcome,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Policy     search.UriOrString       `json:"policy,omitempty"`
-	Site       search.TokenOrString     `json:"site,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
-	Subtype    search.TokenOrString     `json:"subtype,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
+	Action     search.Criteria[search.Token]     `json:"action,omitempty"`
+	Address    search.Criteria[search.String]    `json:"address,omitempty"`
+	Agent      search.Criteria[search.Reference] `json:"agent,omitempty"`
+	AgentName  search.Criteria[search.String]    `json:"agent-name,omitempty"`
+	AgentRole  search.Criteria[search.Token]     `json:"agent-role,omitempty"`
+	Altid      search.Criteria[search.Token]     `json:"altid,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Entity     search.Criteria[search.Reference] `json:"entity,omitempty"`
+	EntityName search.Criteria[search.String]    `json:"entity-name,omitempty"`
+	EntityRole search.Criteria[search.Token]     `json:"entity-role,omitempty"`
+	EntityType search.Criteria[search.Token]     `json:"entity-type,omitempty"`
+	Outcome    search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Policy     search.Criteria[search.Uri]       `json:"policy,omitempty"`
+	Site       search.Criteria[search.Token]     `json:"site,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
+	Subtype    search.Criteria[search.Token]     `json:"subtype,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for AuditEventParams.
@@ -549,12 +549,12 @@ func (p AuditEventParams) Parse() map[string]search.AndGroup {
 // BasicParams contains typed search parameters for Basic resources.
 type BasicParams struct {
 	// Basic-specific search parameters
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Created    search.DateOrString      `json:"created,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Created    search.Criteria[search.Date]      `json:"created,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for BasicParams.
@@ -606,10 +606,10 @@ func (p BiologicallyDerivedProductParams) Parse() map[string]search.AndGroup {
 // BodyStructureParams contains typed search parameters for BodyStructure resources.
 type BodyStructureParams struct {
 	// BodyStructure-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Location   search.TokenOrString     `json:"location,omitempty"`
-	Morphology search.TokenOrString     `json:"morphology,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location   search.Criteria[search.Token]     `json:"location,omitempty"`
+	Morphology search.Criteria[search.Token]     `json:"morphology,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for BodyStructureParams.
@@ -635,11 +635,11 @@ func (p BodyStructureParams) Parse() map[string]search.AndGroup {
 // BundleParams contains typed search parameters for Bundle resources.
 type BundleParams struct {
 	// Bundle-specific search parameters
-	Composition search.ReferenceOrString `json:"composition,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Message     search.ReferenceOrString `json:"message,omitempty"`
-	Timestamp   search.DateOrString      `json:"timestamp,omitempty"`
-	Type        search.TokenOrString     `json:"type,omitempty"`
+	Composition search.Criteria[search.Reference] `json:"composition,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Message     search.Criteria[search.Reference] `json:"message,omitempty"`
+	Timestamp   search.Criteria[search.Date]      `json:"timestamp,omitempty"`
+	Type        search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for BundleParams.
@@ -668,29 +668,29 @@ func (p BundleParams) Parse() map[string]search.AndGroup {
 // CapabilityStatementParams contains typed search parameters for CapabilityStatement resources.
 type CapabilityStatementParams struct {
 	// CapabilityStatement-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Fhirversion         search.TokenOrString     `json:"fhirversion,omitempty"`
-	Format              search.TokenOrString     `json:"format,omitempty"`
-	Guide               search.ReferenceOrString `json:"guide,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Mode                search.TokenOrString     `json:"mode,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Resource            search.TokenOrString     `json:"resource,omitempty"`
-	ResourceProfile     search.ReferenceOrString `json:"resource-profile,omitempty"`
-	SecurityService     search.TokenOrString     `json:"security-service,omitempty"`
-	Software            search.StringOrString    `json:"software,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	SupportedProfile    search.ReferenceOrString `json:"supported-profile,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Fhirversion         search.Criteria[search.Token]     `json:"fhirversion,omitempty"`
+	Format              search.Criteria[search.Token]     `json:"format,omitempty"`
+	Guide               search.Criteria[search.Reference] `json:"guide,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Mode                search.Criteria[search.Token]     `json:"mode,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Resource            search.Criteria[search.Token]     `json:"resource,omitempty"`
+	ResourceProfile     search.Criteria[search.Reference] `json:"resource-profile,omitempty"`
+	SecurityService     search.Criteria[search.Token]     `json:"security-service,omitempty"`
+	Software            search.Criteria[search.String]    `json:"software,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	SupportedProfile    search.Criteria[search.Reference] `json:"supported-profile,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CapabilityStatementParams.
@@ -773,26 +773,26 @@ func (p CapabilityStatementParams) Parse() map[string]search.AndGroup {
 // CarePlanParams contains typed search parameters for CarePlan resources.
 type CarePlanParams struct {
 	// CarePlan-specific search parameters
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	ActivityCode          search.TokenOrString     `json:"activity-code,omitempty"`
-	ActivityDate          search.DateOrString      `json:"activity-date,omitempty"`
-	ActivityReference     search.ReferenceOrString `json:"activity-reference,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	CareTeam              search.ReferenceOrString `json:"care-team,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	Condition             search.ReferenceOrString `json:"condition,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Goal                  search.ReferenceOrString `json:"goal,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	Replaces              search.ReferenceOrString `json:"replaces,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	ActivityCode          search.Criteria[search.Token]     `json:"activity-code,omitempty"`
+	ActivityDate          search.Criteria[search.Date]      `json:"activity-date,omitempty"`
+	ActivityReference     search.Criteria[search.Reference] `json:"activity-reference,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	CareTeam              search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	Condition             search.Criteria[search.Reference] `json:"condition,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Goal                  search.Criteria[search.Reference] `json:"goal,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Replaces              search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CarePlanParams.
@@ -866,14 +866,14 @@ func (p CarePlanParams) Parse() map[string]search.AndGroup {
 // CareTeamParams contains typed search parameters for CareTeam resources.
 type CareTeamParams struct {
 	// CareTeam-specific search parameters
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Category    search.TokenOrString     `json:"category,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Participant search.ReferenceOrString `json:"participant,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Category    search.Criteria[search.Token]     `json:"category,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Participant search.Criteria[search.Reference] `json:"participant,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CareTeamParams.
@@ -921,23 +921,23 @@ func (p CatalogEntryParams) Parse() map[string]search.AndGroup {
 // ChargeItemParams contains typed search parameters for ChargeItem resources.
 type ChargeItemParams struct {
 	// ChargeItem-specific search parameters
-	Account                search.ReferenceOrString `json:"account,omitempty"`
-	Code                   search.TokenOrString     `json:"code,omitempty"`
-	Context                search.ReferenceOrString `json:"context,omitempty"`
-	EnteredDate            search.DateOrString      `json:"entered-date,omitempty"`
-	Enterer                search.ReferenceOrString `json:"enterer,omitempty"`
-	FactorOverride         search.NumberOrString    `json:"factor-override,omitempty"`
-	Identifier             search.TokenOrString     `json:"identifier,omitempty"`
-	Occurrence             search.DateOrString      `json:"occurrence,omitempty"`
-	Patient                search.ReferenceOrString `json:"patient,omitempty"`
-	PerformerActor         search.ReferenceOrString `json:"performer-actor,omitempty"`
-	PerformerFunction      search.TokenOrString     `json:"performer-function,omitempty"`
-	PerformingOrganization search.ReferenceOrString `json:"performing-organization,omitempty"`
-	PriceOverride          search.QuantityOrString  `json:"price-override,omitempty"`
-	Quantity               search.QuantityOrString  `json:"quantity,omitempty"`
-	RequestingOrganization search.ReferenceOrString `json:"requesting-organization,omitempty"`
-	Service                search.ReferenceOrString `json:"service,omitempty"`
-	Subject                search.ReferenceOrString `json:"subject,omitempty"`
+	Account                search.Criteria[search.Reference] `json:"account,omitempty"`
+	Code                   search.Criteria[search.Token]     `json:"code,omitempty"`
+	Context                search.Criteria[search.Reference] `json:"context,omitempty"`
+	EnteredDate            search.Criteria[search.Date]      `json:"entered-date,omitempty"`
+	Enterer                search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	FactorOverride         search.Criteria[search.Number]    `json:"factor-override,omitempty"`
+	Identifier             search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Occurrence             search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	Patient                search.Criteria[search.Reference] `json:"patient,omitempty"`
+	PerformerActor         search.Criteria[search.Reference] `json:"performer-actor,omitempty"`
+	PerformerFunction      search.Criteria[search.Token]     `json:"performer-function,omitempty"`
+	PerformingOrganization search.Criteria[search.Reference] `json:"performing-organization,omitempty"`
+	PriceOverride          search.Criteria[search.Quantity]  `json:"price-override,omitempty"`
+	Quantity               search.Criteria[search.Quantity]  `json:"quantity,omitempty"`
+	RequestingOrganization search.Criteria[search.Reference] `json:"requesting-organization,omitempty"`
+	Service                search.Criteria[search.Reference] `json:"service,omitempty"`
+	Subject                search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ChargeItemParams.
@@ -1002,21 +1002,21 @@ func (p ChargeItemParams) Parse() map[string]search.AndGroup {
 // ChargeItemDefinitionParams contains typed search parameters for ChargeItemDefinition resources.
 type ChargeItemDefinitionParams struct {
 	// ChargeItemDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ChargeItemDefinitionParams.
@@ -1075,22 +1075,22 @@ func (p ChargeItemDefinitionParams) Parse() map[string]search.AndGroup {
 // CitationParams contains typed search parameters for Citation resources.
 type CitationParams struct {
 	// Citation-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CitationParams.
@@ -1152,23 +1152,23 @@ func (p CitationParams) Parse() map[string]search.AndGroup {
 // ClaimParams contains typed search parameters for Claim resources.
 type ClaimParams struct {
 	// Claim-specific search parameters
-	CareTeam     search.ReferenceOrString `json:"care-team,omitempty"`
-	Created      search.DateOrString      `json:"created,omitempty"`
-	DetailUdi    search.ReferenceOrString `json:"detail-udi,omitempty"`
-	Encounter    search.ReferenceOrString `json:"encounter,omitempty"`
-	Enterer      search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility     search.ReferenceOrString `json:"facility,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Insurer      search.ReferenceOrString `json:"insurer,omitempty"`
-	ItemUdi      search.ReferenceOrString `json:"item-udi,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Payee        search.ReferenceOrString `json:"payee,omitempty"`
-	Priority     search.TokenOrString     `json:"priority,omitempty"`
-	ProcedureUdi search.ReferenceOrString `json:"procedure-udi,omitempty"`
-	Provider     search.ReferenceOrString `json:"provider,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	SubdetailUdi search.ReferenceOrString `json:"subdetail-udi,omitempty"`
-	Use          search.TokenOrString     `json:"use,omitempty"`
+	CareTeam     search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Created      search.Criteria[search.Date]      `json:"created,omitempty"`
+	DetailUdi    search.Criteria[search.Reference] `json:"detail-udi,omitempty"`
+	Encounter    search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Enterer      search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility     search.Criteria[search.Reference] `json:"facility,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Insurer      search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	ItemUdi      search.Criteria[search.Reference] `json:"item-udi,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Payee        search.Criteria[search.Reference] `json:"payee,omitempty"`
+	Priority     search.Criteria[search.Token]     `json:"priority,omitempty"`
+	ProcedureUdi search.Criteria[search.Reference] `json:"procedure-udi,omitempty"`
+	Provider     search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubdetailUdi search.Criteria[search.Reference] `json:"subdetail-udi,omitempty"`
+	Use          search.Criteria[search.Token]     `json:"use,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ClaimParams.
@@ -1233,17 +1233,17 @@ func (p ClaimParams) Parse() map[string]search.AndGroup {
 // ClaimResponseParams contains typed search parameters for ClaimResponse resources.
 type ClaimResponseParams struct {
 	// ClaimResponse-specific search parameters
-	Created     search.DateOrString      `json:"created,omitempty"`
-	Disposition search.StringOrString    `json:"disposition,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Insurer     search.ReferenceOrString `json:"insurer,omitempty"`
-	Outcome     search.TokenOrString     `json:"outcome,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	PaymentDate search.DateOrString      `json:"payment-date,omitempty"`
-	Request     search.ReferenceOrString `json:"request,omitempty"`
-	Requestor   search.ReferenceOrString `json:"requestor,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Use         search.TokenOrString     `json:"use,omitempty"`
+	Created     search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Insurer     search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	Outcome     search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	PaymentDate search.Criteria[search.Date]      `json:"payment-date,omitempty"`
+	Request     search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor   search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Use         search.Criteria[search.Token]     `json:"use,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ClaimResponseParams.
@@ -1290,19 +1290,19 @@ func (p ClaimResponseParams) Parse() map[string]search.AndGroup {
 // ClinicalImpressionParams contains typed search parameters for ClinicalImpression resources.
 type ClinicalImpressionParams struct {
 	// ClinicalImpression-specific search parameters
-	Date           search.DateOrString      `json:"date,omitempty"`
-	Patient        search.ReferenceOrString `json:"patient,omitempty"`
-	Assessor       search.ReferenceOrString `json:"assessor,omitempty"`
-	Encounter      search.ReferenceOrString `json:"encounter,omitempty"`
-	FindingCode    search.TokenOrString     `json:"finding-code,omitempty"`
-	FindingRef     search.ReferenceOrString `json:"finding-ref,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Investigation  search.ReferenceOrString `json:"investigation,omitempty"`
-	Previous       search.ReferenceOrString `json:"previous,omitempty"`
-	Problem        search.ReferenceOrString `json:"problem,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
-	Subject        search.ReferenceOrString `json:"subject,omitempty"`
-	SupportingInfo search.ReferenceOrString `json:"supporting-info,omitempty"`
+	Date           search.Criteria[search.Date]      `json:"date,omitempty"`
+	Patient        search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Assessor       search.Criteria[search.Reference] `json:"assessor,omitempty"`
+	Encounter      search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	FindingCode    search.Criteria[search.Token]     `json:"finding-code,omitempty"`
+	FindingRef     search.Criteria[search.Reference] `json:"finding-ref,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Investigation  search.Criteria[search.Reference] `json:"investigation,omitempty"`
+	Previous       search.Criteria[search.Reference] `json:"previous,omitempty"`
+	Problem        search.Criteria[search.Reference] `json:"problem,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject        search.Criteria[search.Reference] `json:"subject,omitempty"`
+	SupportingInfo search.Criteria[search.Reference] `json:"supporting-info,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ClinicalImpressionParams.
@@ -1355,17 +1355,17 @@ func (p ClinicalImpressionParams) Parse() map[string]search.AndGroup {
 // ClinicalUseDefinitionParams contains typed search parameters for ClinicalUseDefinition resources.
 type ClinicalUseDefinitionParams struct {
 	// ClinicalUseDefinition-specific search parameters
-	Contraindication          search.TokenOrString     `json:"contraindication,omitempty"`
-	ContraindicationReference search.ReferenceOrString `json:"contraindication-reference,omitempty"`
-	Effect                    search.TokenOrString     `json:"effect,omitempty"`
-	EffectReference           search.ReferenceOrString `json:"effect-reference,omitempty"`
-	Identifier                search.TokenOrString     `json:"identifier,omitempty"`
-	Indication                search.TokenOrString     `json:"indication,omitempty"`
-	IndicationReference       search.ReferenceOrString `json:"indication-reference,omitempty"`
-	Interaction               search.TokenOrString     `json:"interaction,omitempty"`
-	Product                   search.ReferenceOrString `json:"product,omitempty"`
-	Subject                   search.ReferenceOrString `json:"subject,omitempty"`
-	Type                      search.TokenOrString     `json:"type,omitempty"`
+	Contraindication          search.Criteria[search.Token]     `json:"contraindication,omitempty"`
+	ContraindicationReference search.Criteria[search.Reference] `json:"contraindication-reference,omitempty"`
+	Effect                    search.Criteria[search.Token]     `json:"effect,omitempty"`
+	EffectReference           search.Criteria[search.Reference] `json:"effect-reference,omitempty"`
+	Identifier                search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Indication                search.Criteria[search.Token]     `json:"indication,omitempty"`
+	IndicationReference       search.Criteria[search.Reference] `json:"indication-reference,omitempty"`
+	Interaction               search.Criteria[search.Token]     `json:"interaction,omitempty"`
+	Product                   search.Criteria[search.Reference] `json:"product,omitempty"`
+	Subject                   search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type                      search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ClinicalUseDefinitionParams.
@@ -1412,26 +1412,26 @@ func (p ClinicalUseDefinitionParams) Parse() map[string]search.AndGroup {
 // CodeSystemParams contains typed search parameters for CodeSystem resources.
 type CodeSystemParams struct {
 	// CodeSystem-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	ContentMode         search.TokenOrString     `json:"content-mode,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Language            search.TokenOrString     `json:"language,omitempty"`
-	Supplements         search.ReferenceOrString `json:"supplements,omitempty"`
-	System              search.UriOrString       `json:"system,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	ContentMode         search.Criteria[search.Token]     `json:"content-mode,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Language            search.Criteria[search.Token]     `json:"language,omitempty"`
+	Supplements         search.Criteria[search.Reference] `json:"supplements,omitempty"`
+	System              search.Criteria[search.Uri]       `json:"system,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CodeSystemParams.
@@ -1505,21 +1505,21 @@ func (p CodeSystemParams) Parse() map[string]search.AndGroup {
 // CommunicationParams contains typed search parameters for Communication resources.
 type CommunicationParams struct {
 	// Communication-specific search parameters
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Medium                search.TokenOrString     `json:"medium,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Received              search.DateOrString      `json:"received,omitempty"`
-	Recipient             search.ReferenceOrString `json:"recipient,omitempty"`
-	Sender                search.ReferenceOrString `json:"sender,omitempty"`
-	Sent                  search.DateOrString      `json:"sent,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Medium                search.Criteria[search.Token]     `json:"medium,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Received              search.Criteria[search.Date]      `json:"received,omitempty"`
+	Recipient             search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Sender                search.Criteria[search.Reference] `json:"sender,omitempty"`
+	Sent                  search.Criteria[search.Date]      `json:"sent,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CommunicationParams.
@@ -1578,22 +1578,22 @@ func (p CommunicationParams) Parse() map[string]search.AndGroup {
 // CommunicationRequestParams contains typed search parameters for CommunicationRequest resources.
 type CommunicationRequestParams struct {
 	// CommunicationRequest-specific search parameters
-	Authored        search.DateOrString      `json:"authored,omitempty"`
-	BasedOn         search.ReferenceOrString `json:"based-on,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Encounter       search.ReferenceOrString `json:"encounter,omitempty"`
-	GroupIdentifier search.TokenOrString     `json:"group-identifier,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Medium          search.TokenOrString     `json:"medium,omitempty"`
-	Occurrence      search.DateOrString      `json:"occurrence,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Priority        search.TokenOrString     `json:"priority,omitempty"`
-	Recipient       search.ReferenceOrString `json:"recipient,omitempty"`
-	Replaces        search.ReferenceOrString `json:"replaces,omitempty"`
-	Requester       search.ReferenceOrString `json:"requester,omitempty"`
-	Sender          search.ReferenceOrString `json:"sender,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
+	Authored        search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn         search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Encounter       search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	GroupIdentifier search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Medium          search.Criteria[search.Token]     `json:"medium,omitempty"`
+	Occurrence      search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Priority        search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Recipient       search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Replaces        search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Requester       search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Sender          search.Criteria[search.Reference] `json:"sender,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CommunicationRequestParams.
@@ -1655,20 +1655,20 @@ func (p CommunicationRequestParams) Parse() map[string]search.AndGroup {
 // CompartmentDefinitionParams contains typed search parameters for CompartmentDefinition resources.
 type CompartmentDefinitionParams struct {
 	// CompartmentDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Resource            search.TokenOrString     `json:"resource,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Resource            search.Criteria[search.Token]     `json:"resource,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CompartmentDefinitionParams.
@@ -1724,24 +1724,24 @@ func (p CompartmentDefinitionParams) Parse() map[string]search.AndGroup {
 // CompositionParams contains typed search parameters for Composition resources.
 type CompositionParams struct {
 	// Composition-specific search parameters
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Type            search.TokenOrString     `json:"type,omitempty"`
-	Attester        search.ReferenceOrString `json:"attester,omitempty"`
-	Author          search.ReferenceOrString `json:"author,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Confidentiality search.TokenOrString     `json:"confidentiality,omitempty"`
-	Context         search.TokenOrString     `json:"context,omitempty"`
-	Encounter       search.ReferenceOrString `json:"encounter,omitempty"`
-	Entry           search.ReferenceOrString `json:"entry,omitempty"`
-	Period          search.DateOrString      `json:"period,omitempty"`
-	RelatedId       search.TokenOrString     `json:"related-id,omitempty"`
-	RelatedRef      search.ReferenceOrString `json:"related-ref,omitempty"`
-	Section         search.TokenOrString     `json:"section,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Title           search.StringOrString    `json:"title,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type            search.Criteria[search.Token]     `json:"type,omitempty"`
+	Attester        search.Criteria[search.Reference] `json:"attester,omitempty"`
+	Author          search.Criteria[search.Reference] `json:"author,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Confidentiality search.Criteria[search.Token]     `json:"confidentiality,omitempty"`
+	Context         search.Criteria[search.Token]     `json:"context,omitempty"`
+	Encounter       search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Entry           search.Criteria[search.Reference] `json:"entry,omitempty"`
+	Period          search.Criteria[search.Date]      `json:"period,omitempty"`
+	RelatedId       search.Criteria[search.Token]     `json:"related-id,omitempty"`
+	RelatedRef      search.Criteria[search.Reference] `json:"related-ref,omitempty"`
+	Section         search.Criteria[search.Token]     `json:"section,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Title           search.Criteria[search.String]    `json:"title,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CompositionParams.
@@ -1809,32 +1809,32 @@ func (p CompositionParams) Parse() map[string]search.AndGroup {
 // ConceptMapParams contains typed search parameters for ConceptMap resources.
 type ConceptMapParams struct {
 	// ConceptMap-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Dependson           search.UriOrString       `json:"dependson,omitempty"`
-	Other               search.ReferenceOrString `json:"other,omitempty"`
-	Product             search.UriOrString       `json:"product,omitempty"`
-	Source              search.ReferenceOrString `json:"source,omitempty"`
-	SourceCode          search.TokenOrString     `json:"source-code,omitempty"`
-	SourceSystem        search.UriOrString       `json:"source-system,omitempty"`
-	SourceUri           search.ReferenceOrString `json:"source-uri,omitempty"`
-	Target              search.ReferenceOrString `json:"target,omitempty"`
-	TargetCode          search.TokenOrString     `json:"target-code,omitempty"`
-	TargetSystem        search.UriOrString       `json:"target-system,omitempty"`
-	TargetUri           search.ReferenceOrString `json:"target-uri,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Dependson           search.Criteria[search.Uri]       `json:"dependson,omitempty"`
+	Other               search.Criteria[search.Reference] `json:"other,omitempty"`
+	Product             search.Criteria[search.Uri]       `json:"product,omitempty"`
+	Source              search.Criteria[search.Reference] `json:"source,omitempty"`
+	SourceCode          search.Criteria[search.Token]     `json:"source-code,omitempty"`
+	SourceSystem        search.Criteria[search.Uri]       `json:"source-system,omitempty"`
+	SourceUri           search.Criteria[search.Reference] `json:"source-uri,omitempty"`
+	Target              search.Criteria[search.Reference] `json:"target,omitempty"`
+	TargetCode          search.Criteria[search.Token]     `json:"target-code,omitempty"`
+	TargetSystem        search.Criteria[search.Uri]       `json:"target-system,omitempty"`
+	TargetUri           search.Criteria[search.Reference] `json:"target-uri,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ConceptMapParams.
@@ -1926,27 +1926,27 @@ func (p ConceptMapParams) Parse() map[string]search.AndGroup {
 // ConditionParams contains typed search parameters for Condition resources.
 type ConditionParams struct {
 	// Condition-specific search parameters
-	Code               search.TokenOrString     `json:"code,omitempty"`
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	AbatementAge       search.QuantityOrString  `json:"abatement-age,omitempty"`
-	AbatementDate      search.DateOrString      `json:"abatement-date,omitempty"`
-	AbatementString    search.StringOrString    `json:"abatement-string,omitempty"`
-	Asserter           search.ReferenceOrString `json:"asserter,omitempty"`
-	BodySite           search.TokenOrString     `json:"body-site,omitempty"`
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	ClinicalStatus     search.TokenOrString     `json:"clinical-status,omitempty"`
-	Encounter          search.ReferenceOrString `json:"encounter,omitempty"`
-	Evidence           search.TokenOrString     `json:"evidence,omitempty"`
-	EvidenceDetail     search.ReferenceOrString `json:"evidence-detail,omitempty"`
-	OnsetAge           search.QuantityOrString  `json:"onset-age,omitempty"`
-	OnsetDate          search.DateOrString      `json:"onset-date,omitempty"`
-	OnsetInfo          search.StringOrString    `json:"onset-info,omitempty"`
-	RecordedDate       search.DateOrString      `json:"recorded-date,omitempty"`
-	Severity           search.TokenOrString     `json:"severity,omitempty"`
-	Stage              search.TokenOrString     `json:"stage,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
-	VerificationStatus search.TokenOrString     `json:"verification-status,omitempty"`
+	Code               search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	AbatementAge       search.Criteria[search.Quantity]  `json:"abatement-age,omitempty"`
+	AbatementDate      search.Criteria[search.Date]      `json:"abatement-date,omitempty"`
+	AbatementString    search.Criteria[search.String]    `json:"abatement-string,omitempty"`
+	Asserter           search.Criteria[search.Reference] `json:"asserter,omitempty"`
+	BodySite           search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	ClinicalStatus     search.Criteria[search.Token]     `json:"clinical-status,omitempty"`
+	Encounter          search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Evidence           search.Criteria[search.Token]     `json:"evidence,omitempty"`
+	EvidenceDetail     search.Criteria[search.Reference] `json:"evidence-detail,omitempty"`
+	OnsetAge           search.Criteria[search.Quantity]  `json:"onset-age,omitempty"`
+	OnsetDate          search.Criteria[search.Date]      `json:"onset-date,omitempty"`
+	OnsetInfo          search.Criteria[search.String]    `json:"onset-info,omitempty"`
+	RecordedDate       search.Criteria[search.Date]      `json:"recorded-date,omitempty"`
+	Severity           search.Criteria[search.Token]     `json:"severity,omitempty"`
+	Stage              search.Criteria[search.Token]     `json:"stage,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
+	VerificationStatus search.Criteria[search.Token]     `json:"verification-status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ConditionParams.
@@ -2023,21 +2023,21 @@ func (p ConditionParams) Parse() map[string]search.AndGroup {
 // ConsentParams contains typed search parameters for Consent resources.
 type ConsentParams struct {
 	// Consent-specific search parameters
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Action          search.TokenOrString     `json:"action,omitempty"`
-	Actor           search.ReferenceOrString `json:"actor,omitempty"`
-	Category        search.TokenOrString     `json:"category,omitempty"`
-	Consentor       search.ReferenceOrString `json:"consentor,omitempty"`
-	Data            search.ReferenceOrString `json:"data,omitempty"`
-	Organization    search.ReferenceOrString `json:"organization,omitempty"`
-	Period          search.DateOrString      `json:"period,omitempty"`
-	Purpose         search.TokenOrString     `json:"purpose,omitempty"`
-	Scope           search.TokenOrString     `json:"scope,omitempty"`
-	SecurityLabel   search.TokenOrString     `json:"security-label,omitempty"`
-	SourceReference search.ReferenceOrString `json:"source-reference,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Action          search.Criteria[search.Token]     `json:"action,omitempty"`
+	Actor           search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Category        search.Criteria[search.Token]     `json:"category,omitempty"`
+	Consentor       search.Criteria[search.Reference] `json:"consentor,omitempty"`
+	Data            search.Criteria[search.Reference] `json:"data,omitempty"`
+	Organization    search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Period          search.Criteria[search.Date]      `json:"period,omitempty"`
+	Purpose         search.Criteria[search.Token]     `json:"purpose,omitempty"`
+	Scope           search.Criteria[search.Token]     `json:"scope,omitempty"`
+	SecurityLabel   search.Criteria[search.Token]     `json:"security-label,omitempty"`
+	SourceReference search.Criteria[search.Reference] `json:"source-reference,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ConsentParams.
@@ -2096,16 +2096,16 @@ func (p ConsentParams) Parse() map[string]search.AndGroup {
 // ContractParams contains typed search parameters for Contract resources.
 type ContractParams struct {
 	// Contract-specific search parameters
-	Authority    search.ReferenceOrString `json:"authority,omitempty"`
-	Domain       search.ReferenceOrString `json:"domain,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Instantiates search.UriOrString       `json:"instantiates,omitempty"`
-	Issued       search.DateOrString      `json:"issued,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Signer       search.ReferenceOrString `json:"signer,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	Subject      search.ReferenceOrString `json:"subject,omitempty"`
-	Url          search.UriOrString       `json:"url,omitempty"`
+	Authority    search.Criteria[search.Reference] `json:"authority,omitempty"`
+	Domain       search.Criteria[search.Reference] `json:"domain,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Instantiates search.Criteria[search.Uri]       `json:"instantiates,omitempty"`
+	Issued       search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Signer       search.Criteria[search.Reference] `json:"signer,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject      search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Url          search.Criteria[search.Uri]       `json:"url,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ContractParams.
@@ -2149,17 +2149,17 @@ func (p ContractParams) Parse() map[string]search.AndGroup {
 // CoverageParams contains typed search parameters for Coverage resources.
 type CoverageParams struct {
 	// Coverage-specific search parameters
-	Beneficiary  search.ReferenceOrString `json:"beneficiary,omitempty"`
-	ClassType    search.TokenOrString     `json:"class-type,omitempty"`
-	ClassValue   search.StringOrString    `json:"class-value,omitempty"`
-	Dependent    search.StringOrString    `json:"dependent,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Payor        search.ReferenceOrString `json:"payor,omitempty"`
-	PolicyHolder search.ReferenceOrString `json:"policy-holder,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	Subscriber   search.ReferenceOrString `json:"subscriber,omitempty"`
-	Type         search.TokenOrString     `json:"type,omitempty"`
+	Beneficiary  search.Criteria[search.Reference] `json:"beneficiary,omitempty"`
+	ClassType    search.Criteria[search.Token]     `json:"class-type,omitempty"`
+	ClassValue   search.Criteria[search.String]    `json:"class-value,omitempty"`
+	Dependent    search.Criteria[search.String]    `json:"dependent,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Payor        search.Criteria[search.Reference] `json:"payor,omitempty"`
+	PolicyHolder search.Criteria[search.Reference] `json:"policy-holder,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subscriber   search.Criteria[search.Reference] `json:"subscriber,omitempty"`
+	Type         search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CoverageParams.
@@ -2206,13 +2206,13 @@ func (p CoverageParams) Parse() map[string]search.AndGroup {
 // CoverageEligibilityRequestParams contains typed search parameters for CoverageEligibilityRequest resources.
 type CoverageEligibilityRequestParams struct {
 	// CoverageEligibilityRequest-specific search parameters
-	Created    search.DateOrString      `json:"created,omitempty"`
-	Enterer    search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility   search.ReferenceOrString `json:"facility,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Provider   search.ReferenceOrString `json:"provider,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Created    search.Criteria[search.Date]      `json:"created,omitempty"`
+	Enterer    search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility   search.Criteria[search.Reference] `json:"facility,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Provider   search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CoverageEligibilityRequestParams.
@@ -2247,15 +2247,15 @@ func (p CoverageEligibilityRequestParams) Parse() map[string]search.AndGroup {
 // CoverageEligibilityResponseParams contains typed search parameters for CoverageEligibilityResponse resources.
 type CoverageEligibilityResponseParams struct {
 	// CoverageEligibilityResponse-specific search parameters
-	Created     search.DateOrString      `json:"created,omitempty"`
-	Disposition search.StringOrString    `json:"disposition,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Insurer     search.ReferenceOrString `json:"insurer,omitempty"`
-	Outcome     search.TokenOrString     `json:"outcome,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Request     search.ReferenceOrString `json:"request,omitempty"`
-	Requestor   search.ReferenceOrString `json:"requestor,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
+	Created     search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Insurer     search.Criteria[search.Reference] `json:"insurer,omitempty"`
+	Outcome     search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Request     search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor   search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for CoverageEligibilityResponseParams.
@@ -2296,12 +2296,12 @@ func (p CoverageEligibilityResponseParams) Parse() map[string]search.AndGroup {
 // DetectedIssueParams contains typed search parameters for DetectedIssue resources.
 type DetectedIssueParams struct {
 	// DetectedIssue-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Identified search.DateOrString      `json:"identified,omitempty"`
-	Implicated search.ReferenceOrString `json:"implicated,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identified search.Criteria[search.Date]      `json:"identified,omitempty"`
+	Implicated search.Criteria[search.Reference] `json:"implicated,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DetectedIssueParams.
@@ -2333,18 +2333,18 @@ func (p DetectedIssueParams) Parse() map[string]search.AndGroup {
 // DeviceParams contains typed search parameters for Device resources.
 type DeviceParams struct {
 	// Device-specific search parameters
-	DeviceName   search.StringOrString    `json:"device-name,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Location     search.ReferenceOrString `json:"location,omitempty"`
-	Manufacturer search.StringOrString    `json:"manufacturer,omitempty"`
-	Model        search.StringOrString    `json:"model,omitempty"`
-	Organization search.ReferenceOrString `json:"organization,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	Type         search.TokenOrString     `json:"type,omitempty"`
-	UdiCarrier   search.StringOrString    `json:"udi-carrier,omitempty"`
-	UdiDi        search.StringOrString    `json:"udi-di,omitempty"`
-	Url          search.UriOrString       `json:"url,omitempty"`
+	DeviceName   search.Criteria[search.String]    `json:"device-name,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location     search.Criteria[search.Reference] `json:"location,omitempty"`
+	Manufacturer search.Criteria[search.String]    `json:"manufacturer,omitempty"`
+	Model        search.Criteria[search.String]    `json:"model,omitempty"`
+	Organization search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type         search.Criteria[search.Token]     `json:"type,omitempty"`
+	UdiCarrier   search.Criteria[search.String]    `json:"udi-carrier,omitempty"`
+	UdiDi        search.Criteria[search.String]    `json:"udi-di,omitempty"`
+	Url          search.Criteria[search.Uri]       `json:"url,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DeviceParams.
@@ -2394,9 +2394,9 @@ func (p DeviceParams) Parse() map[string]search.AndGroup {
 // DeviceDefinitionParams contains typed search parameters for DeviceDefinition resources.
 type DeviceDefinitionParams struct {
 	// DeviceDefinition-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Parent     search.ReferenceOrString `json:"parent,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Parent     search.Criteria[search.Reference] `json:"parent,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DeviceDefinitionParams.
@@ -2419,11 +2419,11 @@ func (p DeviceDefinitionParams) Parse() map[string]search.AndGroup {
 // DeviceMetricParams contains typed search parameters for DeviceMetric resources.
 type DeviceMetricParams struct {
 	// DeviceMetric-specific search parameters
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Parent     search.ReferenceOrString `json:"parent,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Parent     search.Criteria[search.Reference] `json:"parent,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DeviceMetricParams.
@@ -2452,24 +2452,24 @@ func (p DeviceMetricParams) Parse() map[string]search.AndGroup {
 // DeviceRequestParams contains typed search parameters for DeviceRequest resources.
 type DeviceRequestParams struct {
 	// DeviceRequest-specific search parameters
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	AuthoredOn            search.DateOrString      `json:"authored-on,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Device                search.ReferenceOrString `json:"device,omitempty"`
-	EventDate             search.DateOrString      `json:"event-date,omitempty"`
-	GroupIdentifier       search.TokenOrString     `json:"group-identifier,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Insurance             search.ReferenceOrString `json:"insurance,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	PriorRequest          search.ReferenceOrString `json:"prior-request,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	AuthoredOn            search.Criteria[search.Date]      `json:"authored-on,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Device                search.Criteria[search.Reference] `json:"device,omitempty"`
+	EventDate             search.Criteria[search.Date]      `json:"event-date,omitempty"`
+	GroupIdentifier       search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Insurance             search.Criteria[search.Reference] `json:"insurance,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	PriorRequest          search.Criteria[search.Reference] `json:"prior-request,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DeviceRequestParams.
@@ -2537,10 +2537,10 @@ func (p DeviceRequestParams) Parse() map[string]search.AndGroup {
 // DeviceUseStatementParams contains typed search parameters for DeviceUseStatement resources.
 type DeviceUseStatementParams struct {
 	// DeviceUseStatement-specific search parameters
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Device     search.ReferenceOrString `json:"device,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Device     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DeviceUseStatementParams.
@@ -2566,22 +2566,22 @@ func (p DeviceUseStatementParams) Parse() map[string]search.AndGroup {
 // DiagnosticReportParams contains typed search parameters for DiagnosticReport resources.
 type DiagnosticReportParams struct {
 	// DiagnosticReport-specific search parameters
-	Code               search.TokenOrString     `json:"code,omitempty"`
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter          search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn            search.ReferenceOrString `json:"based-on,omitempty"`
-	Category           search.TokenOrString     `json:"category,omitempty"`
-	Conclusion         search.TokenOrString     `json:"conclusion,omitempty"`
-	Issued             search.DateOrString      `json:"issued,omitempty"`
-	Media              search.ReferenceOrString `json:"media,omitempty"`
-	Performer          search.ReferenceOrString `json:"performer,omitempty"`
-	Result             search.ReferenceOrString `json:"result,omitempty"`
-	ResultsInterpreter search.ReferenceOrString `json:"results-interpreter,omitempty"`
-	Specimen           search.ReferenceOrString `json:"specimen,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
+	Code               search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter          search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn            search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category           search.Criteria[search.Token]     `json:"category,omitempty"`
+	Conclusion         search.Criteria[search.Token]     `json:"conclusion,omitempty"`
+	Issued             search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Media              search.Criteria[search.Reference] `json:"media,omitempty"`
+	Performer          search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Result             search.Criteria[search.Reference] `json:"result,omitempty"`
+	ResultsInterpreter search.Criteria[search.Reference] `json:"results-interpreter,omitempty"`
+	Specimen           search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DiagnosticReportParams.
@@ -2643,19 +2643,19 @@ func (p DiagnosticReportParams) Parse() map[string]search.AndGroup {
 // DocumentManifestParams contains typed search parameters for DocumentManifest resources.
 type DocumentManifestParams struct {
 	// DocumentManifest-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Type        search.TokenOrString     `json:"type,omitempty"`
-	Author      search.ReferenceOrString `json:"author,omitempty"`
-	Created     search.DateOrString      `json:"created,omitempty"`
-	Description search.StringOrString    `json:"description,omitempty"`
-	Item        search.ReferenceOrString `json:"item,omitempty"`
-	Recipient   search.ReferenceOrString `json:"recipient,omitempty"`
-	RelatedId   search.TokenOrString     `json:"related-id,omitempty"`
-	RelatedRef  search.ReferenceOrString `json:"related-ref,omitempty"`
-	Source      search.UriOrString       `json:"source,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type        search.Criteria[search.Token]     `json:"type,omitempty"`
+	Author      search.Criteria[search.Reference] `json:"author,omitempty"`
+	Created     search.Criteria[search.Date]      `json:"created,omitempty"`
+	Description search.Criteria[search.String]    `json:"description,omitempty"`
+	Item        search.Criteria[search.Reference] `json:"item,omitempty"`
+	Recipient   search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	RelatedId   search.Criteria[search.Token]     `json:"related-id,omitempty"`
+	RelatedRef  search.Criteria[search.Reference] `json:"related-ref,omitempty"`
+	Source      search.Criteria[search.Uri]       `json:"source,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DocumentManifestParams.
@@ -2708,31 +2708,31 @@ func (p DocumentManifestParams) Parse() map[string]search.AndGroup {
 // DocumentReferenceParams contains typed search parameters for DocumentReference resources.
 type DocumentReferenceParams struct {
 	// DocumentReference-specific search parameters
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Type          search.TokenOrString     `json:"type,omitempty"`
-	Encounter     search.ReferenceOrString `json:"encounter,omitempty"`
-	Authenticator search.ReferenceOrString `json:"authenticator,omitempty"`
-	Author        search.ReferenceOrString `json:"author,omitempty"`
-	Category      search.TokenOrString     `json:"category,omitempty"`
-	Contenttype   search.TokenOrString     `json:"contenttype,omitempty"`
-	Custodian     search.ReferenceOrString `json:"custodian,omitempty"`
-	Date          search.DateOrString      `json:"date,omitempty"`
-	Description   search.StringOrString    `json:"description,omitempty"`
-	Event         search.TokenOrString     `json:"event,omitempty"`
-	Facility      search.TokenOrString     `json:"facility,omitempty"`
-	Format        search.TokenOrString     `json:"format,omitempty"`
-	Language      search.TokenOrString     `json:"language,omitempty"`
-	Location      search.UriOrString       `json:"location,omitempty"`
-	Period        search.DateOrString      `json:"period,omitempty"`
-	Related       search.ReferenceOrString `json:"related,omitempty"`
-	Relatesto     search.ReferenceOrString `json:"relatesto,omitempty"`
-	Relation      search.TokenOrString     `json:"relation,omitempty"`
-	SecurityLabel search.TokenOrString     `json:"security-label,omitempty"`
-	Setting       search.TokenOrString     `json:"setting,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
-	Relationship  search.CompositeOrString `json:"relationship,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type          search.Criteria[search.Token]     `json:"type,omitempty"`
+	Encounter     search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Authenticator search.Criteria[search.Reference] `json:"authenticator,omitempty"`
+	Author        search.Criteria[search.Reference] `json:"author,omitempty"`
+	Category      search.Criteria[search.Token]     `json:"category,omitempty"`
+	Contenttype   search.Criteria[search.Token]     `json:"contenttype,omitempty"`
+	Custodian     search.Criteria[search.Reference] `json:"custodian,omitempty"`
+	Date          search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description   search.Criteria[search.String]    `json:"description,omitempty"`
+	Event         search.Criteria[search.Token]     `json:"event,omitempty"`
+	Facility      search.Criteria[search.Token]     `json:"facility,omitempty"`
+	Format        search.Criteria[search.Token]     `json:"format,omitempty"`
+	Language      search.Criteria[search.Token]     `json:"language,omitempty"`
+	Location      search.Criteria[search.Uri]       `json:"location,omitempty"`
+	Period        search.Criteria[search.Date]      `json:"period,omitempty"`
+	Related       search.Criteria[search.Reference] `json:"related,omitempty"`
+	Relatesto     search.Criteria[search.Reference] `json:"relatesto,omitempty"`
+	Relation      search.Criteria[search.Token]     `json:"relation,omitempty"`
+	SecurityLabel search.Criteria[search.Token]     `json:"security-label,omitempty"`
+	Setting       search.Criteria[search.Token]     `json:"setting,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Relationship  search.Criteria[search.Composite] `json:"relationship,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for DocumentReferenceParams.
@@ -2821,29 +2821,29 @@ func (p DocumentReferenceParams) Parse() map[string]search.AndGroup {
 // EncounterParams contains typed search parameters for Encounter resources.
 type EncounterParams struct {
 	// Encounter-specific search parameters
-	Date               search.DateOrString      `json:"date,omitempty"`
-	Identifier         search.TokenOrString     `json:"identifier,omitempty"`
-	Patient            search.ReferenceOrString `json:"patient,omitempty"`
-	Type               search.TokenOrString     `json:"type,omitempty"`
-	Account            search.ReferenceOrString `json:"account,omitempty"`
-	Appointment        search.ReferenceOrString `json:"appointment,omitempty"`
-	BasedOn            search.ReferenceOrString `json:"based-on,omitempty"`
-	Class              search.TokenOrString     `json:"class,omitempty"`
-	Diagnosis          search.ReferenceOrString `json:"diagnosis,omitempty"`
-	EpisodeOfCare      search.ReferenceOrString `json:"episode-of-care,omitempty"`
-	Length             search.QuantityOrString  `json:"length,omitempty"`
-	Location           search.ReferenceOrString `json:"location,omitempty"`
-	LocationPeriod     search.DateOrString      `json:"location-period,omitempty"`
-	PartOf             search.ReferenceOrString `json:"part-of,omitempty"`
-	Participant        search.ReferenceOrString `json:"participant,omitempty"`
-	ParticipantType    search.TokenOrString     `json:"participant-type,omitempty"`
-	Practitioner       search.ReferenceOrString `json:"practitioner,omitempty"`
-	ReasonCode         search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference    search.ReferenceOrString `json:"reason-reference,omitempty"`
-	ServiceProvider    search.ReferenceOrString `json:"service-provider,omitempty"`
-	SpecialArrangement search.TokenOrString     `json:"special-arrangement,omitempty"`
-	Status             search.TokenOrString     `json:"status,omitempty"`
-	Subject            search.ReferenceOrString `json:"subject,omitempty"`
+	Date               search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier         search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient            search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type               search.Criteria[search.Token]     `json:"type,omitempty"`
+	Account            search.Criteria[search.Reference] `json:"account,omitempty"`
+	Appointment        search.Criteria[search.Reference] `json:"appointment,omitempty"`
+	BasedOn            search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Class              search.Criteria[search.Token]     `json:"class,omitempty"`
+	Diagnosis          search.Criteria[search.Reference] `json:"diagnosis,omitempty"`
+	EpisodeOfCare      search.Criteria[search.Reference] `json:"episode-of-care,omitempty"`
+	Length             search.Criteria[search.Quantity]  `json:"length,omitempty"`
+	Location           search.Criteria[search.Reference] `json:"location,omitempty"`
+	LocationPeriod     search.Criteria[search.Date]      `json:"location-period,omitempty"`
+	PartOf             search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Participant        search.Criteria[search.Reference] `json:"participant,omitempty"`
+	ParticipantType    search.Criteria[search.Token]     `json:"participant-type,omitempty"`
+	Practitioner       search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	ReasonCode         search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference    search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	ServiceProvider    search.Criteria[search.Reference] `json:"service-provider,omitempty"`
+	SpecialArrangement search.Criteria[search.Token]     `json:"special-arrangement,omitempty"`
+	Status             search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject            search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EncounterParams.
@@ -2926,12 +2926,12 @@ func (p EncounterParams) Parse() map[string]search.AndGroup {
 // EndpointParams contains typed search parameters for Endpoint resources.
 type EndpointParams struct {
 	// Endpoint-specific search parameters
-	ConnectionType search.TokenOrString     `json:"connection-type,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Name           search.StringOrString    `json:"name,omitempty"`
-	Organization   search.ReferenceOrString `json:"organization,omitempty"`
-	PayloadType    search.TokenOrString     `json:"payload-type,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
+	ConnectionType search.Criteria[search.Token]     `json:"connection-type,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name           search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization   search.Criteria[search.Reference] `json:"organization,omitempty"`
+	PayloadType    search.Criteria[search.Token]     `json:"payload-type,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EndpointParams.
@@ -2963,10 +2963,10 @@ func (p EndpointParams) Parse() map[string]search.AndGroup {
 // EnrollmentRequestParams contains typed search parameters for EnrollmentRequest resources.
 type EnrollmentRequestParams struct {
 	// EnrollmentRequest-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EnrollmentRequestParams.
@@ -2992,9 +2992,9 @@ func (p EnrollmentRequestParams) Parse() map[string]search.AndGroup {
 // EnrollmentResponseParams contains typed search parameters for EnrollmentResponse resources.
 type EnrollmentResponseParams struct {
 	// EnrollmentResponse-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Request    search.ReferenceOrString `json:"request,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Request    search.Criteria[search.Reference] `json:"request,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EnrollmentResponseParams.
@@ -3017,15 +3017,15 @@ func (p EnrollmentResponseParams) Parse() map[string]search.AndGroup {
 // EpisodeOfCareParams contains typed search parameters for EpisodeOfCare resources.
 type EpisodeOfCareParams struct {
 	// EpisodeOfCare-specific search parameters
-	Date             search.DateOrString      `json:"date,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	Patient          search.ReferenceOrString `json:"patient,omitempty"`
-	Type             search.TokenOrString     `json:"type,omitempty"`
-	CareManager      search.ReferenceOrString `json:"care-manager,omitempty"`
-	Condition        search.ReferenceOrString `json:"condition,omitempty"`
-	IncomingReferral search.ReferenceOrString `json:"incoming-referral,omitempty"`
-	Organization     search.ReferenceOrString `json:"organization,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
+	Date             search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient          search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Type             search.Criteria[search.Token]     `json:"type,omitempty"`
+	CareManager      search.Criteria[search.Reference] `json:"care-manager,omitempty"`
+	Condition        search.Criteria[search.Reference] `json:"condition,omitempty"`
+	IncomingReferral search.Criteria[search.Reference] `json:"incoming-referral,omitempty"`
+	Organization     search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EpisodeOfCareParams.
@@ -3066,28 +3066,28 @@ func (p EpisodeOfCareParams) Parse() map[string]search.AndGroup {
 // EventDefinitionParams contains typed search parameters for EventDefinition resources.
 type EventDefinitionParams struct {
 	// EventDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EventDefinitionParams.
@@ -3167,19 +3167,19 @@ func (p EventDefinitionParams) Parse() map[string]search.AndGroup {
 // EvidenceParams contains typed search parameters for Evidence resources.
 type EvidenceParams struct {
 	// Evidence-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EvidenceParams.
@@ -3232,15 +3232,15 @@ func (p EvidenceParams) Parse() map[string]search.AndGroup {
 // EvidenceReportParams contains typed search parameters for EvidenceReport resources.
 type EvidenceReportParams struct {
 	// EvidenceReport-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EvidenceReportParams.
@@ -3281,20 +3281,20 @@ func (p EvidenceReportParams) Parse() map[string]search.AndGroup {
 // EvidenceVariableParams contains typed search parameters for EvidenceVariable resources.
 type EvidenceVariableParams struct {
 	// EvidenceVariable-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for EvidenceVariableParams.
@@ -3350,19 +3350,19 @@ func (p EvidenceVariableParams) Parse() map[string]search.AndGroup {
 // ExampleScenarioParams contains typed search parameters for ExampleScenario resources.
 type ExampleScenarioParams struct {
 	// ExampleScenario-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ExampleScenarioParams.
@@ -3415,23 +3415,23 @@ func (p ExampleScenarioParams) Parse() map[string]search.AndGroup {
 // ExplanationOfBenefitParams contains typed search parameters for ExplanationOfBenefit resources.
 type ExplanationOfBenefitParams struct {
 	// ExplanationOfBenefit-specific search parameters
-	CareTeam     search.ReferenceOrString `json:"care-team,omitempty"`
-	Claim        search.ReferenceOrString `json:"claim,omitempty"`
-	Coverage     search.ReferenceOrString `json:"coverage,omitempty"`
-	Created      search.DateOrString      `json:"created,omitempty"`
-	DetailUdi    search.ReferenceOrString `json:"detail-udi,omitempty"`
-	Disposition  search.StringOrString    `json:"disposition,omitempty"`
-	Encounter    search.ReferenceOrString `json:"encounter,omitempty"`
-	Enterer      search.ReferenceOrString `json:"enterer,omitempty"`
-	Facility     search.ReferenceOrString `json:"facility,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	ItemUdi      search.ReferenceOrString `json:"item-udi,omitempty"`
-	Patient      search.ReferenceOrString `json:"patient,omitempty"`
-	Payee        search.ReferenceOrString `json:"payee,omitempty"`
-	ProcedureUdi search.ReferenceOrString `json:"procedure-udi,omitempty"`
-	Provider     search.ReferenceOrString `json:"provider,omitempty"`
-	Status       search.TokenOrString     `json:"status,omitempty"`
-	SubdetailUdi search.ReferenceOrString `json:"subdetail-udi,omitempty"`
+	CareTeam     search.Criteria[search.Reference] `json:"care-team,omitempty"`
+	Claim        search.Criteria[search.Reference] `json:"claim,omitempty"`
+	Coverage     search.Criteria[search.Reference] `json:"coverage,omitempty"`
+	Created      search.Criteria[search.Date]      `json:"created,omitempty"`
+	DetailUdi    search.Criteria[search.Reference] `json:"detail-udi,omitempty"`
+	Disposition  search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Encounter    search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Enterer      search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Facility     search.Criteria[search.Reference] `json:"facility,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ItemUdi      search.Criteria[search.Reference] `json:"item-udi,omitempty"`
+	Patient      search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Payee        search.Criteria[search.Reference] `json:"payee,omitempty"`
+	ProcedureUdi search.Criteria[search.Reference] `json:"procedure-udi,omitempty"`
+	Provider     search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status       search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubdetailUdi search.Criteria[search.Reference] `json:"subdetail-udi,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ExplanationOfBenefitParams.
@@ -3496,15 +3496,15 @@ func (p ExplanationOfBenefitParams) Parse() map[string]search.AndGroup {
 // FamilyMemberHistoryParams contains typed search parameters for FamilyMemberHistory resources.
 type FamilyMemberHistoryParams struct {
 	// FamilyMemberHistory-specific search parameters
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Relationship          search.TokenOrString     `json:"relationship,omitempty"`
-	Sex                   search.TokenOrString     `json:"sex,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Relationship          search.Criteria[search.Token]     `json:"relationship,omitempty"`
+	Sex                   search.Criteria[search.Token]     `json:"sex,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for FamilyMemberHistoryParams.
@@ -3545,12 +3545,12 @@ func (p FamilyMemberHistoryParams) Parse() map[string]search.AndGroup {
 // FlagParams contains typed search parameters for Flag resources.
 type FlagParams struct {
 	// Flag-specific search parameters
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Author     search.ReferenceOrString `json:"author,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Author     search.Criteria[search.Reference] `json:"author,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for FlagParams.
@@ -3582,14 +3582,14 @@ func (p FlagParams) Parse() map[string]search.AndGroup {
 // GoalParams contains typed search parameters for Goal resources.
 type GoalParams struct {
 	// Goal-specific search parameters
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	AchievementStatus search.TokenOrString     `json:"achievement-status,omitempty"`
-	Category          search.TokenOrString     `json:"category,omitempty"`
-	LifecycleStatus   search.TokenOrString     `json:"lifecycle-status,omitempty"`
-	StartDate         search.DateOrString      `json:"start-date,omitempty"`
-	Subject           search.ReferenceOrString `json:"subject,omitempty"`
-	TargetDate        search.DateOrString      `json:"target-date,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	AchievementStatus search.Criteria[search.Token]     `json:"achievement-status,omitempty"`
+	Category          search.Criteria[search.Token]     `json:"category,omitempty"`
+	LifecycleStatus   search.Criteria[search.Token]     `json:"lifecycle-status,omitempty"`
+	StartDate         search.Criteria[search.Date]      `json:"start-date,omitempty"`
+	Subject           search.Criteria[search.Reference] `json:"subject,omitempty"`
+	TargetDate        search.Criteria[search.Date]      `json:"target-date,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for GoalParams.
@@ -3627,20 +3627,20 @@ func (p GoalParams) Parse() map[string]search.AndGroup {
 // GraphDefinitionParams contains typed search parameters for GraphDefinition resources.
 type GraphDefinitionParams struct {
 	// GraphDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Start               search.TokenOrString     `json:"start,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Start               search.Criteria[search.Token]     `json:"start,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for GraphDefinitionParams.
@@ -3696,16 +3696,16 @@ func (p GraphDefinitionParams) Parse() map[string]search.AndGroup {
 // GroupParams contains typed search parameters for Group resources.
 type GroupParams struct {
 	// Group-specific search parameters
-	Actual              search.TokenOrString     `json:"actual,omitempty"`
-	Characteristic      search.TokenOrString     `json:"characteristic,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Exclude             search.TokenOrString     `json:"exclude,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	ManagingEntity      search.ReferenceOrString `json:"managing-entity,omitempty"`
-	Member              search.ReferenceOrString `json:"member,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
-	Value               search.TokenOrString     `json:"value,omitempty"`
-	CharacteristicValue search.CompositeOrString `json:"characteristic-value,omitempty"`
+	Actual              search.Criteria[search.Token]     `json:"actual,omitempty"`
+	Characteristic      search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Exclude             search.Criteria[search.Token]     `json:"exclude,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ManagingEntity      search.Criteria[search.Reference] `json:"managing-entity,omitempty"`
+	Member              search.Criteria[search.Reference] `json:"member,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
+	Value               search.Criteria[search.Token]     `json:"value,omitempty"`
+	CharacteristicValue search.Criteria[search.Composite] `json:"characteristic-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for GroupParams.
@@ -3749,10 +3749,10 @@ func (p GroupParams) Parse() map[string]search.AndGroup {
 // GuidanceResponseParams contains typed search parameters for GuidanceResponse resources.
 type GuidanceResponseParams struct {
 	// GuidanceResponse-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Request    search.TokenOrString     `json:"request,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Request    search.Criteria[search.Token]     `json:"request,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for GuidanceResponseParams.
@@ -3778,18 +3778,18 @@ func (p GuidanceResponseParams) Parse() map[string]search.AndGroup {
 // HealthcareServiceParams contains typed search parameters for HealthcareService resources.
 type HealthcareServiceParams struct {
 	// HealthcareService-specific search parameters
-	Active          search.TokenOrString     `json:"active,omitempty"`
-	Characteristic  search.TokenOrString     `json:"characteristic,omitempty"`
-	CoverageArea    search.ReferenceOrString `json:"coverage-area,omitempty"`
-	Endpoint        search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	Name            search.StringOrString    `json:"name,omitempty"`
-	Organization    search.ReferenceOrString `json:"organization,omitempty"`
-	Program         search.TokenOrString     `json:"program,omitempty"`
-	ServiceCategory search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType     search.TokenOrString     `json:"service-type,omitempty"`
-	Specialty       search.TokenOrString     `json:"specialty,omitempty"`
+	Active          search.Criteria[search.Token]     `json:"active,omitempty"`
+	Characteristic  search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	CoverageArea    search.Criteria[search.Reference] `json:"coverage-area,omitempty"`
+	Endpoint        search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	Name            search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization    search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Program         search.Criteria[search.Token]     `json:"program,omitempty"`
+	ServiceCategory search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType     search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	Specialty       search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for HealthcareServiceParams.
@@ -3839,23 +3839,23 @@ func (p HealthcareServiceParams) Parse() map[string]search.AndGroup {
 // ImagingStudyParams contains typed search parameters for ImagingStudy resources.
 type ImagingStudyParams struct {
 	// ImagingStudy-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Basedon     search.ReferenceOrString `json:"basedon,omitempty"`
-	Bodysite    search.TokenOrString     `json:"bodysite,omitempty"`
-	DicomClass  search.TokenOrString     `json:"dicom-class,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Endpoint    search.ReferenceOrString `json:"endpoint,omitempty"`
-	Instance    search.TokenOrString     `json:"instance,omitempty"`
-	Interpreter search.ReferenceOrString `json:"interpreter,omitempty"`
-	Modality    search.TokenOrString     `json:"modality,omitempty"`
-	Performer   search.ReferenceOrString `json:"performer,omitempty"`
-	Reason      search.TokenOrString     `json:"reason,omitempty"`
-	Referrer    search.ReferenceOrString `json:"referrer,omitempty"`
-	Series      search.TokenOrString     `json:"series,omitempty"`
-	Started     search.DateOrString      `json:"started,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Basedon     search.Criteria[search.Reference] `json:"basedon,omitempty"`
+	Bodysite    search.Criteria[search.Token]     `json:"bodysite,omitempty"`
+	DicomClass  search.Criteria[search.Token]     `json:"dicom-class,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Endpoint    search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Instance    search.Criteria[search.Token]     `json:"instance,omitempty"`
+	Interpreter search.Criteria[search.Reference] `json:"interpreter,omitempty"`
+	Modality    search.Criteria[search.Token]     `json:"modality,omitempty"`
+	Performer   search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Reason      search.Criteria[search.Token]     `json:"reason,omitempty"`
+	Referrer    search.Criteria[search.Reference] `json:"referrer,omitempty"`
+	Series      search.Criteria[search.Token]     `json:"series,omitempty"`
+	Started     search.Criteria[search.Date]      `json:"started,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ImagingStudyParams.
@@ -3920,22 +3920,22 @@ func (p ImagingStudyParams) Parse() map[string]search.AndGroup {
 // ImmunizationParams contains typed search parameters for Immunization resources.
 type ImmunizationParams struct {
 	// Immunization-specific search parameters
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Location        search.ReferenceOrString `json:"location,omitempty"`
-	LotNumber       search.StringOrString    `json:"lot-number,omitempty"`
-	Manufacturer    search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Performer       search.ReferenceOrString `json:"performer,omitempty"`
-	Reaction        search.ReferenceOrString `json:"reaction,omitempty"`
-	ReactionDate    search.DateOrString      `json:"reaction-date,omitempty"`
-	ReasonCode      search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference search.ReferenceOrString `json:"reason-reference,omitempty"`
-	Series          search.StringOrString    `json:"series,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	StatusReason    search.TokenOrString     `json:"status-reason,omitempty"`
-	TargetDisease   search.TokenOrString     `json:"target-disease,omitempty"`
-	VaccineCode     search.TokenOrString     `json:"vaccine-code,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Location        search.Criteria[search.Reference] `json:"location,omitempty"`
+	LotNumber       search.Criteria[search.String]    `json:"lot-number,omitempty"`
+	Manufacturer    search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Performer       search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Reaction        search.Criteria[search.Reference] `json:"reaction,omitempty"`
+	ReactionDate    search.Criteria[search.Date]      `json:"reaction-date,omitempty"`
+	ReasonCode      search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	Series          search.Criteria[search.String]    `json:"series,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	StatusReason    search.Criteria[search.Token]     `json:"status-reason,omitempty"`
+	TargetDisease   search.Criteria[search.Token]     `json:"target-disease,omitempty"`
+	VaccineCode     search.Criteria[search.Token]     `json:"vaccine-code,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ImmunizationParams.
@@ -3997,13 +3997,13 @@ func (p ImmunizationParams) Parse() map[string]search.AndGroup {
 // ImmunizationEvaluationParams contains typed search parameters for ImmunizationEvaluation resources.
 type ImmunizationEvaluationParams struct {
 	// ImmunizationEvaluation-specific search parameters
-	Date              search.DateOrString      `json:"date,omitempty"`
-	DoseStatus        search.TokenOrString     `json:"dose-status,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	ImmunizationEvent search.ReferenceOrString `json:"immunization-event,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	TargetDisease     search.TokenOrString     `json:"target-disease,omitempty"`
+	Date              search.Criteria[search.Date]      `json:"date,omitempty"`
+	DoseStatus        search.Criteria[search.Token]     `json:"dose-status,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ImmunizationEvent search.Criteria[search.Reference] `json:"immunization-event,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	TargetDisease     search.Criteria[search.Token]     `json:"target-disease,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ImmunizationEvaluationParams.
@@ -4038,14 +4038,14 @@ func (p ImmunizationEvaluationParams) Parse() map[string]search.AndGroup {
 // ImmunizationRecommendationParams contains typed search parameters for ImmunizationRecommendation resources.
 type ImmunizationRecommendationParams struct {
 	// ImmunizationRecommendation-specific search parameters
-	Date          search.DateOrString      `json:"date,omitempty"`
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Information   search.ReferenceOrString `json:"information,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Support       search.ReferenceOrString `json:"support,omitempty"`
-	TargetDisease search.TokenOrString     `json:"target-disease,omitempty"`
-	VaccineType   search.TokenOrString     `json:"vaccine-type,omitempty"`
+	Date          search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Information   search.Criteria[search.Reference] `json:"information,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Support       search.Criteria[search.Reference] `json:"support,omitempty"`
+	TargetDisease search.Criteria[search.Token]     `json:"target-disease,omitempty"`
+	VaccineType   search.Criteria[search.Token]     `json:"vaccine-type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ImmunizationRecommendationParams.
@@ -4083,24 +4083,24 @@ func (p ImmunizationRecommendationParams) Parse() map[string]search.AndGroup {
 // ImplementationGuideParams contains typed search parameters for ImplementationGuide resources.
 type ImplementationGuideParams struct {
 	// ImplementationGuide-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	Experimental        search.TokenOrString     `json:"experimental,omitempty"`
-	Global              search.ReferenceOrString `json:"global,omitempty"`
-	Resource            search.ReferenceOrString `json:"resource,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	Experimental        search.Criteria[search.Token]     `json:"experimental,omitempty"`
+	Global              search.Criteria[search.Reference] `json:"global,omitempty"`
+	Resource            search.Criteria[search.Reference] `json:"resource,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ImplementationGuideParams.
@@ -4168,14 +4168,14 @@ func (p ImplementationGuideParams) Parse() map[string]search.AndGroup {
 // IngredientParams contains typed search parameters for Ingredient resources.
 type IngredientParams struct {
 	// Ingredient-specific search parameters
-	For                 search.ReferenceOrString `json:"for,omitempty"`
-	Function            search.TokenOrString     `json:"function,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Manufacturer        search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Role                search.TokenOrString     `json:"role,omitempty"`
-	Substance           search.ReferenceOrString `json:"substance,omitempty"`
-	SubstanceCode       search.TokenOrString     `json:"substance-code,omitempty"`
-	SubstanceDefinition search.ReferenceOrString `json:"substance-definition,omitempty"`
+	For                 search.Criteria[search.Reference] `json:"for,omitempty"`
+	Function            search.Criteria[search.Token]     `json:"function,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Manufacturer        search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Role                search.Criteria[search.Token]     `json:"role,omitempty"`
+	Substance           search.Criteria[search.Reference] `json:"substance,omitempty"`
+	SubstanceCode       search.Criteria[search.Token]     `json:"substance-code,omitempty"`
+	SubstanceDefinition search.Criteria[search.Reference] `json:"substance-definition,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for IngredientParams.
@@ -4213,20 +4213,20 @@ func (p IngredientParams) Parse() map[string]search.AndGroup {
 // InsurancePlanParams contains typed search parameters for InsurancePlan resources.
 type InsurancePlanParams struct {
 	// InsurancePlan-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	AdministeredBy    search.ReferenceOrString `json:"administered-by,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	OwnedBy           search.ReferenceOrString `json:"owned-by,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	AdministeredBy    search.Criteria[search.Reference] `json:"administered-by,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	OwnedBy           search.Criteria[search.Reference] `json:"owned-by,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for InsurancePlanParams.
@@ -4282,19 +4282,19 @@ func (p InsurancePlanParams) Parse() map[string]search.AndGroup {
 // InvoiceParams contains typed search parameters for Invoice resources.
 type InvoiceParams struct {
 	// Invoice-specific search parameters
-	Account         search.ReferenceOrString `json:"account,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Issuer          search.ReferenceOrString `json:"issuer,omitempty"`
-	Participant     search.ReferenceOrString `json:"participant,omitempty"`
-	ParticipantRole search.TokenOrString     `json:"participant-role,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Recipient       search.ReferenceOrString `json:"recipient,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
-	Totalgross      search.QuantityOrString  `json:"totalgross,omitempty"`
-	Totalnet        search.QuantityOrString  `json:"totalnet,omitempty"`
-	Type            search.TokenOrString     `json:"type,omitempty"`
+	Account         search.Criteria[search.Reference] `json:"account,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Issuer          search.Criteria[search.Reference] `json:"issuer,omitempty"`
+	Participant     search.Criteria[search.Reference] `json:"participant,omitempty"`
+	ParticipantRole search.Criteria[search.Token]     `json:"participant-role,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Recipient       search.Criteria[search.Reference] `json:"recipient,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Totalgross      search.Criteria[search.Quantity]  `json:"totalgross,omitempty"`
+	Totalnet        search.Criteria[search.Quantity]  `json:"totalnet,omitempty"`
+	Type            search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for InvoiceParams.
@@ -4347,30 +4347,30 @@ func (p InvoiceParams) Parse() map[string]search.AndGroup {
 // LibraryParams contains typed search parameters for Library resources.
 type LibraryParams struct {
 	// Library-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	ContentType         search.TokenOrString     `json:"content-type,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	ContentType         search.Criteria[search.Token]     `json:"content-type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for LibraryParams.
@@ -4456,9 +4456,9 @@ func (p LibraryParams) Parse() map[string]search.AndGroup {
 // LinkageParams contains typed search parameters for Linkage resources.
 type LinkageParams struct {
 	// Linkage-specific search parameters
-	Author search.ReferenceOrString `json:"author,omitempty"`
-	Item   search.ReferenceOrString `json:"item,omitempty"`
-	Source search.ReferenceOrString `json:"source,omitempty"`
+	Author search.Criteria[search.Reference] `json:"author,omitempty"`
+	Item   search.Criteria[search.Reference] `json:"item,omitempty"`
+	Source search.Criteria[search.Reference] `json:"source,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for LinkageParams.
@@ -4481,18 +4481,18 @@ func (p LinkageParams) Parse() map[string]search.AndGroup {
 // ListParams contains typed search parameters for List resources.
 type ListParams struct {
 	// List-specific search parameters
-	Code        search.TokenOrString     `json:"code,omitempty"`
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	EmptyReason search.TokenOrString     `json:"empty-reason,omitempty"`
-	Item        search.ReferenceOrString `json:"item,omitempty"`
-	Notes       search.StringOrString    `json:"notes,omitempty"`
-	Source      search.ReferenceOrString `json:"source,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
-	Title       search.StringOrString    `json:"title,omitempty"`
+	Code        search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	EmptyReason search.Criteria[search.Token]     `json:"empty-reason,omitempty"`
+	Item        search.Criteria[search.Reference] `json:"item,omitempty"`
+	Notes       search.Criteria[search.String]    `json:"notes,omitempty"`
+	Source      search.Criteria[search.Reference] `json:"source,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Title       search.Criteria[search.String]    `json:"title,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ListParams.
@@ -4542,21 +4542,21 @@ func (p ListParams) Parse() map[string]search.AndGroup {
 // LocationParams contains typed search parameters for Location resources.
 type LocationParams struct {
 	// Location-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Near              search.SpecialOrString   `json:"near,omitempty"`
-	OperationalStatus search.TokenOrString     `json:"operational-status,omitempty"`
-	Organization      search.ReferenceOrString `json:"organization,omitempty"`
-	Partof            search.ReferenceOrString `json:"partof,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Near              search.Criteria[search.Special]   `json:"near,omitempty"`
+	OperationalStatus search.Criteria[search.Token]     `json:"operational-status,omitempty"`
+	Organization      search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Partof            search.Criteria[search.Reference] `json:"partof,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for LocationParams.
@@ -4615,9 +4615,9 @@ func (p LocationParams) Parse() map[string]search.AndGroup {
 // ManufacturedItemDefinitionParams contains typed search parameters for ManufacturedItemDefinition resources.
 type ManufacturedItemDefinitionParams struct {
 	// ManufacturedItemDefinition-specific search parameters
-	DoseForm   search.TokenOrString `json:"dose-form,omitempty"`
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
-	Ingredient search.TokenOrString `json:"ingredient,omitempty"`
+	DoseForm   search.Criteria[search.Token] `json:"dose-form,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
+	Ingredient search.Criteria[search.Token] `json:"ingredient,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ManufacturedItemDefinitionParams.
@@ -4640,28 +4640,28 @@ func (p ManufacturedItemDefinitionParams) Parse() map[string]search.AndGroup {
 // MeasureParams contains typed search parameters for Measure resources.
 type MeasureParams struct {
 	// Measure-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MeasureParams.
@@ -4741,15 +4741,15 @@ func (p MeasureParams) Parse() map[string]search.AndGroup {
 // MeasureReportParams contains typed search parameters for MeasureReport resources.
 type MeasureReportParams struct {
 	// MeasureReport-specific search parameters
-	Date              search.DateOrString      `json:"date,omitempty"`
-	EvaluatedResource search.ReferenceOrString `json:"evaluated-resource,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Measure           search.ReferenceOrString `json:"measure,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Period            search.DateOrString      `json:"period,omitempty"`
-	Reporter          search.ReferenceOrString `json:"reporter,omitempty"`
-	Status            search.TokenOrString     `json:"status,omitempty"`
-	Subject           search.ReferenceOrString `json:"subject,omitempty"`
+	Date              search.Criteria[search.Date]      `json:"date,omitempty"`
+	EvaluatedResource search.Criteria[search.Reference] `json:"evaluated-resource,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Measure           search.Criteria[search.Reference] `json:"measure,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Period            search.Criteria[search.Date]      `json:"period,omitempty"`
+	Reporter          search.Criteria[search.Reference] `json:"reporter,omitempty"`
+	Status            search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject           search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MeasureReportParams.
@@ -4790,19 +4790,19 @@ func (p MeasureReportParams) Parse() map[string]search.AndGroup {
 // MediaParams contains typed search parameters for Media resources.
 type MediaParams struct {
 	// Media-specific search parameters
-	BasedOn    search.ReferenceOrString `json:"based-on,omitempty"`
-	Created    search.DateOrString      `json:"created,omitempty"`
-	Device     search.ReferenceOrString `json:"device,omitempty"`
-	Encounter  search.ReferenceOrString `json:"encounter,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Modality   search.TokenOrString     `json:"modality,omitempty"`
-	Operator   search.ReferenceOrString `json:"operator,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Site       search.TokenOrString     `json:"site,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
-	Type       search.TokenOrString     `json:"type,omitempty"`
-	View       search.TokenOrString     `json:"view,omitempty"`
+	BasedOn    search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Created    search.Criteria[search.Date]      `json:"created,omitempty"`
+	Device     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Encounter  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Modality   search.Criteria[search.Token]     `json:"modality,omitempty"`
+	Operator   search.Criteria[search.Reference] `json:"operator,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Site       search.Criteria[search.Token]     `json:"site,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type       search.Criteria[search.Token]     `json:"type,omitempty"`
+	View       search.Criteria[search.Token]     `json:"view,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MediaParams.
@@ -4855,15 +4855,15 @@ func (p MediaParams) Parse() map[string]search.AndGroup {
 // MedicationParams contains typed search parameters for Medication resources.
 type MedicationParams struct {
 	// Medication-specific search parameters
-	Code           search.TokenOrString     `json:"code,omitempty"`
-	ExpirationDate search.DateOrString      `json:"expiration-date,omitempty"`
-	Form           search.TokenOrString     `json:"form,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Ingredient     search.ReferenceOrString `json:"ingredient,omitempty"`
-	IngredientCode search.TokenOrString     `json:"ingredient-code,omitempty"`
-	LotNumber      search.TokenOrString     `json:"lot-number,omitempty"`
-	Manufacturer   search.ReferenceOrString `json:"manufacturer,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
+	Code           search.Criteria[search.Token]     `json:"code,omitempty"`
+	ExpirationDate search.Criteria[search.Date]      `json:"expiration-date,omitempty"`
+	Form           search.Criteria[search.Token]     `json:"form,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Ingredient     search.Criteria[search.Reference] `json:"ingredient,omitempty"`
+	IngredientCode search.Criteria[search.Token]     `json:"ingredient-code,omitempty"`
+	LotNumber      search.Criteria[search.Token]     `json:"lot-number,omitempty"`
+	Manufacturer   search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationParams.
@@ -4904,19 +4904,19 @@ func (p MedicationParams) Parse() map[string]search.AndGroup {
 // MedicationAdministrationParams contains typed search parameters for MedicationAdministration resources.
 type MedicationAdministrationParams struct {
 	// MedicationAdministration-specific search parameters
-	Code           search.TokenOrString     `json:"code,omitempty"`
-	Identifier     search.TokenOrString     `json:"identifier,omitempty"`
-	Patient        search.ReferenceOrString `json:"patient,omitempty"`
-	Context        search.ReferenceOrString `json:"context,omitempty"`
-	Device         search.ReferenceOrString `json:"device,omitempty"`
-	EffectiveTime  search.DateOrString      `json:"effective-time,omitempty"`
-	Medication     search.ReferenceOrString `json:"medication,omitempty"`
-	Performer      search.ReferenceOrString `json:"performer,omitempty"`
-	ReasonGiven    search.TokenOrString     `json:"reason-given,omitempty"`
-	ReasonNotGiven search.TokenOrString     `json:"reason-not-given,omitempty"`
-	Request        search.ReferenceOrString `json:"request,omitempty"`
-	Status         search.TokenOrString     `json:"status,omitempty"`
-	Subject        search.ReferenceOrString `json:"subject,omitempty"`
+	Code           search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier     search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient        search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Context        search.Criteria[search.Reference] `json:"context,omitempty"`
+	Device         search.Criteria[search.Reference] `json:"device,omitempty"`
+	EffectiveTime  search.Criteria[search.Date]      `json:"effective-time,omitempty"`
+	Medication     search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Performer      search.Criteria[search.Reference] `json:"performer,omitempty"`
+	ReasonGiven    search.Criteria[search.Token]     `json:"reason-given,omitempty"`
+	ReasonNotGiven search.Criteria[search.Token]     `json:"reason-not-given,omitempty"`
+	Request        search.Criteria[search.Reference] `json:"request,omitempty"`
+	Status         search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject        search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationAdministrationParams.
@@ -4969,21 +4969,21 @@ func (p MedicationAdministrationParams) Parse() map[string]search.AndGroup {
 // MedicationDispenseParams contains typed search parameters for MedicationDispense resources.
 type MedicationDispenseParams struct {
 	// MedicationDispense-specific search parameters
-	Code             search.TokenOrString     `json:"code,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	Patient          search.ReferenceOrString `json:"patient,omitempty"`
-	Medication       search.ReferenceOrString `json:"medication,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
-	Context          search.ReferenceOrString `json:"context,omitempty"`
-	Destination      search.ReferenceOrString `json:"destination,omitempty"`
-	Performer        search.ReferenceOrString `json:"performer,omitempty"`
-	Prescription     search.ReferenceOrString `json:"prescription,omitempty"`
-	Receiver         search.ReferenceOrString `json:"receiver,omitempty"`
-	Responsibleparty search.ReferenceOrString `json:"responsibleparty,omitempty"`
-	Subject          search.ReferenceOrString `json:"subject,omitempty"`
-	Type             search.TokenOrString     `json:"type,omitempty"`
-	Whenhandedover   search.DateOrString      `json:"whenhandedover,omitempty"`
-	Whenprepared     search.DateOrString      `json:"whenprepared,omitempty"`
+	Code             search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient          search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Medication       search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
+	Context          search.Criteria[search.Reference] `json:"context,omitempty"`
+	Destination      search.Criteria[search.Reference] `json:"destination,omitempty"`
+	Performer        search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Prescription     search.Criteria[search.Reference] `json:"prescription,omitempty"`
+	Receiver         search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	Responsibleparty search.Criteria[search.Reference] `json:"responsibleparty,omitempty"`
+	Subject          search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type             search.Criteria[search.Token]     `json:"type,omitempty"`
+	Whenhandedover   search.Criteria[search.Date]      `json:"whenhandedover,omitempty"`
+	Whenprepared     search.Criteria[search.Date]      `json:"whenprepared,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationDispenseParams.
@@ -5042,19 +5042,19 @@ func (p MedicationDispenseParams) Parse() map[string]search.AndGroup {
 // MedicationKnowledgeParams contains typed search parameters for MedicationKnowledge resources.
 type MedicationKnowledgeParams struct {
 	// MedicationKnowledge-specific search parameters
-	Classification        search.TokenOrString     `json:"classification,omitempty"`
-	ClassificationType    search.TokenOrString     `json:"classification-type,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Doseform              search.TokenOrString     `json:"doseform,omitempty"`
-	Ingredient            search.ReferenceOrString `json:"ingredient,omitempty"`
-	IngredientCode        search.TokenOrString     `json:"ingredient-code,omitempty"`
-	Manufacturer          search.ReferenceOrString `json:"manufacturer,omitempty"`
-	MonitoringProgramName search.TokenOrString     `json:"monitoring-program-name,omitempty"`
-	MonitoringProgramType search.TokenOrString     `json:"monitoring-program-type,omitempty"`
-	Monograph             search.ReferenceOrString `json:"monograph,omitempty"`
-	MonographType         search.TokenOrString     `json:"monograph-type,omitempty"`
-	SourceCost            search.TokenOrString     `json:"source-cost,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
+	Classification        search.Criteria[search.Token]     `json:"classification,omitempty"`
+	ClassificationType    search.Criteria[search.Token]     `json:"classification-type,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Doseform              search.Criteria[search.Token]     `json:"doseform,omitempty"`
+	Ingredient            search.Criteria[search.Reference] `json:"ingredient,omitempty"`
+	IngredientCode        search.Criteria[search.Token]     `json:"ingredient-code,omitempty"`
+	Manufacturer          search.Criteria[search.Reference] `json:"manufacturer,omitempty"`
+	MonitoringProgramName search.Criteria[search.Token]     `json:"monitoring-program-name,omitempty"`
+	MonitoringProgramType search.Criteria[search.Token]     `json:"monitoring-program-type,omitempty"`
+	Monograph             search.Criteria[search.Reference] `json:"monograph,omitempty"`
+	MonographType         search.Criteria[search.Token]     `json:"monograph-type,omitempty"`
+	SourceCost            search.Criteria[search.Token]     `json:"source-cost,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationKnowledgeParams.
@@ -5107,22 +5107,22 @@ func (p MedicationKnowledgeParams) Parse() map[string]search.AndGroup {
 // MedicationRequestParams contains typed search parameters for MedicationRequest resources.
 type MedicationRequestParams struct {
 	// MedicationRequest-specific search parameters
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Medication            search.ReferenceOrString `json:"medication,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Authoredon            search.DateOrString      `json:"authoredon,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	IntendedDispenser     search.ReferenceOrString `json:"intended-dispenser,omitempty"`
-	IntendedPerformer     search.ReferenceOrString `json:"intended-performer,omitempty"`
-	IntendedPerformertype search.TokenOrString     `json:"intended-performertype,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Medication            search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Authoredon            search.Criteria[search.Date]      `json:"authoredon,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	IntendedDispenser     search.Criteria[search.Reference] `json:"intended-dispenser,omitempty"`
+	IntendedPerformer     search.Criteria[search.Reference] `json:"intended-performer,omitempty"`
+	IntendedPerformertype search.Criteria[search.Token]     `json:"intended-performertype,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationRequestParams.
@@ -5184,17 +5184,17 @@ func (p MedicationRequestParams) Parse() map[string]search.AndGroup {
 // MedicationStatementParams contains typed search parameters for MedicationStatement resources.
 type MedicationStatementParams struct {
 	// MedicationStatement-specific search parameters
-	Code       search.TokenOrString     `json:"code,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Medication search.ReferenceOrString `json:"medication,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Context    search.ReferenceOrString `json:"context,omitempty"`
-	Effective  search.DateOrString      `json:"effective,omitempty"`
-	PartOf     search.ReferenceOrString `json:"part-of,omitempty"`
-	Source     search.ReferenceOrString `json:"source,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Code       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Medication search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Context    search.Criteria[search.Reference] `json:"context,omitempty"`
+	Effective  search.Criteria[search.Date]      `json:"effective,omitempty"`
+	PartOf     search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Source     search.Criteria[search.Reference] `json:"source,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicationStatementParams.
@@ -5241,18 +5241,18 @@ func (p MedicationStatementParams) Parse() map[string]search.AndGroup {
 // MedicinalProductDefinitionParams contains typed search parameters for MedicinalProductDefinition resources.
 type MedicinalProductDefinitionParams struct {
 	// MedicinalProductDefinition-specific search parameters
-	Characteristic        search.TokenOrString     `json:"characteristic,omitempty"`
-	CharacteristicType    search.TokenOrString     `json:"characteristic-type,omitempty"`
-	Contact               search.ReferenceOrString `json:"contact,omitempty"`
-	Domain                search.TokenOrString     `json:"domain,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Ingredient            search.TokenOrString     `json:"ingredient,omitempty"`
-	MasterFile            search.ReferenceOrString `json:"master-file,omitempty"`
-	Name                  search.StringOrString    `json:"name,omitempty"`
-	NameLanguage          search.TokenOrString     `json:"name-language,omitempty"`
-	ProductClassification search.TokenOrString     `json:"product-classification,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Type                  search.TokenOrString     `json:"type,omitempty"`
+	Characteristic        search.Criteria[search.Token]     `json:"characteristic,omitempty"`
+	CharacteristicType    search.Criteria[search.Token]     `json:"characteristic-type,omitempty"`
+	Contact               search.Criteria[search.Reference] `json:"contact,omitempty"`
+	Domain                search.Criteria[search.Token]     `json:"domain,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Ingredient            search.Criteria[search.Token]     `json:"ingredient,omitempty"`
+	MasterFile            search.Criteria[search.Reference] `json:"master-file,omitempty"`
+	Name                  search.Criteria[search.String]    `json:"name,omitempty"`
+	NameLanguage          search.Criteria[search.Token]     `json:"name-language,omitempty"`
+	ProductClassification search.Criteria[search.Token]     `json:"product-classification,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Type                  search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MedicinalProductDefinitionParams.
@@ -5302,25 +5302,25 @@ func (p MedicinalProductDefinitionParams) Parse() map[string]search.AndGroup {
 // MessageDefinitionParams contains typed search parameters for MessageDefinition resources.
 type MessageDefinitionParams struct {
 	// MessageDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Category            search.TokenOrString     `json:"category,omitempty"`
-	Event               search.TokenOrString     `json:"event,omitempty"`
-	Focus               search.TokenOrString     `json:"focus,omitempty"`
-	Parent              search.ReferenceOrString `json:"parent,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Category            search.Criteria[search.Token]     `json:"category,omitempty"`
+	Event               search.Criteria[search.Token]     `json:"event,omitempty"`
+	Focus               search.Criteria[search.Token]     `json:"focus,omitempty"`
+	Parent              search.Criteria[search.Reference] `json:"parent,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MessageDefinitionParams.
@@ -5391,20 +5391,20 @@ func (p MessageDefinitionParams) Parse() map[string]search.AndGroup {
 // MessageHeaderParams contains typed search parameters for MessageHeader resources.
 type MessageHeaderParams struct {
 	// MessageHeader-specific search parameters
-	Author         search.ReferenceOrString `json:"author,omitempty"`
-	Code           search.TokenOrString     `json:"code,omitempty"`
-	Destination    search.StringOrString    `json:"destination,omitempty"`
-	DestinationUri search.UriOrString       `json:"destination-uri,omitempty"`
-	Enterer        search.ReferenceOrString `json:"enterer,omitempty"`
-	Event          search.TokenOrString     `json:"event,omitempty"`
-	Focus          search.ReferenceOrString `json:"focus,omitempty"`
-	Receiver       search.ReferenceOrString `json:"receiver,omitempty"`
-	ResponseId     search.TokenOrString     `json:"response-id,omitempty"`
-	Responsible    search.ReferenceOrString `json:"responsible,omitempty"`
-	Sender         search.ReferenceOrString `json:"sender,omitempty"`
-	Source         search.StringOrString    `json:"source,omitempty"`
-	SourceUri      search.UriOrString       `json:"source-uri,omitempty"`
-	Target         search.ReferenceOrString `json:"target,omitempty"`
+	Author         search.Criteria[search.Reference] `json:"author,omitempty"`
+	Code           search.Criteria[search.Token]     `json:"code,omitempty"`
+	Destination    search.Criteria[search.String]    `json:"destination,omitempty"`
+	DestinationUri search.Criteria[search.Uri]       `json:"destination-uri,omitempty"`
+	Enterer        search.Criteria[search.Reference] `json:"enterer,omitempty"`
+	Event          search.Criteria[search.Token]     `json:"event,omitempty"`
+	Focus          search.Criteria[search.Reference] `json:"focus,omitempty"`
+	Receiver       search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	ResponseId     search.Criteria[search.Token]     `json:"response-id,omitempty"`
+	Responsible    search.Criteria[search.Reference] `json:"responsible,omitempty"`
+	Sender         search.Criteria[search.Reference] `json:"sender,omitempty"`
+	Source         search.Criteria[search.String]    `json:"source,omitempty"`
+	SourceUri      search.Criteria[search.Uri]       `json:"source-uri,omitempty"`
+	Target         search.Criteria[search.Reference] `json:"target,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MessageHeaderParams.
@@ -5460,19 +5460,19 @@ func (p MessageHeaderParams) Parse() map[string]search.AndGroup {
 // MolecularSequenceParams contains typed search parameters for MolecularSequence resources.
 type MolecularSequenceParams struct {
 	// MolecularSequence-specific search parameters
-	Chromosome                      search.TokenOrString     `json:"chromosome,omitempty"`
-	Identifier                      search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                         search.ReferenceOrString `json:"patient,omitempty"`
-	Referenceseqid                  search.TokenOrString     `json:"referenceseqid,omitempty"`
-	Type                            search.TokenOrString     `json:"type,omitempty"`
-	VariantEnd                      search.NumberOrString    `json:"variant-end,omitempty"`
-	VariantStart                    search.NumberOrString    `json:"variant-start,omitempty"`
-	WindowEnd                       search.NumberOrString    `json:"window-end,omitempty"`
-	WindowStart                     search.NumberOrString    `json:"window-start,omitempty"`
-	ChromosomeVariantCoordinate     search.CompositeOrString `json:"chromosome-variant-coordinate,omitempty"`
-	ChromosomeWindowCoordinate      search.CompositeOrString `json:"chromosome-window-coordinate,omitempty"`
-	ReferenceseqidVariantCoordinate search.CompositeOrString `json:"referenceseqid-variant-coordinate,omitempty"`
-	ReferenceseqidWindowCoordinate  search.CompositeOrString `json:"referenceseqid-window-coordinate,omitempty"`
+	Chromosome                      search.Criteria[search.Token]     `json:"chromosome,omitempty"`
+	Identifier                      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Referenceseqid                  search.Criteria[search.Token]     `json:"referenceseqid,omitempty"`
+	Type                            search.Criteria[search.Token]     `json:"type,omitempty"`
+	VariantEnd                      search.Criteria[search.Number]    `json:"variant-end,omitempty"`
+	VariantStart                    search.Criteria[search.Number]    `json:"variant-start,omitempty"`
+	WindowEnd                       search.Criteria[search.Number]    `json:"window-end,omitempty"`
+	WindowStart                     search.Criteria[search.Number]    `json:"window-start,omitempty"`
+	ChromosomeVariantCoordinate     search.Criteria[search.Composite] `json:"chromosome-variant-coordinate,omitempty"`
+	ChromosomeWindowCoordinate      search.Criteria[search.Composite] `json:"chromosome-window-coordinate,omitempty"`
+	ReferenceseqidVariantCoordinate search.Criteria[search.Composite] `json:"referenceseqid-variant-coordinate,omitempty"`
+	ReferenceseqidWindowCoordinate  search.Criteria[search.Composite] `json:"referenceseqid-window-coordinate,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for MolecularSequenceParams.
@@ -5525,25 +5525,25 @@ func (p MolecularSequenceParams) Parse() map[string]search.AndGroup {
 // NamingSystemParams contains typed search parameters for NamingSystem resources.
 type NamingSystemParams struct {
 	// NamingSystem-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Contact             search.StringOrString    `json:"contact,omitempty"`
-	IdType              search.TokenOrString     `json:"id-type,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	Period              search.DateOrString      `json:"period,omitempty"`
-	Responsible         search.StringOrString    `json:"responsible,omitempty"`
-	Telecom             search.TokenOrString     `json:"telecom,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
-	Value               search.StringOrString    `json:"value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Contact             search.Criteria[search.String]    `json:"contact,omitempty"`
+	IdType              search.Criteria[search.Token]     `json:"id-type,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	Period              search.Criteria[search.Date]      `json:"period,omitempty"`
+	Responsible         search.Criteria[search.String]    `json:"responsible,omitempty"`
+	Telecom             search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
+	Value               search.Criteria[search.String]    `json:"value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for NamingSystemParams.
@@ -5614,18 +5614,18 @@ func (p NamingSystemParams) Parse() map[string]search.AndGroup {
 // NutritionOrderParams contains typed search parameters for NutritionOrder resources.
 type NutritionOrderParams struct {
 	// NutritionOrder-specific search parameters
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Additive              search.TokenOrString     `json:"additive,omitempty"`
-	Datetime              search.DateOrString      `json:"datetime,omitempty"`
-	Formula               search.TokenOrString     `json:"formula,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Oraldiet              search.TokenOrString     `json:"oraldiet,omitempty"`
-	Provider              search.ReferenceOrString `json:"provider,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Supplement            search.TokenOrString     `json:"supplement,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Additive              search.Criteria[search.Token]     `json:"additive,omitempty"`
+	Datetime              search.Criteria[search.Date]      `json:"datetime,omitempty"`
+	Formula               search.Criteria[search.Token]     `json:"formula,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Oraldiet              search.Criteria[search.Token]     `json:"oraldiet,omitempty"`
+	Provider              search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Supplement            search.Criteria[search.Token]     `json:"supplement,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for NutritionOrderParams.
@@ -5675,8 +5675,8 @@ func (p NutritionOrderParams) Parse() map[string]search.AndGroup {
 // NutritionProductParams contains typed search parameters for NutritionProduct resources.
 type NutritionProductParams struct {
 	// NutritionProduct-specific search parameters
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
-	Status     search.TokenOrString `json:"status,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
+	Status     search.Criteria[search.Token] `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for NutritionProductParams.
@@ -5696,44 +5696,44 @@ func (p NutritionProductParams) Parse() map[string]search.AndGroup {
 // ObservationParams contains typed search parameters for Observation resources.
 type ObservationParams struct {
 	// Observation-specific search parameters
-	Code                       search.TokenOrString     `json:"code,omitempty"`
-	Date                       search.DateOrString      `json:"date,omitempty"`
-	Identifier                 search.TokenOrString     `json:"identifier,omitempty"`
-	Patient                    search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter                  search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn                    search.ReferenceOrString `json:"based-on,omitempty"`
-	Category                   search.TokenOrString     `json:"category,omitempty"`
-	ComboCode                  search.TokenOrString     `json:"combo-code,omitempty"`
-	ComboDataAbsentReason      search.TokenOrString     `json:"combo-data-absent-reason,omitempty"`
-	ComboValueConcept          search.TokenOrString     `json:"combo-value-concept,omitempty"`
-	ComboValueQuantity         search.QuantityOrString  `json:"combo-value-quantity,omitempty"`
-	ComponentCode              search.TokenOrString     `json:"component-code,omitempty"`
-	ComponentDataAbsentReason  search.TokenOrString     `json:"component-data-absent-reason,omitempty"`
-	ComponentValueConcept      search.TokenOrString     `json:"component-value-concept,omitempty"`
-	ComponentValueQuantity     search.QuantityOrString  `json:"component-value-quantity,omitempty"`
-	DataAbsentReason           search.TokenOrString     `json:"data-absent-reason,omitempty"`
-	DerivedFrom                search.ReferenceOrString `json:"derived-from,omitempty"`
-	Device                     search.ReferenceOrString `json:"device,omitempty"`
-	Focus                      search.ReferenceOrString `json:"focus,omitempty"`
-	HasMember                  search.ReferenceOrString `json:"has-member,omitempty"`
-	Method                     search.TokenOrString     `json:"method,omitempty"`
-	PartOf                     search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer                  search.ReferenceOrString `json:"performer,omitempty"`
-	Specimen                   search.ReferenceOrString `json:"specimen,omitempty"`
-	Status                     search.TokenOrString     `json:"status,omitempty"`
-	Subject                    search.ReferenceOrString `json:"subject,omitempty"`
-	ValueConcept               search.TokenOrString     `json:"value-concept,omitempty"`
-	ValueDate                  search.DateOrString      `json:"value-date,omitempty"`
-	ValueQuantity              search.QuantityOrString  `json:"value-quantity,omitempty"`
-	ValueString                search.StringOrString    `json:"value-string,omitempty"`
-	CodeValueConcept           search.CompositeOrString `json:"code-value-concept,omitempty"`
-	CodeValueDate              search.CompositeOrString `json:"code-value-date,omitempty"`
-	CodeValueQuantity          search.CompositeOrString `json:"code-value-quantity,omitempty"`
-	CodeValueString            search.CompositeOrString `json:"code-value-string,omitempty"`
-	ComboCodeValueConcept      search.CompositeOrString `json:"combo-code-value-concept,omitempty"`
-	ComboCodeValueQuantity     search.CompositeOrString `json:"combo-code-value-quantity,omitempty"`
-	ComponentCodeValueConcept  search.CompositeOrString `json:"component-code-value-concept,omitempty"`
-	ComponentCodeValueQuantity search.CompositeOrString `json:"component-code-value-quantity,omitempty"`
+	Code                       search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier                 search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient                    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter                  search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn                    search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category                   search.Criteria[search.Token]     `json:"category,omitempty"`
+	ComboCode                  search.Criteria[search.Token]     `json:"combo-code,omitempty"`
+	ComboDataAbsentReason      search.Criteria[search.Token]     `json:"combo-data-absent-reason,omitempty"`
+	ComboValueConcept          search.Criteria[search.Token]     `json:"combo-value-concept,omitempty"`
+	ComboValueQuantity         search.Criteria[search.Quantity]  `json:"combo-value-quantity,omitempty"`
+	ComponentCode              search.Criteria[search.Token]     `json:"component-code,omitempty"`
+	ComponentDataAbsentReason  search.Criteria[search.Token]     `json:"component-data-absent-reason,omitempty"`
+	ComponentValueConcept      search.Criteria[search.Token]     `json:"component-value-concept,omitempty"`
+	ComponentValueQuantity     search.Criteria[search.Quantity]  `json:"component-value-quantity,omitempty"`
+	DataAbsentReason           search.Criteria[search.Token]     `json:"data-absent-reason,omitempty"`
+	DerivedFrom                search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Device                     search.Criteria[search.Reference] `json:"device,omitempty"`
+	Focus                      search.Criteria[search.Reference] `json:"focus,omitempty"`
+	HasMember                  search.Criteria[search.Reference] `json:"has-member,omitempty"`
+	Method                     search.Criteria[search.Token]     `json:"method,omitempty"`
+	PartOf                     search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer                  search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Specimen                   search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status                     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject                    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	ValueConcept               search.Criteria[search.Token]     `json:"value-concept,omitempty"`
+	ValueDate                  search.Criteria[search.Date]      `json:"value-date,omitempty"`
+	ValueQuantity              search.Criteria[search.Quantity]  `json:"value-quantity,omitempty"`
+	ValueString                search.Criteria[search.String]    `json:"value-string,omitempty"`
+	CodeValueConcept           search.Criteria[search.Composite] `json:"code-value-concept,omitempty"`
+	CodeValueDate              search.Criteria[search.Composite] `json:"code-value-date,omitempty"`
+	CodeValueQuantity          search.Criteria[search.Composite] `json:"code-value-quantity,omitempty"`
+	CodeValueString            search.Criteria[search.Composite] `json:"code-value-string,omitempty"`
+	ComboCodeValueConcept      search.Criteria[search.Composite] `json:"combo-code-value-concept,omitempty"`
+	ComboCodeValueQuantity     search.Criteria[search.Composite] `json:"combo-code-value-quantity,omitempty"`
+	ComponentCodeValueConcept  search.Criteria[search.Composite] `json:"component-code-value-concept,omitempty"`
+	ComponentCodeValueQuantity search.Criteria[search.Composite] `json:"component-code-value-quantity,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ObservationParams.
@@ -5871,28 +5871,28 @@ func (p ObservationDefinitionParams) Parse() map[string]search.AndGroup {
 // OperationDefinitionParams contains typed search parameters for OperationDefinition resources.
 type OperationDefinitionParams struct {
 	// OperationDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Base                search.ReferenceOrString `json:"base,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	InputProfile        search.ReferenceOrString `json:"input-profile,omitempty"`
-	Instance            search.TokenOrString     `json:"instance,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	OutputProfile       search.ReferenceOrString `json:"output-profile,omitempty"`
-	System              search.TokenOrString     `json:"system,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Base                search.Criteria[search.Reference] `json:"base,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	InputProfile        search.Criteria[search.Reference] `json:"input-profile,omitempty"`
+	Instance            search.Criteria[search.Token]     `json:"instance,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	OutputProfile       search.Criteria[search.Reference] `json:"output-profile,omitempty"`
+	System              search.Criteria[search.Token]     `json:"system,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for OperationDefinitionParams.
@@ -5982,19 +5982,19 @@ func (p OperationOutcomeParams) Parse() map[string]search.AndGroup {
 // OrganizationParams contains typed search parameters for Organization resources.
 type OrganizationParams struct {
 	// Organization-specific search parameters
-	Active            search.TokenOrString     `json:"active,omitempty"`
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Endpoint          search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Partof            search.ReferenceOrString `json:"partof,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Type              search.TokenOrString     `json:"type,omitempty"`
+	Active            search.Criteria[search.Token]     `json:"active,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Endpoint          search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Partof            search.Criteria[search.Reference] `json:"partof,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Type              search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for OrganizationParams.
@@ -6047,20 +6047,20 @@ func (p OrganizationParams) Parse() map[string]search.AndGroup {
 // OrganizationAffiliationParams contains typed search parameters for OrganizationAffiliation resources.
 type OrganizationAffiliationParams struct {
 	// OrganizationAffiliation-specific search parameters
-	Active                    search.TokenOrString     `json:"active,omitempty"`
-	Date                      search.DateOrString      `json:"date,omitempty"`
-	Email                     search.TokenOrString     `json:"email,omitempty"`
-	Endpoint                  search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier                search.TokenOrString     `json:"identifier,omitempty"`
-	Location                  search.ReferenceOrString `json:"location,omitempty"`
-	Network                   search.ReferenceOrString `json:"network,omitempty"`
-	ParticipatingOrganization search.ReferenceOrString `json:"participating-organization,omitempty"`
-	Phone                     search.TokenOrString     `json:"phone,omitempty"`
-	PrimaryOrganization       search.ReferenceOrString `json:"primary-organization,omitempty"`
-	Role                      search.TokenOrString     `json:"role,omitempty"`
-	Service                   search.ReferenceOrString `json:"service,omitempty"`
-	Specialty                 search.TokenOrString     `json:"specialty,omitempty"`
-	Telecom                   search.TokenOrString     `json:"telecom,omitempty"`
+	Active                    search.Criteria[search.Token]     `json:"active,omitempty"`
+	Date                      search.Criteria[search.Date]      `json:"date,omitempty"`
+	Email                     search.Criteria[search.Token]     `json:"email,omitempty"`
+	Endpoint                  search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier                search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location                  search.Criteria[search.Reference] `json:"location,omitempty"`
+	Network                   search.Criteria[search.Reference] `json:"network,omitempty"`
+	ParticipatingOrganization search.Criteria[search.Reference] `json:"participating-organization,omitempty"`
+	Phone                     search.Criteria[search.Token]     `json:"phone,omitempty"`
+	PrimaryOrganization       search.Criteria[search.Reference] `json:"primary-organization,omitempty"`
+	Role                      search.Criteria[search.Token]     `json:"role,omitempty"`
+	Service                   search.Criteria[search.Reference] `json:"service,omitempty"`
+	Specialty                 search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Telecom                   search.Criteria[search.Token]     `json:"telecom,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for OrganizationAffiliationParams.
@@ -6116,17 +6116,17 @@ func (p OrganizationAffiliationParams) Parse() map[string]search.AndGroup {
 // PackagedProductDefinitionParams contains typed search parameters for PackagedProductDefinition resources.
 type PackagedProductDefinitionParams struct {
 	// PackagedProductDefinition-specific search parameters
-	Biological       search.ReferenceOrString `json:"biological,omitempty"`
-	ContainedItem    search.ReferenceOrString `json:"contained-item,omitempty"`
-	Device           search.ReferenceOrString `json:"device,omitempty"`
-	Identifier       search.TokenOrString     `json:"identifier,omitempty"`
-	ManufacturedItem search.ReferenceOrString `json:"manufactured-item,omitempty"`
-	Medication       search.ReferenceOrString `json:"medication,omitempty"`
-	Name             search.TokenOrString     `json:"name,omitempty"`
-	Nutrition        search.ReferenceOrString `json:"nutrition,omitempty"`
-	Package          search.ReferenceOrString `json:"package,omitempty"`
-	PackageFor       search.ReferenceOrString `json:"package-for,omitempty"`
-	Status           search.TokenOrString     `json:"status,omitempty"`
+	Biological       search.Criteria[search.Reference] `json:"biological,omitempty"`
+	ContainedItem    search.Criteria[search.Reference] `json:"contained-item,omitempty"`
+	Device           search.Criteria[search.Reference] `json:"device,omitempty"`
+	Identifier       search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ManufacturedItem search.Criteria[search.Reference] `json:"manufactured-item,omitempty"`
+	Medication       search.Criteria[search.Reference] `json:"medication,omitempty"`
+	Name             search.Criteria[search.Token]     `json:"name,omitempty"`
+	Nutrition        search.Criteria[search.Reference] `json:"nutrition,omitempty"`
+	Package          search.Criteria[search.Reference] `json:"package,omitempty"`
+	PackageFor       search.Criteria[search.Reference] `json:"package-for,omitempty"`
+	Status           search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PackagedProductDefinitionParams.
@@ -6183,29 +6183,29 @@ func (p ParametersParams) Parse() map[string]search.AndGroup {
 // PatientParams contains typed search parameters for Patient resources.
 type PatientParams struct {
 	// Patient-specific search parameters
-	Active              search.TokenOrString     `json:"active,omitempty"`
-	Address             search.StringOrString    `json:"address,omitempty"`
-	AddressCity         search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry      search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode   search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState        search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse          search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate           search.DateOrString      `json:"birthdate,omitempty"`
-	DeathDate           search.DateOrString      `json:"death-date,omitempty"`
-	Deceased            search.TokenOrString     `json:"deceased,omitempty"`
-	Email               search.TokenOrString     `json:"email,omitempty"`
-	Family              search.StringOrString    `json:"family,omitempty"`
-	Gender              search.TokenOrString     `json:"gender,omitempty"`
-	GeneralPractitioner search.ReferenceOrString `json:"general-practitioner,omitempty"`
-	Given               search.StringOrString    `json:"given,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Language            search.TokenOrString     `json:"language,omitempty"`
-	Link                search.ReferenceOrString `json:"link,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Organization        search.ReferenceOrString `json:"organization,omitempty"`
-	Phone               search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic            search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom             search.TokenOrString     `json:"telecom,omitempty"`
+	Active              search.Criteria[search.Token]     `json:"active,omitempty"`
+	Address             search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity         search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry      search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode   search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState        search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse          search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate           search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	DeathDate           search.Criteria[search.Date]      `json:"death-date,omitempty"`
+	Deceased            search.Criteria[search.Token]     `json:"deceased,omitempty"`
+	Email               search.Criteria[search.Token]     `json:"email,omitempty"`
+	Family              search.Criteria[search.String]    `json:"family,omitempty"`
+	Gender              search.Criteria[search.Token]     `json:"gender,omitempty"`
+	GeneralPractitioner search.Criteria[search.Reference] `json:"general-practitioner,omitempty"`
+	Given               search.Criteria[search.String]    `json:"given,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Language            search.Criteria[search.Token]     `json:"language,omitempty"`
+	Link                search.Criteria[search.Reference] `json:"link,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization        search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Phone               search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic            search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom             search.Criteria[search.Token]     `json:"telecom,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PatientParams.
@@ -6288,13 +6288,13 @@ func (p PatientParams) Parse() map[string]search.AndGroup {
 // PaymentNoticeParams contains typed search parameters for PaymentNotice resources.
 type PaymentNoticeParams struct {
 	// PaymentNotice-specific search parameters
-	Created       search.DateOrString      `json:"created,omitempty"`
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	PaymentStatus search.TokenOrString     `json:"payment-status,omitempty"`
-	Provider      search.ReferenceOrString `json:"provider,omitempty"`
-	Request       search.ReferenceOrString `json:"request,omitempty"`
-	Response      search.ReferenceOrString `json:"response,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
+	Created       search.Criteria[search.Date]      `json:"created,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	PaymentStatus search.Criteria[search.Token]     `json:"payment-status,omitempty"`
+	Provider      search.Criteria[search.Reference] `json:"provider,omitempty"`
+	Request       search.Criteria[search.Reference] `json:"request,omitempty"`
+	Response      search.Criteria[search.Reference] `json:"response,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PaymentNoticeParams.
@@ -6329,14 +6329,14 @@ func (p PaymentNoticeParams) Parse() map[string]search.AndGroup {
 // PaymentReconciliationParams contains typed search parameters for PaymentReconciliation resources.
 type PaymentReconciliationParams struct {
 	// PaymentReconciliation-specific search parameters
-	Created       search.DateOrString      `json:"created,omitempty"`
-	Disposition   search.StringOrString    `json:"disposition,omitempty"`
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	Outcome       search.TokenOrString     `json:"outcome,omitempty"`
-	PaymentIssuer search.ReferenceOrString `json:"payment-issuer,omitempty"`
-	Request       search.ReferenceOrString `json:"request,omitempty"`
-	Requestor     search.ReferenceOrString `json:"requestor,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
+	Created       search.Criteria[search.Date]      `json:"created,omitempty"`
+	Disposition   search.Criteria[search.String]    `json:"disposition,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Outcome       search.Criteria[search.Token]     `json:"outcome,omitempty"`
+	PaymentIssuer search.Criteria[search.Reference] `json:"payment-issuer,omitempty"`
+	Request       search.Criteria[search.Reference] `json:"request,omitempty"`
+	Requestor     search.Criteria[search.Reference] `json:"requestor,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PaymentReconciliationParams.
@@ -6374,25 +6374,25 @@ func (p PaymentReconciliationParams) Parse() map[string]search.AndGroup {
 // PersonParams contains typed search parameters for Person resources.
 type PersonParams struct {
 	// Person-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate         search.DateOrString      `json:"birthdate,omitempty"`
-	Email             search.TokenOrString     `json:"email,omitempty"`
-	Gender            search.TokenOrString     `json:"gender,omitempty"`
-	Phone             search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom           search.TokenOrString     `json:"telecom,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Link              search.ReferenceOrString `json:"link,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Organization      search.ReferenceOrString `json:"organization,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Practitioner      search.ReferenceOrString `json:"practitioner,omitempty"`
-	Relatedperson     search.ReferenceOrString `json:"relatedperson,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate         search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	Email             search.Criteria[search.Token]     `json:"email,omitempty"`
+	Gender            search.Criteria[search.Token]     `json:"gender,omitempty"`
+	Phone             search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom           search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Link              search.Criteria[search.Reference] `json:"link,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Organization      search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Practitioner      search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	Relatedperson     search.Criteria[search.Reference] `json:"relatedperson,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PersonParams.
@@ -6463,30 +6463,30 @@ func (p PersonParams) Parse() map[string]search.AndGroup {
 // PlanDefinitionParams contains typed search parameters for PlanDefinition resources.
 type PlanDefinitionParams struct {
 	// PlanDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Definition          search.ReferenceOrString `json:"definition,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Definition          search.Criteria[search.Reference] `json:"definition,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PlanDefinitionParams.
@@ -6572,23 +6572,23 @@ func (p PlanDefinitionParams) Parse() map[string]search.AndGroup {
 // PractitionerParams contains typed search parameters for Practitioner resources.
 type PractitionerParams struct {
 	// Practitioner-specific search parameters
-	Address           search.StringOrString `json:"address,omitempty"`
-	AddressCity       search.StringOrString `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString  `json:"address-use,omitempty"`
-	Email             search.TokenOrString  `json:"email,omitempty"`
-	Family            search.StringOrString `json:"family,omitempty"`
-	Gender            search.TokenOrString  `json:"gender,omitempty"`
-	Given             search.StringOrString `json:"given,omitempty"`
-	Phone             search.TokenOrString  `json:"phone,omitempty"`
-	Phonetic          search.StringOrString `json:"phonetic,omitempty"`
-	Telecom           search.TokenOrString  `json:"telecom,omitempty"`
-	Active            search.TokenOrString  `json:"active,omitempty"`
-	Communication     search.TokenOrString  `json:"communication,omitempty"`
-	Identifier        search.TokenOrString  `json:"identifier,omitempty"`
-	Name              search.StringOrString `json:"name,omitempty"`
+	Address           search.Criteria[search.String] `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String] `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String] `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String] `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String] `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]  `json:"address-use,omitempty"`
+	Email             search.Criteria[search.Token]  `json:"email,omitempty"`
+	Family            search.Criteria[search.String] `json:"family,omitempty"`
+	Gender            search.Criteria[search.Token]  `json:"gender,omitempty"`
+	Given             search.Criteria[search.String] `json:"given,omitempty"`
+	Phone             search.Criteria[search.Token]  `json:"phone,omitempty"`
+	Phonetic          search.Criteria[search.String] `json:"phonetic,omitempty"`
+	Telecom           search.Criteria[search.Token]  `json:"telecom,omitempty"`
+	Active            search.Criteria[search.Token]  `json:"active,omitempty"`
+	Communication     search.Criteria[search.Token]  `json:"communication,omitempty"`
+	Identifier        search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String] `json:"name,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PractitionerParams.
@@ -6653,19 +6653,19 @@ func (p PractitionerParams) Parse() map[string]search.AndGroup {
 // PractitionerRoleParams contains typed search parameters for PractitionerRole resources.
 type PractitionerRoleParams struct {
 	// PractitionerRole-specific search parameters
-	Email        search.TokenOrString     `json:"email,omitempty"`
-	Phone        search.TokenOrString     `json:"phone,omitempty"`
-	Telecom      search.TokenOrString     `json:"telecom,omitempty"`
-	Active       search.TokenOrString     `json:"active,omitempty"`
-	Date         search.DateOrString      `json:"date,omitempty"`
-	Endpoint     search.ReferenceOrString `json:"endpoint,omitempty"`
-	Identifier   search.TokenOrString     `json:"identifier,omitempty"`
-	Location     search.ReferenceOrString `json:"location,omitempty"`
-	Organization search.ReferenceOrString `json:"organization,omitempty"`
-	Practitioner search.ReferenceOrString `json:"practitioner,omitempty"`
-	Role         search.TokenOrString     `json:"role,omitempty"`
-	Service      search.ReferenceOrString `json:"service,omitempty"`
-	Specialty    search.TokenOrString     `json:"specialty,omitempty"`
+	Email        search.Criteria[search.Token]     `json:"email,omitempty"`
+	Phone        search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Telecom      search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Active       search.Criteria[search.Token]     `json:"active,omitempty"`
+	Date         search.Criteria[search.Date]      `json:"date,omitempty"`
+	Endpoint     search.Criteria[search.Reference] `json:"endpoint,omitempty"`
+	Identifier   search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Location     search.Criteria[search.Reference] `json:"location,omitempty"`
+	Organization search.Criteria[search.Reference] `json:"organization,omitempty"`
+	Practitioner search.Criteria[search.Reference] `json:"practitioner,omitempty"`
+	Role         search.Criteria[search.Token]     `json:"role,omitempty"`
+	Service      search.Criteria[search.Reference] `json:"service,omitempty"`
+	Specialty    search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for PractitionerRoleParams.
@@ -6718,22 +6718,22 @@ func (p PractitionerRoleParams) Parse() map[string]search.AndGroup {
 // ProcedureParams contains typed search parameters for Procedure resources.
 type ProcedureParams struct {
 	// Procedure-specific search parameters
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Location              search.ReferenceOrString `json:"location,omitempty"`
-	PartOf                search.ReferenceOrString `json:"part-of,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	ReasonCode            search.TokenOrString     `json:"reason-code,omitempty"`
-	ReasonReference       search.ReferenceOrString `json:"reason-reference,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Location              search.Criteria[search.Reference] `json:"location,omitempty"`
+	PartOf                search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	ReasonCode            search.Criteria[search.Token]     `json:"reason-code,omitempty"`
+	ReasonReference       search.Criteria[search.Reference] `json:"reason-reference,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ProcedureParams.
@@ -6795,16 +6795,16 @@ func (p ProcedureParams) Parse() map[string]search.AndGroup {
 // ProvenanceParams contains typed search parameters for Provenance resources.
 type ProvenanceParams struct {
 	// Provenance-specific search parameters
-	Agent         search.ReferenceOrString `json:"agent,omitempty"`
-	AgentRole     search.TokenOrString     `json:"agent-role,omitempty"`
-	AgentType     search.TokenOrString     `json:"agent-type,omitempty"`
-	Entity        search.ReferenceOrString `json:"entity,omitempty"`
-	Location      search.ReferenceOrString `json:"location,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Recorded      search.DateOrString      `json:"recorded,omitempty"`
-	SignatureType search.TokenOrString     `json:"signature-type,omitempty"`
-	Target        search.ReferenceOrString `json:"target,omitempty"`
-	When          search.DateOrString      `json:"when,omitempty"`
+	Agent         search.Criteria[search.Reference] `json:"agent,omitempty"`
+	AgentRole     search.Criteria[search.Token]     `json:"agent-role,omitempty"`
+	AgentType     search.Criteria[search.Token]     `json:"agent-type,omitempty"`
+	Entity        search.Criteria[search.Reference] `json:"entity,omitempty"`
+	Location      search.Criteria[search.Reference] `json:"location,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Recorded      search.Criteria[search.Date]      `json:"recorded,omitempty"`
+	SignatureType search.Criteria[search.Token]     `json:"signature-type,omitempty"`
+	Target        search.Criteria[search.Reference] `json:"target,omitempty"`
+	When          search.Criteria[search.Date]      `json:"when,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ProvenanceParams.
@@ -6848,25 +6848,25 @@ func (p ProvenanceParams) Parse() map[string]search.AndGroup {
 // QuestionnaireParams contains typed search parameters for Questionnaire resources.
 type QuestionnaireParams struct {
 	// Questionnaire-specific search parameters
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Definition          search.UriOrString       `json:"definition,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	SubjectType         search.TokenOrString     `json:"subject-type,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Definition          search.Criteria[search.Uri]       `json:"definition,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubjectType         search.Criteria[search.Token]     `json:"subject-type,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for QuestionnaireParams.
@@ -6937,17 +6937,17 @@ func (p QuestionnaireParams) Parse() map[string]search.AndGroup {
 // QuestionnaireResponseParams contains typed search parameters for QuestionnaireResponse resources.
 type QuestionnaireResponseParams struct {
 	// QuestionnaireResponse-specific search parameters
-	Author        search.ReferenceOrString `json:"author,omitempty"`
-	Authored      search.DateOrString      `json:"authored,omitempty"`
-	BasedOn       search.ReferenceOrString `json:"based-on,omitempty"`
-	Encounter     search.ReferenceOrString `json:"encounter,omitempty"`
-	Identifier    search.TokenOrString     `json:"identifier,omitempty"`
-	PartOf        search.ReferenceOrString `json:"part-of,omitempty"`
-	Patient       search.ReferenceOrString `json:"patient,omitempty"`
-	Questionnaire search.ReferenceOrString `json:"questionnaire,omitempty"`
-	Source        search.ReferenceOrString `json:"source,omitempty"`
-	Status        search.TokenOrString     `json:"status,omitempty"`
-	Subject       search.ReferenceOrString `json:"subject,omitempty"`
+	Author        search.Criteria[search.Reference] `json:"author,omitempty"`
+	Authored      search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn       search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	Encounter     search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Identifier    search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	PartOf        search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Patient       search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Questionnaire search.Criteria[search.Reference] `json:"questionnaire,omitempty"`
+	Source        search.Criteria[search.Reference] `json:"source,omitempty"`
+	Status        search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject       search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for QuestionnaireResponseParams.
@@ -6994,13 +6994,13 @@ func (p QuestionnaireResponseParams) Parse() map[string]search.AndGroup {
 // RegulatedAuthorizationParams contains typed search parameters for RegulatedAuthorization resources.
 type RegulatedAuthorizationParams struct {
 	// RegulatedAuthorization-specific search parameters
-	Case       search.TokenOrString     `json:"case,omitempty"`
-	CaseType   search.TokenOrString     `json:"case-type,omitempty"`
-	Holder     search.ReferenceOrString `json:"holder,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Region     search.TokenOrString     `json:"region,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
+	Case       search.Criteria[search.Token]     `json:"case,omitempty"`
+	CaseType   search.Criteria[search.Token]     `json:"case-type,omitempty"`
+	Holder     search.Criteria[search.Reference] `json:"holder,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Region     search.Criteria[search.Token]     `json:"region,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for RegulatedAuthorizationParams.
@@ -7035,23 +7035,23 @@ func (p RegulatedAuthorizationParams) Parse() map[string]search.AndGroup {
 // RelatedPersonParams contains typed search parameters for RelatedPerson resources.
 type RelatedPersonParams struct {
 	// RelatedPerson-specific search parameters
-	Address           search.StringOrString    `json:"address,omitempty"`
-	AddressCity       search.StringOrString    `json:"address-city,omitempty"`
-	AddressCountry    search.StringOrString    `json:"address-country,omitempty"`
-	AddressPostalcode search.StringOrString    `json:"address-postalcode,omitempty"`
-	AddressState      search.StringOrString    `json:"address-state,omitempty"`
-	AddressUse        search.TokenOrString     `json:"address-use,omitempty"`
-	Birthdate         search.DateOrString      `json:"birthdate,omitempty"`
-	Email             search.TokenOrString     `json:"email,omitempty"`
-	Gender            search.TokenOrString     `json:"gender,omitempty"`
-	Phone             search.TokenOrString     `json:"phone,omitempty"`
-	Phonetic          search.StringOrString    `json:"phonetic,omitempty"`
-	Telecom           search.TokenOrString     `json:"telecom,omitempty"`
-	Active            search.TokenOrString     `json:"active,omitempty"`
-	Identifier        search.TokenOrString     `json:"identifier,omitempty"`
-	Name              search.StringOrString    `json:"name,omitempty"`
-	Patient           search.ReferenceOrString `json:"patient,omitempty"`
-	Relationship      search.TokenOrString     `json:"relationship,omitempty"`
+	Address           search.Criteria[search.String]    `json:"address,omitempty"`
+	AddressCity       search.Criteria[search.String]    `json:"address-city,omitempty"`
+	AddressCountry    search.Criteria[search.String]    `json:"address-country,omitempty"`
+	AddressPostalcode search.Criteria[search.String]    `json:"address-postalcode,omitempty"`
+	AddressState      search.Criteria[search.String]    `json:"address-state,omitempty"`
+	AddressUse        search.Criteria[search.Token]     `json:"address-use,omitempty"`
+	Birthdate         search.Criteria[search.Date]      `json:"birthdate,omitempty"`
+	Email             search.Criteria[search.Token]     `json:"email,omitempty"`
+	Gender            search.Criteria[search.Token]     `json:"gender,omitempty"`
+	Phone             search.Criteria[search.Token]     `json:"phone,omitempty"`
+	Phonetic          search.Criteria[search.String]    `json:"phonetic,omitempty"`
+	Telecom           search.Criteria[search.Token]     `json:"telecom,omitempty"`
+	Active            search.Criteria[search.Token]     `json:"active,omitempty"`
+	Identifier        search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Name              search.Criteria[search.String]    `json:"name,omitempty"`
+	Patient           search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Relationship      search.Criteria[search.Token]     `json:"relationship,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for RelatedPersonParams.
@@ -7116,20 +7116,20 @@ func (p RelatedPersonParams) Parse() map[string]search.AndGroup {
 // RequestGroupParams contains typed search parameters for RequestGroup resources.
 type RequestGroupParams struct {
 	// RequestGroup-specific search parameters
-	Author                search.ReferenceOrString `json:"author,omitempty"`
-	Authored              search.DateOrString      `json:"authored,omitempty"`
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	GroupIdentifier       search.TokenOrString     `json:"group-identifier,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Participant           search.ReferenceOrString `json:"participant,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Author                search.Criteria[search.Reference] `json:"author,omitempty"`
+	Authored              search.Criteria[search.Date]      `json:"authored,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	GroupIdentifier       search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Participant           search.Criteria[search.Reference] `json:"participant,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for RequestGroupParams.
@@ -7185,28 +7185,28 @@ func (p RequestGroupParams) Parse() map[string]search.AndGroup {
 // ResearchDefinitionParams contains typed search parameters for ResearchDefinition resources.
 type ResearchDefinitionParams struct {
 	// ResearchDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ResearchDefinitionParams.
@@ -7286,28 +7286,28 @@ func (p ResearchDefinitionParams) Parse() map[string]search.AndGroup {
 // ResearchElementDefinitionParams contains typed search parameters for ResearchElementDefinition resources.
 type ResearchElementDefinitionParams struct {
 	// ResearchElementDefinition-specific search parameters
-	ComposedOf          search.ReferenceOrString `json:"composed-of,omitempty"`
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	DependsOn           search.ReferenceOrString `json:"depends-on,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Effective           search.DateOrString      `json:"effective,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Predecessor         search.ReferenceOrString `json:"predecessor,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Successor           search.ReferenceOrString `json:"successor,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Topic               search.TokenOrString     `json:"topic,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	ComposedOf          search.Criteria[search.Reference] `json:"composed-of,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	DependsOn           search.Criteria[search.Reference] `json:"depends-on,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Effective           search.Criteria[search.Date]      `json:"effective,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Predecessor         search.Criteria[search.Reference] `json:"predecessor,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Successor           search.Criteria[search.Reference] `json:"successor,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Topic               search.Criteria[search.Token]     `json:"topic,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ResearchElementDefinitionParams.
@@ -7387,19 +7387,19 @@ func (p ResearchElementDefinitionParams) Parse() map[string]search.AndGroup {
 // ResearchStudyParams contains typed search parameters for ResearchStudy resources.
 type ResearchStudyParams struct {
 	// ResearchStudy-specific search parameters
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	Date                  search.DateOrString      `json:"date,omitempty"`
-	Focus                 search.TokenOrString     `json:"focus,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Keyword               search.TokenOrString     `json:"keyword,omitempty"`
-	Location              search.TokenOrString     `json:"location,omitempty"`
-	Partof                search.ReferenceOrString `json:"partof,omitempty"`
-	Principalinvestigator search.ReferenceOrString `json:"principalinvestigator,omitempty"`
-	Protocol              search.ReferenceOrString `json:"protocol,omitempty"`
-	Site                  search.ReferenceOrString `json:"site,omitempty"`
-	Sponsor               search.ReferenceOrString `json:"sponsor,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Title                 search.StringOrString    `json:"title,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	Date                  search.Criteria[search.Date]      `json:"date,omitempty"`
+	Focus                 search.Criteria[search.Token]     `json:"focus,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Keyword               search.Criteria[search.Token]     `json:"keyword,omitempty"`
+	Location              search.Criteria[search.Token]     `json:"location,omitempty"`
+	Partof                search.Criteria[search.Reference] `json:"partof,omitempty"`
+	Principalinvestigator search.Criteria[search.Reference] `json:"principalinvestigator,omitempty"`
+	Protocol              search.Criteria[search.Reference] `json:"protocol,omitempty"`
+	Site                  search.Criteria[search.Reference] `json:"site,omitempty"`
+	Sponsor               search.Criteria[search.Reference] `json:"sponsor,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title                 search.Criteria[search.String]    `json:"title,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ResearchStudyParams.
@@ -7452,12 +7452,12 @@ func (p ResearchStudyParams) Parse() map[string]search.AndGroup {
 // ResearchSubjectParams contains typed search parameters for ResearchSubject resources.
 type ResearchSubjectParams struct {
 	// ResearchSubject-specific search parameters
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Individual search.ReferenceOrString `json:"individual,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Study      search.ReferenceOrString `json:"study,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Individual search.Criteria[search.Reference] `json:"individual,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Study      search.Criteria[search.Reference] `json:"study,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ResearchSubjectParams.
@@ -7489,16 +7489,16 @@ func (p ResearchSubjectParams) Parse() map[string]search.AndGroup {
 // RiskAssessmentParams contains typed search parameters for RiskAssessment resources.
 type RiskAssessmentParams struct {
 	// RiskAssessment-specific search parameters
-	Date        search.DateOrString      `json:"date,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Condition   search.ReferenceOrString `json:"condition,omitempty"`
-	Method      search.TokenOrString     `json:"method,omitempty"`
-	Performer   search.ReferenceOrString `json:"performer,omitempty"`
-	Probability search.NumberOrString    `json:"probability,omitempty"`
-	Risk        search.TokenOrString     `json:"risk,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
+	Date        search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Condition   search.Criteria[search.Reference] `json:"condition,omitempty"`
+	Method      search.Criteria[search.Token]     `json:"method,omitempty"`
+	Performer   search.Criteria[search.Reference] `json:"performer,omitempty"`
+	Probability search.Criteria[search.Number]    `json:"probability,omitempty"`
+	Risk        search.Criteria[search.Token]     `json:"risk,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for RiskAssessmentParams.
@@ -7542,13 +7542,13 @@ func (p RiskAssessmentParams) Parse() map[string]search.AndGroup {
 // ScheduleParams contains typed search parameters for Schedule resources.
 type ScheduleParams struct {
 	// Schedule-specific search parameters
-	Active          search.TokenOrString     `json:"active,omitempty"`
-	Actor           search.ReferenceOrString `json:"actor,omitempty"`
-	Date            search.DateOrString      `json:"date,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	ServiceCategory search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType     search.TokenOrString     `json:"service-type,omitempty"`
-	Specialty       search.TokenOrString     `json:"specialty,omitempty"`
+	Active          search.Criteria[search.Token]     `json:"active,omitempty"`
+	Actor           search.Criteria[search.Reference] `json:"actor,omitempty"`
+	Date            search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	ServiceCategory search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType     search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	Specialty       search.Criteria[search.Token]     `json:"specialty,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ScheduleParams.
@@ -7583,25 +7583,25 @@ func (p ScheduleParams) Parse() map[string]search.AndGroup {
 // SearchParameterParams contains typed search parameters for SearchParameter resources.
 type SearchParameterParams struct {
 	// SearchParameter-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Base                search.TokenOrString     `json:"base,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Component           search.ReferenceOrString `json:"component,omitempty"`
-	DerivedFrom         search.ReferenceOrString `json:"derived-from,omitempty"`
-	Target              search.TokenOrString     `json:"target,omitempty"`
-	Type                search.TokenOrString     `json:"type,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Base                search.Criteria[search.Token]     `json:"base,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Component           search.Criteria[search.Reference] `json:"component,omitempty"`
+	DerivedFrom         search.Criteria[search.Reference] `json:"derived-from,omitempty"`
+	Target              search.Criteria[search.Token]     `json:"target,omitempty"`
+	Type                search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SearchParameterParams.
@@ -7672,27 +7672,27 @@ func (p SearchParameterParams) Parse() map[string]search.AndGroup {
 // ServiceRequestParams contains typed search parameters for ServiceRequest resources.
 type ServiceRequestParams struct {
 	// ServiceRequest-specific search parameters
-	Code                  search.TokenOrString     `json:"code,omitempty"`
-	Identifier            search.TokenOrString     `json:"identifier,omitempty"`
-	Patient               search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter             search.ReferenceOrString `json:"encounter,omitempty"`
-	Authored              search.DateOrString      `json:"authored,omitempty"`
-	BasedOn               search.ReferenceOrString `json:"based-on,omitempty"`
-	BodySite              search.TokenOrString     `json:"body-site,omitempty"`
-	Category              search.TokenOrString     `json:"category,omitempty"`
-	InstantiatesCanonical search.ReferenceOrString `json:"instantiates-canonical,omitempty"`
-	InstantiatesUri       search.UriOrString       `json:"instantiates-uri,omitempty"`
-	Intent                search.TokenOrString     `json:"intent,omitempty"`
-	Occurrence            search.DateOrString      `json:"occurrence,omitempty"`
-	Performer             search.ReferenceOrString `json:"performer,omitempty"`
-	PerformerType         search.TokenOrString     `json:"performer-type,omitempty"`
-	Priority              search.TokenOrString     `json:"priority,omitempty"`
-	Replaces              search.ReferenceOrString `json:"replaces,omitempty"`
-	Requester             search.ReferenceOrString `json:"requester,omitempty"`
-	Requisition           search.TokenOrString     `json:"requisition,omitempty"`
-	Specimen              search.ReferenceOrString `json:"specimen,omitempty"`
-	Status                search.TokenOrString     `json:"status,omitempty"`
-	Subject               search.ReferenceOrString `json:"subject,omitempty"`
+	Code                  search.Criteria[search.Token]     `json:"code,omitempty"`
+	Identifier            search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient               search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter             search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Authored              search.Criteria[search.Date]      `json:"authored,omitempty"`
+	BasedOn               search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BodySite              search.Criteria[search.Token]     `json:"body-site,omitempty"`
+	Category              search.Criteria[search.Token]     `json:"category,omitempty"`
+	InstantiatesCanonical search.Criteria[search.Reference] `json:"instantiates-canonical,omitempty"`
+	InstantiatesUri       search.Criteria[search.Uri]       `json:"instantiates-uri,omitempty"`
+	Intent                search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Occurrence            search.Criteria[search.Date]      `json:"occurrence,omitempty"`
+	Performer             search.Criteria[search.Reference] `json:"performer,omitempty"`
+	PerformerType         search.Criteria[search.Token]     `json:"performer-type,omitempty"`
+	Priority              search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Replaces              search.Criteria[search.Reference] `json:"replaces,omitempty"`
+	Requester             search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Requisition           search.Criteria[search.Token]     `json:"requisition,omitempty"`
+	Specimen              search.Criteria[search.Reference] `json:"specimen,omitempty"`
+	Status                search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject               search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ServiceRequestParams.
@@ -7769,14 +7769,14 @@ func (p ServiceRequestParams) Parse() map[string]search.AndGroup {
 // SlotParams contains typed search parameters for Slot resources.
 type SlotParams struct {
 	// Slot-specific search parameters
-	AppointmentType search.TokenOrString     `json:"appointment-type,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Schedule        search.ReferenceOrString `json:"schedule,omitempty"`
-	ServiceCategory search.TokenOrString     `json:"service-category,omitempty"`
-	ServiceType     search.TokenOrString     `json:"service-type,omitempty"`
-	Specialty       search.TokenOrString     `json:"specialty,omitempty"`
-	Start           search.DateOrString      `json:"start,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
+	AppointmentType search.Criteria[search.Token]     `json:"appointment-type,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Schedule        search.Criteria[search.Reference] `json:"schedule,omitempty"`
+	ServiceCategory search.Criteria[search.Token]     `json:"service-category,omitempty"`
+	ServiceType     search.Criteria[search.Token]     `json:"service-type,omitempty"`
+	Specialty       search.Criteria[search.Token]     `json:"specialty,omitempty"`
+	Start           search.Criteria[search.Date]      `json:"start,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SlotParams.
@@ -7814,18 +7814,18 @@ func (p SlotParams) Parse() map[string]search.AndGroup {
 // SpecimenParams contains typed search parameters for Specimen resources.
 type SpecimenParams struct {
 	// Specimen-specific search parameters
-	Accession   search.TokenOrString     `json:"accession,omitempty"`
-	Bodysite    search.TokenOrString     `json:"bodysite,omitempty"`
-	Collected   search.DateOrString      `json:"collected,omitempty"`
-	Collector   search.ReferenceOrString `json:"collector,omitempty"`
-	Container   search.TokenOrString     `json:"container,omitempty"`
-	ContainerId search.TokenOrString     `json:"container-id,omitempty"`
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Parent      search.ReferenceOrString `json:"parent,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
-	Subject     search.ReferenceOrString `json:"subject,omitempty"`
-	Type        search.TokenOrString     `json:"type,omitempty"`
+	Accession   search.Criteria[search.Token]     `json:"accession,omitempty"`
+	Bodysite    search.Criteria[search.Token]     `json:"bodysite,omitempty"`
+	Collected   search.Criteria[search.Date]      `json:"collected,omitempty"`
+	Collector   search.Criteria[search.Reference] `json:"collector,omitempty"`
+	Container   search.Criteria[search.Token]     `json:"container,omitempty"`
+	ContainerId search.Criteria[search.Token]     `json:"container-id,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Parent      search.Criteria[search.Reference] `json:"parent,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject     search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Type        search.Criteria[search.Token]     `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SpecimenParams.
@@ -7875,9 +7875,9 @@ func (p SpecimenParams) Parse() map[string]search.AndGroup {
 // SpecimenDefinitionParams contains typed search parameters for SpecimenDefinition resources.
 type SpecimenDefinitionParams struct {
 	// SpecimenDefinition-specific search parameters
-	Container  search.TokenOrString `json:"container,omitempty"`
-	Identifier search.TokenOrString `json:"identifier,omitempty"`
-	Type       search.TokenOrString `json:"type,omitempty"`
+	Container  search.Criteria[search.Token] `json:"container,omitempty"`
+	Identifier search.Criteria[search.Token] `json:"identifier,omitempty"`
+	Type       search.Criteria[search.Token] `json:"type,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SpecimenDefinitionParams.
@@ -7900,32 +7900,32 @@ func (p SpecimenDefinitionParams) Parse() map[string]search.AndGroup {
 // StructureDefinitionParams contains typed search parameters for StructureDefinition resources.
 type StructureDefinitionParams struct {
 	// StructureDefinition-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Abstract            search.TokenOrString     `json:"abstract,omitempty"`
-	Base                search.ReferenceOrString `json:"base,omitempty"`
-	BasePath            search.TokenOrString     `json:"base-path,omitempty"`
-	Derivation          search.TokenOrString     `json:"derivation,omitempty"`
-	Experimental        search.TokenOrString     `json:"experimental,omitempty"`
-	ExtContext          search.TokenOrString     `json:"ext-context,omitempty"`
-	Keyword             search.TokenOrString     `json:"keyword,omitempty"`
-	Kind                search.TokenOrString     `json:"kind,omitempty"`
-	Path                search.TokenOrString     `json:"path,omitempty"`
-	Type                search.UriOrString       `json:"type,omitempty"`
-	Valueset            search.ReferenceOrString `json:"valueset,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Abstract            search.Criteria[search.Token]     `json:"abstract,omitempty"`
+	Base                search.Criteria[search.Reference] `json:"base,omitempty"`
+	BasePath            search.Criteria[search.Token]     `json:"base-path,omitempty"`
+	Derivation          search.Criteria[search.Token]     `json:"derivation,omitempty"`
+	Experimental        search.Criteria[search.Token]     `json:"experimental,omitempty"`
+	ExtContext          search.Criteria[search.Token]     `json:"ext-context,omitempty"`
+	Keyword             search.Criteria[search.Token]     `json:"keyword,omitempty"`
+	Kind                search.Criteria[search.Token]     `json:"kind,omitempty"`
+	Path                search.Criteria[search.Token]     `json:"path,omitempty"`
+	Type                search.Criteria[search.Uri]       `json:"type,omitempty"`
+	Valueset            search.Criteria[search.Reference] `json:"valueset,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for StructureDefinitionParams.
@@ -8017,21 +8017,21 @@ func (p StructureDefinitionParams) Parse() map[string]search.AndGroup {
 // StructureMapParams contains typed search parameters for StructureMap resources.
 type StructureMapParams struct {
 	// StructureMap-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for StructureMapParams.
@@ -8090,12 +8090,12 @@ func (p StructureMapParams) Parse() map[string]search.AndGroup {
 // SubscriptionParams contains typed search parameters for Subscription resources.
 type SubscriptionParams struct {
 	// Subscription-specific search parameters
-	Contact  search.TokenOrString  `json:"contact,omitempty"`
-	Criteria search.StringOrString `json:"criteria,omitempty"`
-	Payload  search.TokenOrString  `json:"payload,omitempty"`
-	Status   search.TokenOrString  `json:"status,omitempty"`
-	Type     search.TokenOrString  `json:"type,omitempty"`
-	Url      search.UriOrString    `json:"url,omitempty"`
+	Contact  search.Criteria[search.Token]  `json:"contact,omitempty"`
+	Criteria search.Criteria[search.String] `json:"criteria,omitempty"`
+	Payload  search.Criteria[search.Token]  `json:"payload,omitempty"`
+	Status   search.Criteria[search.Token]  `json:"status,omitempty"`
+	Type     search.Criteria[search.Token]  `json:"type,omitempty"`
+	Url      search.Criteria[search.Uri]    `json:"url,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SubscriptionParams.
@@ -8137,15 +8137,15 @@ func (p SubscriptionStatusParams) Parse() map[string]search.AndGroup {
 // SubscriptionTopicParams contains typed search parameters for SubscriptionTopic resources.
 type SubscriptionTopicParams struct {
 	// SubscriptionTopic-specific search parameters
-	Date               search.DateOrString   `json:"date,omitempty"`
-	DerivedOrSelf      search.UriOrString    `json:"derived-or-self,omitempty"`
-	Identifier         search.TokenOrString  `json:"identifier,omitempty"`
-	Resource           search.UriOrString    `json:"resource,omitempty"`
-	Status             search.TokenOrString  `json:"status,omitempty"`
-	Title              search.StringOrString `json:"title,omitempty"`
-	TriggerDescription search.StringOrString `json:"trigger-description,omitempty"`
-	Url                search.UriOrString    `json:"url,omitempty"`
-	Version            search.TokenOrString  `json:"version,omitempty"`
+	Date               search.Criteria[search.Date]   `json:"date,omitempty"`
+	DerivedOrSelf      search.Criteria[search.Uri]    `json:"derived-or-self,omitempty"`
+	Identifier         search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Resource           search.Criteria[search.Uri]    `json:"resource,omitempty"`
+	Status             search.Criteria[search.Token]  `json:"status,omitempty"`
+	Title              search.Criteria[search.String] `json:"title,omitempty"`
+	TriggerDescription search.Criteria[search.String] `json:"trigger-description,omitempty"`
+	Url                search.Criteria[search.Uri]    `json:"url,omitempty"`
+	Version            search.Criteria[search.Token]  `json:"version,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SubscriptionTopicParams.
@@ -8186,14 +8186,14 @@ func (p SubscriptionTopicParams) Parse() map[string]search.AndGroup {
 // SubstanceParams contains typed search parameters for Substance resources.
 type SubstanceParams struct {
 	// Substance-specific search parameters
-	Category            search.TokenOrString     `json:"category,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	ContainerIdentifier search.TokenOrString     `json:"container-identifier,omitempty"`
-	Expiry              search.DateOrString      `json:"expiry,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Quantity            search.QuantityOrString  `json:"quantity,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	SubstanceReference  search.ReferenceOrString `json:"substance-reference,omitempty"`
+	Category            search.Criteria[search.Token]     `json:"category,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	ContainerIdentifier search.Criteria[search.Token]     `json:"container-identifier,omitempty"`
+	Expiry              search.Criteria[search.Date]      `json:"expiry,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Quantity            search.Criteria[search.Quantity]  `json:"quantity,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	SubstanceReference  search.Criteria[search.Reference] `json:"substance-reference,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SubstanceParams.
@@ -8231,11 +8231,11 @@ func (p SubstanceParams) Parse() map[string]search.AndGroup {
 // SubstanceDefinitionParams contains typed search parameters for SubstanceDefinition resources.
 type SubstanceDefinitionParams struct {
 	// SubstanceDefinition-specific search parameters
-	Classification search.TokenOrString  `json:"classification,omitempty"`
-	Code           search.TokenOrString  `json:"code,omitempty"`
-	Domain         search.TokenOrString  `json:"domain,omitempty"`
-	Identifier     search.TokenOrString  `json:"identifier,omitempty"`
-	Name           search.StringOrString `json:"name,omitempty"`
+	Classification search.Criteria[search.Token]  `json:"classification,omitempty"`
+	Code           search.Criteria[search.Token]  `json:"code,omitempty"`
+	Domain         search.Criteria[search.Token]  `json:"domain,omitempty"`
+	Identifier     search.Criteria[search.Token]  `json:"identifier,omitempty"`
+	Name           search.Criteria[search.String] `json:"name,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SubstanceDefinitionParams.
@@ -8264,11 +8264,11 @@ func (p SubstanceDefinitionParams) Parse() map[string]search.AndGroup {
 // SupplyDeliveryParams contains typed search parameters for SupplyDelivery resources.
 type SupplyDeliveryParams struct {
 	// SupplyDelivery-specific search parameters
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Patient    search.ReferenceOrString `json:"patient,omitempty"`
-	Receiver   search.ReferenceOrString `json:"receiver,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Supplier   search.ReferenceOrString `json:"supplier,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient    search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Receiver   search.Criteria[search.Reference] `json:"receiver,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Supplier   search.Criteria[search.Reference] `json:"supplier,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SupplyDeliveryParams.
@@ -8297,13 +8297,13 @@ func (p SupplyDeliveryParams) Parse() map[string]search.AndGroup {
 // SupplyRequestParams contains typed search parameters for SupplyRequest resources.
 type SupplyRequestParams struct {
 	// SupplyRequest-specific search parameters
-	Date       search.DateOrString      `json:"date,omitempty"`
-	Identifier search.TokenOrString     `json:"identifier,omitempty"`
-	Category   search.TokenOrString     `json:"category,omitempty"`
-	Requester  search.ReferenceOrString `json:"requester,omitempty"`
-	Status     search.TokenOrString     `json:"status,omitempty"`
-	Subject    search.ReferenceOrString `json:"subject,omitempty"`
-	Supplier   search.ReferenceOrString `json:"supplier,omitempty"`
+	Date       search.Criteria[search.Date]      `json:"date,omitempty"`
+	Identifier search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Category   search.Criteria[search.Token]     `json:"category,omitempty"`
+	Requester  search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status     search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject    search.Criteria[search.Reference] `json:"subject,omitempty"`
+	Supplier   search.Criteria[search.Reference] `json:"supplier,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for SupplyRequestParams.
@@ -8338,25 +8338,25 @@ func (p SupplyRequestParams) Parse() map[string]search.AndGroup {
 // TaskParams contains typed search parameters for Task resources.
 type TaskParams struct {
 	// Task-specific search parameters
-	AuthoredOn      search.DateOrString      `json:"authored-on,omitempty"`
-	BasedOn         search.ReferenceOrString `json:"based-on,omitempty"`
-	BusinessStatus  search.TokenOrString     `json:"business-status,omitempty"`
-	Code            search.TokenOrString     `json:"code,omitempty"`
-	Encounter       search.ReferenceOrString `json:"encounter,omitempty"`
-	Focus           search.ReferenceOrString `json:"focus,omitempty"`
-	GroupIdentifier search.TokenOrString     `json:"group-identifier,omitempty"`
-	Identifier      search.TokenOrString     `json:"identifier,omitempty"`
-	Intent          search.TokenOrString     `json:"intent,omitempty"`
-	Modified        search.DateOrString      `json:"modified,omitempty"`
-	Owner           search.ReferenceOrString `json:"owner,omitempty"`
-	PartOf          search.ReferenceOrString `json:"part-of,omitempty"`
-	Patient         search.ReferenceOrString `json:"patient,omitempty"`
-	Performer       search.TokenOrString     `json:"performer,omitempty"`
-	Period          search.DateOrString      `json:"period,omitempty"`
-	Priority        search.TokenOrString     `json:"priority,omitempty"`
-	Requester       search.ReferenceOrString `json:"requester,omitempty"`
-	Status          search.TokenOrString     `json:"status,omitempty"`
-	Subject         search.ReferenceOrString `json:"subject,omitempty"`
+	AuthoredOn      search.Criteria[search.Date]      `json:"authored-on,omitempty"`
+	BasedOn         search.Criteria[search.Reference] `json:"based-on,omitempty"`
+	BusinessStatus  search.Criteria[search.Token]     `json:"business-status,omitempty"`
+	Code            search.Criteria[search.Token]     `json:"code,omitempty"`
+	Encounter       search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Focus           search.Criteria[search.Reference] `json:"focus,omitempty"`
+	GroupIdentifier search.Criteria[search.Token]     `json:"group-identifier,omitempty"`
+	Identifier      search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Intent          search.Criteria[search.Token]     `json:"intent,omitempty"`
+	Modified        search.Criteria[search.Date]      `json:"modified,omitempty"`
+	Owner           search.Criteria[search.Reference] `json:"owner,omitempty"`
+	PartOf          search.Criteria[search.Reference] `json:"part-of,omitempty"`
+	Patient         search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Performer       search.Criteria[search.Token]     `json:"performer,omitempty"`
+	Period          search.Criteria[search.Date]      `json:"period,omitempty"`
+	Priority        search.Criteria[search.Token]     `json:"priority,omitempty"`
+	Requester       search.Criteria[search.Reference] `json:"requester,omitempty"`
+	Status          search.Criteria[search.Token]     `json:"status,omitempty"`
+	Subject         search.Criteria[search.Reference] `json:"subject,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for TaskParams.
@@ -8427,20 +8427,20 @@ func (p TaskParams) Parse() map[string]search.AndGroup {
 // TerminologyCapabilitiesParams contains typed search parameters for TerminologyCapabilities resources.
 type TerminologyCapabilitiesParams struct {
 	// TerminologyCapabilities-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for TerminologyCapabilitiesParams.
@@ -8496,12 +8496,12 @@ func (p TerminologyCapabilitiesParams) Parse() map[string]search.AndGroup {
 // TestReportParams contains typed search parameters for TestReport resources.
 type TestReportParams struct {
 	// TestReport-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Issued      search.DateOrString      `json:"issued,omitempty"`
-	Participant search.UriOrString       `json:"participant,omitempty"`
-	Result      search.TokenOrString     `json:"result,omitempty"`
-	Tester      search.StringOrString    `json:"tester,omitempty"`
-	Testscript  search.ReferenceOrString `json:"testscript,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Issued      search.Criteria[search.Date]      `json:"issued,omitempty"`
+	Participant search.Criteria[search.Uri]       `json:"participant,omitempty"`
+	Result      search.Criteria[search.Token]     `json:"result,omitempty"`
+	Tester      search.Criteria[search.String]    `json:"tester,omitempty"`
+	Testscript  search.Criteria[search.Reference] `json:"testscript,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for TestReportParams.
@@ -8533,22 +8533,22 @@ func (p TestReportParams) Parse() map[string]search.AndGroup {
 // TestScriptParams contains typed search parameters for TestScript resources.
 type TestScriptParams struct {
 	// TestScript-specific search parameters
-	Context              search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity      search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType          search.TokenOrString     `json:"context-type,omitempty"`
-	Date                 search.DateOrString      `json:"date,omitempty"`
-	Description          search.StringOrString    `json:"description,omitempty"`
-	Identifier           search.TokenOrString     `json:"identifier,omitempty"`
-	Jurisdiction         search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                 search.StringOrString    `json:"name,omitempty"`
-	Publisher            search.StringOrString    `json:"publisher,omitempty"`
-	Status               search.TokenOrString     `json:"status,omitempty"`
-	TestscriptCapability search.StringOrString    `json:"testscript-capability,omitempty"`
-	Title                search.StringOrString    `json:"title,omitempty"`
-	Url                  search.UriOrString       `json:"url,omitempty"`
-	Version              search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity  search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue     search.CompositeOrString `json:"context-type-value,omitempty"`
+	Context              search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity      search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType          search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                 search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description          search.Criteria[search.String]    `json:"description,omitempty"`
+	Identifier           search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Jurisdiction         search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                 search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher            search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status               search.Criteria[search.Token]     `json:"status,omitempty"`
+	TestscriptCapability search.Criteria[search.String]    `json:"testscript-capability,omitempty"`
+	Title                search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                  search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version              search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity  search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue     search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for TestScriptParams.
@@ -8610,24 +8610,24 @@ func (p TestScriptParams) Parse() map[string]search.AndGroup {
 // ValueSetParams contains typed search parameters for ValueSet resources.
 type ValueSetParams struct {
 	// ValueSet-specific search parameters
-	Context             search.TokenOrString     `json:"context,omitempty"`
-	ContextQuantity     search.QuantityOrString  `json:"context-quantity,omitempty"`
-	ContextType         search.TokenOrString     `json:"context-type,omitempty"`
-	Date                search.DateOrString      `json:"date,omitempty"`
-	Description         search.StringOrString    `json:"description,omitempty"`
-	Jurisdiction        search.TokenOrString     `json:"jurisdiction,omitempty"`
-	Name                search.StringOrString    `json:"name,omitempty"`
-	Publisher           search.StringOrString    `json:"publisher,omitempty"`
-	Status              search.TokenOrString     `json:"status,omitempty"`
-	Title               search.StringOrString    `json:"title,omitempty"`
-	Url                 search.UriOrString       `json:"url,omitempty"`
-	Version             search.TokenOrString     `json:"version,omitempty"`
-	ContextTypeQuantity search.CompositeOrString `json:"context-type-quantity,omitempty"`
-	ContextTypeValue    search.CompositeOrString `json:"context-type-value,omitempty"`
-	Identifier          search.TokenOrString     `json:"identifier,omitempty"`
-	Code                search.TokenOrString     `json:"code,omitempty"`
-	Expansion           search.UriOrString       `json:"expansion,omitempty"`
-	Reference           search.UriOrString       `json:"reference,omitempty"`
+	Context             search.Criteria[search.Token]     `json:"context,omitempty"`
+	ContextQuantity     search.Criteria[search.Quantity]  `json:"context-quantity,omitempty"`
+	ContextType         search.Criteria[search.Token]     `json:"context-type,omitempty"`
+	Date                search.Criteria[search.Date]      `json:"date,omitempty"`
+	Description         search.Criteria[search.String]    `json:"description,omitempty"`
+	Jurisdiction        search.Criteria[search.Token]     `json:"jurisdiction,omitempty"`
+	Name                search.Criteria[search.String]    `json:"name,omitempty"`
+	Publisher           search.Criteria[search.String]    `json:"publisher,omitempty"`
+	Status              search.Criteria[search.Token]     `json:"status,omitempty"`
+	Title               search.Criteria[search.String]    `json:"title,omitempty"`
+	Url                 search.Criteria[search.Uri]       `json:"url,omitempty"`
+	Version             search.Criteria[search.Token]     `json:"version,omitempty"`
+	ContextTypeQuantity search.Criteria[search.Composite] `json:"context-type-quantity,omitempty"`
+	ContextTypeValue    search.Criteria[search.Composite] `json:"context-type-value,omitempty"`
+	Identifier          search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Code                search.Criteria[search.Token]     `json:"code,omitempty"`
+	Expansion           search.Criteria[search.Uri]       `json:"expansion,omitempty"`
+	Reference           search.Criteria[search.Uri]       `json:"reference,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for ValueSetParams.
@@ -8695,7 +8695,7 @@ func (p ValueSetParams) Parse() map[string]search.AndGroup {
 // VerificationResultParams contains typed search parameters for VerificationResult resources.
 type VerificationResultParams struct {
 	// VerificationResult-specific search parameters
-	Target search.ReferenceOrString `json:"target,omitempty"`
+	Target search.Criteria[search.Reference] `json:"target,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for VerificationResultParams.
@@ -8712,12 +8712,12 @@ func (p VerificationResultParams) Parse() map[string]search.AndGroup {
 // VisionPrescriptionParams contains typed search parameters for VisionPrescription resources.
 type VisionPrescriptionParams struct {
 	// VisionPrescription-specific search parameters
-	Identifier  search.TokenOrString     `json:"identifier,omitempty"`
-	Patient     search.ReferenceOrString `json:"patient,omitempty"`
-	Encounter   search.ReferenceOrString `json:"encounter,omitempty"`
-	Datewritten search.DateOrString      `json:"datewritten,omitempty"`
-	Prescriber  search.ReferenceOrString `json:"prescriber,omitempty"`
-	Status      search.TokenOrString     `json:"status,omitempty"`
+	Identifier  search.Criteria[search.Token]     `json:"identifier,omitempty"`
+	Patient     search.Criteria[search.Reference] `json:"patient,omitempty"`
+	Encounter   search.Criteria[search.Reference] `json:"encounter,omitempty"`
+	Datewritten search.Criteria[search.Date]      `json:"datewritten,omitempty"`
+	Prescriber  search.Criteria[search.Reference] `json:"prescriber,omitempty"`
+	Status      search.Criteria[search.Token]     `json:"status,omitempty"`
 }
 
 // Parse implements the search.Parameters interface for VisionPrescriptionParams.

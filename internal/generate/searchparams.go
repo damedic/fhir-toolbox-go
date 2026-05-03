@@ -81,8 +81,9 @@ func parseSearchParams(bundle model.Bundle) map[string][]SearchParamInfo {
 	return result
 }
 
-// Convert FHIR search parameter type to Go type
-func fhirTypeToGoType(fhirType string) string {
+// fhirTypeToCriteriaType returns the concrete Value type name for the Criteria[T] type parameter.
+// T documents the primary typed value for the field (String is always accepted via raw syntax).
+func fhirTypeToCriteriaType(fhirType string) string {
 	switch fhirType {
 	case "string":
 		return "String"
@@ -166,8 +167,8 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 				g.Comment("// Common search parameters")
 				for _, param := range commonParams {
 					fieldName := codeToFieldName(param.Code)
-					interfaceType := fhirTypeToGoType(param.Type) + "OrString"
-					g.Id(fieldName).Qual(searchPkg, interfaceType).Tag(map[string]string{"json": param.Code + ",omitempty"})
+					criteriaType := fhirTypeToCriteriaType(param.Type)
+					g.Id(fieldName).Qual(searchPkg, "Criteria").Types(Qual(searchPkg, criteriaType)).Tag(map[string]string{"json": param.Code + ",omitempty"})
 				}
 				g.Line()
 			}
@@ -177,8 +178,8 @@ func generateSearchParamsModel(f *File, resources []ir.ResourceOrType, release s
 				g.Commentf("// %s-specific search parameters", r.Name)
 				for _, param := range specificParams {
 					fieldName := codeToFieldName(param.Code)
-					interfaceType := fhirTypeToGoType(param.Type) + "OrString"
-					g.Id(fieldName).Qual(searchPkg, interfaceType).Tag(map[string]string{"json": param.Code + ",omitempty"})
+					criteriaType := fhirTypeToCriteriaType(param.Type)
+					g.Id(fieldName).Qual(searchPkg, "Criteria").Types(Qual(searchPkg, criteriaType)).Tag(map[string]string{"json": param.Code + ",omitempty"})
 				}
 			}
 		})
