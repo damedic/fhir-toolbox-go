@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.0.5
+
+### Bug Fixes
+- #11 prevent double adding of search interactions in CapabilityStatement generation
+
 ## v0.0.4
 
 ### Bug Fixes
