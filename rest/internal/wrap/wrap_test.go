@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/damedic/fhir-toolbox-go/capabilities"
+	"github.com/damedic/fhir-toolbox-go/capabilities/search"
 	"github.com/damedic/fhir-toolbox-go/model"
 	"github.com/damedic/fhir-toolbox-go/model/gen/r4"
 	"github.com/damedic/fhir-toolbox-go/utils/ptr"
@@ -279,5 +280,156 @@ func TestCapabilityStatementFromConcrete(t *testing.T) {
 	}
 	if !hasReadInteraction {
 		t.Fatal("read interaction for Patient not found in CapabilityStatement")
+	}
+}
+
+// searchParameterResource returns the SearchParameter rest resource of the given
+// CapabilityStatement and fails the test if it is not present exactly once.
+func searchParameterResource(t *testing.T, cs model.CapabilityStatement) r4.CapabilityStatementRestResource {
+	t.Helper()
+	r4cs, ok := cs.(r4.CapabilityStatement)
+	if !ok {
+		t.Fatalf("expected r4.CapabilityStatement, got %T", cs)
+	}
+	var found []r4.CapabilityStatementRestResource
+	for _, rest := range r4cs.Rest {
+		for _, resource := range rest.Resource {
+			if resource.Type.Value != nil && *resource.Type.Value == "SearchParameter" {
+				found = append(found, resource)
+			}
+		}
+	}
+	if len(found) != 1 {
+		t.Fatalf("expected exactly one SearchParameter resource, got %d", len(found))
+	}
+	return found[0]
+}
+
+func assertNoDuplicateCapabilities(t *testing.T, resource r4.CapabilityStatementRestResource) {
+	t.Helper()
+	interactions := map[string]int{}
+	for _, interaction := range resource.Interaction {
+		if interaction.Code.Value != nil {
+			interactions[*interaction.Code.Value]++
+		}
+	}
+	for code, count := range interactions {
+		if count != 1 {
+			t.Errorf("interaction %q listed %d times, want 1", code, count)
+		}
+	}
+	params := map[string]int{}
+	for _, param := range resource.SearchParam {
+		if param.Name.Value != nil {
+			params[*param.Name.Value]++
+		}
+	}
+	for name, count := range params {
+		if count != 1 {
+			t.Errorf("searchParam %q listed %d times, want 1", name, count)
+		}
+	}
+}
+
+// Regression test for https://github.com/damedic/fhir-toolbox-go/issues/11.
+// Wrapping an already wrapped backend (e.g. user code wraps in capabilitiesR4.Generic
+// and the REST server wraps again) must not duplicate the automatically added
+// SearchParameter read/search-type interactions and the _id search parameter.
+func TestDoubleWrapNoDuplicateSearchParameterCapabilities(t *testing.T) {
+	first, err := Generic[model.R4](&concreteOnlyBackend{})
+	if err != nil {
+		t.Fatalf("first wrap: %v", err)
+	}
+	second, err := Generic[model.R4](first)
+	if err != nil {
+		t.Fatalf("second wrap: %v", err)
+	}
+
+	cs, err := second.CapabilityStatement(context.Background())
+	if err != nil {
+		t.Fatalf("CapabilityStatement returned error: %v", err)
+	}
+
+	sp := searchParameterResource(t, cs)
+	assertNoDuplicateCapabilities(t, sp)
+	if len(sp.Interaction) != 2 {
+		t.Errorf("expected 2 interactions (read, search-type), got %d", len(sp.Interaction))
+	}
+	if len(sp.SearchParam) != 1 {
+		t.Errorf("expected 1 searchParam (_id), got %d", len(sp.SearchParam))
+	}
+}
+
+// baseWithPatientBackend declares Patient read and search in its CapabilityBase
+// and also implements the corresponding concrete methods.
+type baseWithPatientBackend struct {
+	concreteOnlyBackend
+}
+
+func (b *baseWithPatientBackend) CapabilityBase(ctx context.Context) (r4.CapabilityStatement, error) {
+	cs, err := b.concreteOnlyBackend.CapabilityBase(ctx)
+	if err != nil {
+		return cs, err
+	}
+	cs.Rest = []r4.CapabilityStatementRest{{
+		Mode: r4.Code{Value: ptr.To("server")},
+		Resource: []r4.CapabilityStatementRestResource{{
+			Type: r4.Code{Value: ptr.To("Patient")},
+			Interaction: []r4.CapabilityStatementRestResourceInteraction{
+				{Code: r4.Code{Value: ptr.To("read")}},
+				{Code: r4.Code{Value: ptr.To("search-type")}},
+			},
+			SearchParam: []r4.CapabilityStatementRestResourceSearchParam{{
+				Name: r4.String{Value: ptr.To("_id")},
+				Type: r4.Code{Value: ptr.To("token")},
+			}},
+		}},
+	}}
+	return cs, nil
+}
+
+func (b *baseWithPatientBackend) SearchCapabilitiesPatient(ctx context.Context) (r4.SearchCapabilities, error) {
+	return r4.SearchCapabilities{
+		Parameters: map[string]r4.SearchParameter{
+			"_id": {Type: r4.Code{Value: ptr.To("token")}},
+		},
+	}, nil
+}
+
+func (b *baseWithPatientBackend) SearchPatient(ctx context.Context, parameters search.Parameters, options search.Options) (search.Result[r4.Patient], error) {
+	return search.Result[r4.Patient]{}, nil
+}
+
+// Interactions and search parameters already declared in the base
+// CapabilityStatement must not be listed twice after augmentation.
+func TestBaseDeclaredCapabilitiesNotDuplicated(t *testing.T) {
+	wrapped, err := Generic[model.R4](&baseWithPatientBackend{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	cs, err := wrapped.CapabilityStatement(context.Background())
+	if err != nil {
+		t.Fatalf("CapabilityStatement returned error: %v", err)
+	}
+
+	r4cs := cs.(r4.CapabilityStatement)
+	var patient *r4.CapabilityStatementRestResource
+	for _, rest := range r4cs.Rest {
+		for i := range rest.Resource {
+			if rest.Resource[i].Type.Value != nil && *rest.Resource[i].Type.Value == "Patient" {
+				patient = &rest.Resource[i]
+			}
+		}
+	}
+	if patient == nil {
+		t.Fatal("Patient resource not found in CapabilityStatement")
+	}
+	assertNoDuplicateCapabilities(t, *patient)
+	if len(patient.Interaction) != 2 {
+		t.Errorf("expected 2 interactions (read, search-type), got %d", len(patient.Interaction))
+	}
+	if len(patient.SearchParam) != 1 {
+		t.Errorf("expected 1 searchParam (_id), got %d", len(patient.SearchParam))
 	}
 }

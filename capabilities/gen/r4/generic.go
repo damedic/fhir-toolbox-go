@@ -76,7 +76,31 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		if !ok {
 			r = r4.CapabilityStatementRestResource{Type: r4.Code{Value: &name}}
 		}
+		for _, existing := range r.Interaction {
+			if existing.Code.Value != nil && *existing.Code.Value == interactionCode {
+				return r
+			}
+		}
 		r.Interaction = append(r.Interaction, r4.CapabilityStatementRestResourceInteraction{Code: r4.Code{Value: ptr.To(interactionCode)}})
+		return r
+	}
+	addSearchParam := func(r r4.CapabilityStatementRestResource, param r4.CapabilityStatementRestResourceSearchParam) r4.CapabilityStatementRestResource {
+		for i := range r.SearchParam {
+			if r.SearchParam[i].Name.Value != nil && param.Name.Value != nil && *r.SearchParam[i].Name.Value == *param.Name.Value {
+				r.SearchParam[i] = param
+				return r
+			}
+		}
+		r.SearchParam = append(r.SearchParam, param)
+		return r
+	}
+	addSearchInclude := func(r r4.CapabilityStatementRestResource, include string) r4.CapabilityStatementRestResource {
+		for _, existing := range r.SearchInclude {
+			if existing.Value != nil && *existing.Value == include {
+				return r
+			}
+		}
+		r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
 		return r
 	}
 	if _, ok := w.Concrete.(AccountCreate); ok {
@@ -108,7 +132,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Account", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -129,7 +153,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -167,7 +191,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ActivityDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -188,7 +212,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -226,7 +250,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("AdverseEvent", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -247,7 +271,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -285,7 +309,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("AllergyIntolerance", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -306,7 +330,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -344,7 +368,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Appointment", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -365,7 +389,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -403,7 +427,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("AppointmentResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -424,7 +448,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -462,7 +486,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("AuditEvent", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -483,7 +507,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -521,7 +545,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Basic", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -542,7 +566,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -580,7 +604,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Binary", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -601,7 +625,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -639,7 +663,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("BiologicallyDerivedProduct", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -660,7 +684,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -698,7 +722,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("BodyStructure", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -719,7 +743,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -757,7 +781,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Bundle", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -778,7 +802,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -816,7 +840,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CapabilityStatement", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -837,7 +861,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -875,7 +899,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CarePlan", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -896,7 +920,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -934,7 +958,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CareTeam", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -955,7 +979,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -993,7 +1017,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CatalogEntry", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1014,7 +1038,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1052,7 +1076,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ChargeItem", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1073,7 +1097,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1111,7 +1135,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ChargeItemDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1132,7 +1156,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1170,7 +1194,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Claim", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1191,7 +1215,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1229,7 +1253,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ClaimResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1250,7 +1274,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1288,7 +1312,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ClinicalImpression", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1309,7 +1333,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1347,7 +1371,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CodeSystem", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1368,7 +1392,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1406,7 +1430,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Communication", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1427,7 +1451,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1465,7 +1489,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CommunicationRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1486,7 +1510,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1524,7 +1548,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CompartmentDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1545,7 +1569,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1583,7 +1607,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Composition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1604,7 +1628,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1642,7 +1666,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ConceptMap", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1663,7 +1687,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1701,7 +1725,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Condition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1722,7 +1746,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1760,7 +1784,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Consent", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1781,7 +1805,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1819,7 +1843,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Contract", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1840,7 +1864,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1878,7 +1902,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Coverage", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1899,7 +1923,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1937,7 +1961,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CoverageEligibilityRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -1958,7 +1982,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -1996,7 +2020,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("CoverageEligibilityResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2017,7 +2041,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2055,7 +2079,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DetectedIssue", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2076,7 +2100,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2114,7 +2138,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Device", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2135,7 +2159,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2173,7 +2197,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DeviceDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2194,7 +2218,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2232,7 +2256,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DeviceMetric", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2253,7 +2277,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2291,7 +2315,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DeviceRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2312,7 +2336,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2350,7 +2374,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DeviceUseStatement", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2371,7 +2395,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2409,7 +2433,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DiagnosticReport", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2430,7 +2454,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2468,7 +2492,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DocumentManifest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2489,7 +2513,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2527,7 +2551,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("DocumentReference", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2548,7 +2572,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2586,7 +2610,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EffectEvidenceSynthesis", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2607,7 +2631,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2645,7 +2669,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Encounter", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2666,7 +2690,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2704,7 +2728,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Endpoint", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2725,7 +2749,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2763,7 +2787,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EnrollmentRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2784,7 +2808,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2822,7 +2846,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EnrollmentResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2843,7 +2867,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2881,7 +2905,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EpisodeOfCare", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2902,7 +2926,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2940,7 +2964,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EventDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -2961,7 +2985,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -2999,7 +3023,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Evidence", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3020,7 +3044,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3058,7 +3082,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("EvidenceVariable", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3079,7 +3103,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3117,7 +3141,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ExampleScenario", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3138,7 +3162,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3176,7 +3200,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ExplanationOfBenefit", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3197,7 +3221,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3235,7 +3259,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("FamilyMemberHistory", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3256,7 +3280,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3294,7 +3318,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Flag", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3315,7 +3339,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3353,7 +3377,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Goal", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3374,7 +3398,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3412,7 +3436,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("GraphDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3433,7 +3457,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3471,7 +3495,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Group", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3492,7 +3516,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3530,7 +3554,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("GuidanceResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3551,7 +3575,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3589,7 +3613,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("HealthcareService", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3610,7 +3634,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3648,7 +3672,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ImagingStudy", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3669,7 +3693,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3707,7 +3731,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Immunization", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3728,7 +3752,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3766,7 +3790,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ImmunizationEvaluation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3787,7 +3811,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3825,7 +3849,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ImmunizationRecommendation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3846,7 +3870,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3884,7 +3908,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ImplementationGuide", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3905,7 +3929,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -3943,7 +3967,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("InsurancePlan", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -3964,7 +3988,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4002,7 +4026,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Invoice", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4023,7 +4047,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4061,7 +4085,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Library", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4082,7 +4106,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4120,7 +4144,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Linkage", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4141,7 +4165,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4179,7 +4203,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("List", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4200,7 +4224,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4238,7 +4262,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Location", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4259,7 +4283,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4297,7 +4321,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Measure", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4318,7 +4342,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4356,7 +4380,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MeasureReport", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4377,7 +4401,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4415,7 +4439,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Media", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4436,7 +4460,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4474,7 +4498,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Medication", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4495,7 +4519,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4533,7 +4557,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicationAdministration", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4554,7 +4578,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4592,7 +4616,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicationDispense", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4613,7 +4637,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4651,7 +4675,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicationKnowledge", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4672,7 +4696,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4710,7 +4734,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicationRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4731,7 +4755,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4769,7 +4793,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicationStatement", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4790,7 +4814,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4828,7 +4852,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProduct", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4849,7 +4873,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4887,7 +4911,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductAuthorization", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4908,7 +4932,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -4946,7 +4970,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductContraindication", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -4967,7 +4991,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5005,7 +5029,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductIndication", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5026,7 +5050,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5064,7 +5088,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductIngredient", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5085,7 +5109,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5123,7 +5147,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductInteraction", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5144,7 +5168,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5182,7 +5206,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductManufactured", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5203,7 +5227,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5241,7 +5265,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductPackaged", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5262,7 +5286,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5300,7 +5324,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductPharmaceutical", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5321,7 +5345,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5359,7 +5383,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MedicinalProductUndesirableEffect", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5380,7 +5404,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5418,7 +5442,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MessageDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5439,7 +5463,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5477,7 +5501,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MessageHeader", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5498,7 +5522,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5536,7 +5560,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("MolecularSequence", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5557,7 +5581,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5595,7 +5619,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("NamingSystem", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5616,7 +5640,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5654,7 +5678,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("NutritionOrder", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5675,7 +5699,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5713,7 +5737,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Observation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5734,7 +5758,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5772,7 +5796,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ObservationDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5793,7 +5817,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5831,7 +5855,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("OperationDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5852,7 +5876,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5890,7 +5914,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("OperationOutcome", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5911,7 +5935,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -5949,7 +5973,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Organization", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -5970,7 +5994,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6008,7 +6032,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("OrganizationAffiliation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6029,7 +6053,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6067,7 +6091,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Parameters", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6088,7 +6112,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6126,7 +6150,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Patient", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6147,7 +6171,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6185,7 +6209,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("PaymentNotice", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6206,7 +6230,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6244,7 +6268,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("PaymentReconciliation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6265,7 +6289,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6303,7 +6327,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Person", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6324,7 +6348,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6362,7 +6386,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("PlanDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6383,7 +6407,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6421,7 +6445,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Practitioner", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6442,7 +6466,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6480,7 +6504,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("PractitionerRole", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6501,7 +6525,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6539,7 +6563,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Procedure", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6560,7 +6584,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6598,7 +6622,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Provenance", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6619,7 +6643,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6657,7 +6681,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Questionnaire", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6678,7 +6702,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6716,7 +6740,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("QuestionnaireResponse", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6737,7 +6761,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6775,7 +6799,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("RelatedPerson", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6796,7 +6820,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6834,7 +6858,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("RequestGroup", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6855,7 +6879,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6893,7 +6917,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ResearchDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6914,7 +6938,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -6952,7 +6976,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ResearchElementDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -6973,7 +6997,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7011,7 +7035,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ResearchStudy", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7032,7 +7056,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7070,7 +7094,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ResearchSubject", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7091,7 +7115,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7129,7 +7153,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("RiskAssessment", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7150,7 +7174,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7188,7 +7212,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("RiskEvidenceSynthesis", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7209,7 +7233,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7247,7 +7271,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Schedule", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7268,7 +7292,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7306,7 +7330,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SearchParameter", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7327,7 +7351,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7365,7 +7389,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ServiceRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7386,7 +7410,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7424,7 +7448,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Slot", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7445,7 +7469,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7483,7 +7507,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Specimen", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7504,7 +7528,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7542,7 +7566,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SpecimenDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7563,7 +7587,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7601,7 +7625,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("StructureDefinition", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7622,7 +7646,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7660,7 +7684,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("StructureMap", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7681,7 +7705,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7719,7 +7743,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Subscription", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7740,7 +7764,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7778,7 +7802,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Substance", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7799,7 +7823,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7837,7 +7861,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstanceNucleicAcid", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7858,7 +7882,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7896,7 +7920,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstancePolymer", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7917,7 +7941,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -7955,7 +7979,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstanceProtein", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -7976,7 +8000,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8014,7 +8038,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstanceReferenceInformation", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8035,7 +8059,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8073,7 +8097,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstanceSourceMaterial", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8094,7 +8118,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8132,7 +8156,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SubstanceSpecification", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8153,7 +8177,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8191,7 +8215,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SupplyDelivery", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8212,7 +8236,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8250,7 +8274,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("SupplyRequest", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8271,7 +8295,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8309,7 +8333,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("Task", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8330,7 +8354,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8368,7 +8392,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("TerminologyCapabilities", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8389,7 +8413,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8427,7 +8451,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("TestReport", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8448,7 +8472,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8486,7 +8510,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("TestScript", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8507,7 +8531,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8545,7 +8569,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("ValueSet", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8566,7 +8590,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8604,7 +8628,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("VerificationResult", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8625,7 +8649,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8663,7 +8687,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		} else {
 			r := addInteraction("VisionPrescription", "search-type")
 			for _, include := range c.Includes {
-				r.SearchInclude = append(r.SearchInclude, r4.String{Value: &include})
+				r = addSearchInclude(r, include)
 			}
 			for n, p := range c.Parameters {
 				fhirpathType, ok, err := fhirpath.Singleton[fhirpath.String](p.Children("type"))
@@ -8684,7 +8708,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 					canonicalUrl := baseUrl + "/SearchParameter/" + searchParameterId
 					definition = &r4.Canonical{Value: &canonicalUrl}
 				}
-				r.SearchParam = append(r.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+				r = addSearchParam(r, r4.CapabilityStatementRestResourceSearchParam{
 					Definition: definition,
 					Name:       r4.String{Value: &n},
 					Type:       r4.Code{Value: &resolvedType},
@@ -8699,7 +8723,7 @@ func (w Generic) CapabilityStatement(ctx context.Context) (model.CapabilityState
 		idParam := "_id"
 		tokenType := "token"
 		idDefinition := baseUrl + "/SearchParameter/SearchParameter-id"
-		spResource.SearchParam = append(spResource.SearchParam, r4.CapabilityStatementRestResourceSearchParam{
+		spResource = addSearchParam(spResource, r4.CapabilityStatementRestResourceSearchParam{
 			Definition: &r4.Canonical{Value: &idDefinition},
 			Name:       r4.String{Value: &idParam},
 			Type:       r4.Code{Value: &tokenType},

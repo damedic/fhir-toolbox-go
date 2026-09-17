@@ -568,11 +568,54 @@ func generateWrapperCapabilityStatement(f *File, release string, resources []ir.
 						Id("Type"): Qual(moduleName+"/model/gen/"+strings.ToLower(release), "Code").Values(Dict{Id("Value"): Op("&").Id("name")}),
 					}),
 				),
+				// Do not add an interaction that is already declared, e.g. by the base
+				// CapabilityStatement or by an inner Generic wrapper (double wrapping).
+				For(List(Id("_"), Id("existing")).Op(":=").Range().Id("r").Dot("Interaction")).Block(
+					If(Id("existing.Code.Value").Op("!=").Nil().Op("&&").Op("*").Id("existing.Code.Value").Op("==").Id("interactionCode")).Block(
+						Return(Id("r")),
+					),
+				),
 				Id("r").Dot("Interaction").Op("=").Append(
 					Id("r").Dot("Interaction"),
 					Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResourceInteraction").Values(Dict{
 						Id("Code"): Qual(moduleName+"/model/gen/"+strings.ToLower(release), "Code").Values(Dict{Id("Value"): Qual(moduleName+"/utils/ptr", "To").Call(Id("interactionCode"))}),
 					}),
+				),
+				Return(Id("r")),
+			)
+
+			// Helper function to add a search parameter, replacing an existing one with the same name
+			g.Id("addSearchParam").Op(":=").Func().Params(
+				Id("r").Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResource"),
+				Id("param").Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResourceSearchParam"),
+			).Params(
+				Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResource"),
+			).Block(
+				For(Id("i").Op(":=").Range().Id("r").Dot("SearchParam")).Block(
+					If(Id("r.SearchParam[i].Name.Value").Op("!=").Nil().Op("&&").Id("param.Name.Value").Op("!=").Nil().Op("&&").Op("*").Id("r.SearchParam[i].Name.Value").Op("==").Op("*").Id("param.Name.Value")).Block(
+						Id("r.SearchParam[i]").Op("=").Id("param"),
+						Return(Id("r")),
+					),
+				),
+				Id("r").Dot("SearchParam").Op("=").Append(Id("r").Dot("SearchParam"), Id("param")),
+				Return(Id("r")),
+			)
+
+			// Helper function to add a search include if not already present
+			g.Id("addSearchInclude").Op(":=").Func().Params(
+				Id("r").Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResource"),
+				Id("include").String(),
+			).Params(
+				Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResource"),
+			).Block(
+				For(List(Id("_"), Id("existing")).Op(":=").Range().Id("r").Dot("SearchInclude")).Block(
+					If(Id("existing.Value").Op("!=").Nil().Op("&&").Op("*").Id("existing.Value").Op("==").Id("include")).Block(
+						Return(Id("r")),
+					),
+				),
+				Id("r").Dot("SearchInclude").Op("=").Append(
+					Id("r").Dot("SearchInclude"),
+					Qual(moduleName+"/model/gen/"+strings.ToLower(release), "String").Values(Dict{Id("Value"): Op("&").Id("include")}),
 				),
 				Return(Id("r")),
 			)
@@ -628,10 +671,7 @@ func generateWrapperCapabilityStatement(f *File, release string, resources []ir.
 
 						// Add includes
 						For(List(Id("_"), Id("include")).Op(":=").Range().Id("c").Dot("Includes")).Block(
-							Id("r").Dot("SearchInclude").Op("=").Append(
-								Id("r").Dot("SearchInclude"),
-								Qual(moduleName+"/model/gen/"+strings.ToLower(release), "String").Values(Dict{Id("Value"): Op("&").Id("include")}),
-							),
+							Id("r").Op("=").Id("addSearchInclude").Call(Id("r"), Id("include")),
 						),
 
 						// Add search parameters
@@ -657,8 +697,8 @@ func generateWrapperCapabilityStatement(f *File, release string, resources []ir.
 								Id("definition").Op("=").Op("&").Qual(moduleName+"/model/gen/"+strings.ToLower(release), "Canonical").Values(Dict{Id("Value"): Op("&").Id("canonicalUrl")}),
 							),
 
-							Id("r").Dot("SearchParam").Op("=").Append(
-								Id("r").Dot("SearchParam"),
+							Id("r").Op("=").Id("addSearchParam").Call(
+								Id("r"),
 								Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResourceSearchParam").Values(Dict{
 									Id("Name"):       Qual(moduleName+"/model/gen/"+strings.ToLower(release), "String").Values(Dict{Id("Value"): Op("&").Id("n")}),
 									Id("Type"):       Qual(moduleName+"/model/gen/"+strings.ToLower(release), "Code").Values(Dict{Id("Value"): Op("&").Id("resolvedType")}),
@@ -682,8 +722,8 @@ func generateWrapperCapabilityStatement(f *File, release string, resources []ir.
 				Id("idParam").Op(":=").Lit("_id"),
 				Id("tokenType").Op(":=").Lit("token"),
 				Id("idDefinition").Op(":=").Id("baseUrl").Op("+").Lit("/SearchParameter/SearchParameter-id"),
-				Id("spResource").Dot("SearchParam").Op("=").Append(
-					Id("spResource").Dot("SearchParam"),
+				Id("spResource").Op("=").Id("addSearchParam").Call(
+					Id("spResource"),
 					Qual(moduleName+"/model/gen/"+strings.ToLower(release), "CapabilityStatementRestResourceSearchParam").Values(Dict{
 						Id("Name"): Qual(moduleName+"/model/gen/"+strings.ToLower(release), "String").Values(Dict{
 							Id("Value"): Op("&").Id("idParam"),
