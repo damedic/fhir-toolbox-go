@@ -340,7 +340,14 @@ From the FHIR-specific extension functions defined in the FHIR specification, th
 * `hasValue() : Boolean` - checks if a FHIR primitive has a value (not just extensions)
 * `getValue() : System.[type]` - returns the primitive system value when a single FHIR primitive has a value
 
-Other FHIR-specific functions like `resolve()`, `conformsTo()` and `htmlChecks()` are not yet implemented, mostly because they require validation or terminology services which are not implemented by `fhir-toolbox-go` yet. The `%resource` and `%rootResource` environment variables are not provided yet either.
+Other FHIR-specific functions like `resolve()`, `conformsTo()` and `htmlChecks()` are not yet implemented, mostly because they require validation or terminology services which are not implemented by `fhir-toolbox-go` yet.
+
+The FHIR-defined environment variables `%resource` and `%rootResource` are provided when the evaluation target is a resource.
+`%rootResource` always refers to the target. `%resource` initially refers to the target as well and is re-bound to a nested
+resource (e.g. a contained resource or a `Bundle.entry.resource`) while a scoped function such as `where()` or `select()`
+iterates over it, as required by the FHIRPath specification. When evaluating against a nested element instead of a whole
+resource, supply both variables yourself via `fhirpath.WithEnv(ctx, "resource", ...)` and `fhirpath.WithEnv(ctx, "rootResource", ...)`;
+caller-supplied values are never overwritten.
 
 For a quick usage example see [`./examples/fhirpath`](./examples/fhirpath/main.go).
 

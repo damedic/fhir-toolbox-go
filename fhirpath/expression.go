@@ -151,6 +151,20 @@ func Evaluate(ctx context.Context, target Element, expr Expression) (Collection,
 		}
 	}
 
+	// FHIR defines %resource (the resource currently being processed) and
+	// %rootResource (the top level resource, does not change during
+	// execution). When the target is a resource, both initially refer to it.
+	// Callers evaluating against a nested element can supply them via WithEnv,
+	// in which case they are left untouched. See the FHIRPath spec section
+	// "Special variables".
+	if isResource(target) {
+		for _, name := range []string{resourceVariable, rootResourceVariable} {
+			if _, ok := envValue(ctx, name); !ok {
+				ctx = WithEnv(ctx, name, Collection{target})
+			}
+		}
+	}
+
 	result, _, err := evalExpression(
 		ctx,
 		target, Collection{target},
@@ -613,6 +627,19 @@ func evalLiteral(
 }
 
 type envKey struct{}
+
+const (
+	resourceVariable     = "resource"
+	rootResourceVariable = "rootResource"
+)
+
+// isResource reports whether e is a FHIR resource. Resources are detected by
+// their ResourceType method so that this package does not depend on the model
+// package.
+func isResource(e Element) bool {
+	_, ok := e.(interface{ ResourceType() string })
+	return ok
+}
 
 var systemVariables = map[string]Collection{
 	"context": nil,

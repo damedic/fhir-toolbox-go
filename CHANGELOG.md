@@ -2,6 +2,9 @@
 
 ## v0.0.6
 
+### Features
+- Provide the FHIR-defined `%resource` and `%rootResource` environment variables in FHIRPath evaluation
+
 ### Bug Fixes
 - Fix FHIR primitive that carries only extensions and no value now yields empty
 - Skip new unimplemented R5 tests

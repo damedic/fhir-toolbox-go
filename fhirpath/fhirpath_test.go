@@ -149,14 +149,11 @@ type skipRule struct {
 
 // Tests that are not in line with spec or where spec is unclear/ambiguous
 var testSkipsSpecIssues = []skipRule{
-	// testPolymorphismB: Test is marked invalid="semantic" and demonstrates invalid polymorphic field access.
-	// The expression "Observation.valueQuantity.unit" is semantically incorrect per FHIR - should use
-	// "Observation.value.unit" or "Observation.value.as(Quantity).unit" instead. Per FHIRPath spec, semantic
-	// errors don't throw exceptions but return empty collections. This test is informational only.
-	{regexp.MustCompile(`^testPolymorphismB$`), nil, "test demonstrates invalid polymorphic field access (invalid=\"semantic\") - informational only"},
-	// testPrecedence3 & testPrecedence4: The tests are wrong. In the formal FHIRPath grammar,
-	// type operators (is, as) bind tighter than comparison operators (>, <, etc.)
-	{regexp.MustCompile(`^testPrecedence[34]$`), nil, "test uses wrong precedence - type operators bind tighter than comparison operators"},
+	// testPolymorphismB (R5 only): The expression "Observation.valueQuantity.unit" is marked
+	// invalid="semantic" and mode="strict", yet the R5 variant expects the lenient result 'lbs'.
+	// Per FHIRPath spec, semantic errors don't throw exceptions but return empty collections, which
+	// is what the R4/R4B variants expect and what the implementation returns.
+	{regexp.MustCompile(`^testPolymorphismB$`), isR5Release, "R5 variant expects lenient polymorphic field access although marked invalid=\"semantic\" and mode=\"strict\""},
 	// testPlusDate19: R4/R4B test expects @...T00:00:00.000 + 0.1 's' = @...T00:00:00.000 (unchanged),
 	// but R5 test (correctly) expects @...T00:00:00.100. Implementation follows R5 behavior.
 	{regexp.MustCompile(`^testPlusDate19$`), isNotR5Release, "R4/R4B test expects no change when adding 0.1s, but implementation (correctly) adds fractional seconds per R5 test"},
@@ -165,22 +162,26 @@ var testSkipsSpecIssues = []skipRule{
 	// Tests marked "contested" expect ofType/as operations to NOT match derived types against base types,
 	// but our implementation correctly follows the FHIR type hierarchy.
 	{regexp.MustCompile(`^testFHIRPathAsFunction(11|16)$`), nil, "Contested: expects code NOT to be subtype of string, but FHIR spec defines it as such"},
-	// testIif6: Test expects empty result when iif() receives non-Boolean criterion, but per FHIRPath singleton
-	// evaluation rule, a single non-Boolean value evaluates to true in Boolean context. Our implementation
-	// correctly applies this rule.
-	{regexp.MustCompile(`^testIif6$`), nil, "test expects strict behavior that contradicts singleton evaluation rule - implementation correctly applies spec"},
+	// testIif6 (R4/R4B only): Test expects empty result when iif() receives non-Boolean criterion, but per
+	// FHIRPath singleton evaluation rule, a single non-Boolean value evaluates to true in Boolean context.
+	// Our implementation correctly applies this rule; the R5 variant of the test expects exactly that.
+	{regexp.MustCompile(`^testIif6$`), isNotR5Release, "test expects strict behavior that contradicts singleton evaluation rule - implementation correctly applies spec"},
+	// htmlTest01: The expression "text.div.htmlChecks()" is not valid FHIRPath. Per the spec section
+	// "Keywords", div is a reserved word that may not be used as an identifier; only as, contains and is
+	// may. The spec itself gives "Patient.text.`div`.empty()" as the required delimited form.
+	// (htmlChecks() is not implemented either, see testSkipsImplementationGaps.)
+	{regexp.MustCompile(`^htmlTest01$`), nil, "test uses reserved word div as identifier - spec requires the delimited form `div`"},
 }
 
 // Tests that are correct per spec, but our implementation doesn't match yet
 var testSkipsImplementationGaps = []skipRule{
 	// Functions not yet implemented
 	{regexp.MustCompile(`^testMultipleResolve$`), nil, "resolve() function not implemented"},
-	{regexp.MustCompile(`^testConformsTo.*`), nil, "conformsTo() function not implemented"},
-	// htmlChecks() validates FHIR narrative XHTML rules and is not implemented. htmlTest01 additionally
-	// uses `text.div`, which the normative grammar rejects because `div` is a keyword (the delimited
-	// identifier `text.\`div\`` would be required). htmlTest02-04 also depend on the %resource
-	// environment variable, which is not provided yet.
-	{regexp.MustCompile(`^htmlTest0[1-4]$`), nil, "htmlChecks() function not implemented"},
+	// testConformsTo3 is not skipped: it is marked invalid="execution" (unknown profile) and the
+	// "function not implemented" error satisfies it.
+	{regexp.MustCompile(`^testConformsTo[12]$`), nil, "conformsTo() function not implemented"},
+	// htmlChecks() validates FHIR narrative XHTML rules and is not implemented.
+	{regexp.MustCompile(`^htmlTest0[2-4]$`), nil, "htmlChecks() function not implemented"},
 
 	// Polymorphic choice-type field access by concrete type name (e.g. valueQuantity -> value.ofType(Quantity))
 	// not yet implemented in field resolution

@@ -166,7 +166,8 @@ func callFunc(
 		) (result Collection, resultOrdered bool, err error) {
 			// Create isolated environment scope for ALL parameter evaluations
 			// This prevents variables defined in parameter expressions from colliding
-			ctx, _ = withNewEnvStackFrame(ctx)
+			var frame map[string]Collection
+			ctx, frame = withNewEnvStackFrame(ctx)
 
 			parentScope, parentOk := getFunctionScope(ctx)
 
@@ -177,6 +178,16 @@ func callFunc(
 
 				if len(target) == 1 && target[0] != nil {
 					fnScope.this = target[0]
+
+					// Per the FHIRPath spec (section "Special variables"), %resource
+					// "will be changed to the new resource context" when passing into a
+					// contained resource. This happens when a scoped function focuses on
+					// a nested resource (e.g. contained or Bundle.entry.resource). The
+					// binding lives in this parameter's environment frame, so it reverts
+					// once the function returns. %rootResource never changes.
+					if isResource(target[0]) {
+						frame[resourceVariable] = Collection{target[0]}
+					}
 				}
 
 				// Preserve aggregate context from parent
