@@ -340,7 +340,7 @@ From the FHIR-specific extension functions defined in the FHIR specification, th
 * `hasValue() : Boolean` - checks if a FHIR primitive has a value (not just extensions)
 * `getValue() : System.[type]` - returns the primitive system value when a single FHIR primitive has a value
 
-Other FHIR-specific functions like `resolve()` and `conformsTo()` are not yet implemented, mostly because they require validation or terminology services which are not implemented by `fhir-toolbox-go` yet.
+Other FHIR-specific functions like `resolve()`, `conformsTo()` and `htmlChecks()` are not yet implemented, mostly because they require validation or terminology services which are not implemented by `fhir-toolbox-go` yet. The `%resource` and `%rootResource` environment variables are not provided yet either.
 
 For a quick usage example see [`./examples/fhirpath`](./examples/fhirpath/main.go).
 

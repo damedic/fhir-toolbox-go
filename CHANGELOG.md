@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.6
+
+### Bug Fixes
+- Fix FHIR primitive that carries only extensions and no value now yields empty
+- Skip new unimplemented R5 tests
+
 ## v0.0.5
 
 ### Bug Fixes

@@ -176,6 +176,11 @@ var testSkipsImplementationGaps = []skipRule{
 	// Functions not yet implemented
 	{regexp.MustCompile(`^testMultipleResolve$`), nil, "resolve() function not implemented"},
 	{regexp.MustCompile(`^testConformsTo.*`), nil, "conformsTo() function not implemented"},
+	// htmlChecks() validates FHIR narrative XHTML rules and is not implemented. htmlTest01 additionally
+	// uses `text.div`, which the normative grammar rejects because `div` is a keyword (the delimited
+	// identifier `text.\`div\`` would be required). htmlTest02-04 also depend on the %resource
+	// environment variable, which is not provided yet.
+	{regexp.MustCompile(`^htmlTest0[1-4]$`), nil, "htmlChecks() function not implemented"},
 
 	// Polymorphic choice-type field access by concrete type name (e.g. valueQuantity -> value.ofType(Quantity))
 	// not yet implemented in field resolution

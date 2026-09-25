@@ -825,6 +825,16 @@ func (c Collection) Cmp(other Collection) (cmp int, ok bool, err error) {
 		return 0, false, fmt.Errorf("can not compare collections with len != 1: %v and %v", c, other)
 	}
 
+	// A FHIR primitive that carries only extensions but no value (e.g. a
+	// data-absent-reason extension) has no system value. Operations that
+	// need the value treat it as empty (see hasValue()/getValue() in the
+	// FHIR spec), and comparing with empty yields empty per the FHIRPath
+	// spec (section "Comparison": if one or both operands are empty, the
+	// result is empty).
+	if isValuelessPrimitive(c[0]) || isValuelessPrimitive(other[0]) {
+		return 0, false, nil
+	}
+
 	left, ok := c[0].(cmpElement)
 	if !ok {
 		primitive, _ := toPrimitive(c[0])
@@ -837,6 +847,14 @@ func (c Collection) Cmp(other Collection) (cmp int, ok bool, err error) {
 
 	return left.Cmp(right)
 }
+
+// isValuelessPrimitive reports whether e is a FHIR primitive element that
+// has no value (only extensions, null in JSON).
+func isValuelessPrimitive(e Element) bool {
+	hv, ok := e.(hasValuer)
+	return ok && !hv.HasValue()
+}
+
 func (c Collection) Union(other Collection) Collection {
 	// If the input collection is empty, return the other collection
 	if len(c) == 0 {
